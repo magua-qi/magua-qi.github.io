@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Lively Wallpaper - 动态云图与月球公转</title>
+    <title>Lively Wallpaper - 动态云图与月球公转 | 独立位置控制</title>
     <style>
         * {
             margin: 0;
@@ -51,7 +51,7 @@
     <div id="appRoot" style="width:100%;height:100vh;"></div>
 
     <script>
-        // 云图资源地址
+        // 云图资源地址 (风云四号真实卫星影像)
         const EARTH_URL = "https://img.nsmc.org.cn/CLOUDIMAGE/FY4B/AGRI/THUMBNAIL/FY4B_AGRI_DISK_GCLR.jpg";
         const CHINA_URL = "https://img.nsmc.org.cn/CLOUDIMAGE/FY4B/AGRI/GCLR/FY4B_REGC_GCLR.JPG";
 
@@ -60,30 +60,41 @@
         let activeMoon;     // 当前月球元素引用
         let currentMode;    // 当前模式标识
 
-        /* 根据日期计算月球相位图片地址 (基于NASA SVS模拟序列) */
+        /* 根据日期计算月球相位图片地址 (基于NASA SVS动态序列) */
         function moonUrl() {
-            const d = Math.floor((new Date() - new Date('2026-01-01')) / 864e5);
-            const frame = Math.min(1 + d * 24, 9999).toString().padStart(4, '0');
+            const base = new Date('2026-01-01');
+            const now = new Date();
+            const diffDays = Math.floor((now - base) / 864e5);
+            const frame = Math.min(1 + diffDays * 24, 9999).toString().padStart(4, '0');
             return `https://svs.gsfc.nasa.gov/vis/a000000/a005500/a005587/frames/730x730_1x1_30p/moon.${frame}.jpg`;
         }
 
-        /* 设置月球背景图，加载失败则清空背景 */
+        /* 设置月球背景图 */
         function setMoon(el, url) {
             if (!el) return;
             const src = url || moonUrl();
             const img = new Image();
-            img.onload = () => { el.style.backgroundImage = `url(${src})`; };
-            img.onerror = () => { el.style.backgroundImage = ''; };
+            img.onload = () => { 
+                if (el && document.body.contains(el)) {
+                    el.style.backgroundImage = `url(${src})`; 
+                }
+            };
+            img.onerror = () => { 
+                if (el && document.body.contains(el)) el.style.backgroundImage = ''; 
+            };
             img.src = src;
         }
 
         /* 刷新地球云图 */
         function refreshEarth() {
             const el = document.querySelector('.single-earth, .earth-img');
-            if (el) el.style.backgroundImage = `url(${EARTH_URL})`;
+            if (el) {
+                const freshUrl = EARTH_URL + '?t=' + Date.now();
+                el.style.backgroundImage = `url(${freshUrl})`;
+            }
         }
 
-        /* 地球云图自动刷新，间隔 s 秒 */
+        /* 地球云图自动刷新 */
         function earthTimer(s) {
             clearInterval(refreshTimer);
             refreshTimer = setInterval(refreshEarth, s * 1000);
@@ -95,75 +106,104 @@
             clearInterval(moonTimer);
         }
 
-        /* 每天更新一次月球相位 */
+        /* 每日更新月球相位 */
         function watchMoon(el) {
             clearInterval(moonTimer);
-            let last = new Date().toDateString();
-            const upd = () => { if (activeMoon && document.body.contains(activeMoon)) setMoon(activeMoon, moonUrl()); };
+            if (!el) return;
+            let lastDate = new Date().toDateString();
+            const upd = () => { 
+                if (activeMoon && document.body.contains(activeMoon)) {
+                    setMoon(activeMoon, moonUrl()); 
+                }
+            };
             upd();
             moonTimer = setInterval(() => {
-                const now = new Date().toDateString();
-                if (now !== last) { last = now; upd(); }
+                const nowDate = new Date().toDateString();
+                if (nowDate !== lastDate) {
+                    lastDate = nowDate;
+                    upd();
+                }
             }, 36e5);
         }
 
         // ---------- 四种壁纸模式 ----------
 
         /* 模式1：仅地球（右下角） */
-        function renderEarthOnly() {
+            function renderEarthOnly() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
+            const offsetH = "0vw";
+            const offsetV = "-12vh";
+            
             const wrap = document.createElement('div');
-            wrap.style.cssText = 'width:100%;height:100vh;position:relative;background:#000;';
+            wrap.style.cssText = `width:100%;height:100vh;position:relative;background:#000;transform: translate(${offsetH}, ${offsetV});`;
+            
             const earth = document.createElement('div');
             earth.className = 'single-earth';
-            earth.style.cssText = `position:absolute;right:220px;bottom:220px;width:700px;height:700px;border-radius:400px;background:url(${EARTH_URL}) center/700px no-repeat;`;
+            earth.style.cssText = `position:absolute;right:5vw;bottom:5vh;width:700px;height:700px;border-radius:400px;background:url(${EARTH_URL}) center/700px no-repeat;`;
             wrap.appendChild(earth);
             root.appendChild(wrap);
+            
+            const freshEarthUrl = EARTH_URL + '?t=' + Date.now();
+            earth.style.backgroundImage = `url(${freshEarthUrl})`;
             earthTimer(300);
             activeMoon = null;
         }
 
-        /* 模式2：静态月球（地球+右下角月球） */
-        function renderMoonStatic() {
+        /* 模式2：静态月球（地球居中 + 月球右上角）*/
+            function renderMoonStatic() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
+            const offsetH = "3vw";
+            const offsetV = "3vh";
+            
             const container = document.createElement('div');
-            container.style.cssText = 'position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:auto;margin-right:5%;display:flex;align-items:center;';
+            container.style.cssText = `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:auto;margin-right:5%;display:flex;align-items:center;transform: translate(${offsetH}, ${offsetV});`;
+            
             const earth = document.createElement('div');
             earth.className = 'earth-img';
             earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
+            
             const moon = document.createElement('div');
             moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:5%;right:5%;z-index:2;';
             moon.classList.add('moon-static');
+            
             const mq = document.createElement('style');
-            mq.textContent = '@media(max-width:768px){.moon-static{width:21.84%!important;padding-bottom:21.84%!important}.earth-img{width:100%!important;padding-bottom:100%!important}}';
+            mq.textContent = `
+                @media(max-width:768px) {
+                    .moon-static { width:21.84%!important; padding-bottom:21.84%!important; }
+                    .earth-img { width:100%!important; padding-bottom:100%!important; }
+                }
+            `;
             container.append(earth, moon);
             root.append(container, mq);
+            
             activeMoon = moon;
-            setMoon(moon);
+            setMoon(moon, moonUrl());
             watchMoon(moon);
+            const freshEarth = EARTH_URL + '?t=' + Date.now();
+            earth.style.backgroundImage = `url(${freshEarth})`;
             earthTimer(1800);
         }
 
-        /* 
-           模式3：月球公转  可根据需要调整数值 (vh 为单位)控制上下位置
-        */
-        function renderMoonOrbit() {
+        /* 模式3：月球公转 + 动画*/
+            function renderMoonOrbit() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
+            const offsetH = "0vw";
+            const offsetV = "4vh";
+            
             const container = document.createElement('div');
-            container.style.cssText = 'position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;transform: translateY(3vh);';
+            container.style.cssText = `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;transform: translate(${offsetH}, ${offsetV});`;
             
             const earth = document.createElement('div');
             earth.className = 'earth-img';
             earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
             
             const moon = document.createElement('div');
-            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';
+            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 60s linear infinite;';
             moon.classList.add('moon-orbit');
             
-            // 公转关键帧动画 (带响应式适配)
             const anim = document.createElement('style');
             anim.textContent = `
                 @keyframes orbit {
@@ -182,12 +222,14 @@
             container.append(earth, moon);
             root.append(container, anim);
             activeMoon = moon;
-            setMoon(moon);
+            setMoon(moon, moonUrl());
             watchMoon(moon);
+            const freshEarth = EARTH_URL + '?t=' + Date.now();
+            earth.style.backgroundImage = `url(${freshEarth})`;
             earthTimer(1800);
         }
 
-        /* 模式4：全屏中国云图 (自动刷新) */
+        /* 模式4：全屏中国云图*/
         function renderFullscreen() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
@@ -196,11 +238,15 @@
             const wrap = document.createElement('div');
             wrap.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;overflow:hidden;';
             const img = document.createElement('img');
-            img.src = CHINA_URL;
+            img.src = CHINA_URL + '?t=' + Date.now();
             img.style.cssText = 'width:150%;height:150%;object-fit:cover;flex-shrink:0;';
             wrap.appendChild(img);
             root.appendChild(wrap);
-            refreshTimer = setInterval(() => { img.src = CHINA_URL + '?t=' + Date.now(); }, 18e5);
+            refreshTimer = setInterval(() => { 
+                if (img && document.body.contains(img)) {
+                    img.src = CHINA_URL + '?t=' + Date.now(); 
+                }
+            }, 18e5);
         }
 
         /* 模式切换路由 */
@@ -226,19 +272,19 @@
             return MODE_CYCLE[(idx + 1) % MODE_CYCLE.length];
         }
 
-        /* 将当前模式写入URL参数，便于收藏 */
+        /* 将当前模式保存至URL参数 */
         function updateUrlMode(mode) {
             const url = new URL(location);
             url.searchParams.set('mode', mode);
             history.replaceState({}, '', url);
         }
 
-        // ---------- 启动 ----------
+        // 启动
         window.addEventListener('DOMContentLoaded', () => {
             const urlMode = new URLSearchParams(location.search).get('mode');
-            const initMode = ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'].includes(urlMode) ? urlMode : 'earth_only';
+            const validModes = ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'];
+            const initMode = validModes.includes(urlMode) ? urlMode : 'earth_only';
             setMode(initMode);
-
             document.getElementById('modeBtn').addEventListener('click', () => {
                 const next = getNextMode(currentMode);
                 setMode(next);
