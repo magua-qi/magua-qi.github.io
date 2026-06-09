@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Lively Wallpaper</title>
+    <title>Lively Wallpaper - 动态云图与月球公转</title>
     <style>
         * {
             margin: 0;
@@ -60,7 +60,7 @@
         let activeMoon;     // 当前月球元素引用
         let currentMode;    // 当前模式标识
 
-        /* 根据日期计算月球相位图片地址 */
+        /* 根据日期计算月球相位图片地址 (基于NASA SVS模拟序列) */
         function moonUrl() {
             const d = Math.floor((new Date() - new Date('2026-01-01')) / 864e5);
             const frame = Math.min(1 + d * 24, 9999).toString().padStart(4, '0');
@@ -124,7 +124,7 @@
             activeMoon = null;
         }
 
-        /* 模式2：静态月球 */
+        /* 模式2：静态月球（地球+右下角月球） */
         function renderMoonStatic() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
@@ -146,20 +146,39 @@
             earthTimer(1800);
         }
 
-        /* 模式3：月球公转（默认已弃用，保留切换） */
+        /* 
+           模式3：月球公转  可根据需要调整数值 (vh 为单位)控制上下位置
+        */
         function renderMoonOrbit() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
             const container = document.createElement('div');
-            container.style.cssText = 'position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;';
+            container.style.cssText = 'position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;transform: translateY(3vh);';
+            
             const earth = document.createElement('div');
             earth.className = 'earth-img';
             earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
+            
             const moon = document.createElement('div');
             moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';
             moon.classList.add('moon-orbit');
+            
+            // 公转关键帧动画 (带响应式适配)
             const anim = document.createElement('style');
-            anim.textContent = '@keyframes orbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 20vw)) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 20vw)) rotate(-360deg)}}@media(max-width:768px){.moon-orbit{width:21.84%!important;padding-bottom:21.84%!important}.earth-img{width:100%!important;padding-bottom:100%!important}@keyframes orbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 12vw)) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 12vw)) rotate(-360deg)}}}';
+            anim.textContent = `
+                @keyframes orbit {
+                    from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 20vw)) rotate(0deg); }
+                    to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 20vw)) rotate(-360deg); }
+                }
+                @media(max-width:768px) {
+                    .moon-orbit { width:21.84%!important; padding-bottom:21.84%!important; }
+                    .earth-img { width:100%!important; padding-bottom:100%!important; }
+                    @keyframes orbit {
+                        from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 12vw)) rotate(0deg); }
+                        to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 12vw)) rotate(-360deg); }
+                    }
+                }
+            `;
             container.append(earth, moon);
             root.append(container, anim);
             activeMoon = moon;
@@ -168,7 +187,7 @@
             earthTimer(1800);
         }
 
-        /* 模式4：全屏中国云图 */
+        /* 模式4：全屏中国云图 (自动刷新) */
         function renderFullscreen() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
@@ -184,7 +203,7 @@
             refreshTimer = setInterval(() => { img.src = CHINA_URL + '?t=' + Date.now(); }, 18e5);
         }
 
-        /* 模式切换 */
+        /* 模式切换路由 */
         function setMode(id) {
             if (currentMode === id) return;
             currentMode = id;
