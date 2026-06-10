@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a5f9e' /%3E%3Ctext x='50' y='54' font-family='system-ui, -apple-system, sans-serif' font-size='58' font-weight='900' fill='%23ffffff' text-anchor='middle' dominant-baseline='central' stroke='%23ffffff' stroke-width='3.5' paint-order='stroke'%3E.QI%3C/text%3E%3C/svg%3E">
     <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a5f9e' /%3E%3Ctext x='50' y='54' font-family='system-ui, -apple-system, sans-serif' font-size='58' font-weight='900' fill='%23ffffff' text-anchor='middle' dominant-baseline='central' stroke='%23ffffff' stroke-width='3.5' paint-order='stroke'%3E.QI%3C/text%3E%3C/svg%3E">
-    <title>MAGUA-卫星云图壁纸</title>
+    <title>.QI · 台风卫星云图壁纸</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
         .gamepad {
             position: fixed;
-            bottom: 30px;
+            bottom: 70px;
             right: 20px;
             z-index: 9999;
             background: rgba(0, 0, 0, 0.55);
@@ -31,6 +31,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             transform: scale(0.5);
             transform-origin: bottom right;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+        .gamepad.visible {
+            opacity: 1;
+            visibility: visible;
         }
         .dpad {
             display: grid;
@@ -134,7 +141,7 @@
         }
         @media (max-width: 560px) {
             .gamepad {
-                bottom: 20px;
+                bottom: 60px;
                 right: 12px;
                 padding: 6px;
             }
@@ -161,7 +168,7 @@
     </style>
 </head>
 <body>
-    <div class="gamepad">
+    <div class="gamepad" id="gamepad">
         <div class="dpad">
             <button class="dpad-btn" data-dir="up">▲</button>
             <button class="dpad-btn" data-dir="left">◀</button>
@@ -286,16 +293,13 @@
             if (currentMode === 'fullscreen') return CHINA_URL;
             return EARTH_URL;
         }
-
         function hasMoonDisplay() {
             return currentMode === 'moon_static' || currentMode === 'moon_orbit';
         }
-
         function showImageUrls() {
             const mainUrl = getCurrentImageUrl();
             const toast = document.getElementById('toastUrl');
             if (!toast) return;
-            
             let content = '';
             if (currentMode === 'fullscreen') {
                 content = `🛰️ 中国区域云图链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(mainUrl)}</span>`;
@@ -313,15 +317,12 @@
                 toast.classList.remove('show');
             }, 6000);
         }
-
         function escapeHtml(str) {
             return str.replace(/[&<>]/g, function(m) {
                 if (m === '&') return '&amp;';
                 if (m === '<') return '&lt;';
                 if (m === '>') return '&gt;';
                 return m;
-            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-                return c;
             });
         }
 
@@ -374,7 +375,7 @@
             earth.className = 'earth-img';
             earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
             const moon = document.createElement('div');
-            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 60s linear infinite;';
+            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';
             moon.classList.add('moon-orbit');
             const anim = document.createElement('style');
             anim.textContent = `
@@ -443,32 +444,66 @@
             history.replaceState({}, '', url); 
         }
 
+        function initGamepadVisibility() {
+            const gamepad = document.getElementById('gamepad');
+            if (!gamepad) return;
+            let hideTimeout = null;
+            function showGamepad() {
+                if (hideTimeout) clearTimeout(hideTimeout);
+                gamepad.classList.add('visible');
+            }
+            function hideGamepad() {
+                if (hideTimeout) clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(() => {
+                    gamepad.classList.remove('visible');
+                }, 200);
+            }
+            document.addEventListener('mousemove', (e) => {
+                const winW = window.innerWidth;
+                const winH = window.innerHeight;
+                const rightZone = 150;
+                const bottomZone = 150;
+                const isNearCorner = (e.clientX > winW - rightZone) && (e.clientY > winH - bottomZone);
+                if (isNearCorner) showGamepad();
+                else hideGamepad();
+            });
+            document.addEventListener('touchmove', (e) => {
+                const touch = e.touches[0];
+                if (touch) {
+                    const winW = window.innerWidth;
+                    const winH = window.innerHeight;
+                    const rightZone = 150;
+                    const bottomZone = 150;
+                    const isNearCorner = (touch.clientX > winW - rightZone) && (touch.clientY > winH - bottomZone);
+                    if (isNearCorner) showGamepad();
+                    else hideGamepad();
+                }
+            });
+            document.addEventListener('touchend', () => {
+                hideGamepad();
+            });
+            gamepad.classList.remove('visible');
+        }
+
         function bindGamepadControls() {
             const upBtn = document.querySelector('[data-dir="up"]');
             const downBtn = document.querySelector('[data-dir="down"]');
             const leftBtn = document.querySelector('[data-dir="left"]');
             const rightBtn = document.querySelector('[data-dir="right"]');
             let modeSwitchBtn = document.getElementById('modeBtn');
-            
             const step = 1;
             const handleDir = (dir) => { if (currentMode !== 'fullscreen') adjustOffset(dir, step); };
             if (upBtn) upBtn.addEventListener('click', () => handleDir('up'));
             if (downBtn) downBtn.addEventListener('click', () => handleDir('down'));
             if (leftBtn) leftBtn.addEventListener('click', () => handleDir('left'));
             if (rightBtn) rightBtn.addEventListener('click', () => handleDir('right'));
-            
             if (modeSwitchBtn) {
                 const newBtn = modeSwitchBtn.cloneNode(true);
                 modeSwitchBtn.parentNode.replaceChild(newBtn, modeSwitchBtn);
                 modeSwitchBtn = newBtn;
-                
                 let pressTimer = null;
                 let isLongPress = false;
-                
-                const clearPressTimer = () => {
-                    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-                };
-                
+                const clearPressTimer = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
                 const onPointerStart = (e) => {
                     isLongPress = false;
                     clearPressTimer();
@@ -478,7 +513,6 @@
                         clearPressTimer();
                     }, 500);
                 };
-                
                 const onPointerEnd = (e) => {
                     clearPressTimer();
                     if (!isLongPress) {
@@ -488,12 +522,7 @@
                     }
                     isLongPress = false;
                 };
-                
-                const onPointerCancel = () => {
-                    clearPressTimer();
-                    isLongPress = false;
-                };
-                
+                const onPointerCancel = () => { clearPressTimer(); isLongPress = false; };
                 modeSwitchBtn.addEventListener('mousedown', onPointerStart);
                 modeSwitchBtn.addEventListener('mouseup', onPointerEnd);
                 modeSwitchBtn.addEventListener('mouseleave', onPointerCancel);
@@ -510,6 +539,7 @@
             const initMode = validModes.includes(urlMode) ? urlMode : 'earth_only';
             setMode(initMode);
             bindGamepadControls();
+            initGamepadVisibility();
         });
     </script>
 </body>
