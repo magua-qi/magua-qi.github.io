@@ -342,62 +342,64 @@
             border-bottom: 1px solid #e8edf5;
             margin-bottom: 8px;
         }
-        .number-grid {
+
+        .stat-table {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .stat-row {
+            display: flex;
+            align-items: center;
             gap: 6px;
-            justify-content: center;
-        }
-        .number-grid .num-item {
-            width: calc(20% - 6px);
-            min-width: 42px;
+            padding: 2px 4px;
+            border-radius: 4px;
             background: #ffffff;
-            border-radius: 8px;
-            padding: 6px 2px;
-            text-align: center;
-            border: 1px solid #e8edf5;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
             transition: background 0.2s;
-            position: relative;
         }
-        .number-grid .num-item.hot-item {
-            background: #ffe6e6;
-            border-color: #ff9999;
+        .stat-row.header {
+            background: transparent;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 11px;
+            border-bottom: 1px solid #e8edf5;
+            padding-bottom: 4px;
+            margin-bottom: 2px;
         }
-        .number-grid .num-item.cold-item {
-            background: #e6f0ff;
-            border-color: #99bbff;
-        }
-        .number-grid .num-item .num {
-            font-size: 14px;
+        .stat-num {
+            width: 32px;
+            text-align: center;
             font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0;
         }
-        .number-grid .num-item .num.red {
+        .stat-num.red {
             color: #e74c6f;
         }
-        .number-grid .num-item .num.blue {
+        .stat-num.blue {
             color: #3a7bd5;
         }
-        .number-grid .num-item .tag {
-            font-size: 8px;
-            font-weight: 700;
-            padding: 1px 4px;
+        .stat-cell {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 4px;
-            display: inline-block;
-            margin-left: 2px;
+            padding: 2px 4px;
+            min-height: 24px;
+            background: #f0f4fa;
+            transition: background 0.2s;
         }
-        .number-grid .num-item .tag.hot-tag {
-            background: #e74c6f;
-            color: #fff;
+        .stat-cell .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
         }
-        .number-grid .num-item .tag.cold-tag {
-            background: #3a7bd5;
-            color: #fff;
+        .stat-cell.freq {
+            background: #fde8e8;
         }
-        .number-grid .num-item .detail {
-            font-size: 9px;
-            color: #7f8c9b;
-            margin-top: 2px;
+        .stat-cell.miss {
+            background: #e8f0fe;
         }
 
         .hotcold-panel {
@@ -560,19 +562,12 @@
                 font-size: 11px;
                 padding: 12px 14px 14px;
             }
-            .number-grid .num-item {
-                min-width: 36px;
-                padding: 4px 2px;
-            }
-            .number-grid .num-item .num {
+            .stat-num {
+                width: 28px;
                 font-size: 12px;
             }
-            .number-grid .num-item .detail {
-                font-size: 8px;
-            }
-            .number-grid .num-item .tag {
-                font-size: 7px;
-                padding: 0 3px;
+            .stat-cell .value {
+                font-size: 12px;
             }
         }
         @media (max-width: 360px) {
@@ -604,19 +599,12 @@
                 font-size: 10px;
                 padding: 10px 12px 12px;
             }
-            .number-grid .num-item {
-                min-width: 32px;
-                padding: 3px 2px;
-            }
-            .number-grid .num-item .num {
+            .stat-num {
+                width: 24px;
                 font-size: 11px;
             }
-            .number-grid .num-item .detail {
-                font-size: 7px;
-            }
-            .number-grid .num-item .tag {
-                font-size: 6px;
-                padding: 0 2px;
+            .stat-cell .value {
+                font-size: 11px;
             }
         }
     </style>
@@ -1134,32 +1122,51 @@
             resultDiv.innerHTML = html;
         }
 
-        function renderNumberTable(container, data, title, colorClass, hotList, coldList) {
+        function renderNumberTable(container, data, title, colorClass) {
             if (!data || data.length === 0) {
                 container.innerHTML = `<div class="error-text">暂无数据</div>`;
                 return;
             }
-            const hotSet = new Set(hotList.map(d => d.num));
-            const coldSet = new Set(coldList.map(d => d.num));
-            let html = `<div class="sub-title">${title}</div><div class="number-grid">`;
+            const maxFreq = Math.max(...data.map(d => d.freq), 1);
+            const maxMiss = Math.max(...data.map(d => d.miss), 1);
+
+            let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
+            html += `<div class="stat-row header">
+                <div class="stat-num">号码</div>
+                <div class="stat-cell" style="background:transparent;">频次</div>
+                <div class="stat-cell" style="background:transparent;">遗漏</div>
+            </div>`;
+            
+            const minAlpha = 0.05;
+            const maxAlpha = 0.95;
+            
             for (let i = 1; i < data.length; i++) {
                 const freq = data[i].freq || 0;
                 const miss = data[i].miss || 0;
-                const isHot = hotSet.has(i);
-                const isCold = coldSet.has(i);
-                let itemClass = 'num-item';
-                let tagHtml = '';
-                if (isHot) {
-                    itemClass += ' hot-item';
-                    tagHtml = `<span class="tag hot-tag">热</span>`;
-                } else if (isCold) {
-                    itemClass += ' cold-item';
-                    tagHtml = `<span class="tag cold-tag">冷</span>`;
-                }
-                const numClass = `num ${colorClass}`;
-                html += `<div class="${itemClass}">
-                    <div class="${numClass}">${i}${tagHtml}</div>
-                    <div class="detail">${freq}次 / 漏${miss}期</div>
+                const freqRatio = freq / maxFreq;
+                const missRatio = miss / maxMiss;
+                
+                const freqAlpha = minAlpha + (maxAlpha - minAlpha) * Math.min(freqRatio, 1);
+                const missAlpha = minAlpha + (maxAlpha - minAlpha) * Math.min(missRatio, 1);
+                
+                const freqTextColor = freqRatio > 0.45 ? '#ffffff' : '#2c3e50';
+                const missTextColor = missRatio > 0.45 ? '#ffffff' : '#2c3e50';
+                
+                const freqR = 231, freqG = 76, freqB = 111;
+                const freqBg = `rgba(${freqR},${freqG},${freqB},${freqAlpha})`;
+                
+                const missR = 58, missG = 123, missB = 213;
+                const missBg = `rgba(${missR},${missG},${missB},${missAlpha})`;
+
+                const numColor = colorClass === 'red' ? 'red' : 'blue';
+                html += `<div class="stat-row">
+                    <div class="stat-num ${numColor}">${i}</div>
+                    <div class="stat-cell freq" style="background:${freqBg};">
+                        <div class="value" style="color:${freqTextColor};">${freq}</div>
+                    </div>
+                    <div class="stat-cell miss" style="background:${missBg};">
+                        <div class="value" style="color:${missTextColor};">${miss}</div>
+                    </div>
                 </div>`;
             }
             html += '</div>';
@@ -1197,8 +1204,8 @@
 
             const frontTitle = type === 'ssq' ? '红球号码统计' : '前区号码统计';
             const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
-            renderNumberTable(frontTableContainer, frontData, frontTitle, 'red', stats.hotFront, stats.coldFront);
-            renderNumberTable(backTableContainer, backData, backTitle, 'blue', stats.hotBack, stats.coldBack);
+            renderNumberTable(frontTableContainer, frontData, frontTitle, 'red');
+            renderNumberTable(backTableContainer, backData, backTitle, 'blue');
 
             const total = stats.totalPeriods;
             trendStatsSpan.innerHTML = `共 ${total} 期 · 热号高频 · 冷号低开`;
