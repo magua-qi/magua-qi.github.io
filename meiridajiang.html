@@ -1,1036 +1,1303 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-<title>每日大奖·麻瓜</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='white'/%3E%3Ctext x='50' y='68' font-size='68' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%23e60012' stroke='%23e60012' stroke-width='2' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
-<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCpcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js">
-</script>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>每日大奖</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='white'/%3E%3Ctext x='50' y='68' font-size='68' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%23e60012' stroke='%23e60012' stroke-width='2' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
+    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCpcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    font-family: "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
-  }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            background: #eef2f7;
+            font-family: "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
 
-  .app-container {
-    width: 100%;
-    max-width: 380px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+        .app-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-  .card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    width: 100%;
-  }
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
 
-  .title-bar {
-    background: linear-gradient(90deg, #e74c3c, #f39c12);
-    text-align: center;
-    padding: 10px 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 3px;
-  }
+        .title-bar {
+            background: linear-gradient(135deg, #3a7bd5, #2b5ea7);
+            text-align: center;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
 
-  .mode-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px 16px 6px;
-    flex-wrap: nowrap;
-  }
-  .mode-row label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px 12px;
-    border-radius: 30px;
-    transition: background 0.2s;
-    white-space: nowrap;
-    color: #ffffff;
-  }
-  .mode-row label:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-  .mode-row input[type="radio"] {
-    display: none;
-  }
-  .mode-row label .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #dddddd;
-    display: inline-block;
-    position: relative;
-  }
-  .mode-row input:checked+span .dot {
-    border-color: #f39c12;
-  }
-  .mode-row input:checked+span .dot::after {
-    content: '';
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #f39c12;
-    top: 1.5px;
-    left: 1.5px;
-  }
+        .title-bar.secondary {
+            background: linear-gradient(135deg, #5b9bd5, #3a7bd5);
+        }
 
-  .result-box {
-    margin: 6px 16px 14px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    min-height: 150px;
-    padding: 12px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .hint-text {
-    text-align: center;
-    color: #dddddd;
-    font-size: 13px;
-  }
-  .number-line {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 6px 0;
-    flex-wrap: nowrap;
-    animation: fadeUp 0.3s ease both;
-  }
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+        .title-bar.tertiary {
+            background: linear-gradient(135deg, #4a8fd4, #2b5ea7);
+        }
 
-  .ball {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .ball.red,
-  .ball.front {
-    background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
-    box-shadow: 0 2px 6px rgba(231, 76, 60, 0.5);
-  }
-  .ball.blue,
-  .ball.back {
-    background: radial-gradient(circle at 35% 35%, #74b9ff, #2980b9);
-    box-shadow: 0 2px 6px rgba(41, 128, 185, 0.5);
-  }
-  .sep {
-    margin: 0 2px;
-    color: #eeeeee;
-    font-weight: 700;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
+        .title-bar.fourth {
+            background: linear-gradient(135deg, #6aafd5, #3a7bd5);
+        }
 
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    padding: 0 16px 16px;
-  }
-  .btn {
-    flex: 1;
-    padding: 10px 0;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.12s, box-shadow 0.2s;
-    color: #ffffff;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-  }
-  .btn:focus {
-    outline: none;
-    box-shadow: none;
-  }
-  .btn:active {
-    transform: scale(0.96);
-  }
-  .btn-cycle {
-    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-  }
-  .btn-refresh {
-    background: linear-gradient(135deg, #e74c3c, #fd79a8);
-  }
-  .btn-smart {
-    background: linear-gradient(135deg, #00b894, #55efc4);
-    color: #1e272e;
-  }
-  .btn-cold,
-  .btn-hot {
-    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-  }
-  .badge {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    padding: 2px 6px;
-    margin-left: 5px;
-    font-size: 11px;
-    display: inline-block;
-    min-width: 26px;
-    text-align: center;
-    color: white;
-  }
-  #cycleBtn {
-    user-select: none;
-    -webkit-user-select: none;
-  }
+        .mode-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 14px 16px 8px;
+            flex-wrap: nowrap;
+        }
+        .mode-row label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 30px;
+            transition: background 0.2s;
+            white-space: nowrap;
+            color: #2c3e50;
+        }
+        .mode-row label:hover {
+            background: rgba(58, 123, 213, 0.08);
+        }
+        .mode-row input[type="radio"] {
+            display: none;
+        }
+        .mode-row label .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #b0c4de;
+            display: inline-block;
+            position: relative;
+        }
+        .mode-row input:checked+span .dot {
+            border-color: #3a7bd5;
+        }
+        .mode-row input:checked+span .dot::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #3a7bd5;
+            top: 1.5px;
+            left: 1.5px;
+        }
 
-  .trend-header {
-    padding: 8px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .trend-header h3 {
-    font-size: 13px;
-    font-weight: 600;
-    background: linear-gradient(135deg, #f39c12, #e74c3c);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    white-space: nowrap;
-  }
-  .trend-stats {
-    display: flex;
-    gap: 8px;
-    font-size: 10px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 3px 10px;
-    border-radius: 30px;
-    color: white;
-    white-space: nowrap;
-  }
+        .result-box {
+            margin: 6px 16px 14px;
+            background: #f8faff;
+            border: 1px solid rgba(58, 123, 213, 0.10);
+            border-radius: 12px;
+            min-height: 150px;
+            padding: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            text-align: center;
+        }
+        .hint-text {
+            text-align: center;
+            color: #7f8c9b;
+            font-size: 13px;
+        }
+        .number-line {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 6px 0;
+            flex-wrap: nowrap;
+            animation: fadeUp 0.3s ease both;
+            justify-content: center;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  .chart-container {
-    padding: 12px 12px;
-    width: 100%;
-  }
-  #frontChart {
-    width: 100%;
-    height: 500px;
-    background: rgba(10, 10, 26, 0.4);
-    border-radius: 12px;
-  }
-  #backChart {
-    width: 100%;
-    height: 230px;
-    background: rgba(10, 10, 26, 0.4);
-    border-radius: 12px;
-    margin-top: 12px;
-  }
+        .ball {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .ball.red,
+        .ball.front {
+            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
+        }
+        .ball.blue,
+        .ball.back {
+            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
+        }
+        .placeholder-red {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
+            flex-shrink: 0;
+        }
+        .placeholder-blue {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
+            flex-shrink: 0;
+        }
+        .sep {
+            margin: 0 2px;
+            color: #b0c4de;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
 
-  .hotcold-panel {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 0 16px 16px;
-    justify-content: space-between;
-  }
-  .hotcold-box {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 14px;
-    padding: 8px 10px;
-  }
-  .hotcold-box h4 {
-    font-size: 12px;
-    margin-bottom: 6px;
-    border-left: 3px solid #f39c12;
-    padding-left: 6px;
-    color: #f5f5f5;
-  }
-  .plain-number-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 8px;
-    margin-top: 4px;
-  }
-  .plain-number {
-    color: #ffeaa7;
-    font-size: 12px;
-    background: transparent;
-    padding: 2px 4px;
-  }
-  .section-label {
-    color: #f39c12;
-    font-size: 12px;
-    font-weight: 500;
-    display: inline-block;
-    margin-top: 4px;
-    margin-bottom: 2px;
-  }
-  .hotcold-box p {
-    color: #ffeaa7;
-    font-size: 12px;
-    margin: 4px 0;
-  }
-  .hotcold-box strong {
-    color: #f39c12;
-    font-size: 12px;
-    font-weight: 500;
-    display: inline-block;
-    margin-top: 6px;
-    margin-bottom: 2px;
-  }
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            padding: 0 16px 12px;
+            flex-wrap: nowrap;
+            align-items: stretch;
+        }
+        .btn-row .btn-group {
+            display: flex;
+            flex: 1;
+            background: #e8edf5;
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 40px;
+        }
+        .btn-row .btn-group .btn-cycle {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.12s;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            line-height: 40px;
+            text-align: center;
+        }
+        .btn-row .btn-group .btn-cycle:active {
+            transform: scale(0.94);
+        }
+        .btn-row .btn-group .group-number {
+            flex: 1;
+            text-align: center;
+            line-height: 40px;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 16px;
+            background: transparent;
+        }
 
-  .history-list {
-    padding: 6px 16px 12px;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-  }
-  .history-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 6px;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    width: max-content;
-    min-width: 100%;
-  }
-  .period {
-    color: #dddddd;
-    font-size: 11px;
-    min-width: 60px;
-    flex-shrink: 0;
-  }
-  .date {
-    color: #bbbbbb;
-    font-size: 10px;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-  .history-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 16px 12px;
-    font-size: 10px;
-    color: #cccccc;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .history-meta .info {
-    flex: 1;
-    text-align: left;
-  }
-  .history-meta .pagination {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .history-meta .pagination button {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    color: #fff;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    cursor: pointer;
-    transition: background 0.2s;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-  }
-  .history-meta .pagination button:active {
-    transform: scale(0.94);
-  }
-  .history-meta .pagination button:disabled {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-  .history-meta .pagination span {
-    font-size: 11px;
-    color: #dddddd;
-    min-width: 40px;
-    text-align: center;
-  }
+        .btn {
+            flex: 1;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.12s, box-shadow 0.2s, opacity 0.2s;
+            color: #ffffff;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            white-space: nowrap;
+            min-height: 40px;
+            line-height: 40px;
+            min-width: 0;
+        }
+        .btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
 
-  .dot.ok {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #00b894;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
+        .btn-red {
+            background: linear-gradient(135deg, #ff6b7a, #e74c6f);
+            color: #fff;
+        }
+        .btn-red:disabled {
+            background: #d5dbe3;
+            color: #aab3c0;
+            pointer-events: none;
+            transform: none;
+        }
 
-  button,
-  .btn,
-  input,
-  label {
-    -webkit-tap-highlight-color: transparent;
-  }
-  .error-text {
-    color: #ff6b6b;
-    text-align: center;
-    font-size: 13px;
-    padding: 8px 0;
-  }
-  .data-hint {
-    color: #55efc4;
-    font-size: 10px;
-    text-align: center;
-    padding: 4px 12px 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-  }
-</style>
+        .btn-blue {
+            background: linear-gradient(135deg, #6ab0ff, #3a7bd5);
+            color: #fff;
+        }
+        .btn-blue:disabled {
+            background: #d5dbe3;
+            color: #aab3c0;
+            pointer-events: none;
+            transform: none;
+        }
+
+        .btn-smart {
+            background: linear-gradient(135deg, #6ab0ff, #5dd9b2);
+            color: #fff;
+        }
+
+        .trend-header {
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #f8faff;
+            border-bottom: 1px solid rgba(58, 123, 213, 0.08);
+        }
+        .trend-header h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        .trend-stats {
+            display: flex;
+            gap: 8px;
+            font-size: 10px;
+            background: #e8edf5;
+            padding: 3px 10px;
+            border-radius: 30px;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+
+        .chart-container {
+            padding: 12px 12px;
+            width: 100%;
+            background: #fcfdff;
+        }
+
+        .table-container {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 8px 4px;
+            margin-bottom: 12px;
+        }
+        .table-container .sub-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 4px 8px 8px;
+            border-bottom: 1px solid #e8edf5;
+            margin-bottom: 8px;
+        }
+        .number-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+        .number-grid .num-item {
+            width: calc(20% - 6px);
+            min-width: 42px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 6px 2px;
+            text-align: center;
+            border: 1px solid #e8edf5;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+            transition: background 0.2s;
+            position: relative;
+        }
+        .number-grid .num-item.hot-item {
+            background: #ffe6e6;
+            border-color: #ff9999;
+        }
+        .number-grid .num-item.cold-item {
+            background: #e6f0ff;
+            border-color: #99bbff;
+        }
+        .number-grid .num-item .num {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .number-grid .num-item .num.red {
+            color: #e74c6f;
+        }
+        .number-grid .num-item .num.blue {
+            color: #3a7bd5;
+        }
+        .number-grid .num-item .tag {
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-left: 2px;
+        }
+        .number-grid .num-item .tag.hot-tag {
+            background: #e74c6f;
+            color: #fff;
+        }
+        .number-grid .num-item .tag.cold-tag {
+            background: #3a7bd5;
+            color: #fff;
+        }
+        .number-grid .num-item .detail {
+            font-size: 9px;
+            color: #7f8c9b;
+            margin-top: 2px;
+        }
+
+        .hotcold-panel {
+            display: none;
+        }
+
+        .history-list {
+            padding: 6px 16px 12px;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            background: #fcfdff;
+        }
+        .history-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 6px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            width: max-content;
+            min-width: 100%;
+        }
+        .period {
+            color: #2c3e50;
+            font-size: 11px;
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+        .date {
+            color: #7f8c9b;
+            font-size: 10px;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 16px 12px;
+            font-size: 10px;
+            color: #7f8c9b;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #fcfdff;
+        }
+        .history-meta .info {
+            flex: 1;
+            text-align: left;
+        }
+        .history-meta .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .history-meta .pagination button {
+            background: #e8edf5;
+            border: none;
+            color: #2c3e50;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+        .history-meta .pagination button:active {
+            transform: scale(0.94);
+        }
+        .history-meta .pagination button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .history-meta .pagination span {
+            font-size: 11px;
+            color: #2c3e50;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .info-content {
+            padding: 14px 16px 16px;
+            color: #2c3e50;
+            font-size: 12px;
+            line-height: 1.8;
+            background: #fcfdff;
+        }
+        .info-content p {
+            margin-bottom: 4px;
+        }
+        .info-content .highlight-red {
+            color: #e74c6f;
+            font-weight: 600;
+        }
+        .info-content .highlight-blue {
+            color: #3a7bd5;
+            font-weight: 600;
+        }
+        .info-content .highlight-green {
+            color: #3ab795;
+            font-weight: 600;
+        }
+
+        button,
+        .btn,
+        input,
+        label {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .error-text {
+            color: #e74c6f;
+            text-align: center;
+            font-size: 13px;
+            padding: 8px 0;
+        }
+        .data-hint {
+            color: #3a7bd5;
+            font-size: 10px;
+            text-align: center;
+            padding: 6px 12px 10px;
+            border-top: 1px solid rgba(58, 123, 213, 0.06);
+            background: #f8faff;
+        }
+
+        @media (max-width: 420px) {
+            .btn {
+                font-size: 11px;
+                min-height: 36px;
+                line-height: 36px;
+            }
+            .btn-row .btn-group {
+                min-height: 36px;
+            }
+            .btn-row .btn-group .btn-cycle {
+                line-height: 36px;
+                font-size: 16px;
+            }
+            .btn-row .btn-group .group-number {
+                line-height: 36px;
+                font-size: 14px;
+            }
+            .ball, .placeholder-red, .placeholder-blue {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+            .mode-row label {
+                font-size: 12px;
+                padding: 2px 8px;
+            }
+            .trend-header h3 {
+                font-size: 11px;
+            }
+            .trend-stats {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+            .info-content {
+                font-size: 11px;
+                padding: 12px 14px 14px;
+            }
+            .number-grid .num-item {
+                min-width: 36px;
+                padding: 4px 2px;
+            }
+            .number-grid .num-item .num {
+                font-size: 12px;
+            }
+            .number-grid .num-item .detail {
+                font-size: 8px;
+            }
+            .number-grid .num-item .tag {
+                font-size: 7px;
+                padding: 0 3px;
+            }
+        }
+        @media (max-width: 360px) {
+            .btn {
+                font-size: 10px;
+                min-height: 32px;
+                line-height: 32px;
+            }
+            .btn-row .btn-group {
+                min-height: 32px;
+            }
+            .btn-row .btn-group .btn-cycle {
+                line-height: 32px;
+                font-size: 14px;
+            }
+            .btn-row .btn-group .group-number {
+                line-height: 32px;
+                font-size: 12px;
+            }
+            .ball, .placeholder-red, .placeholder-blue {
+                width: 20px;
+                height: 20px;
+                font-size: 9px;
+            }
+            .sep {
+                font-size: 10px;
+            }
+            .info-content {
+                font-size: 10px;
+                padding: 10px 12px 12px;
+            }
+            .number-grid .num-item {
+                min-width: 32px;
+                padding: 3px 2px;
+            }
+            .number-grid .num-item .num {
+                font-size: 11px;
+            }
+            .number-grid .num-item .detail {
+                font-size: 7px;
+            }
+            .number-grid .num-item .tag {
+                font-size: 6px;
+                padding: 0 2px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="app-container">
-    <div class="card">
-      <div class="title-bar">每 日 大 奖</div>
-      <div class="mode-row">
-        <label>
-          <input type="radio" name="mode" value="ssq" checked>
-          <span><span class="dot"></span> 双色球</span>
-        </label>
-        <label>
-          <input type="radio" name="mode" value="dlt">
-          <span><span class="dot"></span> 大乐透</span>
-        </label>
-      </div>
-      <div class="result-box" id="resultArea">
-        <div class="hint-text">⏳ 加载数据中...</div>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-cycle" id="cycleBtn">组数 <span class="badge" id="groupBadge">1</span></button>
-        <button class="btn btn-refresh" id="refreshBtn">随机生成</button>
-        <button class="btn btn-smart" id="smartBtn">智能推荐</button>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-cold" id="coldRecommendBtn">追冷推荐</button>
-        <button class="btn btn-hot" id="hotRecommendBtn">追热推荐</button>
-      </div>
-      <div class="data-hint" id="dataStatus">📊 数据来源于外部独立文件</div>
+    <div class="app-container">
+        <div class="card">
+            <div class="title-bar">每日大奖</div>
+            <div class="mode-row">
+                <label>
+                    <input type="radio" name="mode" value="ssq" checked>
+                    <span><span class="dot"></span> 双色球</span>
+                </label>
+                <label>
+                    <input type="radio" name="mode" value="dlt">
+                    <span><span class="dot"></span> 大乐透</span>
+                </label>
+            </div>
+            <div class="result-box" id="resultArea">
+                <div class="hint-text">加载数据中...</div>
+            </div>
+            <div class="btn-row">
+                <div class="btn-group">
+                    <button class="btn-cycle" id="decBtn">−</button>
+                    <span class="group-number" id="groupDisplay">1</span>
+                    <button class="btn-cycle" id="incBtn">+</button>
+                </div>
+                <button class="btn btn-red" id="refreshBtn">天命所归</button>
+                <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-smart" id="smartBtn">智能推荐</button>
+                <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
+                <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
+            </div>
+            <div class="data-hint" id="dataStatus">加载数据中...</div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar secondary" id="historyTitle">历史数据</div>
+            <div class="history-list" id="historyList"></div>
+            <div class="history-meta" id="historyMeta">
+                <span class="info" id="historyInfo"></span>
+                <span class="pagination">
+                    <button id="prevPageBtn" disabled>上一页</button>
+                    <span id="pageInfo">1/10</span>
+                    <button id="nextPageBtn">下一页</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar tertiary" id="trendTitleBar">走势分析</div>
+            <div class="trend-header">
+                <h3 id="trendTitle">双色球 · 红球频率分布</h3>
+                <div class="trend-stats" id="trendStats">加载中...</div>
+            </div>
+            <div class="chart-container" id="tableContainer">
+                <div id="frontTableContainer" class="table-container"></div>
+                <div id="backTableContainer" class="table-container"></div>
+            </div>
+            <div class="hotcold-panel" id="hotcoldPanel"></div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar fourth">功能说明</div>
+            <div class="info-content">
+                <p><span class="highlight-red">天命所归</span> —— 完全随机生成，听天由命。</p>
+                <p><span class="highlight-blue">逆天改命</span> —— 排除天命所归生成的号码，另辟蹊径。</p>
+                <p><span class="highlight-green">智能推荐</span> —— 冷热均衡策略，兼顾频率与遗漏。</p>
+                <p><span class="highlight-red">追冷推荐</span> —— 侧重高遗漏号码，博冷门。</p>
+                <p><span class="highlight-blue">追热推荐</span> —— 侧重高频号码，跟热门。</p>
+                <p style="margin-top:6px; color:#7f8c9b; font-size:11px;">数据基于真实历史开奖记录，每次推荐均从当期数据中动态计算。</p>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-      <div class="title-bar" id="historyTitle" style="background: linear-gradient(90deg,#2d3436,#636e72);">历史数据</div>
-      <div class="history-list" id="historyList"></div>
-      <div class="history-meta" id="historyMeta">
-        <span class="info" id="historyInfo"></span>
-        <span class="pagination">
-          <button id="prevPageBtn" disabled>上一页</button>
-          <span id="pageInfo">1/10</span>
-          <button id="nextPageBtn">下一页</button>
-        </span>
-      </div>
-    </div>
+    <script>
+        let currentMode = 'ssq';
+        let groups = 1;
+        let currentPage = 1;
+        const PAGE_SIZE = 10;
 
-    <div class="card">
-      <div class="title-bar" id="trendTitleBar" style="background: linear-gradient(90deg,#e67e22,#f1c40f);">历史数据</div>
-      <div class="trend-header">
-        <h3 id="trendTitle">双色球 · 红球频率分布</h3>
-        <div class="trend-stats" id="trendStats">加载中...</div>
-      </div>
-      <div class="chart-container">
-        <div id="frontChart" style="width:100%; height:500px;"></div>
-        <div id="backChart" style="width:100%; height:230px;"></div>
-      </div>
-      <div class="hotcold-panel" id="hotcoldPanel"></div>
-    </div>
-  </div>
+        let SSQ_DATA = [];
+        let DLT_DATA = [];
 
-  <script>
-    // ======================== 核心逻辑 ========================
-    let currentMode = 'ssq';
-    let groups = 1;
-    let currentPage = 1;
-    const PAGE_SIZE = 10;
+        let trendCache = { ssq: null, dlt: null };
 
-    let SSQ_DATA = [];
-    let DLT_DATA = [];
+        const resultDiv = document.getElementById('resultArea');
+        const trendStatsSpan = document.getElementById('trendStats');
+        const trendTitleSpan = document.getElementById('trendTitle');
+        const hotcoldPanel = document.getElementById('hotcoldPanel');
+        const historyListDiv = document.getElementById('historyList');
+        const historyMetaSpan = document.getElementById('historyMeta');
+        const historyInfoSpan = document.getElementById('historyInfo');
+        const pageInfoSpan = document.getElementById('pageInfo');
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const dataStatusDiv = document.getElementById('dataStatus');
+        const specificBtn = document.getElementById('specificBtn');
+        const groupDisplay = document.getElementById('groupDisplay');
+        const frontTableContainer = document.getElementById('frontTableContainer');
+        const backTableContainer = document.getElementById('backTableContainer');
 
-    let trendCache = { ssq: null, dlt: null };
-    let frontChartInstance = null;
-    let backChartInstance = null;
+        let lastExcludeReds = [];
+        let lastExcludeBlues = [];
+        let lastGeneratedGroups = 1;
 
-    const resultDiv = document.getElementById('resultArea');
-    const trendStatsSpan = document.getElementById('trendStats');
-    const trendTitleSpan = document.getElementById('trendTitle');
-    const hotcoldPanel = document.getElementById('hotcoldPanel');
-    const groupBadge = document.getElementById('groupBadge');
-    const historyListDiv = document.getElementById('historyList');
-    const historyMetaSpan = document.getElementById('historyMeta');
-    const historyInfoSpan = document.getElementById('historyInfo');
-    const pageInfoSpan = document.getElementById('pageInfo');
-    const prevPageBtn = document.getElementById('prevPageBtn');
-    const nextPageBtn = document.getElementById('nextPageBtn');
-    const dataStatusDiv = document.getElementById('dataStatus');
-
-    function rand(n) {
-      const arr = new Uint32Array(1);
-      crypto.getRandomValues(arr);
-      return 1 + (arr[0] % n);
-    }
-
-    function pickUnique(count, max) {
-      const set = new Set();
-      while (set.size < count) set.add(rand(max));
-      return [...set].sort((a, b) => a - b);
-    }
-
-    function pad(n) {
-      return n < 10 ? '0' + n : '' + n;
-    }
-
-    function genSSQ() {
-      return { reds: pickUnique(6, 33), blues: [rand(16)] };
-    }
-
-    function genDLT() {
-      return { reds: pickUnique(5, 35), blues: pickUnique(2, 12) };
-    }
-
-    function refreshNumbers() {
-      const isSSQ = currentMode === 'ssq';
-      let html = '';
-      for (let i = 0; i < groups; i++) {
-        const d = isSSQ ? genSSQ() : genDLT();
-        html += '<div class="number-line">';
-        d.reds.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
-        html += '<span class="sep">+</span>';
-        d.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
-        html += '</div>';
-      }
-      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">🎲 随机生成</div>`;
-      resultDiv.innerHTML = html;
-    }
-
-    function showHint() {
-      const name = currentMode === 'ssq' ? '双色球' : '大乐透';
-      const data = currentMode === 'ssq' ? SSQ_DATA : DLT_DATA;
-      const count = data.length;
-      resultDiv.innerHTML = `<div class="hint-text">点击下方按钮获得 ${groups} 组${name}号码<br>随机生成 或 基于近${count}期真实数据推荐</div>`;
-    }
-
-    function parseBuiltinData(type) {
-      const raw = type === 'ssq' ? SSQ_DATA : DLT_DATA;
-      const records = [];
-      for (let line of raw) {
-        const parts = line.split('|');
-        if (parts.length < 4) continue;
-        const issue = parts[0].trim();
-        const date = parts[1].trim();
-        const redsStr = parts[2].trim();
-        const bluesStr = parts[3].trim();
-        const reds = redsStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
-        const blues = bluesStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
-        if (reds.length === 0 || blues.length === 0) continue;
-        if (type === 'ssq') {
-          if (reds.length !== 6 || blues.length !== 1) continue;
-          if (reds.some(n => n < 1 || n > 33)) continue;
-          if (blues.some(n => n < 1 || n > 16)) continue;
-        } else {
-          if (reds.length !== 5 || blues.length !== 2) continue;
-          if (reds.some(n => n < 1 || n > 35)) continue;
-          if (blues.some(n => n < 1 || n > 12)) continue;
+        function rand(n) {
+            const arr = new Uint32Array(1);
+            crypto.getRandomValues(arr);
+            return 1 + (arr[0] % n);
         }
-        records.push({
-          issue,
-          date,
-          reds: reds.slice().sort((a, b) => a - b),
-          blues: blues.slice().sort((a, b) => a - b)
-        });
-      }
-      records.sort((a, b) => {
-        if (a.date > b.date) return -1;
-        if (a.date < b.date) return 1;
-        return 0;
-      });
-      return records;
-    }
 
-    function getData(type) {
-      if (trendCache[type]) return trendCache[type];
-      const records = parseBuiltinData(type);
-      trendCache[type] = records;
-      return records;
-    }
-
-    let historyStore = { ssq: [], dlt: [] };
-
-    function loadHistory(lotteryType) {
-      const allData = getData(lotteryType);
-      const recent = allData;
-      historyStore[lotteryType] = recent.map(item => ({
-        period: item.issue,
-        date: item.date.slice(5),
-        nums: item.reds,
-        blues: item.blues,
-        blue: item.blues[0]
-      }));
-      if (lotteryType === currentMode) renderHistory();
-    }
-
-    function renderHistory() {
-      const items = historyStore[currentMode];
-      if (!items || items.length === 0) {
-        historyListDiv.innerHTML = `<div class="error-text">📭 历史数据加载失败</div>`;
-        historyInfoSpan.textContent = '数据不可用';
-        pageInfoSpan.textContent = '0/0';
-        prevPageBtn.disabled = true;
-        nextPageBtn.disabled = true;
-        return;
-      }
-
-      const total = items.length;
-      const totalPages = Math.ceil(total / PAGE_SIZE);
-      if (currentPage > totalPages) currentPage = totalPages || 1;
-      if (currentPage < 1) currentPage = 1;
-
-      const start = (currentPage - 1) * PAGE_SIZE;
-      const end = Math.min(start + PAGE_SIZE, total);
-      const pageItems = items.slice(start, end);
-
-      const isSSQ = currentMode === 'ssq';
-      let html = '';
-      pageItems.forEach(item => {
-        html += '<div class="history-row">';
-        html += `<span class="period">${item.period}期</span>`;
-        item.nums.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
-        if (isSSQ) {
-          html += `<span class="ball blue">${pad(item.blue)}</span>`;
-        } else {
-          item.blues.forEach(b => html += `<span class="ball back">${pad(b)}</span>`);
-        }
-        html += `<span class="date">${item.date}</span></div>`;
-      });
-      historyListDiv.innerHTML = html;
-
-      historyInfoSpan.textContent = `共 ${total} 期 (第${start+1}-${end}期)`;
-      pageInfoSpan.textContent = `${currentPage}/${totalPages}`;
-      prevPageBtn.disabled = (currentPage <= 1);
-      nextPageBtn.disabled = (currentPage >= totalPages);
-    }
-
-    function goToPage(page) {
-      const items = historyStore[currentMode];
-      if (!items || items.length === 0) return;
-      const totalPages = Math.ceil(items.length / PAGE_SIZE);
-      if (page < 1) page = 1;
-      if (page > totalPages) page = totalPages;
-      if (currentPage === page) return;
-      currentPage = page;
-      renderHistory();
-    }
-
-    function analyzeStats(records, type) {
-      if (!records || records.length === 0) return null;
-      const isSSQ = type === 'ssq';
-      const frontMax = isSSQ ? 33 : 35;
-      const backMax = isSSQ ? 16 : 12;
-      let frontFreq = new Array(frontMax + 1).fill(0);
-      let backFreq = new Array(backMax + 1).fill(0);
-      let frontMiss = new Array(frontMax + 1).fill(0);
-      let backMiss = new Array(backMax + 1).fill(0);
-      let frontMet = new Array(frontMax + 1).fill(false);
-      let backMet = new Array(backMax + 1).fill(false);
-      for (let i = 0; i < records.length; i++) {
-        const rec = records[i];
-        rec.reds.forEach(num => {
-          frontFreq[num]++;
-          if (!frontMet[num]) { frontMiss[num] = i;
-            frontMet[num] = true; }
-        });
-        rec.blues.forEach(num => {
-          backFreq[num]++;
-          if (!backMet[num]) { backMiss[num] = i;
-            backMet[num] = true; }
-        });
-      }
-      for (let i = 1; i <= frontMax; i++) {
-        if (!frontMet[i]) frontMiss[i] = records.length;
-      }
-      for (let i = 1; i <= backMax; i++) {
-        if (!backMet[i]) backMiss[i] = records.length;
-      }
-      let frontEntries = [];
-      for (let i = 1; i <= frontMax; i++) {
-        frontEntries.push({ num: i, freq: frontFreq[i], miss: frontMiss[i] });
-      }
-      frontEntries.sort((a, b) => b.freq - a.freq);
-      let hotFront = frontEntries.slice(0, 5);
-      let coldFront = [...frontEntries].sort((a, b) => a.freq - b.freq).slice(0, 5);
-      let backEntries = [];
-      for (let i = 1; i <= backMax; i++) {
-        backEntries.push({ num: i, freq: backFreq[i], miss: backMiss[i] });
-      }
-      backEntries.sort((a, b) => b.freq - a.freq);
-      let hotBack = backEntries.slice(0, 3);
-      let coldBack = [...backEntries].sort((a, b) => a.freq - b.freq).slice(0, 3);
-      return {
-        frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length,
-        hotFront, coldFront, hotBack, coldBack, frontMax, backMax
-      };
-    }
-
-    function weightedSelect(pool, count) {
-      let total = pool.reduce((s, o) => s + o.weight, 0);
-      let selected = new Set();
-      let result = [];
-      let tempPool = [...pool];
-      while (result.length < count && tempPool.length) {
-        let randVal = Math.random() * total;
-        let acc = 0, pick = null;
-        for (let i = 0; i < tempPool.length; i++) {
-          acc += tempPool[i].weight;
-          if (randVal <= acc) { pick = tempPool[i]; break; }
-        }
-        if (pick && !selected.has(pick.num)) {
-          selected.add(pick.num);
-          result.push(pick.num);
-          let idx = tempPool.findIndex(p => p.num === pick.num);
-          if (idx !== -1) tempPool.splice(idx, 1);
-          total = tempPool.reduce((s, o) => s + o.weight, 0);
-        } else if (!pick) break;
-      }
-      while (result.length < count) {
-        const max = pool.length > 0 ? Math.max(...pool.map(p => p.num)) : 35;
-        let extra = Math.floor(Math.random() * max) + 1;
-        if (!selected.has(extra)) { result.push(extra);
-          selected.add(extra); }
-      }
-      return result.sort((a, b) => a - b);
-    }
-
-    function smartRecommend(mode) {
-      const records = getData(currentMode);
-      if (!records || records.length === 0) {
-        resultDiv.innerHTML = `<div class="error-text">⚠️ 走势数据未加载，无法推荐</div>`;
-        return;
-      }
-      const stats = analyzeStats(records, currentMode);
-      if (!stats) {
-        resultDiv.innerHTML = `<div class="error-text">数据解析异常，无法推荐</div>`;
-        return;
-      }
-      const isSSQ = currentMode === 'ssq';
-      const frontCnt = isSSQ ? 6 : 5;
-      const backCnt = isSSQ ? 1 : 2;
-      const frontMax = stats.frontMax;
-      const backMax = stats.backMax;
-      let html = '';
-      for (let g = 0; g < groups; g++) {
-        let frontPool = [];
-        for (let i = 1; i <= frontMax; i++) {
-          let weight;
-          if (mode === 'cold') {
-            weight = (stats.frontMiss[i] + 1) * 2;
-          } else if (mode === 'hot') {
-            weight = stats.frontFreq[i] + 2;
-          } else {
-            weight = 10 - stats.frontFreq[i] + stats.frontMiss[i] * 0.7;
-          }
-          weight = Math.max(1, weight);
-          frontPool.push({ num: i, weight });
-        }
-        let backPool = [];
-        for (let i = 1; i <= backMax; i++) {
-          let weight;
-          if (mode === 'cold') {
-            weight = (stats.backMiss[i] + 1) * 2;
-          } else if (mode === 'hot') {
-            weight = stats.backFreq[i] + 2;
-          } else {
-            weight = 10 - stats.backFreq[i] + stats.backMiss[i] * 0.8;
-          }
-          weight = Math.max(1, weight);
-          backPool.push({ num: i, weight });
-        }
-        let redsRec = weightedSelect(frontPool, frontCnt);
-        let bluesRec = weightedSelect(backPool, backCnt);
-        html += '<div class="number-line">';
-        redsRec.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
-        html += '<span class="sep">+</span>';
-        bluesRec.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
-        html += '</div>';
-      }
-      const modeTextMap = {
-        cold: '❄️ 追冷模式 (侧重高遗漏)',
-        hot: '🔥 追热模式 (侧重高频)',
-        balance: '⚖️ 冷热均衡策略'
-      };
-      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeTextMap[mode] || mode}</div>`;
-      resultDiv.innerHTML = html;
-    }
-
-    function renderHorizontalBarChart(containerId, categories, values, barColorStart, barColorEnd, axisName) {
-      const dom = document.getElementById(containerId);
-      if (!dom) return;
-      let chart = null;
-      if (containerId === 'frontChart') {
-        if (frontChartInstance) chart = frontChartInstance;
-        else { chart = echarts.init(dom);
-          frontChartInstance = chart; }
-      } else {
-        if (backChartInstance) chart = backChartInstance;
-        else { chart = echarts.init(dom);
-          backChartInstance = chart; }
-      }
-      const baseOption = {
-        backgroundColor: 'transparent',
-        tooltip: { show: false },
-        grid: { containLabel: true, left: '12%', right: '5%', top: 20, bottom: 10 },
-        xAxis: {
-          type: 'value',
-          name: axisName,
-          nameTextStyle: { color: '#cccccc', fontSize: 10 },
-          splitLine: { lineStyle: { color: '#444444' } },
-          axisLabel: { color: '#dddddd' }
-        },
-        yAxis: {
-          type: 'category',
-          data: categories,
-          axisLabel: { fontSize: 9, color: '#dddddd', interval: 0, rotate: 0 },
-          axisLine: { lineStyle: { color: '#888888' } },
-          axisTick: { show: false }
-        },
-        series: [{
-          type: 'bar',
-          data: values,
-          label: {
-            show: true,
-            position: 'right',
-            color: '#ffd966',
-            fontSize: 9,
-            formatter: (params) => params.value > 0 ? params.value : ''
-          },
-          itemStyle: {
-            borderRadius: [0, 4, 4, 0],
-            color: {
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 1,
-              y2: 0,
-              colorStops: [
-                { offset: 0, color: barColorStart },
-                { offset: 1, color: barColorEnd }
-              ]
+        function pickUnique(count, max, excludeSet) {
+            const pool = [];
+            for (let i = 1; i <= max; i++) {
+                if (!excludeSet || !excludeSet.has(i)) pool.push(i);
             }
-          }
-        }]
-      };
-      chart.setOption(baseOption, true);
-      chart.resize();
-    }
-
-    function clearCharts() {
-      const msg = { text: '暂无数据', textStyle: { color: '#888', fontSize: 14, fontWeight: 'normal' }, left: 'center',
-        top: 'center' };
-      if (frontChartInstance) {
-        frontChartInstance.clear();
-        frontChartInstance.setOption({ backgroundColor: 'transparent', title: msg });
-      }
-      if (backChartInstance) {
-        backChartInstance.clear();
-        backChartInstance.setOption({ backgroundColor: 'transparent', title: msg });
-      }
-    }
-
-    function renderTrend() {
-      const type = currentMode;
-      const name = type === 'ssq' ? '双色球' : '大乐透';
-      trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
-      trendStatsSpan.innerHTML = '⏳ 加载数据...';
-      const records = getData(type);
-      if (!records || records.length === 0) {
-        trendStatsSpan.innerHTML = '❌ 数据加载失败';
-        hotcoldPanel.innerHTML = `<div class="error-text">⚠️ 无法获取走势数据</div>`;
-        clearCharts();
-        return;
-      }
-      const stats = analyzeStats(records, type);
-      if (!stats) {
-        trendStatsSpan.innerHTML = '❌ 数据解析失败';
-        hotcoldPanel.innerHTML = `<div class="error-text">数据格式异常</div>`;
-        clearCharts();
-        return;
-      }
-      const frontCategories = Array.from({ length: stats.frontMax }, (_, i) => i + 1);
-      const frontData = frontCategories.map(num => stats.frontFreq[num] || 0);
-      renderHorizontalBarChart('frontChart', frontCategories, frontData, '#e74c3c', '#f39c12', '出现次数');
-      const backCategories = Array.from({ length: stats.backMax }, (_, i) => i + 1);
-      const backData = backCategories.map(num => stats.backFreq[num] || 0);
-      renderHorizontalBarChart('backChart', backCategories, backData, '#3498db', '#9b59b6', '出现次数');
-      const total = stats.totalPeriods;
-      trendStatsSpan.innerHTML = `📊 共 ${total} 期 | 热号高频 · 冷号低开 · 遗漏统计`;
-      let hotHtml = `<div class="hotcold-box"><h4>🔥 热号</h4>`;
-      hotHtml += `<span class="section-label">${type === 'ssq' ? '红球' : '前区'}热号</span><div class="plain-number-list">`;
-      stats.hotFront.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
-      hotHtml += `</div><span class="section-label">${type === 'ssq' ? '蓝球' : '后区'}热号</span><div class="plain-number-list">`;
-      stats.hotBack.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
-      hotHtml += `</div></div>`;
-      let coldHtml = `<div class="hotcold-box"><h4>❄️ 冷号</h4>`;
-      coldHtml += `<span class="section-label">${type === 'ssq' ? '红球' : '前区'}冷号</span><div class="plain-number-list">`;
-      stats.coldFront.forEach(c => {
-        const missVal = stats.frontMiss[c.num] || 0;
-        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
-      });
-      coldHtml += `</div><span class="section-label">${type === 'ssq' ? '蓝球' : '后区'}冷号</span><div class="plain-number-list">`;
-      stats.coldBack.forEach(c => {
-        const missVal = stats.backMiss[c.num] || 0;
-        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
-      });
-      coldHtml += `</div></div>`;
-      let missHtml = `<div class="hotcold-box"><h4>📌 最大遗漏</h4>`;
-      let maxMissFront = 0, maxMissNum = 0;
-      for (let i = 1; i <= stats.frontMax; i++) {
-        if (stats.frontMiss[i] > maxMissFront) { maxMissFront = stats.frontMiss[i];
-          maxMissNum = i; }
-      }
-      missHtml += `<p>${type === 'ssq' ? '红' : '前区'}最大遗漏: ${maxMissNum}号 (${maxMissFront}期未开)</p>`;
-      let maxMissBack = 0, maxMissBNum = 0;
-      for (let i = 1; i <= stats.backMax; i++) {
-        if (stats.backMiss[i] > maxMissBack) { maxMissBack = stats.backMiss[i];
-          maxMissBNum = i; }
-      }
-      missHtml += `<p>${type === 'ssq' ? '蓝' : '后区'}最大遗漏: ${maxMissBNum}号 (${maxMissBack}期未开)</p>`;
-      missHtml += `</div>`;
-      hotcoldPanel.innerHTML = hotHtml + coldHtml + missHtml;
-    }
-
-    // ---- 从外部 fetch 数据 ----
-    async function fetchData() {
-      try {
-        const [ssqResp, dltResp] = await Promise.all([
-          fetch('https://magua-qi.github.io/ssqdata.html'),
-          fetch('https://magua-qi.github.io/dltdata.html')
-        ]);
-
-        if (!ssqResp.ok || !dltResp.ok) {
-          throw new Error('网络请求失败');
+            if (pool.length < count) {
+                return pickUnique(count, max, new Set());
+            }
+            const result = [];
+            const used = new Set();
+            while (result.length < count) {
+                const idx = rand(pool.length) - 1;
+                const val = pool[idx];
+                if (!used.has(val)) {
+                    used.add(val);
+                    result.push(val);
+                }
+            }
+            return result.sort((a, b) => a - b);
         }
 
-        const ssqText = await ssqResp.text();
-        const dltText = await dltResp.text();
-
-        // 从 HTML 中提取数组定义
-        function extractArray(html, varName) {
-          const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
-          const match = html.match(regex);
-          if (!match) return [];
-          // 将匹配到的数组字符串转换为真正的数组
-          try {
-            // 先去除注释行
-            let cleaned = match[1].replace(/\/\/.*$/gm, '');
-            // 使用 Function 构造器安全解析
-            const fn = new Function(`return [${cleaned}];`);
-            return fn();
-          } catch (e) {
-            console.error(`解析 ${varName} 失败:`, e);
-            return [];
-          }
+        function pad(n) {
+            return n < 10 ? '0' + n : '' + n;
         }
 
-        SSQ_DATA = extractArray(ssqText, 'SSQ_DATA');
-        DLT_DATA = extractArray(dltText, 'DLT_DATA');
+        function genSSQ(excludeReds, excludeBlues) {
+            const redSet = new Set(excludeReds || []);
+            const blueSet = new Set(excludeBlues || []);
+            return { reds: pickUnique(6, 33, redSet), blues: pickUnique(1, 16, blueSet) };
+        }
 
-        console.log(`✅ 双色球数据加载完成: ${SSQ_DATA.length} 期`);
-        console.log(`✅ 大乐透数据加载完成: ${DLT_DATA.length} 期`);
+        function genDLT(excludeReds, excludeBlues) {
+            const redSet = new Set(excludeReds || []);
+            const blueSet = new Set(excludeBlues || []);
+            return { reds: pickUnique(5, 35, redSet), blues: pickUnique(2, 12, blueSet) };
+        }
 
-        // 数据加载完成后初始化
-        showHint();
-        loadHistory('ssq');
-        loadHistory('dlt');
-        renderHistory();
-        renderTrend();
-        dataStatusDiv.textContent = `📊 双色球 ${SSQ_DATA.length} 期 · 大乐透 ${DLT_DATA.length} 期`;
+        function refreshNumbers() {
+            const isSSQ = currentMode === 'ssq';
+            const allReds = [];
+            const allBlues = [];
+            const groupsData = [];
+            let html = '';
+            for (let i = 0; i < groups; i++) {
+                const d = isSSQ ? genSSQ() : genDLT();
+                groupsData.push(d);
+                d.reds.forEach(n => allReds.push(n));
+                d.blues.forEach(n => allBlues.push(n));
+                html += '<div class="number-line">';
+                d.reds.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+                html += '<span class="sep">+</span>';
+                d.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+                html += '</div>';
+            }
+            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">要的就是这些号码！</div>`;
+            resultDiv.innerHTML = html;
 
-      } catch (err) {
-        console.error('加载数据失败:', err);
-        resultDiv.innerHTML = `<div class="error-text">⚠️ 数据加载失败，请检查网络连接</div>`;
-        dataStatusDiv.textContent = '❌ 数据加载失败';
-      }
-    }
+            const uniqueReds = [...new Set(allReds)];
+            const uniqueBlues = [...new Set(allBlues)];
+            lastExcludeReds = uniqueReds;
+            lastExcludeBlues = uniqueBlues;
+            lastGeneratedGroups = groups;
+            specificBtn.disabled = false;
+            specificBtn.className = 'btn btn-blue';
+        }
 
-    // ---- 事件绑定 ----
-    document.querySelectorAll('input[name="mode"]').forEach(radio => {
-      radio.addEventListener('change', async (e) => {
-        currentMode = e.target.value;
-        currentPage = 1;
-        showHint();
-        renderHistory();
-        renderTrend();
-      });
-    });
+        function specificRandom() {
+            if (lastExcludeReds.length === 0 && lastExcludeBlues.length === 0) {
+                resultDiv.innerHTML = `<div class="error-text">请先点击「天命所归」</div>`;
+                return;
+            }
+            const isSSQ = currentMode === 'ssq';
+            const groupsToGen = lastGeneratedGroups;
+            let excludeReds = lastExcludeReds.slice();
+            let excludeBlues = lastExcludeBlues.slice();
 
-    document.getElementById('cycleBtn').addEventListener('click', () => {
-      groups = groups % 5 + 1;
-      groupBadge.innerText = groups;
-      showHint();
-    });
+            let html = '';
+            let fallback = false;
 
-    document.getElementById('refreshBtn').addEventListener('click', () => refreshNumbers());
-    document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
-    document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
-    document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+            for (let i = 0; i < groupsToGen; i++) {
+                let d;
+                if (isSSQ) {
+                    const redSet = new Set(excludeReds);
+                    const blueSet = new Set(excludeBlues);
+                    let poolSize = 33 - redSet.size;
+                    if (poolSize < 6) {
+                        fallback = true;
+                        const firstGroupReds = lastExcludeReds.slice(0, 6);
+                        const firstGroupBlues = lastExcludeBlues.slice(0, 1);
+                        d = genSSQ(firstGroupReds, firstGroupBlues);
+                    } else {
+                        d = genSSQ(excludeReds, excludeBlues);
+                    }
+                } else {
+                    const redSet = new Set(excludeReds);
+                    const blueSet = new Set(excludeBlues);
+                    let poolSize = 35 - redSet.size;
+                    if (poolSize < 5) {
+                        fallback = true;
+                        const firstGroupReds = lastExcludeReds.slice(0, 5);
+                        const firstGroupBlues = lastExcludeBlues.slice(0, 2);
+                        d = genDLT(firstGroupReds, firstGroupBlues);
+                    } else {
+                        d = genDLT(excludeReds, excludeBlues);
+                    }
+                }
+                html += '<div class="number-line">';
+                d.reds.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+                html += '<span class="sep">+</span>';
+                d.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+                html += '</div>';
+            }
+            const modeLabel = fallback ? '特定随机 (排除不足·已降级)' : '反其道而行之~';
+            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeLabel}</div>`;
+            resultDiv.innerHTML = html;
+        }
 
-    prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
-    nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+        function showHint() {
+            const isSSQ = currentMode === 'ssq';
+            const name = isSSQ ? '双色球' : '大乐透';
+            const data = isSSQ ? SSQ_DATA : DLT_DATA;
+            const count = data.length;
+            const frontCount = isSSQ ? 6 : 5;
+            const backCount = isSSQ ? 1 : 2;
+            let html = '';
+            for (let g = 0; g < groups; g++) {
+                html += '<div class="number-line">';
+                for (let f = 0; f < frontCount; f++) {
+                    html += `<span class="placeholder-red"></span>`;
+                }
+                html += '<span class="sep">+</span>';
+                for (let b = 0; b < backCount; b++) {
+                    html += `<span class="placeholder-blue"></span>`;
+                }
+                html += '</div>';
+            }
+            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">等待操作 (共${groups}组)</div>`;
+            resultDiv.innerHTML = html;
+            specificBtn.disabled = true;
+            specificBtn.className = 'btn btn-blue';
+        }
 
-    window.addEventListener('resize', () => {
-      if (frontChartInstance) frontChartInstance.resize();
-      if (backChartInstance) backChartInstance.resize();
-    });
+        function parseBuiltinData(type) {
+            const raw = type === 'ssq' ? SSQ_DATA : DLT_DATA;
+            const records = [];
+            for (let line of raw) {
+                const parts = line.split('|');
+                if (parts.length < 4) continue;
+                const issue = parts[0].trim();
+                const date = parts[1].trim();
+                const redsStr = parts[2].trim();
+                const bluesStr = parts[3].trim();
+                const reds = redsStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
+                const blues = bluesStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
+                if (reds.length === 0 || blues.length === 0) continue;
+                if (type === 'ssq') {
+                    if (reds.length !== 6 || blues.length !== 1) continue;
+                    if (reds.some(n => n < 1 || n > 33)) continue;
+                    if (blues.some(n => n < 1 || n > 16)) continue;
+                } else {
+                    if (reds.length !== 5 || blues.length !== 2) continue;
+                    if (reds.some(n => n < 1 || n > 35)) continue;
+                    if (blues.some(n => n < 1 || n > 12)) continue;
+                }
+                records.push({
+                    issue,
+                    date,
+                    reds: reds.slice().sort((a, b) => a - b),
+                    blues: blues.slice().sort((a, b) => a - b)
+                });
+            }
+            records.sort((a, b) => {
+                if (a.date > b.date) return -1;
+                if (a.date < b.date) return 1;
+                return 0;
+            });
+            return records;
+        }
 
-    // ---- 启动 ----
-    fetchData();
-  </script>
+        function getData(type) {
+            if (trendCache[type]) return trendCache[type];
+            const records = parseBuiltinData(type);
+            trendCache[type] = records;
+            return records;
+        }
+
+        let historyStore = { ssq: [], dlt: [] };
+
+        function loadHistory(lotteryType) {
+            const allData = getData(lotteryType);
+            const recent = allData;
+            historyStore[lotteryType] = recent.map(item => ({
+                period: item.issue,
+                date: item.date.slice(5),
+                nums: item.reds,
+                blues: item.blues,
+                blue: item.blues[0]
+            }));
+            if (lotteryType === currentMode) renderHistory();
+        }
+
+        function renderHistory() {
+            const items = historyStore[currentMode];
+            if (!items || items.length === 0) {
+                historyListDiv.innerHTML = `<div class="error-text">历史数据加载失败</div>`;
+                historyInfoSpan.textContent = '数据不可用';
+                pageInfoSpan.textContent = '0/0';
+                prevPageBtn.disabled = true;
+                nextPageBtn.disabled = true;
+                return;
+            }
+
+            const total = items.length;
+            const totalPages = Math.ceil(total / PAGE_SIZE);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = Math.min(start + PAGE_SIZE, total);
+            const pageItems = items.slice(start, end);
+
+            const isSSQ = currentMode === 'ssq';
+            let html = '';
+            pageItems.forEach(item => {
+                html += '<div class="history-row">';
+                html += `<span class="period">${item.period}期</span>`;
+                item.nums.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+                if (isSSQ) {
+                    html += `<span class="ball blue">${pad(item.blue)}</span>`;
+                } else {
+                    item.blues.forEach(b => html += `<span class="ball back">${pad(b)}</span>`);
+                }
+                html += `<span class="date">${item.date}</span></div>`;
+            });
+            historyListDiv.innerHTML = html;
+
+            historyInfoSpan.textContent = `共 ${total} 期 (第${start+1}-${end}期)`;
+            pageInfoSpan.textContent = `${currentPage}/${totalPages}`;
+            prevPageBtn.disabled = (currentPage <= 1);
+            nextPageBtn.disabled = (currentPage >= totalPages);
+        }
+
+        function goToPage(page) {
+            const items = historyStore[currentMode];
+            if (!items || items.length === 0) return;
+            const totalPages = Math.ceil(items.length / PAGE_SIZE);
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            if (currentPage === page) return;
+            currentPage = page;
+            renderHistory();
+        }
+
+        function analyzeStats(records, type) {
+            if (!records || records.length === 0) return null;
+            const isSSQ = type === 'ssq';
+            const frontMax = isSSQ ? 33 : 35;
+            const backMax = isSSQ ? 16 : 12;
+            let frontFreq = new Array(frontMax + 1).fill(0);
+            let backFreq = new Array(backMax + 1).fill(0);
+            let frontMiss = new Array(frontMax + 1).fill(0);
+            let backMiss = new Array(backMax + 1).fill(0);
+            let frontMet = new Array(frontMax + 1).fill(false);
+            let backMet = new Array(backMax + 1).fill(false);
+            for (let i = 0; i < records.length; i++) {
+                const rec = records[i];
+                rec.reds.forEach(num => {
+                    frontFreq[num]++;
+                    if (!frontMet[num]) { frontMiss[num] = i;
+                        frontMet[num] = true; }
+                });
+                rec.blues.forEach(num => {
+                    backFreq[num]++;
+                    if (!backMet[num]) { backMiss[num] = i;
+                        backMet[num] = true; }
+                });
+            }
+            for (let i = 1; i <= frontMax; i++) {
+                if (!frontMet[i]) frontMiss[i] = records.length;
+            }
+            for (let i = 1; i <= backMax; i++) {
+                if (!backMet[i]) backMiss[i] = records.length;
+            }
+            let frontEntries = [];
+            for (let i = 1; i <= frontMax; i++) {
+                frontEntries.push({ num: i, freq: frontFreq[i], miss: frontMiss[i] });
+            }
+            frontEntries.sort((a, b) => b.freq - a.freq);
+            let hotFront = frontEntries.slice(0, 5);
+            let coldFront = [...frontEntries].sort((a, b) => a.freq - b.freq).slice(0, 5);
+            let backEntries = [];
+            for (let i = 1; i <= backMax; i++) {
+                backEntries.push({ num: i, freq: backFreq[i], miss: backMiss[i] });
+            }
+            backEntries.sort((a, b) => b.freq - a.freq);
+            let hotBack = backEntries.slice(0, 3);
+            let coldBack = [...backEntries].sort((a, b) => a.freq - b.freq).slice(0, 3);
+            return {
+                frontFreq,
+                backFreq,
+                frontMiss,
+                backMiss,
+                totalPeriods: records.length,
+                hotFront,
+                coldFront,
+                hotBack,
+                coldBack,
+                frontMax,
+                backMax
+            };
+        }
+
+        function weightedSelect(pool, count) {
+            let total = pool.reduce((s, o) => s + o.weight, 0);
+            let selected = new Set();
+            let result = [];
+            let tempPool = [...pool];
+            while (result.length < count && tempPool.length) {
+                let randVal = Math.random() * total;
+                let acc = 0,
+                    pick = null;
+                for (let i = 0; i < tempPool.length; i++) {
+                    acc += tempPool[i].weight;
+                    if (randVal <= acc) { pick = tempPool[i]; break; }
+                }
+                if (pick && !selected.has(pick.num)) {
+                    selected.add(pick.num);
+                    result.push(pick.num);
+                    let idx = tempPool.findIndex(p => p.num === pick.num);
+                    if (idx !== -1) tempPool.splice(idx, 1);
+                    total = tempPool.reduce((s, o) => s + o.weight, 0);
+                } else if (!pick) break;
+            }
+            while (result.length < count) {
+                const max = pool.length > 0 ? Math.max(...pool.map(p => p.num)) : 35;
+                let extra = Math.floor(Math.random() * max) + 1;
+                if (!selected.has(extra)) { result.push(extra);
+                    selected.add(extra); }
+            }
+            return result.sort((a, b) => a - b);
+        }
+
+        function smartRecommend(mode) {
+            const records = getData(currentMode);
+            if (!records || records.length === 0) {
+                resultDiv.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
+                return;
+            }
+            const stats = analyzeStats(records, currentMode);
+            if (!stats) {
+                resultDiv.innerHTML = `<div class="error-text">数据解析异常，无法推荐</div>`;
+                return;
+            }
+            const isSSQ = currentMode === 'ssq';
+            const frontCnt = isSSQ ? 6 : 5;
+            const backCnt = isSSQ ? 1 : 2;
+            const frontMax = stats.frontMax;
+            const backMax = stats.backMax;
+            let html = '';
+            for (let g = 0; g < groups; g++) {
+                let frontPool = [];
+                for (let i = 1; i <= frontMax; i++) {
+                    let weight;
+                    if (mode === 'cold') {
+                        weight = (stats.frontMiss[i] + 1) * 2;
+                    } else if (mode === 'hot') {
+                        weight = stats.frontFreq[i] + 2;
+                    } else {
+                        weight = 10 - stats.frontFreq[i] + stats.frontMiss[i] * 0.7;
+                    }
+                    weight = Math.max(1, weight);
+                    frontPool.push({ num: i, weight });
+                }
+                let backPool = [];
+                for (let i = 1; i <= backMax; i++) {
+                    let weight;
+                    if (mode === 'cold') {
+                        weight = (stats.backMiss[i] + 1) * 2;
+                    } else if (mode === 'hot') {
+                        weight = stats.backFreq[i] + 2;
+                    } else {
+                        weight = 10 - stats.backFreq[i] + stats.backMiss[i] * 0.8;
+                    }
+                    weight = Math.max(1, weight);
+                    backPool.push({ num: i, weight });
+                }
+                let redsRec = weightedSelect(frontPool, frontCnt);
+                let bluesRec = weightedSelect(backPool, backCnt);
+                html += '<div class="number-line">';
+                redsRec.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+                html += '<span class="sep">+</span>';
+                bluesRec.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+                html += '</div>';
+            }
+            const modeTextMap = {
+                cold: '追冷模式 (侧重高遗漏)',
+                hot: '追热模式 (侧重高频)',
+                balance: '冷热均衡策略'
+            };
+            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeTextMap[mode] || mode}</div>`;
+            resultDiv.innerHTML = html;
+        }
+
+        function renderNumberTable(container, data, title, colorClass, hotList, coldList) {
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="error-text">暂无数据</div>`;
+                return;
+            }
+            const hotSet = new Set(hotList.map(d => d.num));
+            const coldSet = new Set(coldList.map(d => d.num));
+            let html = `<div class="sub-title">${title}</div><div class="number-grid">`;
+            for (let i = 1; i < data.length; i++) {
+                const freq = data[i].freq || 0;
+                const miss = data[i].miss || 0;
+                const isHot = hotSet.has(i);
+                const isCold = coldSet.has(i);
+                let itemClass = 'num-item';
+                let tagHtml = '';
+                if (isHot) {
+                    itemClass += ' hot-item';
+                    tagHtml = `<span class="tag hot-tag">热</span>`;
+                } else if (isCold) {
+                    itemClass += ' cold-item';
+                    tagHtml = `<span class="tag cold-tag">冷</span>`;
+                }
+                const numClass = `num ${colorClass}`;
+                html += `<div class="${itemClass}">
+                    <div class="${numClass}">${i}${tagHtml}</div>
+                    <div class="detail">${freq}次 / 漏${miss}期</div>
+                </div>`;
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderTrend() {
+            const type = currentMode;
+            const name = type === 'ssq' ? '双色球' : '大乐透';
+            trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
+            trendStatsSpan.innerHTML = '加载数据...';
+            const records = getData(type);
+            if (!records || records.length === 0) {
+                trendStatsSpan.innerHTML = '数据加载失败';
+                hotcoldPanel.innerHTML = '';
+                frontTableContainer.innerHTML = '<div class="error-text">无数据</div>';
+                backTableContainer.innerHTML = '<div class="error-text">无数据</div>';
+                return;
+            }
+            const stats = analyzeStats(records, type);
+            if (!stats) {
+                trendStatsSpan.innerHTML = '数据解析失败';
+                hotcoldPanel.innerHTML = '';
+                return;
+            }
+
+            const frontData = [];
+            for (let i = 1; i <= stats.frontMax; i++) {
+                frontData.push({ freq: stats.frontFreq[i], miss: stats.frontMiss[i] });
+            }
+            const backData = [];
+            for (let i = 1; i <= stats.backMax; i++) {
+                backData.push({ freq: stats.backFreq[i], miss: stats.backMiss[i] });
+            }
+
+            const frontTitle = type === 'ssq' ? '红球号码统计' : '前区号码统计';
+            const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
+            renderNumberTable(frontTableContainer, frontData, frontTitle, 'red', stats.hotFront, stats.coldFront);
+            renderNumberTable(backTableContainer, backData, backTitle, 'blue', stats.hotBack, stats.coldBack);
+
+            const total = stats.totalPeriods;
+            trendStatsSpan.innerHTML = `共 ${total} 期 · 热号高频 · 冷号低开`;
+
+            hotcoldPanel.innerHTML = '';
+        }
+
+        async function fetchData() {
+            try {
+                const [ssqResp, dltResp] = await Promise.all([
+                    fetch('https://magua-qi.github.io/ssqdata.html'),
+                    fetch('https://magua-qi.github.io/dltdata.html')
+                ]);
+
+                if (!ssqResp.ok || !dltResp.ok) {
+                    throw new Error('网络请求失败');
+                }
+
+                const ssqText = await ssqResp.text();
+                const dltText = await dltResp.text();
+
+                function extractArray(html, varName) {
+                    const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
+                    const match = html.match(regex);
+                    if (!match) return [];
+                    try {
+                        let cleaned = match[1].replace(/\/\/.*$/gm, '');
+                        const fn = new Function(`return [${cleaned}];`);
+                        return fn();
+                    } catch (e) {
+                        console.error(`解析 ${varName} 失败:`, e);
+                        return [];
+                    }
+                }
+
+                SSQ_DATA = extractArray(ssqText, 'SSQ_DATA');
+                DLT_DATA = extractArray(dltText, 'DLT_DATA');
+
+                console.log(`双色球数据加载完成: ${SSQ_DATA.length} 期`);
+                console.log(`大乐透数据加载完成: ${DLT_DATA.length} 期`);
+
+                showHint();
+                loadHistory('ssq');
+                loadHistory('dlt');
+                renderHistory();
+                renderTrend();
+
+                const ssqCount = SSQ_DATA.length;
+                const dltCount = DLT_DATA.length;
+                dataStatusDiv.textContent = `推荐数字根据双色球 ${ssqCount} 期 · 大乐透 ${dltCount} 期中奖号码选出`;
+
+            } catch (err) {
+                console.error('加载数据失败:', err);
+                resultDiv.innerHTML = `<div class="error-text">数据加载失败，请检查网络连接</div>`;
+                dataStatusDiv.textContent = '数据加载失败';
+            }
+        }
+
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', async (e) => {
+                currentMode = e.target.value;
+                currentPage = 1;
+                showHint();
+                renderHistory();
+                renderTrend();
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+            });
+        });
+
+        document.getElementById('decBtn').addEventListener('click', () => {
+            if (groups > 1) {
+                groups--;
+                groupDisplay.textContent = groups;
+                showHint();
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+            }
+        });
+        document.getElementById('incBtn').addEventListener('click', () => {
+            if (groups < 5) {
+                groups++;
+                groupDisplay.textContent = groups;
+                showHint();
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+            }
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', () => refreshNumbers());
+        document.getElementById('specificBtn').addEventListener('click', () => specificRandom());
+        document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+        document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+        document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+
+        prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+        nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+        fetchData();
+    </script>
 </body>
 </html>
