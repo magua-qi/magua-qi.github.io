@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Flip Clock · 麻瓜</title>
+<link rel="icon" id="dynamicFavicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231e6df2'/%3E%3Ctext x='50' y='72' font-size='70' font-family='Arial Black, Impact, sans-serif' font-weight='900' fill='white' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap');
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0f;
+    font-family: 'Roboto Mono', monospace;
+    overflow: hidden;
+    cursor: default;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 120vmax; height: 120vmax;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(40,40,60,0.4) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .clock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    user-select: none;
+  }
+  .clock * {
+    pointer-events: none;
+    user-select: none;
+    cursor: default;
+  }
+  .card {
+    --w: 140px;
+    --h: 160px;
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    border-radius: 12px;
+  }
+  .card .half {
+    position: absolute;
+    left: 0; width: 100%; height: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card .half-top {
+    top: 0;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(180deg, #1e1e35 0%, #1a1a2e 100%);
+    border-bottom: 1px solid rgba(0,0,0,0.6);
+    z-index: 1;
+  }
+  .card .half-bottom {
+    bottom: 0;
+    border-radius: 0 0 12px 12px;
+    background: linear-gradient(180deg, #16162a 0%, #1a1a2e 100%);
+    z-index: 1;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 2px;
+    background: rgba(0,0,0,0.7);
+    z-index: 5;
+    pointer-events: none;
+  }
+  .time-card .half span {
+    font-size: 96px;
+    font-weight: 700;
+    color: #e8e8f0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .time-card .half span {
+    position: absolute;
+    left: 0; right: 0;
+    height: var(--h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .time-card .half-top span { top: 0; }
+  .time-card .half-bottom span { bottom: 0; }
+  .flip-top, .flip-bottom {
+    position: absolute;
+    left: 0; width: 100%; height: 50%;
+    overflow: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px 12px 0 0;
+  }
+  .flip-top {
+    top: 0;
+    background: linear-gradient(180deg, #1e1e35 0%, #1a1a2e 100%);
+    transform-origin: bottom center;
+    z-index: 10;
+    animation: flipTopAnim 0.3s ease-in forwards;
+  }
+  .flip-bottom {
+    bottom: 0;
+    border-radius: 0 0 12px 12px;
+    background: linear-gradient(180deg, #16162a 0%, #1a1a2e 100%);
+    transform-origin: top center;
+    z-index: 10;
+    animation: flipBottomAnim 0.3s ease-out forwards;
+    animation-delay: 0.3s;
+    transform: rotateX(90deg);
+  }
+  .flip-top span, .flip-bottom span {
+    position: absolute;
+    left: 0; right: 0;
+    height: var(--h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 96px;
+    font-weight: 700;
+    color: #e8e8f0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .flip-top span { top: 0; }
+  .flip-bottom span { bottom: 0; }
+  @keyframes flipTopAnim {
+    0%   { transform: rotateX(0deg); }
+    100% { transform: rotateX(-90deg); }
+  }
+  @keyframes flipBottomAnim {
+    0%   { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+  .flip-top::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    animation: shadowIn 0.3s ease-in forwards;
+    border-radius: 12px 12px 0 0;
+  }
+  @keyframes shadowIn {
+    100% { background: rgba(0,0,0,0.3); }
+  }
+  .flip-bottom::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    animation: shadowOut 0.3s ease-out forwards;
+    animation-delay: 0.3s;
+    border-radius: 0 0 12px 12px;
+  }
+  @keyframes shadowOut {
+    0%   { background: rgba(0,0,0,0.3); }
+    100% { background: rgba(0,0,0,0); }
+  }
+  .info-card .half {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .info-card .half-top { padding-bottom: 4px; }
+  .info-card .half-bottom { padding-top: 4px; }
+  .info-card .weekday {
+    font-size: 32px;
+    font-weight: 700;
+    color: #e8e8f0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    letter-spacing: 4px;
+  }
+  .info-card .date-line {
+    font-size: 15px;
+    font-weight: 500;
+    color: #8888aa;
+    letter-spacing: 2px;
+  }
+  .info-card .ampm {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e85d75;
+    text-shadow: 0 0 12px rgba(232,93,117,0.4);
+    letter-spacing: 3px;
+  }
+  .sep {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 2px;
+  }
+  .sep .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e85d75;
+    box-shadow: 0 0 12px rgba(232,93,117,0.5);
+    animation: pulse 1s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    0%   { opacity: 0.4; transform: scale(0.85); }
+    100% { opacity: 1;   transform: scale(1); }
+  }
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .controls:hover,
+  .controls-trigger:hover .controls,
+  .controls.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .controls-trigger {
+    position: fixed;
+    bottom: 0; right: 0;
+    width: 200px; height: 200px;
+    z-index: 99;
+  }
+  .controls-panel {
+    background: rgba(20, 20, 40, 0.92);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px 24px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 200px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666680;
+    user-select: none;
+    cursor: default;
+  }
+  .control-label .val {
+    color: #9999bb;
+    font-size: 12px;
+    min-width: 28px;
+    text-align: right;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #2a2a45;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e85d75;
+    box-shadow: 0 0 8px rgba(232,93,117,0.4);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e85d75;
+    box-shadow: 0 0 8px rgba(232,93,117,0.4);
+    border: none;
+    cursor: pointer;
+  }
+  @media (max-width: 700px) {
+    .card { --w: 90px; --h: 100px; }
+    .time-card .half span,
+    .flip-top span, .flip-bottom span { font-size: 60px; }
+    .info-card .weekday { font-size: 22px; letter-spacing: 2px; }
+    .info-card .date-line { font-size: 11px; }
+    .info-card .ampm { font-size: 16px; }
+    .sep .dot { width: 8px; height: 8px; }
+    .clock { gap: 5px; }
+  }
+</style>
+</head>
+<body>
+<div class="clock" id="clock"></div>
+<div class="controls-trigger">
+  <div class="controls" id="controls">
+    <div class="controls-panel">
+      <div class="control-row">
+        <div class="control-label">
+          <span>Size</span>
+          <span class="val" id="sizeVal">50</span>
+        </div>
+        <input type="range" id="sizeSlider" min="1" max="100" value="50">
+      </div>
+      <div class="control-row">
+        <div class="control-label">
+          <span>Brightness</span>
+          <span class="val" id="brightVal">50</span>
+        </div>
+        <input type="range" id="brightSlider" min="1" max="100" value="50">
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (function setCustomFavicon() {
+    const canvas = document.createElement('canvas');
+    const size = 64;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#1a6df5';
+    const radius = 14;
+    ctx.beginPath();
+    ctx.moveTo(radius, 0);
+    ctx.lineTo(size - radius, 0);
+    ctx.quadraticCurveTo(size, 0, size, radius);
+    ctx.lineTo(size, size - radius);
+    ctx.quadraticCurveTo(size, size, size - radius, size);
+    ctx.lineTo(radius, size);
+    ctx.quadraticCurveTo(0, size, 0, size - radius);
+    ctx.lineTo(0, radius);
+    ctx.quadraticCurveTo(0, 0, radius, 0);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `bold ${size * 0.6}px "Arial Black", "Impact", "Segoe UI Black", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('T', size/2, size/2 + 2);
+    const faviconUrl = canvas.toDataURL('image/png');
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.href = faviconUrl;
+  })();
+  const clockContainer = document.getElementById('clock');
+  function createSep() {
+    const s = document.createElement('div');
+    s.className = 'sep';
+    s.innerHTML = '<div class="dot"></div><div class="dot"></div>';
+    return s;
+  }
+  const infoCard = document.createElement('div');
+  infoCard.className = 'card info-card';
+  infoCard.innerHTML = `
+    <div class="half half-top">
+      <div class="weekday" id="weekday">FRI</div>
+      <div class="date-line" id="dateLine">06 / 12</div>
+    </div>
+    <div class="half half-bottom">
+      <div class="ampm" id="ampm">AM</div>
+    </div>
+  `;
+  clockContainer.appendChild(infoCard);
+  const weekdayEl = infoCard.querySelector('#weekday');
+  const dateLineEl = infoCard.querySelector('#dateLine');
+  const ampmEl = infoCard.querySelector('#ampm');
+  const timeCards = [];
+  clockContainer.appendChild(createSep());
+  for (let i = 0; i < 3; i++) {
+    const card = document.createElement('div');
+    card.className = 'card time-card';
+    card.innerHTML = `
+      <div class="half half-top"><span>00</span></div>
+      <div class="half half-bottom"><span>00</span></div>
+    `;
+    timeCards.push(card);
+    clockContainer.appendChild(card);
+    if (i < 2) clockContainer.appendChild(createSep());
+  }
+  let prevValues = ['--', '--', '--'];
+  let prevInfo = { weekday: '', date: '', ampm: '' };
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function updateCard(card, oldVal, newVal) {
+    if (oldVal === newVal) return;
+    const existingFlips = card.querySelectorAll('.flip-top, .flip-bottom');
+    existingFlips.forEach(el => el.remove());
+    const topSpan = card.querySelector('.half-top span');
+    const bottomSpan = card.querySelector('.half-bottom span');
+    const flipTop = document.createElement('div');
+    flipTop.className = 'flip-top';
+    flipTop.innerHTML = `<span>${oldVal}</span>`;
+    const flipBottom = document.createElement('div');
+    flipBottom.className = 'flip-bottom';
+    flipBottom.innerHTML = `<span>${newVal}</span>`;
+    topSpan.textContent = newVal;
+    bottomSpan.textContent = oldVal;
+    card.appendChild(flipTop);
+    card.appendChild(flipBottom);
+    setTimeout(() => {
+      if (flipTop && flipTop.parentNode) flipTop.remove();
+      if (flipBottom && flipBottom.parentNode) flipBottom.remove();
+      if (bottomSpan) bottomSpan.textContent = newVal;
+    }, 650);
+  }
+  function tick() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const timeVals = [pad2(hours), pad2(minutes), pad2(seconds)];
+    for (let i = 0; i < 3; i++) {
+      updateCard(timeCards[i], prevValues[i], timeVals[i]);
+    }
+    prevValues = [...timeVals];
+    const weekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const weekday = weekdays[now.getDay()];
+    const dateStr = pad2(now.getMonth() + 1) + ' / ' + pad2(now.getDate());
+    const ampm = hours < 12 ? 'AM' : 'PM';
+    if (prevInfo.weekday !== weekday) {
+      weekdayEl.textContent = weekday;
+      prevInfo.weekday = weekday;
+    }
+    if (prevInfo.date !== dateStr) {
+      dateLineEl.textContent = dateStr;
+      prevInfo.date = dateStr;
+    }
+    if (prevInfo.ampm !== ampm) {
+      ampmEl.textContent = ampm;
+      prevInfo.ampm = ampm;
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+  const sizeSlider = document.getElementById('sizeSlider');
+  const brightSlider = document.getElementById('brightSlider');
+  const sizeVal = document.getElementById('sizeVal');
+  const brightVal = document.getElementById('brightVal');
+  const clockElement = document.getElementById('clock');
+  function applyControls() {
+    const size = parseFloat(sizeSlider.value);
+    const bright = parseFloat(brightSlider.value);
+    const scale = 0.4 + (size - 1) * (1.6 / 99);
+    clockElement.style.transform = `scale(${scale.toFixed(3)})`;
+    const brightnessVal = 0.1 + (bright - 1) * (1.4 / 99);
+    document.body.style.filter = `brightness(${brightnessVal.toFixed(3)})`;
+    sizeVal.textContent = Math.round(size);
+    brightVal.textContent = Math.round(bright);
+  }
+  sizeSlider.addEventListener('input', applyControls);
+  brightSlider.addEventListener('input', applyControls);
+  applyControls();
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === 1 && clockContainer.contains(node)) {
+          node.style.pointerEvents = 'none';
+          node.style.userSelect = 'none';
+        }
+      });
+    });
+  });
+  observer.observe(clockContainer, { childList: true, subtree: true });
+</script>
+</body>
+</html>
