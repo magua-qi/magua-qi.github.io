@@ -6,6 +6,7 @@
 <title>麻瓜的五百万</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='white'/%3E%3Ctext x='50' y='68' font-size='68' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%23e60012' stroke='%23e60012' stroke-width='2' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
 <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCqcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
   * {
     margin: 0;
@@ -70,6 +71,7 @@
     border-radius: 30px;
     transition: background 0.2s;
     white-space: nowrap;
+    color: #ffffff;
   }
   .mode-row label:hover {
     background: rgba(255, 255, 255, 0.08);
@@ -81,7 +83,7 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 2px solid #888;
+    border: 2px solid #dddddd;
     display: inline-block;
     position: relative;
   }
@@ -111,7 +113,7 @@
   }
   .hint-text {
     text-align: center;
-    color: #aaa;
+    color: #dddddd;
     font-size: 13px;
   }
   .number-line {
@@ -155,7 +157,7 @@
   }
   .sep {
     margin: 0 2px;
-    color: #ccc;
+    color: #eeeeee;
     font-weight: 700;
     font-size: 12px;
     flex-shrink: 0;
@@ -175,9 +177,14 @@
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.12s, box-shadow 0.2s;
-    color: #fff;
+    color: #ffffff;
     text-align: center;
     -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .btn:focus {
+    outline: none;
+    box-shadow: none;
   }
   .btn:active {
     transform: scale(0.96);
@@ -192,12 +199,23 @@
     background: linear-gradient(135deg, #00b894, #55efc4);
     color: #1e272e;
   }
+  .btn-cold, .btn-hot {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  }
   .badge {
     background: rgba(255, 255, 255, 0.25);
     border-radius: 20px;
     padding: 2px 6px;
     margin-left: 5px;
     font-size: 11px;
+    display: inline-block;
+    min-width: 26px;
+    text-align: center;
+    color: white;
+  }
+  #cycleBtn {
+    user-select: none;
+    -webkit-user-select: none;
   }
   .btn-almanac {
     background: linear-gradient(135deg, #d63031, #e17055);
@@ -239,17 +257,20 @@
     padding: 12px 12px;
     width: 100%;
   }
-  .chart-canvas-wrapper {
+  #frontChart {
     width: 100%;
-    margin-bottom: 12px;
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: rgba(0, 0, 0, 0.45);
+    height: 500px;
+    background: rgba(10, 10, 26, 0.4);
     border-radius: 12px;
   }
+  #backChart {
+    width: 100%;
+    height: 230px;
+    background: rgba(10, 10, 26, 0.4);
+    border-radius: 12px;
+    margin-top: 12px;
+  }
+
   .hotcold-panel {
     display: flex;
     flex-wrap: wrap;
@@ -268,23 +289,41 @@
     margin-bottom: 6px;
     border-left: 3px solid #f39c12;
     padding-left: 6px;
+    color: #f5f5f5;
   }
-  .num-tag {
+  .plain-number-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+  .plain-number {
+    color: #ffeaa7;
+    font-size: 12px;
+    background: transparent;
+    padding: 2px 4px;
+  }
+  .section-label {
+    color: #f39c12;
+    font-size: 12px;
+    font-weight: 500;
     display: inline-block;
-    background: #2d3436;
-    margin: 3px 5px 3px 0;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+    margin-top: 4px;
+    margin-bottom: 2px;
   }
-  .num-tag.hot {
-    background: #e74c3c;
-    color: white;
+  .hotcold-box p {
+    color: #ffeaa7;
+    font-size: 12px;
+    margin: 4px 0;
   }
-  .num-tag.cold {
-    background: #3498db;
-    color: white;
+  .hotcold-box strong {
+    color: #f39c12;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 6px;
+    margin-bottom: 2px;
   }
 
   .history-list {
@@ -304,13 +343,13 @@
     min-width: 100%;
   }
   .period {
-    color: #bbb;
+    color: #dddddd;
     font-size: 11px;
     min-width: 60px;
     flex-shrink: 0;
   }
   .date {
-    color: #777;
+    color: #bbbbbb;
     font-size: 10px;
     margin-left: auto;
     flex-shrink: 0;
@@ -319,6 +358,7 @@
     text-align: center;
     padding: 4px 16px 12px;
     font-size: 10px;
+    color: #cccccc;
   }
   .dot.ok {
     display: inline-block;
@@ -365,6 +405,7 @@
     padding: 2px 10px;
     margin: 0 4px 4px 0;
     font-size: 11px;
+    color: #fff;
   }
   .taboo-tag {
     display: inline-block;
@@ -373,6 +414,7 @@
     padding: 2px 10px;
     margin: 0 4px 4px 0;
     font-size: 11px;
+    color: #eee;
   }
   .fortune-numbers {
     margin-top: 8px;
@@ -385,6 +427,12 @@
     font-size: 12px;
     color: #ffd966;
     margin-bottom: 6px;
+  }
+  .btn-smart {
+    color: white;
+  }
+  button, .btn, input, label {
+    -webkit-tap-highlight-color: transparent;
   }
 </style>
 </head>
@@ -410,6 +458,10 @@
       <button class="btn btn-refresh" id="refreshBtn">随机生成</button>
       <button class="btn btn-smart" id="smartBtn">智能推荐</button>
     </div>
+    <div class="btn-row">
+      <button class="btn btn-cold" id="coldRecommendBtn">❄️ 追冷推荐</button>
+      <button class="btn btn-hot" id="hotRecommendBtn">🔥 追热推荐</button>
+    </div>
   </div>
 
   <div class="card">
@@ -425,12 +477,8 @@
       <div class="trend-stats" id="trendStats">加载中...</div>
     </div>
     <div class="chart-container">
-      <div class="chart-canvas-wrapper">
-        <canvas id="frontCanvas" width="500" height="260" style="width:100%; height:auto; background:#0a0a1a;"></canvas>
-      </div>
-      <div class="chart-canvas-wrapper" style="margin-top: 12px;">
-        <canvas id="backCanvas" width="500" height="230" style="width:100%; height:auto; background:#0a0a1a;"></canvas>
-      </div>
+      <div id="frontChart" style="width:100%; height:500px;"></div>
+      <div id="backChart" style="width:100%; height:230px;"></div>
     </div>
     <div class="hotcold-panel" id="hotcoldPanel"></div>
   </div>
@@ -450,9 +498,10 @@
   let trendCache = { ssq: null, dlt: null };
   let trendLoading = { ssq: false, dlt: false };
   
+  let frontChartInstance = null;
+  let backChartInstance = null;
+  
   const resultDiv = document.getElementById('resultArea');
-  const frontCanvas = document.getElementById('frontCanvas');
-  const backCanvas = document.getElementById('backCanvas');
   const trendStatsSpan = document.getElementById('trendStats');
   const trendTitleSpan = document.getElementById('trendTitle');
   const hotcoldPanel = document.getElementById('hotcoldPanel');
@@ -584,38 +633,32 @@
              hotFront, coldFront, hotBack, coldBack, frontMax, backMax };
   }
   
-  function drawBarChart(canvas, frequencies, title, colorStart, colorEnd, maxNum) {
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0,0,w,h);
-    if (!frequencies) return;
-    let values = [];
-    for (let i=1; i<=maxNum; i++) values.push(frequencies[i] || 0);
-    const maxFreq = Math.max(...values, 1);
-    const barWidth = (w - 80) / maxNum;
-    const bottomY = h - 38;
-    ctx.fillStyle = "#f0f0f0";
-    ctx.font = "11px 'Segoe UI'";
-    ctx.fillText(title, 12, 18);
-    ctx.fillStyle = "#bbb";
-    for (let i=0; i<values.length; i++) {
-      let x = 40 + i * barWidth;
-      let barH = (values[i] / maxFreq) * (h - 65);
-      let gradient = ctx.createLinearGradient(x, bottomY-barH, x, bottomY);
-      gradient.addColorStop(0, colorStart);
-      gradient.addColorStop(1, colorEnd);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x, bottomY - barH, barWidth-1, barH);
-      ctx.fillStyle = "#ccc";
-      ctx.fillText(i+1, x+2, bottomY+10);
-      if (values[i] > 0) {
-        ctx.fillStyle = "#ffd966";
-        ctx.font = "9px monospace";
-        ctx.fillText(values[i], x+2, bottomY - barH - 2);
-      }
+  function renderHorizontalBarChart(containerId, categories, values, titleColor, barColorStart, barColorEnd, axisName) {
+    const dom = document.getElementById(containerId);
+    if (!dom) return;
+    let chart = null;
+    if (containerId === 'frontChart') {
+      if (frontChartInstance) chart = frontChartInstance;
+      else { chart = echarts.init(dom); frontChartInstance = chart; }
+    } else {
+      if (backChartInstance) chart = backChartInstance;
+      else { chart = echarts.init(dom); backChartInstance = chart; }
     }
-    ctx.fillStyle = "#ddd";
-    ctx.fillText("出现次数", w-55, 25);
+    
+    const baseOption = {
+      backgroundColor: 'transparent',
+      tooltip: { show: false },
+      grid: { containLabel: true, left: '12%', right: '5%', top: 20, bottom: 10 },
+      xAxis: { type: 'value', name: axisName, nameTextStyle: { color: '#cccccc', fontSize: 10 }, splitLine: { lineStyle: { color: '#444444' } }, axisLabel: { color: '#dddddd' } },
+      yAxis: { type: 'category', data: categories, axisLabel: { fontSize: 9, color: '#dddddd', interval: 0, rotate: 0 }, axisLine: { lineStyle: { color: '#888888' } }, axisTick: { show: false } },
+      series: [{
+        type: 'bar', data: values, label: { show: true, position: 'right', color: '#ffd966', fontSize: 9, formatter: (params) => params.value > 0 ? params.value : '' },
+        itemStyle: { borderRadius: [0, 4, 4, 0], color: { type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
+          colorStops: [{ offset: 0, color: barColorStart }, { offset: 1, color: barColorEnd }] } }
+      }]
+    };
+    
+    chart.setOption(baseOption);
   }
   
   async function renderTrend() {
@@ -629,40 +672,47 @@
     }
     const stats = analyzeStats(records, type);
     if (!stats) return;
+    
     const isSSQ = type === 'ssq';
-    drawBarChart(frontCanvas, stats.frontFreq, isSSQ ? "红球 (1-33) 出现频次" : "前区 (1-35) 出现频次", "#e74c3c", "#f39c12", stats.frontMax);
-    drawBarChart(backCanvas, stats.backFreq, isSSQ ? "蓝球 (1-16) 出现频次" : "后区 (1-12) 出现频次", "#3498db", "#9b59b6", stats.backMax);
+    const frontCategories = Array.from({length: stats.frontMax}, (_, i) => i+1);
+    const frontData = frontCategories.map(num => stats.frontFreq[num] || 0);
+    const backCategories = Array.from({length: stats.backMax}, (_, i) => i+1);
+    const backData = backCategories.map(num => stats.backFreq[num] || 0);
+    
+    renderHorizontalBarChart('frontChart', frontCategories, frontData, '出现次数', '#e74c3c', '#f39c12', '出现次数');
+    renderHorizontalBarChart('backChart', backCategories, backData, '出现次数', '#3498db', '#9b59b6', '出现次数');
+    
     trendStatsSpan.innerHTML = `共 ${stats.totalPeriods} 期 | 热号高频 | 冷号低开 | 遗漏统计`;
     
-    let hotHtml = `<div class="hotcold-box"><h4>热号 (高频)</h4>`;
-    stats.hotFront.forEach(h => { hotHtml += `<span class="num-tag hot">${h.num} (${h.freq}次)</span>`; });
-    hotHtml += `<div style="margin-top:6px;"><strong>后区热号</strong><br>`;
-    stats.hotBack.forEach(h => { hotHtml += `<span class="num-tag hot">${h.num} (${h.freq}次)</span>`; });
+    let hotHtml = `<div class="hotcold-box"><h4>热号</h4>`;
+    hotHtml += `<span class="section-label">前区热号</span><div class="plain-number-list">`;
+    stats.hotFront.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
+    hotHtml += `</div><span class="section-label">后区热号</span><div class="plain-number-list">`;
+    stats.hotBack.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
     hotHtml += `</div></div>`;
     
-    let coldHtml = `<div class="hotcold-box"><h4>冷号 (低频/高遗漏)</h4>`;
+    let coldHtml = `<div class="hotcold-box"><h4>冷号</h4>`;
+    coldHtml += `<span class="section-label">前区冷号</span><div class="plain-number-list">`;
     stats.coldFront.forEach(c => {
       let missVal = stats.frontMiss[c.num] || 0;
-      coldHtml += `<span class="num-tag cold">${c.num} (漏${missVal}期)</span>`;
+      coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
     });
-    coldHtml += `<div style="margin-top:6px;"><strong>后区冷号</strong><br>`;
+    coldHtml += `</div><span class="section-label">后区冷号</span><div class="plain-number-list">`;
     stats.coldBack.forEach(c => {
       let missVal = stats.backMiss[c.num] || 0;
-      coldHtml += `<span class="num-tag cold">${c.num} (漏${missVal}期)</span>`;
+      coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
     });
     coldHtml += `</div></div>`;
     
-    let missHtml = `<div class="hotcold-box"><h4>最大遗漏提醒</h4>`;
+    let missHtml = `<div class="hotcold-box"><h4>最大遗漏</h4>`;
     let maxMissFront = 0, maxMissNum = 0;
     for (let i=1; i<=stats.frontMax; i++) if (stats.frontMiss[i] > maxMissFront) { maxMissFront = stats.frontMiss[i]; maxMissNum = i; }
     missHtml += `<p>前区最大遗漏: ${maxMissNum}号 (${maxMissFront}期未开)</p>`;
     let maxMissBack = 0, maxMissBNum = 0;
     for (let i=1; i<=stats.backMax; i++) if (stats.backMiss[i] > maxMissBack) { maxMissBack = stats.backMiss[i]; maxMissBNum = i; }
     missHtml += `<p>后区最大遗漏: ${maxMissBNum}号 (${maxMissBack}期未开)</p>`;
-    missHtml += `<div style="margin-top:6px;"><button id="focusMissBtn" style="background:#6c5ce7; padding:4px 10px; border:none; border-radius:18px; color:white; cursor:pointer; font-size:11px;">追冷推荐</button></div></div>`;
+    missHtml += `</div>`;
     hotcoldPanel.innerHTML = hotHtml + coldHtml + missHtml;
-    const missBtn = document.getElementById('focusMissBtn');
-    if (missBtn) missBtn.onclick = () => smartRecommend(true);
   }
   
   function weightedSelect(pool, count) {
@@ -692,7 +742,7 @@
     return result.sort((a,b)=>a-b);
   }
   
-  function smartRecommend(focusCold = false) {
+  function smartRecommend(mode = 'balance') {
     const records = trendCache[currentMode];
     if (!records || records.length === 0) {
       alert("走势数据加载中，请稍后...");
@@ -710,13 +760,27 @@
     for (let g = 0; g < groups; g++) {
       let frontPool = [];
       for (let i=1; i<=frontMax; i++) {
-        let weight = focusCold ? (stats.frontMiss[i] + 1) : (10 - stats.frontFreq[i] + stats.frontMiss[i] * 0.7);
+        let weight;
+        if (mode === 'cold') {
+          weight = (stats.frontMiss[i] + 1) * 2;
+        } else if (mode === 'hot') {
+          weight = stats.frontFreq[i] + 2;
+        } else {
+          weight = 10 - stats.frontFreq[i] + stats.frontMiss[i] * 0.7;
+        }
         weight = Math.max(1, weight);
         frontPool.push({ num: i, weight });
       }
       let backPool = [];
       for (let i=1; i<=backMax; i++) {
-        let weight = focusCold ? (stats.backMiss[i] + 1) : (10 - stats.backFreq[i] + stats.backMiss[i] * 0.8);
+        let weight;
+        if (mode === 'cold') {
+          weight = (stats.backMiss[i] + 1) * 2;
+        } else if (mode === 'hot') {
+          weight = stats.backFreq[i] + 2;
+        } else {
+          weight = 10 - stats.backFreq[i] + stats.backMiss[i] * 0.8;
+        }
         weight = Math.max(1, weight);
         backPool.push({ num: i, weight });
       }
@@ -728,7 +792,11 @@
       bluesRec.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
       html += '</div>';
     }
-    html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${focusCold ? '追冷模式 (侧重高遗漏)' : '冷热均衡策略'}</div>`;
+    let modeText = '';
+    if (mode === 'cold') modeText = '追冷模式 (侧重高遗漏)';
+    else if (mode === 'hot') modeText = '追热模式 (侧重高频)';
+    else modeText = '冷热均衡策略';
+    html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeText}</div>`;
     resultDiv.innerHTML = html;
   }
   
@@ -843,7 +911,6 @@
     }
     const lunarMonthNames = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
     const lunarMonthStr = lunarMonthNames[lunarMonth - 1] || `${lunarMonth}月`;
-    const lunarDayStr = lunarDay + (lunarDay === 1 ? '日' : '日');
     
     const seed = (month * day + today.getDay()) % 100;
     const yiList = ['嫁娶', '纳财', '开市', '交易', '出行', '祈福', '祭祀', '求嗣', '开光', '解除', '修造', '动土', '安床', '栽种', '纳畜'];
@@ -856,14 +923,12 @@
     
     return {
       solar: `${year}年${month}月${day}日 ${weekday}`,
-      lunar: `${lunarYear}年 ${lunarMonthStr}${lunarDayStr}`,
+      lunar: `${lunarYear}年 ${lunarMonthStr}${lunarDay}日`,
       ganzhi: `${yearGanZhi}年 ${monthGanZhi}月 ${dayGanZhi}日`,
       zodiac: `🐎 生肖: ${yearZodiac} · 日冲: ${chongZodiac}`,
       yi: yi,
       ji: ji,
       shenSha: `吉神: ${shenSha}`,
-      dayGan: dayGanZhi[0],
-      dayZhi: dayGanZhi[1]
     };
   }
   
@@ -933,14 +998,23 @@
       await renderTrend();
     });
   });
+  
   document.getElementById('cycleBtn').addEventListener('click', () => {
-    groups = Math.floor(Math.random() * 5) + 1;
+    groups = groups % 5 + 1;
     groupBadge.innerText = groups;
     showHint();
   });
+  
   document.getElementById('refreshBtn').addEventListener('click', () => refreshNumbers());
-  document.getElementById('smartBtn').addEventListener('click', () => smartRecommend(false));
+  document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+  document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+  document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
   document.getElementById('fortuneBtn').addEventListener('click', () => showFortuneNumbers());
+  
+  window.addEventListener('resize', () => {
+    if (frontChartInstance) frontChartInstance.resize();
+    if (backChartInstance) backChartInstance.resize();
+  });
   
   (async () => {
     showHint();
