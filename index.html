@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麻瓜的导航站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            padding: 40px 36px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 20px;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-item {
+            display: block;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #1e293b;
+            transition: background 0.2s, transform 0.1s;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .nav-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .nav-desc {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 18px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>麻瓜的导航站</h1>
+        <div class="subtitle">三个小工具</div>
+
+        <div class="nav-list">
+            <a href="https://magua-qi.github.io/meiridajiang.html" class="nav-item" target="_blank">
+                <div class="nav-title">每日大奖</div>
+                <div class="nav-desc">双色球 · 大乐透 频率分析</div>
+            </a>
+
+            <a href="https://magua-qi.github.io/Flip%20Clock.html" class="nav-item" target="_blank">
+                <div class="nav-title">Flip Clock</div>
+                <div class="nav-desc">翻页时钟 · 极简显示</div>
+            </a>
+
+            <a href="https://magua-qi.github.io/wallpaper.html?mode=moon_static" class="nav-item" target="_blank">
+                <div class="nav-title">卫星云图壁纸</div>
+                <div class="nav-desc">月亮静态模式</div>
+            </a>
+            <!-- 此处已无预留位置，需要添加新链接时，直接复制上面的 <a> 块并修改即可 -->
+        </div>
+
+        <div class="footer">托管于 GitHub Pages</div>
+    </div>
+
+</body>
+</html>
