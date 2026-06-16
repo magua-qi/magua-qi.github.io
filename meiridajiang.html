@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
 <title>麻瓜的五百万</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='white'/%3E%3Ctext x='50' y='68' font-size='68' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%23e60012' stroke='%23e60012' stroke-width='2' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
-<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCqcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
+<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCpcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js">
 </script>
 <style>
@@ -354,11 +354,50 @@
     flex-shrink: 0;
   }
   .history-meta {
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 4px 16px 12px;
     font-size: 10px;
     color: #cccccc;
+    flex-wrap: wrap;
+    gap: 6px;
   }
+  .history-meta .info {
+    flex: 1;
+    text-align: left;
+  }
+  .history-meta .pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .history-meta .pagination button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .history-meta .pagination button:active {
+    transform: scale(0.94);
+  }
+  .history-meta .pagination button:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .history-meta .pagination span {
+    font-size: 11px;
+    color: #dddddd;
+    min-width: 40px;
+    text-align: center;
+  }
+
   .dot.ok {
     display: inline-block;
     width: 7px;
@@ -381,6 +420,13 @@
     font-size: 13px;
     padding: 8px 0;
   }
+  .data-hint {
+    color: #55efc4;
+    font-size: 10px;
+    text-align: center;
+    padding: 4px 12px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
 </style>
 </head>
 <body>
@@ -398,7 +444,7 @@
         </label>
       </div>
       <div class="result-box" id="resultArea">
-        <div class="hint-text">点击 随机生成 获得号码</div>
+        <div class="hint-text">⏳ 加载数据中...</div>
       </div>
       <div class="btn-row">
         <button class="btn btn-cycle" id="cycleBtn">组数 <span class="badge" id="groupBadge">1</span></button>
@@ -409,16 +455,24 @@
         <button class="btn btn-cold" id="coldRecommendBtn">追冷推荐</button>
         <button class="btn btn-hot" id="hotRecommendBtn">追热推荐</button>
       </div>
+      <div class="data-hint" id="dataStatus">📊 数据来源于外部独立文件</div>
     </div>
 
     <div class="card">
-      <div class="title-bar" style="background: linear-gradient(90deg,#2d3436,#636e72);">近 10 期开奖号码</div>
+      <div class="title-bar" id="historyTitle" style="background: linear-gradient(90deg,#2d3436,#636e72);">历史数据</div>
       <div class="history-list" id="historyList"></div>
-      <div class="history-meta" id="historyMeta"></div>
+      <div class="history-meta" id="historyMeta">
+        <span class="info" id="historyInfo"></span>
+        <span class="pagination">
+          <button id="prevPageBtn" disabled>上一页</button>
+          <span id="pageInfo">1/10</span>
+          <button id="nextPageBtn">下一页</button>
+        </span>
+      </div>
     </div>
 
     <div class="card">
-      <div class="title-bar" style="background: linear-gradient(90deg,#e67e22,#f1c40f);">近10期走势图 · 冷热分析</div>
+      <div class="title-bar" id="trendTitleBar" style="background: linear-gradient(90deg,#e67e22,#f1c40f);">历史数据</div>
       <div class="trend-header">
         <h3 id="trendTitle">双色球 · 红球频率分布</h3>
         <div class="trend-stats" id="trendStats">加载中...</div>
@@ -432,12 +486,16 @@
   </div>
 
   <script>
+    // ======================== 核心逻辑 ========================
     let currentMode = 'ssq';
     let groups = 1;
+    let currentPage = 1;
+    const PAGE_SIZE = 10;
+
+    let SSQ_DATA = [];
+    let DLT_DATA = [];
 
     let trendCache = { ssq: null, dlt: null };
-    let trendLoading = { ssq: false, dlt: false };
-
     let frontChartInstance = null;
     let backChartInstance = null;
 
@@ -448,6 +506,11 @@
     const groupBadge = document.getElementById('groupBadge');
     const historyListDiv = document.getElementById('historyList');
     const historyMetaSpan = document.getElementById('historyMeta');
+    const historyInfoSpan = document.getElementById('historyInfo');
+    const pageInfoSpan = document.getElementById('pageInfo');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const dataStatusDiv = document.getElementById('dataStatus');
 
     function rand(n) {
       const arr = new Uint32Array(1);
@@ -484,51 +547,126 @@
         d.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
         html += '</div>';
       }
-      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">随机生成</div>`;
+      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">🎲 随机生成</div>`;
       resultDiv.innerHTML = html;
     }
 
     function showHint() {
       const name = currentMode === 'ssq' ? '双色球' : '大乐透';
-      resultDiv.innerHTML = `<div class="hint-text">点击下方按钮获得 ${groups} 组${name}号码<br>随机生成 或 基于近10期真实数据生成</div>`;
+      const data = currentMode === 'ssq' ? SSQ_DATA : DLT_DATA;
+      const count = data.length;
+      resultDiv.innerHTML = `<div class="hint-text">点击下方按钮获得 ${groups} 组${name}号码<br>随机生成 或 基于近${count}期真实数据推荐</div>`;
     }
 
-    async function fetchTrendData(lotteryType) {
-      if (trendCache[lotteryType]) return trendCache[lotteryType];
-      if (trendLoading[lotteryType]) return null;
-      trendLoading[lotteryType] = true;
-      try {
-        const limit = 88;
-        const url = '';
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const json = await resp.json();
-        let list = json?.data?.data?.list;
-        if (!list || !list.length) throw new Error('empty list');
-        let records = [];
-        for (let item of list) {
-          if (lotteryType === 'ssq') {
-            let reds = (item.red_balls || []).map(Number).sort((a, b) => a - b);
-            let blue = Number(item.blue_ball);
-            if (reds.length === 6 && blue >= 1 && blue <= 16) records.push({ reds, blues: [blue], date: item.date,
-              period: item.issue });
-          } else {
-            let fronts = (item.front_balls || []).map(Number).sort((a, b) => a - b);
-            let backs = (item.back_balls || []).map(Number).sort((a, b) => a - b);
-            if (fronts.length === 5 && backs.length === 2) records.push({ reds: fronts, blues: backs, date: item.date,
-              period: item.issue });
-          }
+    function parseBuiltinData(type) {
+      const raw = type === 'ssq' ? SSQ_DATA : DLT_DATA;
+      const records = [];
+      for (let line of raw) {
+        const parts = line.split('|');
+        if (parts.length < 4) continue;
+        const issue = parts[0].trim();
+        const date = parts[1].trim();
+        const redsStr = parts[2].trim();
+        const bluesStr = parts[3].trim();
+        const reds = redsStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
+        const blues = bluesStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n > 0);
+        if (reds.length === 0 || blues.length === 0) continue;
+        if (type === 'ssq') {
+          if (reds.length !== 6 || blues.length !== 1) continue;
+          if (reds.some(n => n < 1 || n > 33)) continue;
+          if (blues.some(n => n < 1 || n > 16)) continue;
+        } else {
+          if (reds.length !== 5 || blues.length !== 2) continue;
+          if (reds.some(n => n < 1 || n > 35)) continue;
+          if (blues.some(n => n < 1 || n > 12)) continue;
         }
-        if (records.length === 0) throw new Error('parse fail');
-        trendCache[lotteryType] = records.slice(0, 88);
-        return trendCache[lotteryType];
-      } catch (e) {
-        console.warn('fetchTrendData error:', e);
-        trendCache[lotteryType] = null;
-        return null;
-      } finally {
-        trendLoading[lotteryType] = false;
+        records.push({
+          issue,
+          date,
+          reds: reds.slice().sort((a, b) => a - b),
+          blues: blues.slice().sort((a, b) => a - b)
+        });
       }
+      records.sort((a, b) => {
+        if (a.date > b.date) return -1;
+        if (a.date < b.date) return 1;
+        return 0;
+      });
+      return records;
+    }
+
+    function getData(type) {
+      if (trendCache[type]) return trendCache[type];
+      const records = parseBuiltinData(type);
+      trendCache[type] = records;
+      return records;
+    }
+
+    let historyStore = { ssq: [], dlt: [] };
+
+    function loadHistory(lotteryType) {
+      const allData = getData(lotteryType);
+      const recent = allData;
+      historyStore[lotteryType] = recent.map(item => ({
+        period: item.issue,
+        date: item.date.slice(5),
+        nums: item.reds,
+        blues: item.blues,
+        blue: item.blues[0]
+      }));
+      if (lotteryType === currentMode) renderHistory();
+    }
+
+    function renderHistory() {
+      const items = historyStore[currentMode];
+      if (!items || items.length === 0) {
+        historyListDiv.innerHTML = `<div class="error-text">📭 历史数据加载失败</div>`;
+        historyInfoSpan.textContent = '数据不可用';
+        pageInfoSpan.textContent = '0/0';
+        prevPageBtn.disabled = true;
+        nextPageBtn.disabled = true;
+        return;
+      }
+
+      const total = items.length;
+      const totalPages = Math.ceil(total / PAGE_SIZE);
+      if (currentPage > totalPages) currentPage = totalPages || 1;
+      if (currentPage < 1) currentPage = 1;
+
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+      const pageItems = items.slice(start, end);
+
+      const isSSQ = currentMode === 'ssq';
+      let html = '';
+      pageItems.forEach(item => {
+        html += '<div class="history-row">';
+        html += `<span class="period">${item.period}期</span>`;
+        item.nums.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+        if (isSSQ) {
+          html += `<span class="ball blue">${pad(item.blue)}</span>`;
+        } else {
+          item.blues.forEach(b => html += `<span class="ball back">${pad(b)}</span>`);
+        }
+        html += `<span class="date">${item.date}</span></div>`;
+      });
+      historyListDiv.innerHTML = html;
+
+      historyInfoSpan.textContent = `共 ${total} 期 (第${start+1}-${end}期)`;
+      pageInfoSpan.textContent = `${currentPage}/${totalPages}`;
+      prevPageBtn.disabled = (currentPage <= 1);
+      nextPageBtn.disabled = (currentPage >= totalPages);
+    }
+
+    function goToPage(page) {
+      const items = historyStore[currentMode];
+      if (!items || items.length === 0) return;
+      const totalPages = Math.ceil(items.length / PAGE_SIZE);
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      if (currentPage === page) return;
+      currentPage = page;
+      renderHistory();
     }
 
     function analyzeStats(records, type) {
@@ -542,11 +680,8 @@
       let backMiss = new Array(backMax + 1).fill(0);
       let frontMet = new Array(frontMax + 1).fill(false);
       let backMet = new Array(backMax + 1).fill(false);
-      let sorted = [...records];
-      if (sorted.length && sorted[0].date && sorted[sorted.length - 1].date && sorted[0].date < sorted[sorted.length - 1]
-        .date) sorted.reverse();
-      for (let i = 0; i < sorted.length; i++) {
-        const rec = sorted[i];
+      for (let i = 0; i < records.length; i++) {
+        const rec = records[i];
         rec.reds.forEach(num => {
           frontFreq[num]++;
           if (!frontMet[num]) { frontMiss[num] = i;
@@ -558,143 +693,30 @@
             backMet[num] = true; }
         });
       }
-      for (let i = 1; i <= frontMax; i++)
-        if (!frontMet[i]) frontMiss[i] = sorted.length;
-      for (let i = 1; i <= backMax; i++)
-        if (!backMet[i]) backMiss[i] = sorted.length;
-
+      for (let i = 1; i <= frontMax; i++) {
+        if (!frontMet[i]) frontMiss[i] = records.length;
+      }
+      for (let i = 1; i <= backMax; i++) {
+        if (!backMet[i]) backMiss[i] = records.length;
+      }
       let frontEntries = [];
-      for (let i = 1; i <= frontMax; i++) frontEntries.push({ num: i, freq: frontFreq[i], miss: frontMiss[i] });
+      for (let i = 1; i <= frontMax; i++) {
+        frontEntries.push({ num: i, freq: frontFreq[i], miss: frontMiss[i] });
+      }
       frontEntries.sort((a, b) => b.freq - a.freq);
       let hotFront = frontEntries.slice(0, 5);
       let coldFront = [...frontEntries].sort((a, b) => a.freq - b.freq).slice(0, 5);
       let backEntries = [];
-      for (let i = 1; i <= backMax; i++) backEntries.push({ num: i, freq: backFreq[i], miss: backMiss[i] });
+      for (let i = 1; i <= backMax; i++) {
+        backEntries.push({ num: i, freq: backFreq[i], miss: backMiss[i] });
+      }
       backEntries.sort((a, b) => b.freq - a.freq);
       let hotBack = backEntries.slice(0, 3);
       let coldBack = [...backEntries].sort((a, b) => a.freq - b.freq).slice(0, 3);
-      return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: sorted.length,
-        hotFront, coldFront, hotBack, coldBack, frontMax, backMax };
-    }
-
-    function renderHorizontalBarChart(containerId, categories, values, titleColor, barColorStart, barColorEnd, axisName) {
-      const dom = document.getElementById(containerId);
-      if (!dom) return;
-      let chart = null;
-      if (containerId === 'frontChart') {
-        if (frontChartInstance) chart = frontChartInstance;
-        else { chart = echarts.init(dom);
-          frontChartInstance = chart; }
-      } else {
-        if (backChartInstance) chart = backChartInstance;
-        else { chart = echarts.init(dom);
-          backChartInstance = chart; }
-      }
-
-      const baseOption = {
-        backgroundColor: 'transparent',
-        tooltip: { show: false },
-        grid: { containLabel: true, left: '12%', right: '5%', top: 20, bottom: 10 },
-        xAxis: { type: 'value', name: axisName, nameTextStyle: { color: '#cccccc', fontSize: 10 }, splitLine: {
-            lineStyle: { color: '#444444' } }, axisLabel: { color: '#dddddd' } },
-        yAxis: { type: 'category', data: categories, axisLabel: { fontSize: 9, color: '#dddddd', interval: 0,
-            rotate: 0 }, axisLine: { lineStyle: { color: '#888888' } }, axisTick: { show: false } },
-        series: [{
-          type: 'bar',
-          data: values,
-          label: { show: true, position: 'right', color: '#ffd966', fontSize: 9, formatter: (params) => params
-              .value > 0 ? params.value : '' },
-          itemStyle: { borderRadius: [0, 4, 4, 0], color: { type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
-              colorStops: [{ offset: 0, color: barColorStart }, { offset: 1, color: barColorEnd }] } }
-        }]
+      return {
+        frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length,
+        hotFront, coldFront, hotBack, coldBack, frontMax, backMax
       };
-
-      chart.setOption(baseOption);
-    }
-
-    function clearCharts() {
-      if (frontChartInstance) {
-        frontChartInstance.clear();
-        frontChartInstance.setOption({
-          backgroundColor: 'transparent',
-          title: { text: '暂无数据', textStyle: { color: '#888', fontSize: 14, fontWeight: 'normal' }, left: 'center',
-            top: 'center' }
-        });
-      }
-      if (backChartInstance) {
-        backChartInstance.clear();
-        backChartInstance.setOption({
-          backgroundColor: 'transparent',
-          title: { text: '暂无数据', textStyle: { color: '#888', fontSize: 14, fontWeight: 'normal' }, left: 'center',
-            top: 'center' }
-        });
-      }
-    }
-
-    async function renderTrend() {
-      const type = currentMode;
-      trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
-      trendStatsSpan.innerHTML = '加载近10期数据...';
-      const records = await fetchTrendData(type);
-      if (!records || records.length === 0) {
-        trendStatsSpan.innerHTML = '数据加载失败！';
-        hotcoldPanel.innerHTML = `<div class="error-text">无法获取走势数据，请稍后重试</div>`;
-        clearCharts();
-        return;
-      }
-      const stats = analyzeStats(records, type);
-      if (!stats) {
-        trendStatsSpan.innerHTML = '数据解析失败！';
-        hotcoldPanel.innerHTML = `<div class="error-text">数据格式异常，请稍后重试</div>`;
-        clearCharts();
-        return;
-      }
-
-      const frontCategories = Array.from({ length: stats.frontMax }, (_, i) => i + 1);
-      const frontData = frontCategories.map(num => stats.frontFreq[num] || 0);
-      const backCategories = Array.from({ length: stats.backMax }, (_, i) => i + 1);
-      const backData = backCategories.map(num => stats.backFreq[num] || 0);
-
-      renderHorizontalBarChart('frontChart', frontCategories, frontData, '出现次数', '#e74c3c', '#f39c12', '出现次数');
-      renderHorizontalBarChart('backChart', backCategories, backData, '出现次数', '#3498db', '#9b59b6', '出现次数');
-
-      trendStatsSpan.innerHTML = `共 ${stats.totalPeriods} 期 | 热号高频 | 冷号低开 | 遗漏统计`;
-
-      let hotHtml = `<div class="hotcold-box"><h4>热号</h4>`;
-      hotHtml += `<span class="section-label">前区热号</span><div class="plain-number-list">`;
-      stats.hotFront.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
-      hotHtml += `</div><span class="section-label">后区热号</span><div class="plain-number-list">`;
-      stats.hotBack.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
-      hotHtml += `</div></div>`;
-
-      let coldHtml = `<div class="hotcold-box"><h4>冷号</h4>`;
-      coldHtml += `<span class="section-label">前区冷号</span><div class="plain-number-list">`;
-      stats.coldFront.forEach(c => {
-        let missVal = stats.frontMiss[c.num] || 0;
-        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
-      });
-      coldHtml += `</div><span class="section-label">后区冷号</span><div class="plain-number-list">`;
-      stats.coldBack.forEach(c => {
-        let missVal = stats.backMiss[c.num] || 0;
-        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
-      });
-      coldHtml += `</div></div>`;
-
-      let missHtml = `<div class="hotcold-box"><h4>最大遗漏</h4>`;
-      let maxMissFront = 0,
-        maxMissNum = 0;
-      for (let i = 1; i <= stats.frontMax; i++)
-        if (stats.frontMiss[i] > maxMissFront) { maxMissFront = stats.frontMiss[i];
-          maxMissNum = i; }
-      missHtml += `<p>前区最大遗漏: ${maxMissNum}号 (${maxMissFront}期未开)</p>`;
-      let maxMissBack = 0,
-        maxMissBNum = 0;
-      for (let i = 1; i <= stats.backMax; i++)
-        if (stats.backMiss[i] > maxMissBack) { maxMissBack = stats.backMiss[i];
-          maxMissBNum = i; }
-      missHtml += `<p>后区最大遗漏: ${maxMissBNum}号 (${maxMissBack}期未开)</p>`;
-      missHtml += `</div>`;
-      hotcoldPanel.innerHTML = hotHtml + coldHtml + missHtml;
     }
 
     function weightedSelect(pool, count) {
@@ -704,8 +726,7 @@
       let tempPool = [...pool];
       while (result.length < count && tempPool.length) {
         let randVal = Math.random() * total;
-        let acc = 0,
-          pick = null;
+        let acc = 0, pick = null;
         for (let i = 0; i < tempPool.length; i++) {
           acc += tempPool[i].weight;
           if (randVal <= acc) { pick = tempPool[i]; break; }
@@ -719,17 +740,18 @@
         } else if (!pick) break;
       }
       while (result.length < count) {
-        let extra = Math.floor(Math.random() * (pool.length > 0 ? pool[0].num : 35)) + 1;
+        const max = pool.length > 0 ? Math.max(...pool.map(p => p.num)) : 35;
+        let extra = Math.floor(Math.random() * max) + 1;
         if (!selected.has(extra)) { result.push(extra);
           selected.add(extra); }
       }
       return result.sort((a, b) => a - b);
     }
 
-    function smartRecommend(mode = 'balance') {
-      const records = trendCache[currentMode];
+    function smartRecommend(mode) {
+      const records = getData(currentMode);
       if (!records || records.length === 0) {
-        resultDiv.innerHTML = `<div class="error-text">走势数据加载失败，无法进行推荐</div>`;
+        resultDiv.innerHTML = `<div class="error-text">⚠️ 走势数据未加载，无法推荐</div>`;
         return;
       }
       const stats = analyzeStats(records, currentMode);
@@ -742,7 +764,6 @@
       const backCnt = isSSQ ? 1 : 2;
       const frontMax = stats.frontMax;
       const backMax = stats.backMax;
-
       let html = '';
       for (let g = 0; g < groups; g++) {
         let frontPool = [];
@@ -779,77 +800,213 @@
         bluesRec.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
         html += '</div>';
       }
-      let modeText = '';
-      if (mode === 'cold') modeText = '追冷模式 (侧重高遗漏)';
-      else if (mode === 'hot') modeText = '追热模式 (侧重高频)';
-      else modeText = '冷热均衡策略';
-      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeText}</div>`;
+      const modeTextMap = {
+        cold: '❄️ 追冷模式 (侧重高遗漏)',
+        hot: '🔥 追热模式 (侧重高频)',
+        balance: '⚖️ 冷热均衡策略'
+      };
+      html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${modeTextMap[mode] || mode}</div>`;
       resultDiv.innerHTML = html;
     }
 
-    let historyStore = { ssq: [], dlt: [] };
-
-    async function loadHistory(lotteryType) {
-      try {
-        const resp = await fetch('');
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const json = await resp.json();
-        let list = json?.data?.data?.list;
-        if (!list || !list.length) throw new Error('empty list');
-        let parsed = [];
-        if (lotteryType === 'ssq') {
-          parsed = list.map(item => ({
-            period: item.issue,
-            date: item.date.slice(5),
-            nums: (item.red_balls || []).map(Number).sort((a, b) => a - b),
-            blue: Number(item.blue_ball)
-          }));
-        } else {
-          parsed = list.map(item => ({
-            period: item.issue,
-            date: item.date.slice(5),
-            nums: (item.front_balls || []).map(Number).sort((a, b) => a - b),
-            blues: (item.back_balls || []).map(Number).sort((a, b) => a - b)
-          }));
-        }
-        historyStore[lotteryType] = parsed.slice(0, 10);
-      } catch (e) {
-        console.warn('loadHistory error:', e);
-        historyStore[lotteryType] = [];
+    function renderHorizontalBarChart(containerId, categories, values, barColorStart, barColorEnd, axisName) {
+      const dom = document.getElementById(containerId);
+      if (!dom) return;
+      let chart = null;
+      if (containerId === 'frontChart') {
+        if (frontChartInstance) chart = frontChartInstance;
+        else { chart = echarts.init(dom);
+          frontChartInstance = chart; }
+      } else {
+        if (backChartInstance) chart = backChartInstance;
+        else { chart = echarts.init(dom);
+          backChartInstance = chart; }
       }
-      if (lotteryType === currentMode) renderHistory();
+      const baseOption = {
+        backgroundColor: 'transparent',
+        tooltip: { show: false },
+        grid: { containLabel: true, left: '12%', right: '5%', top: 20, bottom: 10 },
+        xAxis: {
+          type: 'value',
+          name: axisName,
+          nameTextStyle: { color: '#cccccc', fontSize: 10 },
+          splitLine: { lineStyle: { color: '#444444' } },
+          axisLabel: { color: '#dddddd' }
+        },
+        yAxis: {
+          type: 'category',
+          data: categories,
+          axisLabel: { fontSize: 9, color: '#dddddd', interval: 0, rotate: 0 },
+          axisLine: { lineStyle: { color: '#888888' } },
+          axisTick: { show: false }
+        },
+        series: [{
+          type: 'bar',
+          data: values,
+          label: {
+            show: true,
+            position: 'right',
+            color: '#ffd966',
+            fontSize: 9,
+            formatter: (params) => params.value > 0 ? params.value : ''
+          },
+          itemStyle: {
+            borderRadius: [0, 4, 4, 0],
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 1,
+              y2: 0,
+              colorStops: [
+                { offset: 0, color: barColorStart },
+                { offset: 1, color: barColorEnd }
+              ]
+            }
+          }
+        }]
+      };
+      chart.setOption(baseOption, true);
+      chart.resize();
     }
 
-    function renderHistory() {
-      const items = historyStore[currentMode];
-      if (!items || items.length === 0) {
-        historyListDiv.innerHTML = `<div class="error-text">近10期数据加载失败！</div>`;
-        historyMetaSpan.innerHTML = `<span style="color:#ff6b6b;">数据不可用！</span>`;
+    function clearCharts() {
+      const msg = { text: '暂无数据', textStyle: { color: '#888', fontSize: 14, fontWeight: 'normal' }, left: 'center',
+        top: 'center' };
+      if (frontChartInstance) {
+        frontChartInstance.clear();
+        frontChartInstance.setOption({ backgroundColor: 'transparent', title: msg });
+      }
+      if (backChartInstance) {
+        backChartInstance.clear();
+        backChartInstance.setOption({ backgroundColor: 'transparent', title: msg });
+      }
+    }
+
+    function renderTrend() {
+      const type = currentMode;
+      const name = type === 'ssq' ? '双色球' : '大乐透';
+      trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
+      trendStatsSpan.innerHTML = '⏳ 加载数据...';
+      const records = getData(type);
+      if (!records || records.length === 0) {
+        trendStatsSpan.innerHTML = '❌ 数据加载失败';
+        hotcoldPanel.innerHTML = `<div class="error-text">⚠️ 无法获取走势数据</div>`;
+        clearCharts();
         return;
       }
-      let html = '';
-      const isSSQ = currentMode === 'ssq';
-      items.forEach(item => {
-        html += '<div class="history-row">';
-        html += `<span class="period">${item.period}期</span>`;
-        item.nums.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
-        if (isSSQ) {
-          html += `<span class="ball blue">${pad(item.blue)}</span>`;
-        } else {
-          item.blues.forEach(b => html += `<span class="ball back">${pad(b)}</span>`);
-        }
-        html += `<span class="date">${item.date}</span></div>`;
+      const stats = analyzeStats(records, type);
+      if (!stats) {
+        trendStatsSpan.innerHTML = '❌ 数据解析失败';
+        hotcoldPanel.innerHTML = `<div class="error-text">数据格式异常</div>`;
+        clearCharts();
+        return;
+      }
+      const frontCategories = Array.from({ length: stats.frontMax }, (_, i) => i + 1);
+      const frontData = frontCategories.map(num => stats.frontFreq[num] || 0);
+      renderHorizontalBarChart('frontChart', frontCategories, frontData, '#e74c3c', '#f39c12', '出现次数');
+      const backCategories = Array.from({ length: stats.backMax }, (_, i) => i + 1);
+      const backData = backCategories.map(num => stats.backFreq[num] || 0);
+      renderHorizontalBarChart('backChart', backCategories, backData, '#3498db', '#9b59b6', '出现次数');
+      const total = stats.totalPeriods;
+      trendStatsSpan.innerHTML = `📊 共 ${total} 期 | 热号高频 · 冷号低开 · 遗漏统计`;
+      let hotHtml = `<div class="hotcold-box"><h4>🔥 热号</h4>`;
+      hotHtml += `<span class="section-label">${type === 'ssq' ? '红球' : '前区'}热号</span><div class="plain-number-list">`;
+      stats.hotFront.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
+      hotHtml += `</div><span class="section-label">${type === 'ssq' ? '蓝球' : '后区'}热号</span><div class="plain-number-list">`;
+      stats.hotBack.forEach(h => { hotHtml += `<span class="plain-number">${h.num} (${h.freq}次)</span>`; });
+      hotHtml += `</div></div>`;
+      let coldHtml = `<div class="hotcold-box"><h4>❄️ 冷号</h4>`;
+      coldHtml += `<span class="section-label">${type === 'ssq' ? '红球' : '前区'}冷号</span><div class="plain-number-list">`;
+      stats.coldFront.forEach(c => {
+        const missVal = stats.frontMiss[c.num] || 0;
+        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
       });
-      historyListDiv.innerHTML = html;
-      historyMetaSpan.innerHTML = `<span class="dot ok"></span> 共 ${items.length} 期 (含最近开奖)`;
+      coldHtml += `</div><span class="section-label">${type === 'ssq' ? '蓝球' : '后区'}冷号</span><div class="plain-number-list">`;
+      stats.coldBack.forEach(c => {
+        const missVal = stats.backMiss[c.num] || 0;
+        coldHtml += `<span class="plain-number">${c.num} (漏${missVal}期)</span>`;
+      });
+      coldHtml += `</div></div>`;
+      let missHtml = `<div class="hotcold-box"><h4>📌 最大遗漏</h4>`;
+      let maxMissFront = 0, maxMissNum = 0;
+      for (let i = 1; i <= stats.frontMax; i++) {
+        if (stats.frontMiss[i] > maxMissFront) { maxMissFront = stats.frontMiss[i];
+          maxMissNum = i; }
+      }
+      missHtml += `<p>${type === 'ssq' ? '红' : '前区'}最大遗漏: ${maxMissNum}号 (${maxMissFront}期未开)</p>`;
+      let maxMissBack = 0, maxMissBNum = 0;
+      for (let i = 1; i <= stats.backMax; i++) {
+        if (stats.backMiss[i] > maxMissBack) { maxMissBack = stats.backMiss[i];
+          maxMissBNum = i; }
+      }
+      missHtml += `<p>${type === 'ssq' ? '蓝' : '后区'}最大遗漏: ${maxMissBNum}号 (${maxMissBack}期未开)</p>`;
+      missHtml += `</div>`;
+      hotcoldPanel.innerHTML = hotHtml + coldHtml + missHtml;
     }
 
+    // ---- 从外部 fetch 数据 ----
+    async function fetchData() {
+      try {
+        const [ssqResp, dltResp] = await Promise.all([
+          fetch('https://magua-qi.github.io/ssqdata.html'),
+          fetch('https://magua-qi.github.io/dltdata.html')
+        ]);
+
+        if (!ssqResp.ok || !dltResp.ok) {
+          throw new Error('网络请求失败');
+        }
+
+        const ssqText = await ssqResp.text();
+        const dltText = await dltResp.text();
+
+        // 从 HTML 中提取数组定义
+        function extractArray(html, varName) {
+          const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
+          const match = html.match(regex);
+          if (!match) return [];
+          // 将匹配到的数组字符串转换为真正的数组
+          try {
+            // 先去除注释行
+            let cleaned = match[1].replace(/\/\/.*$/gm, '');
+            // 使用 Function 构造器安全解析
+            const fn = new Function(`return [${cleaned}];`);
+            return fn();
+          } catch (e) {
+            console.error(`解析 ${varName} 失败:`, e);
+            return [];
+          }
+        }
+
+        SSQ_DATA = extractArray(ssqText, 'SSQ_DATA');
+        DLT_DATA = extractArray(dltText, 'DLT_DATA');
+
+        console.log(`✅ 双色球数据加载完成: ${SSQ_DATA.length} 期`);
+        console.log(`✅ 大乐透数据加载完成: ${DLT_DATA.length} 期`);
+
+        // 数据加载完成后初始化
+        showHint();
+        loadHistory('ssq');
+        loadHistory('dlt');
+        renderHistory();
+        renderTrend();
+        dataStatusDiv.textContent = `📊 双色球 ${SSQ_DATA.length} 期 · 大乐透 ${DLT_DATA.length} 期`;
+
+      } catch (err) {
+        console.error('加载数据失败:', err);
+        resultDiv.innerHTML = `<div class="error-text">⚠️ 数据加载失败，请检查网络连接</div>`;
+        dataStatusDiv.textContent = '❌ 数据加载失败';
+      }
+    }
+
+    // ---- 事件绑定 ----
     document.querySelectorAll('input[name="mode"]').forEach(radio => {
       radio.addEventListener('change', async (e) => {
         currentMode = e.target.value;
+        currentPage = 1;
         showHint();
         renderHistory();
-        await renderTrend();
+        renderTrend();
       });
     });
 
@@ -864,17 +1021,16 @@
     document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
     document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
 
+    prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+    nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
     window.addEventListener('resize', () => {
       if (frontChartInstance) frontChartInstance.resize();
       if (backChartInstance) backChartInstance.resize();
     });
 
-    (async () => {
-      showHint();
-      await Promise.all([loadHistory('ssq'), loadHistory('dlt')]);
-      renderHistory();
-      await renderTrend();
-    })();
+    // ---- 启动 ----
+    fetchData();
   </script>
 </body>
 </html>
