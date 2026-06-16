@@ -451,10 +451,16 @@
 
         const MODE_CYCLE = ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'];
         function getNextMode(current) { return MODE_CYCLE[(MODE_CYCLE.indexOf(current) + 1) % MODE_CYCLE.length]; }
+        
+        // ✅ 修改点：安全处理 URL 更新，捕获所有异常，不影响核心功能
         function updateUrlMode(mode) { 
-            const url = new URL(location); 
-            url.searchParams.set('mode', mode); 
-            history.replaceState({}, '', url); 
+            try {
+                const url = new URL(location); 
+                url.searchParams.set('mode', mode); 
+                history.replaceState({}, '', url); 
+            } catch (_) {
+                // 忽略错误（例如在沙箱环境或某些壁纸软件中）
+            }
         }
 
         function initGamepadVisibility() {
@@ -655,7 +661,7 @@
             }
             
             setMode(initMode);
-            updateUrlMode(initMode);
+            updateUrlMode(initMode); // 已安全包裹
             bindGamepadControls();
             initGamepadVisibility();
         });
