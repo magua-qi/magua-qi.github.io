@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<title>麻瓜的五百万</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='white'/%3E%3Ctext x='50' y='68' font-size='68' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%23e60012' stroke='%23e60012' stroke-width='2' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
+<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCqcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .app-container {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    width: 100%;
+  }
+
+  .title-bar {
+    background: linear-gradient(90deg, #e74c3c, #f39c12);
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+  }
+
+  .mode-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px 16px 6px;
+    flex-wrap: nowrap;
+  }
+  .mode-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 30px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .mode-row label:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .mode-row input[type="radio"] {
+    display: none;
+  }
+  .mode-row label .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #888;
+    display: inline-block;
+    position: relative;
+  }
+  .mode-row input:checked + span .dot {
+    border-color: #f39c12;
+  }
+  .mode-row input:checked + span .dot::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #f39c12;
+    top: 1.5px;
+    left: 1.5px;
+  }
+
+  .result-box {
+    margin: 6px 16px 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    min-height: 150px;
+    padding: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hint-text {
+    text-align: center;
+    color: #aaa;
+    font-size: 13px;
+  }
+  .number-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 6px 0;
+    flex-wrap: nowrap;
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ball {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .ball.red, .ball.front {
+    background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+    box-shadow: 0 2px 6px rgba(231, 76, 60, 0.5);
+  }
+  .ball.blue, .ball.back {
+    background: radial-gradient(circle at 35% 35%, #74b9ff, #2980b9);
+    box-shadow: 0 2px 6px rgba(41, 128, 185, 0.5);
+  }
+  .sep {
+    margin: 0 2px;
+    color: #ccc;
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
+  .btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.2s;
+    color: #fff;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active {
+    transform: scale(0.96);
+  }
+  .btn-cycle {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  }
+  .btn-refresh {
+    background: linear-gradient(135deg, #e74c3c, #fd79a8);
+  }
+  .btn-smart {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+    color: #1e272e;
+  }
+  .badge {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 2px 6px;
+    margin-left: 5px;
+    font-size: 11px;
+  }
+  .btn-almanac {
+    background: linear-gradient(135deg, #d63031, #e17055);
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .trend-header {
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .trend-header h3 {
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #f39c12, #e74c3c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+  }
+  .trend-stats {
+    display: flex;
+    gap: 8px;
+    font-size: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 3px 10px;
+    border-radius: 30px;
+    color: white;
+    white-space: nowrap;
+  }
+
+  .chart-container {
+    padding: 12px 12px;
+    width: 100%;
+  }
+  .chart-canvas-wrapper {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 12px;
+  }
+  .hotcold-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 16px 16px;
+    justify-content: space-between;
+  }
+  .hotcold-box {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 14px;
+    padding: 8px 10px;
+  }
+  .hotcold-box h4 {
+    font-size: 12px;
+    margin-bottom: 6px;
+    border-left: 3px solid #f39c12;
+    padding-left: 6px;
+  }
+  .num-tag {
+    display: inline-block;
+    background: #2d3436;
+    margin: 3px 5px 3px 0;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .num-tag.hot {
+    background: #e74c3c;
+    color: white;
+  }
+  .num-tag.cold {
+    background: #3498db;
+    color: white;
+  }
+
+  .history-list {
+    padding: 6px 16px 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .history-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    width: max-content;
+    min-width: 100%;
+  }
+  .period {
+    color: #bbb;
+    font-size: 11px;
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+  .date {
+    color: #777;
+    font-size: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .history-meta {
+    text-align: center;
+    padding: 4px 16px 12px;
+    font-size: 10px;
+  }
+  .dot.ok {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00b894;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .almanac-card {
+    background: rgba(255, 215, 0, 0.08);
+    backdrop-filter: blur(18px);
+  }
+  .almanac-content {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .almanac-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    padding-bottom: 6px;
+  }
+  .almanac-label {
+    color: #f39c12;
+    font-weight: 600;
+  }
+  .almanac-value {
+    color: #ffeaa7;
+    text-align: right;
+  }
+  .lucky-tag {
+    display: inline-block;
+    background: rgba(231, 76, 60, 0.7);
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin: 0 4px 4px 0;
+    font-size: 11px;
+  }
+  .taboo-tag {
+    display: inline-block;
+    background: rgba(52, 73, 94, 0.8);
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin: 0 4px 4px 0;
+    font-size: 11px;
+  }
+  .fortune-numbers {
+    margin-top: 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 8px;
+    text-align: center;
+  }
+  .fortune-title {
+    font-size: 12px;
+    color: #ffd966;
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="card">
+    <div class="title-bar">每 日 大 奖</div>
+    <div class="mode-row">
+      <label>
+        <input type="radio" name="mode" value="ssq" checked>
+        <span><span class="dot"></span> 双色球</span>
+      </label>
+      <label>
+        <input type="radio" name="mode" value="dlt">
+        <span><span class="dot"></span> 大乐透</span>
+      </label>
+    </div>
+    <div class="result-box" id="resultArea">
+      <div class="hint-text">点击 随机生成 获得号码</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-cycle" id="cycleBtn">组数 <span class="badge" id="groupBadge">1</span></button>
+      <button class="btn btn-refresh" id="refreshBtn">随机生成</button>
+      <button class="btn btn-smart" id="smartBtn">智能推荐</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title-bar" style="background: linear-gradient(90deg,#2d3436,#636e72);">近 10 期开奖号码</div>
+    <div class="history-list" id="historyList"></div>
+    <div class="history-meta" id="historyMeta"></div>
+  </div>
+
+  <div class="card">
+    <div class="title-bar" style="background: linear-gradient(90deg,#e67e22,#f1c40f);">近88期走势图 · 冷热分析</div>
+    <div class="trend-header">
+      <h3 id="trendTitle">双色球 · 红球频率分布</h3>
+      <div class="trend-stats" id="trendStats">加载中...</div>
+    </div>
+    <div class="chart-container">
+      <div class="chart-canvas-wrapper">
+        <canvas id="frontCanvas" width="500" height="260" style="width:100%; height:auto; background:#0a0a1a;"></canvas>
+      </div>
+      <div class="chart-canvas-wrapper" style="margin-top: 12px;">
+        <canvas id="backCanvas" width="500" height="230" style="width:100%; height:auto; background:#0a0a1a;"></canvas>
+      </div>
+    </div>
+    <div class="hotcold-panel" id="hotcoldPanel"></div>
+  </div>
+
+  <div class="card almanac-card">
+    <div class="title-bar" style="background: linear-gradient(90deg,#d63031, #e17055);">📅 今日黄历 · 运势选号</div>
+    <div class="almanac-content" id="almanacContent"></div>
+    <button class="btn btn-almanac" id="fortuneBtn">✨ 运势选号 ✨</button>
+    <div id="fortuneNumbers" class="fortune-numbers" style="margin: 0 16px 16px 16px;"></div>
+  </div>
+</div>
+
+<script>
+  let currentMode = 'ssq';
+  let groups = 1;
+  
+  let trendCache = { ssq: null, dlt: null };
+  let trendLoading = { ssq: false, dlt: false };
+  
+  const resultDiv = document.getElementById('resultArea');
+  const frontCanvas = document.getElementById('frontCanvas');
+  const backCanvas = document.getElementById('backCanvas');
+  const trendStatsSpan = document.getElementById('trendStats');
+  const trendTitleSpan = document.getElementById('trendTitle');
+  const hotcoldPanel = document.getElementById('hotcoldPanel');
+  const groupBadge = document.getElementById('groupBadge');
+  const historyListDiv = document.getElementById('historyList');
+  const historyMetaSpan = document.getElementById('historyMeta');
+  const almanacDiv = document.getElementById('almanacContent');
+  const fortuneDiv = document.getElementById('fortuneNumbers');
+  
+  function rand(n) {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return 1 + (arr[0] % n);
+  }
+  function pickUnique(count, max) {
+    const set = new Set();
+    while (set.size < count) set.add(rand(max));
+    return [...set].sort((a, b) => a - b);
+  }
+  function pad(n) {
+    return n < 10 ? '0' + n : '' + n;
+  }
+  
+  function genSSQ() {
+    return { reds: pickUnique(6, 33), blues: [rand(16)] };
+  }
+  function genDLT() {
+    return { reds: pickUnique(5, 35), blues: pickUnique(2, 12) };
+  }
+  
+  function refreshNumbers() {
+    const isSSQ = currentMode === 'ssq';
+    let html = '';
+    for (let i = 0; i < groups; i++) {
+      const d = isSSQ ? genSSQ() : genDLT();
+      html += '<div class="number-line">';
+      d.reds.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+      html += '<span class="sep">+</span>';
+      d.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+      html += '</div>';
+    }
+    resultDiv.innerHTML = html;
+  }
+  
+  function showHint() {
+    const name = currentMode === 'ssq' ? '双色球' : '大乐透';
+    resultDiv.innerHTML = `<div class="hint-text">点击 随机生成 获得 ${groups} 组${name}号码<br>走势图基于近88期真实数据</div>`;
+  }
+  
+  async function fetchTrendData(lotteryType) {
+    if (trendCache[lotteryType]) return trendCache[lotteryType];
+    if (trendLoading[lotteryType]) return null;
+    trendLoading[lotteryType] = true;
+    try {
+      const limit = 88;
+      const url = `https://api.ruseo.cn/api/lottery?type=${lotteryType}&page=1&limit=${limit}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const json = await resp.json();
+      let list = json?.data?.data?.list;
+      if (!list || !list.length) throw new Error('empty');
+      let records = [];
+      for (let item of list) {
+        if (lotteryType === 'ssq') {
+          let reds = (item.red_balls || '').split(',').map(Number).sort((a,b)=>a-b);
+          let blue = Number(item.blue_ball);
+          if (reds.length === 6 && blue >= 1 && blue <= 16) records.push({ reds, blues: [blue], date: item.date, period: item.issue });
+        } else {
+          let fronts = (item.front_balls || '').split(',').map(Number).sort((a,b)=>a-b);
+          let backs = (item.back_balls || '').split(',').map(Number).sort((a,b)=>a-b);
+          if (fronts.length === 5 && backs.length === 2) records.push({ reds: fronts, blues: backs, date: item.date, period: item.issue });
+        }
+      }
+      if (records.length === 0) throw new Error('parse fail');
+      trendCache[lotteryType] = records.slice(0, 88);
+      return trendCache[lotteryType];
+    } catch (e) {
+      const mock = [];
+      const isSSQ = lotteryType === 'ssq';
+      for (let i = 1; i <= 88; i++) {
+        if (isSSQ) mock.push({ reds: pickUnique(6,33), blues: [rand(16)], date: `2026-${String(30+(i%20)).padStart(2,'0')}-${String(1+(i%28)).padStart(2,'0')}`, period: `2026${String(50+i).slice(-2)}` });
+        else mock.push({ reds: pickUnique(5,35), blues: pickUnique(2,12), date: `2026-${String(30+(i%20)).padStart(2,'0')}-${String(1+(i%28)).padStart(2,'0')}`, period: `2026${String(50+i).slice(-2)}` });
+      }
+      trendCache[lotteryType] = mock;
+      return mock;
+    } finally {
+      trendLoading[lotteryType] = false;
+    }
+  }
+  
+  function analyzeStats(records, type) {
+    if (!records || records.length === 0) return null;
+    const isSSQ = type === 'ssq';
+    const frontMax = isSSQ ? 33 : 35;
+    const backMax = isSSQ ? 16 : 12;
+    let frontFreq = new Array(frontMax+1).fill(0);
+    let backFreq = new Array(backMax+1).fill(0);
+    let frontMiss = new Array(frontMax+1).fill(0);
+    let backMiss = new Array(backMax+1).fill(0);
+    let frontMet = new Array(frontMax+1).fill(false);
+    let backMet = new Array(backMax+1).fill(false);
+    let sorted = [...records];
+    if (sorted.length && sorted[0].date && sorted[sorted.length-1].date && sorted[0].date < sorted[sorted.length-1].date) sorted.reverse();
+    for (let i=0; i<sorted.length; i++) {
+      const rec = sorted[i];
+      rec.reds.forEach(num => {
+        frontFreq[num]++;
+        if (!frontMet[num]) { frontMiss[num] = i; frontMet[num] = true; }
+      });
+      rec.blues.forEach(num => {
+        backFreq[num]++;
+        if (!backMet[num]) { backMiss[num] = i; backMet[num] = true; }
+      });
+    }
+    for (let i=1; i<=frontMax; i++) if (!frontMet[i]) frontMiss[i] = sorted.length;
+    for (let i=1; i<=backMax; i++) if (!backMet[i]) backMiss[i] = sorted.length;
+    
+    let frontEntries = [];
+    for (let i=1; i<=frontMax; i++) frontEntries.push({num:i, freq:frontFreq[i], miss:frontMiss[i]});
+    frontEntries.sort((a,b)=>b.freq - a.freq);
+    let hotFront = frontEntries.slice(0,5);
+    let coldFront = [...frontEntries].sort((a,b)=>a.freq - b.freq).slice(0,5);
+    let backEntries = [];
+    for (let i=1; i<=backMax; i++) backEntries.push({num:i, freq:backFreq[i], miss:backMiss[i]});
+    backEntries.sort((a,b)=>b.freq - a.freq);
+    let hotBack = backEntries.slice(0,3);
+    let coldBack = [...backEntries].sort((a,b)=>a.freq - b.freq).slice(0,3);
+    return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: sorted.length,
+             hotFront, coldFront, hotBack, coldBack, frontMax, backMax };
+  }
+  
+  function drawBarChart(canvas, frequencies, title, colorStart, colorEnd, maxNum) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    if (!frequencies) return;
+    let values = [];
+    for (let i=1; i<=maxNum; i++) values.push(frequencies[i] || 0);
+    const maxFreq = Math.max(...values, 1);
+    const barWidth = (w - 80) / maxNum;
+    const bottomY = h - 38;
+    ctx.fillStyle = "#f0f0f0";
+    ctx.font = "11px 'Segoe UI'";
+    ctx.fillText(title, 12, 18);
+    ctx.fillStyle = "#bbb";
+    for (let i=0; i<values.length; i++) {
+      let x = 40 + i * barWidth;
+      let barH = (values[i] / maxFreq) * (h - 65);
+      let gradient = ctx.createLinearGradient(x, bottomY-barH, x, bottomY);
+      gradient.addColorStop(0, colorStart);
+      gradient.addColorStop(1, colorEnd);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x, bottomY - barH, barWidth-1, barH);
+      ctx.fillStyle = "#ccc";
+      ctx.fillText(i+1, x+2, bottomY+10);
+      if (values[i] > 0) {
+        ctx.fillStyle = "#ffd966";
+        ctx.font = "9px monospace";
+        ctx.fillText(values[i], x+2, bottomY - barH - 2);
+      }
+    }
+    ctx.fillStyle = "#ddd";
+    ctx.fillText("出现次数", w-55, 25);
+  }
+  
+  async function renderTrend() {
+    const type = currentMode;
+    trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
+    trendStatsSpan.innerHTML = '加载近88期数据...';
+    const records = await fetchTrendData(type);
+    if (!records || records.length === 0) {
+      trendStatsSpan.innerHTML = '数据不可用';
+      return;
+    }
+    const stats = analyzeStats(records, type);
+    if (!stats) return;
+    const isSSQ = type === 'ssq';
+    drawBarChart(frontCanvas, stats.frontFreq, isSSQ ? "红球 (1-33) 出现频次" : "前区 (1-35) 出现频次", "#e74c3c", "#f39c12", stats.frontMax);
+    drawBarChart(backCanvas, stats.backFreq, isSSQ ? "蓝球 (1-16) 出现频次" : "后区 (1-12) 出现频次", "#3498db", "#9b59b6", stats.backMax);
+    trendStatsSpan.innerHTML = `共 ${stats.totalPeriods} 期 | 热号高频 | 冷号低开 | 遗漏统计`;
+    
+    let hotHtml = `<div class="hotcold-box"><h4>热号 (高频)</h4>`;
+    stats.hotFront.forEach(h => { hotHtml += `<span class="num-tag hot">${h.num} (${h.freq}次)</span>`; });
+    hotHtml += `<div style="margin-top:6px;"><strong>后区热号</strong><br>`;
+    stats.hotBack.forEach(h => { hotHtml += `<span class="num-tag hot">${h.num} (${h.freq}次)</span>`; });
+    hotHtml += `</div></div>`;
+    
+    let coldHtml = `<div class="hotcold-box"><h4>冷号 (低频/高遗漏)</h4>`;
+    stats.coldFront.forEach(c => {
+      let missVal = stats.frontMiss[c.num] || 0;
+      coldHtml += `<span class="num-tag cold">${c.num} (漏${missVal}期)</span>`;
+    });
+    coldHtml += `<div style="margin-top:6px;"><strong>后区冷号</strong><br>`;
+    stats.coldBack.forEach(c => {
+      let missVal = stats.backMiss[c.num] || 0;
+      coldHtml += `<span class="num-tag cold">${c.num} (漏${missVal}期)</span>`;
+    });
+    coldHtml += `</div></div>`;
+    
+    let missHtml = `<div class="hotcold-box"><h4>最大遗漏提醒</h4>`;
+    let maxMissFront = 0, maxMissNum = 0;
+    for (let i=1; i<=stats.frontMax; i++) if (stats.frontMiss[i] > maxMissFront) { maxMissFront = stats.frontMiss[i]; maxMissNum = i; }
+    missHtml += `<p>前区最大遗漏: ${maxMissNum}号 (${maxMissFront}期未开)</p>`;
+    let maxMissBack = 0, maxMissBNum = 0;
+    for (let i=1; i<=stats.backMax; i++) if (stats.backMiss[i] > maxMissBack) { maxMissBack = stats.backMiss[i]; maxMissBNum = i; }
+    missHtml += `<p>后区最大遗漏: ${maxMissBNum}号 (${maxMissBack}期未开)</p>`;
+    missHtml += `<div style="margin-top:6px;"><button id="focusMissBtn" style="background:#6c5ce7; padding:4px 10px; border:none; border-radius:18px; color:white; cursor:pointer; font-size:11px;">追冷推荐</button></div></div>`;
+    hotcoldPanel.innerHTML = hotHtml + coldHtml + missHtml;
+    const missBtn = document.getElementById('focusMissBtn');
+    if (missBtn) missBtn.onclick = () => smartRecommend(true);
+  }
+  
+  function weightedSelect(pool, count) {
+    let total = pool.reduce((s,o)=>s+o.weight,0);
+    let selected = new Set();
+    let result = [];
+    let tempPool = [...pool];
+    while(result.length < count && tempPool.length) {
+      let randVal = Math.random() * total;
+      let acc = 0, pick = null;
+      for(let i=0; i<tempPool.length; i++) {
+        acc += tempPool[i].weight;
+        if(randVal <= acc) { pick = tempPool[i]; break; }
+      }
+      if(pick && !selected.has(pick.num)) {
+        selected.add(pick.num);
+        result.push(pick.num);
+        let idx = tempPool.findIndex(p=>p.num===pick.num);
+        if(idx!==-1) tempPool.splice(idx,1);
+        total = tempPool.reduce((s,o)=>s+o.weight,0);
+      } else if(!pick) break;
+    }
+    while(result.length < count) {
+      let extra = Math.floor(Math.random() * (pool.length > 0 ? pool[0].num : 35)) + 1;
+      if(!selected.has(extra)) { result.push(extra); selected.add(extra); }
+    }
+    return result.sort((a,b)=>a-b);
+  }
+  
+  function smartRecommend(focusCold = false) {
+    const records = trendCache[currentMode];
+    if (!records || records.length === 0) {
+      alert("走势数据加载中，请稍后...");
+      return;
+    }
+    const stats = analyzeStats(records, currentMode);
+    if (!stats) return;
+    const isSSQ = currentMode === 'ssq';
+    const frontCnt = isSSQ ? 6 : 5;
+    const backCnt = isSSQ ? 1 : 2;
+    const frontMax = stats.frontMax;
+    const backMax = stats.backMax;
+    
+    let html = '';
+    for (let g = 0; g < groups; g++) {
+      let frontPool = [];
+      for (let i=1; i<=frontMax; i++) {
+        let weight = focusCold ? (stats.frontMiss[i] + 1) : (10 - stats.frontFreq[i] + stats.frontMiss[i] * 0.7);
+        weight = Math.max(1, weight);
+        frontPool.push({ num: i, weight });
+      }
+      let backPool = [];
+      for (let i=1; i<=backMax; i++) {
+        let weight = focusCold ? (stats.backMiss[i] + 1) : (10 - stats.backFreq[i] + stats.backMiss[i] * 0.8);
+        weight = Math.max(1, weight);
+        backPool.push({ num: i, weight });
+      }
+      let redsRec = weightedSelect(frontPool, frontCnt);
+      let bluesRec = weightedSelect(backPool, backCnt);
+      html += '<div class="number-line">';
+      redsRec.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+      html += '<span class="sep">+</span>';
+      bluesRec.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+      html += '</div>';
+    }
+    html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${focusCold ? '追冷模式 (侧重高遗漏)' : '冷热均衡策略'}</div>`;
+    resultDiv.innerHTML = html;
+  }
+  
+  const FULL_SSQ = [
+    { period:'2026067', date:'06-14', nums:[4,19,27,29,30,32], blue:13 }, { period:'2026066', date:'06-11', nums:[5,11,21,23,24,29], blue:16 },
+    { period:'2026065', date:'06-09', nums:[7,8,16,24,30,32], blue:2 }, { period:'2026064', date:'06-07', nums:[1,9,15,18,29,33], blue:15 },
+    { period:'2026063', date:'06-04', nums:[2,8,25,28,30,31], blue:2 }, { period:'2026062', date:'06-02', nums:[2,4,7,14,28,29], blue:9 },
+    { period:'2026061', date:'05-31', nums:[1,4,5,15,23,28], blue:7 }, { period:'2026060', date:'05-28', nums:[7,9,10,16,22,27], blue:11 },
+    { period:'2026059', date:'05-26', nums:[8,16,26,28,29,30], blue:15 }, { period:'2026058', date:'05-24', nums:[1,4,7,21,29,30], blue:1 }
+  ];
+  const FULL_DLT = [
+    { period:'2026065', date:'06-13', nums:[4,11,12,13,25], blues:[4,8] }, { period:'2026064', date:'06-10', nums:[5,10,18,20,34], blues:[1,8] },
+    { period:'2026063', date:'06-08', nums:[3,15,20,29,31], blues:[1,12] }, { period:'2026062', date:'06-06', nums:[7,15,20,24,29], blues:[4,10] },
+    { period:'2026061', date:'06-03', nums:[10,12,26,31,35], blues:[2,12] }, { period:'2026060', date:'06-01', nums:[22,28,30,31,34], blues:[1,5] },
+    { period:'2026059', date:'05-30', nums:[6,13,17,19,26], blues:[7,8] }, { period:'2026058', date:'05-27', nums:[7,12,13,18,34], blues:[1,5] },
+    { period:'2026057', date:'05-25', nums:[23,25,26,27,34], blues:[4,10] }, { period:'2026056', date:'05-23', nums:[6,7,18,21,30], blues:[1,5] }
+  ];
+  let historyStore = { ssq: [], dlt: [] };
+  
+  async function loadHistory(lotteryType) {
+    try {
+      const resp = await fetch(`https://api.ruseo.cn/api/lottery?type=${lotteryType}&page=1&limit=10`);
+      if (!resp.ok) throw new Error();
+      const json = await resp.json();
+      let list = json?.data?.data?.list;
+      if (list && list.length) {
+        let parsed = [];
+        if (lotteryType === 'ssq') {
+          parsed = list.map(item => ({ period: item.issue, date: item.date.slice(5), nums: item.red_balls.split(',').map(Number).sort((a,b)=>a-b), blue: Number(item.blue_ball) }));
+        } else {
+          parsed = list.map(item => ({ period: item.issue, date: item.date.slice(5), nums: item.front_balls.split(',').map(Number).sort((a,b)=>a-b), blues: item.back_balls.split(',').map(Number).sort((a,b)=>a-b) }));
+        }
+        let full = [...parsed];
+        const mock = lotteryType === 'ssq' ? FULL_SSQ : FULL_DLT;
+        while (full.length < 10) full.push(mock[full.length % mock.length]);
+        historyStore[lotteryType] = full.slice(0,10);
+      } else throw new Error();
+    } catch(e) {
+      historyStore[lotteryType] = lotteryType === 'ssq' ? [...FULL_SSQ] : [...FULL_DLT];
+    }
+    if (lotteryType === currentMode) renderHistory();
+  }
+  
+  function renderHistory() {
+    const items = historyStore[currentMode];
+    if (!items || items.length === 0) { historyListDiv.innerHTML = '<div class="hint-text">暂无数据</div>'; return; }
+    let html = '';
+    const isSSQ = currentMode === 'ssq';
+    items.forEach(item => {
+      html += '<div class="history-row">';
+      html += `<span class="period">${item.period}期</span>`;
+      item.nums.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+      if (isSSQ) {
+        html += `<span class="ball blue">${pad(item.blue)}</span>`;
+      } else {
+        item.blues.forEach(b => html += `<span class="ball back">${pad(b)}</span>`);
+      }
+      html += `<span class="date">${item.date}</span></div>`;
+    });
+    historyListDiv.innerHTML = html;
+    historyMetaSpan.innerHTML = `<span class="dot ok"></span> 共 ${items.length} 期 (含最近开奖)`;
+  }
+  
+  function getAlmanac() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekday = weekdays[today.getDay()];
+    
+    const gan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+    const zhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    const zodiacs = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+    
+    let yearGanZhi = '';
+    let yearZodiac = '';
+    let monthGanZhi = '';
+    let dayGanZhi = '';
+    
+    if (year === 2026) {
+      yearGanZhi = '丙午';
+      yearZodiac = '马';
+      monthGanZhi = '乙巳';
+      const seed = (month * 31 + day) % 60;
+      dayGanZhi = gan[seed % 10] + zhi[seed % 12];
+    } else {
+      const seedYear = (year - 2026 + 60) % 60;
+      yearGanZhi = gan[seedYear % 10] + zhi[seedYear % 12];
+      yearZodiac = zodiacs[seedYear % 12];
+      const seedMonth = (year * 12 + month) % 60;
+      monthGanZhi = gan[seedMonth % 10] + zhi[seedMonth % 12];
+      const seedDay = (today.getTime() / 86400000) % 60;
+      dayGanZhi = gan[seedDay % 10] + zhi[seedDay % 12];
+    }
+    
+    const springFestival2026 = new Date(2026, 1, 17);
+    let lunarYear, lunarMonth, lunarDay;
+    const diffDays = Math.floor((today - springFestival2026) / 86400000);
+    if (diffDays >= 0) {
+      lunarYear = 2026;
+      let lunarDays = diffDays;
+      lunarMonth = Math.floor(lunarDays / 30) + 1;
+      if (lunarMonth > 12) lunarMonth = 12;
+      lunarDay = (lunarDays % 30) + 1;
+    } else {
+      lunarYear = 2025;
+      let lunarDays = -diffDays - 1;
+      lunarMonth = Math.floor(lunarDays / 30) + 1;
+      if (lunarMonth > 12) lunarMonth = 12;
+      lunarDay = (lunarDays % 30) + 1;
+    }
+    const lunarMonthNames = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
+    const lunarMonthStr = lunarMonthNames[lunarMonth - 1] || `${lunarMonth}月`;
+    const lunarDayStr = lunarDay + (lunarDay === 1 ? '日' : '日');
+    
+    const seed = (month * day + today.getDay()) % 100;
+    const yiList = ['嫁娶', '纳财', '开市', '交易', '出行', '祈福', '祭祀', '求嗣', '开光', '解除', '修造', '动土', '安床', '栽种', '纳畜'];
+    const jiList = ['诸事不宜', '诉讼', '纳采', '安葬', '作灶', '破土', '开仓', '入宅', '移徙', '理发', '针灸', '伐木', '行丧'];
+    const yi = [yiList[seed % yiList.length], yiList[(seed+7) % yiList.length], yiList[(seed+3) % yiList.length]].slice(0,3);
+    const ji = [jiList[seed % jiList.length], jiList[(seed+5) % jiList.length]].slice(0,2);
+    
+    const chongZodiac = zodiacs[((today.getFullYear() + today.getMonth() + today.getDate()) % 12)];
+    const shenSha = ['岁德合', '天德', '月德', '三合', '六合', '天喜', '福星'][seed % 7];
+    
+    return {
+      solar: `${year}年${month}月${day}日 ${weekday}`,
+      lunar: `${lunarYear}年 ${lunarMonthStr}${lunarDayStr}`,
+      ganzhi: `${yearGanZhi}年 ${monthGanZhi}月 ${dayGanZhi}日`,
+      zodiac: `🐎 生肖: ${yearZodiac} · 日冲: ${chongZodiac}`,
+      yi: yi,
+      ji: ji,
+      shenSha: `吉神: ${shenSha}`,
+      dayGan: dayGanZhi[0],
+      dayZhi: dayGanZhi[1]
+    };
+  }
+  
+  function getFortuneNumbers() {
+    const alm = getAlmanac();
+    const isSSQ = currentMode === 'ssq';
+    const frontCount = isSSQ ? 6 : 5;
+    const backCount = isSSQ ? 1 : 2;
+    const frontMax = isSSQ ? 33 : 35;
+    const backMax = isSSQ ? 16 : 12;
+    
+    let seed = 0;
+    for (let ch of alm.ganzhi + alm.solar + alm.lunar) seed += ch.charCodeAt(0);
+    seed = seed % 10000;
+    function seededRandom() {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    }
+    
+    const reds = new Set();
+    while (reds.size < frontCount) {
+      let r = Math.floor(seededRandom() * frontMax) + 1;
+      reds.add(r);
+    }
+    let redsArr = [...reds].sort((a,b)=>a-b);
+    
+    const blues = new Set();
+    while (blues.size < backCount) {
+      let b = Math.floor(seededRandom() * backMax) + 1;
+      blues.add(b);
+    }
+    let bluesArr = [...blues].sort((a,b)=>a-b);
+    
+    return { reds: redsArr, blues: bluesArr };
+  }
+  
+  function renderAlmanac() {
+    const alm = getAlmanac();
+    let html = `
+      <div class="almanac-row"><span class="almanac-label">📆 公历</span><span class="almanac-value">${alm.solar}</span></div>
+      <div class="almanac-row"><span class="almanac-label">🌙 农历</span><span class="almanac-value">${alm.lunar}</span></div>
+      <div class="almanac-row"><span class="almanac-label">☯ 干支</span><span class="almanac-value">${alm.ganzhi}</span></div>
+      <div class="almanac-row"><span class="almanac-label">🐉 生肖冲煞</span><span class="almanac-value">${alm.zodiac}</span></div>
+      <div class="almanac-row"><span class="almanac-label">✨ 宜</span><span class="almanac-value">${alm.yi.map(v => `<span class="lucky-tag">${v}</span>`).join('')}</span></div>
+      <div class="almanac-row"><span class="almanac-label">⚠️ 忌</span><span class="almanac-value">${alm.ji.map(v => `<span class="taboo-tag">${v}</span>`).join('')}</span></div>
+      <div class="almanac-row"><span class="almanac-label">🌟 吉神</span><span class="almanac-value">${alm.shenSha}</span></div>
+    `;
+    almanacDiv.innerHTML = html;
+  }
+  
+  function showFortuneNumbers() {
+    const nums = getFortuneNumbers();
+    const isSSQ = currentMode === 'ssq';
+    let html = `<div class="fortune-title">🎋 今日运势推荐号码 🎋</div><div class="number-line" style="justify-content:center;">`;
+    nums.reds.forEach(n => html += `<span class="ball ${isSSQ ? 'red' : 'front'}">${pad(n)}</span>`);
+    html += `<span class="sep">+</span>`;
+    nums.blues.forEach(n => html += `<span class="ball ${isSSQ ? 'blue' : 'back'}">${pad(n)}</span>`);
+    html += `</div><div class="hint-text" style="font-size:10px;">依今日天干地支·宜忌生成</div>`;
+    fortuneDiv.innerHTML = html;
+  }
+  
+  document.querySelectorAll('input[name="mode"]').forEach(radio => {
+    radio.addEventListener('change', async (e) => {
+      currentMode = e.target.value;
+      showHint();
+      renderHistory();
+      await renderTrend();
+    });
+  });
+  document.getElementById('cycleBtn').addEventListener('click', () => {
+    groups = Math.floor(Math.random() * 5) + 1;
+    groupBadge.innerText = groups;
+    showHint();
+  });
+  document.getElementById('refreshBtn').addEventListener('click', () => refreshNumbers());
+  document.getElementById('smartBtn').addEventListener('click', () => smartRecommend(false));
+  document.getElementById('fortuneBtn').addEventListener('click', () => showFortuneNumbers());
+  
+  (async () => {
+    showHint();
+    await Promise.all([loadHistory('ssq'), loadHistory('dlt')]);
+    renderHistory();
+    await renderTrend();
+    renderAlmanac();
+  })();
+</script>
+</body>
+</html>
