@@ -525,6 +525,49 @@
             background: #f8faff;
         }
 
+        .range-row {
+            padding: 0 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .range-row .range-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #2c3e50;
+        }
+        .range-row input[type="range"] {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #b0c4de;
+            border-radius: 2px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .range-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3a7bd5;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .range-row input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3a7bd5;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
         @media (max-width: 420px) {
             .btn {
                 font-size: 11px;
@@ -542,7 +585,9 @@
                 line-height: 36px;
                 font-size: 14px;
             }
-            .ball, .placeholder-red, .placeholder-blue {
+            .ball,
+            .placeholder-red,
+            .placeholder-blue {
                 width: 24px;
                 height: 24px;
                 font-size: 10px;
@@ -569,6 +614,9 @@
             .stat-cell .value {
                 font-size: 12px;
             }
+            .range-row .range-label {
+                font-size: 11px;
+            }
         }
         @media (max-width: 360px) {
             .btn {
@@ -587,7 +635,9 @@
                 line-height: 32px;
                 font-size: 12px;
             }
-            .ball, .placeholder-red, .placeholder-blue {
+            .ball,
+            .placeholder-red,
+            .placeholder-blue {
                 width: 20px;
                 height: 20px;
                 font-size: 9px;
@@ -605,6 +655,9 @@
             }
             .stat-cell .value {
                 font-size: 11px;
+            }
+            .range-row .range-label {
+                font-size: 10px;
             }
         }
     </style>
@@ -639,6 +692,13 @@
                 <button class="btn btn-smart" id="smartBtn">智能推荐</button>
                 <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
                 <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
+            </div>
+            <div class="range-row">
+                <div class="range-label">
+                    <span>推荐号码参考数据范围</span>
+                    <span id="rangeDisplay">全部</span>
+                </div>
+                <input type="range" id="rangeSlider" min="1" max="100" value="100">
             </div>
             <div class="data-hint" id="dataStatus">加载数据中...</div>
         </div>
@@ -678,6 +738,7 @@
                 <p><span class="highlight-red">追冷推荐</span> —— 侧重高遗漏号码，博冷门。</p>
                 <p><span class="highlight-blue">追热推荐</span> —— 侧重高频号码，跟热门。</p>
                 <p style="margin-top:6px; color:#7f8c9b; font-size:11px;">数据基于真实历史开奖记录，每次推荐均从当期数据中动态计算。</p>
+                <p style="margin-top:6px; color:#2c3e50; font-size:11px;">频次与遗漏数据采样原理：基于所选参考范围内的历史开奖记录，统计每个号码出现的次数（频次）以及自上次出现以来未出现的期数（遗漏）。所有推荐算法均基于这些统计值动态加权计算。</p>
             </div>
         </div>
     </div>
@@ -687,6 +748,7 @@
         let groups = 1;
         let currentPage = 1;
         const PAGE_SIZE = 10;
+        let currentRange = 'all';
 
         let SSQ_DATA = [];
         let DLT_DATA = [];
@@ -708,6 +770,8 @@
         const groupDisplay = document.getElementById('groupDisplay');
         const frontTableContainer = document.getElementById('frontTableContainer');
         const backTableContainer = document.getElementById('backTableContainer');
+        const rangeSlider = document.getElementById('rangeSlider');
+        const rangeDisplay = document.getElementById('rangeDisplay');
 
         let lastExcludeReds = [];
         let lastExcludeBlues = [];
@@ -905,6 +969,14 @@
             return records;
         }
 
+        function getFilteredData(type, range) {
+            const all = getData(type);
+            if (range === 'all' || !all || all.length === 0) return all;
+            const limit = parseInt(range, 10);
+            if (isNaN(limit) || limit <= 0) return all;
+            return all.slice(0, Math.min(limit, all.length));
+        }
+
         let historyStore = { ssq: [], dlt: [] };
 
         function loadHistory(lotteryType) {
@@ -1062,7 +1134,7 @@
         }
 
         function smartRecommend(mode) {
-            const records = getData(currentMode);
+            const records = getFilteredData(currentMode, currentRange);
             if (!records || records.length === 0) {
                 resultDiv.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
                 return;
@@ -1127,8 +1199,23 @@
                 container.innerHTML = `<div class="error-text">暂无数据</div>`;
                 return;
             }
-            const maxFreq = Math.max(...data.map(d => d.freq), 1);
-            const maxMiss = Math.max(...data.map(d => d.miss), 1);
+
+            const freqValues = data.map(d => d.freq || 0);
+            const missValues = data.map(d => d.miss || 0);
+
+            function getPercentileRanks(values) {
+                const sorted = [...values].sort((a, b) => a - b);
+                const len = sorted.length;
+                if (len === 0) return [];
+                const ranks = values.map(val => {
+                    const idx = sorted.lastIndexOf(val);
+                    return len > 1 ? idx / (len - 1) : 0.5;
+                });
+                return ranks;
+            }
+
+            const freqRanks = getPercentileRanks(freqValues);
+            const missRanks = getPercentileRanks(missValues);
 
             let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
             html += `<div class="stat-row header">
@@ -1136,31 +1223,37 @@
                 <div class="stat-cell" style="background:transparent;">频次</div>
                 <div class="stat-cell" style="background:transparent;">遗漏</div>
             </div>`;
-            
+
             const minAlpha = 0.05;
             const maxAlpha = 0.95;
-            
-            for (let i = 1; i < data.length; i++) {
+
+            for (let i = 0; i < data.length; i++) {
                 const freq = data[i].freq || 0;
                 const miss = data[i].miss || 0;
-                const freqRatio = freq / maxFreq;
-                const missRatio = miss / maxMiss;
-                
-                const freqAlpha = minAlpha + (maxAlpha - minAlpha) * Math.min(freqRatio, 1);
-                const missAlpha = minAlpha + (maxAlpha - minAlpha) * Math.min(missRatio, 1);
-                
-                const freqTextColor = freqRatio > 0.45 ? '#ffffff' : '#2c3e50';
-                const missTextColor = missRatio > 0.45 ? '#ffffff' : '#2c3e50';
-                
-                const freqR = 231, freqG = 76, freqB = 111;
+                const num = i + 1;
+
+                const freqRank = freqRanks[i] || 0;
+                const missRank = missRanks[i] || 0;
+
+                const freqAlpha = minAlpha + (maxAlpha - minAlpha) * freqRank;
+                const missAlpha = minAlpha + (maxAlpha - minAlpha) * missRank;
+
+                const freqTextColor = freqRank > 0.45 ? '#ffffff' : '#2c3e50';
+                const missTextColor = missRank > 0.45 ? '#ffffff' : '#2c3e50';
+
+                const freqR = 231,
+                    freqG = 76,
+                    freqB = 111;
                 const freqBg = `rgba(${freqR},${freqG},${freqB},${freqAlpha})`;
-                
-                const missR = 58, missG = 123, missB = 213;
+
+                const missR = 58,
+                    missG = 123,
+                    missB = 213;
                 const missBg = `rgba(${missR},${missG},${missB},${missAlpha})`;
 
                 const numColor = colorClass === 'red' ? 'red' : 'blue';
                 html += `<div class="stat-row">
-                    <div class="stat-num ${numColor}">${i}</div>
+                    <div class="stat-num ${numColor}">${num}</div>
                     <div class="stat-cell freq" style="background:${freqBg};">
                         <div class="value" style="color:${freqTextColor};">${freq}</div>
                     </div>
@@ -1178,7 +1271,7 @@
             const name = type === 'ssq' ? '双色球' : '大乐透';
             trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
             trendStatsSpan.innerHTML = '加载数据...';
-            const records = getData(type);
+            const records = getFilteredData(type, currentRange);
             if (!records || records.length === 0) {
                 trendStatsSpan.innerHTML = '数据加载失败';
                 hotcoldPanel.innerHTML = '';
@@ -1208,9 +1301,43 @@
             renderNumberTable(backTableContainer, backData, backTitle, 'blue');
 
             const total = stats.totalPeriods;
-            trendStatsSpan.innerHTML = `共 ${total} 期 · 热号高频 · 冷号低开`;
+            const rangeLabel = currentRange === 'all' ? '全部' : `近${currentRange}期`;
+            trendStatsSpan.innerHTML = `共 ${total} 期 (${rangeLabel}) · 热号高频 · 冷号低开`;
 
             hotcoldPanel.innerHTML = '';
+        }
+
+        function updateRangeSlider() {
+            const allData = getData(currentMode);
+            const maxVal = allData ? allData.length : 100;
+            rangeSlider.max = maxVal;
+            if (currentRange === 'all') {
+                rangeSlider.value = maxVal;
+                rangeDisplay.textContent = '全部';
+            } else {
+                const num = parseInt(currentRange, 10);
+                if (!isNaN(num) && num > 0 && num <= maxVal) {
+                    rangeSlider.value = num;
+                    rangeDisplay.textContent = `近${num}期`;
+                } else {
+                    rangeSlider.value = maxVal;
+                    rangeDisplay.textContent = '全部';
+                    currentRange = 'all';
+                }
+            }
+        }
+
+        function onRangeChange() {
+            const val = parseInt(rangeSlider.value, 10);
+            const maxVal = parseInt(rangeSlider.max, 10);
+            if (val >= maxVal) {
+                currentRange = 'all';
+                rangeDisplay.textContent = '全部';
+            } else {
+                currentRange = String(val);
+                rangeDisplay.textContent = `近${val}期`;
+            }
+            renderTrend();
         }
 
         async function fetchData() {
@@ -1251,6 +1378,7 @@
                 loadHistory('ssq');
                 loadHistory('dlt');
                 renderHistory();
+                updateRangeSlider();
                 renderTrend();
 
                 const ssqCount = SSQ_DATA.length;
@@ -1269,7 +1397,9 @@
                 currentMode = e.target.value;
                 currentPage = 1;
                 showHint();
+                loadHistory(currentMode);
                 renderHistory();
+                updateRangeSlider();
                 renderTrend();
                 specificBtn.disabled = true;
                 specificBtn.className = 'btn btn-blue';
@@ -1300,6 +1430,8 @@
         document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
         document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
         document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+
+        rangeSlider.addEventListener('input', onRangeChange);
 
         prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
         nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
