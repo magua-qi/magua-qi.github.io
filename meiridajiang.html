@@ -16,6 +16,7 @@
             background: #eef2f7;
             font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
             overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
         }
         .app-container {
             width: 100%;
@@ -32,6 +33,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             width: 100%;
             border: 1px solid rgba(0,0,0,0.04);
+            transition: background 0.3s, border-color 0.3s;
         }
         .title-bar {
             background: linear-gradient(135deg, #3a7bd5, #2b5ea7);
@@ -93,6 +95,7 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             text-align: center;
+            transition: background 0.3s;
         }
         .hint-text {
             text-align: center;
@@ -107,6 +110,7 @@
             flex-wrap: nowrap;
             animation: fadeUp 0.3s ease both;
             justify-content: center;
+            position: relative;
         }
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(6px); }
@@ -122,9 +126,11 @@
             font-weight: 700;
             color: #fff;
             flex-shrink: 0;
+            transition: transform 0.2s;
         }
         .ball.red, .ball.front { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
         .ball.blue, .ball.back { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
+        .ball.match { outline: 3px solid #f1c40f; outline-offset: 2px; box-shadow: 0 0 12px rgba(241,196,15,0.6); }
         .placeholder-red, .placeholder-blue {
             display: inline-flex;
             align-items: center;
@@ -136,6 +142,19 @@
         .placeholder-red { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
         .placeholder-blue { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
         .sep { margin: 0 2px; color: #b0c4de; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+
+        .copy-btn {
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            opacity: 0.6;
+            transition: opacity 0.2s, transform 0.1s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .copy-btn:hover { opacity: 1; }
+        .copy-btn:active { transform: scale(0.85); }
 
         .btn-row {
             display: flex;
@@ -459,6 +478,7 @@
             .range-track { height: 20px; }
             .range-thumb { width: 20px; height: 20px; }
             .range-summary { font-size: 12px; margin-bottom: 10px; }
+            .copy-btn { font-size: 14px; }
         }
         @media (max-width: 360px) {
             .btn { font-size: 10px; min-height: 32px; line-height: 32px; }
@@ -475,6 +495,51 @@
             .range-track { height: 18px; }
             .range-thumb { width: 18px; height: 18px; }
             .range-summary { font-size: 11px; margin-bottom: 8px; }
+            .copy-btn { font-size: 12px; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: #1a1e24; }
+            .card { background: #2a2e36; border-color: #3a3f4a; }
+            .title-bar { background: linear-gradient(135deg, #2b5ea7, #1e4a7a); }
+            .title-bar.secondary { background: linear-gradient(135deg, #4a7fbf, #2b5ea7); }
+            .title-bar.tertiary { background: linear-gradient(135deg, #3a6fb0, #1e4a7a); }
+            .title-bar.fourth { background: linear-gradient(135deg, #5a8fc0, #2b5ea7); }
+            .mode-row label { color: #c8d0dc; }
+            .result-box { background: #2f343e; }
+            .hint-text { color: #9aa5b5; }
+            .btn-row .btn-group { background: #3a3f4a; }
+            .btn-row .btn-group .btn-cycle { color: #c8d0dc; }
+            .btn-row .btn-group .group-number { color: #c8d0dc; }
+            .btn-red:disabled, .btn-blue:disabled { background: #3a3f4a; color: #6a7585; }
+            .chart-container { background: #2a2e36; }
+            .table-container { background: #2f343e; }
+            .table-container .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
+            .stat-row { background: #2a2e36; }
+            .stat-row.header { color: #c8d0dc; border-bottom-color: #3a3f4a; }
+            .stat-num.red { color: #ff6b7a; }
+            .stat-num.blue { color: #6ab0ff; }
+            .stat-cell { background: #3a3f4a; }
+            .stat-cell .value { color: #c8d0dc; }
+            .stat-cell.freq { background: #4a2a2a; }
+            .stat-cell.miss { background: #2a3a4a; }
+            .history-row { border-bottom-color: #3a3f4a; }
+            .period { color: #c8d0dc; }
+            .date { color: #9aa5b5; }
+            .history-meta { color: #9aa5b5; }
+            .history-meta .pagination button { background: #3a3f4a; color: #c8d0dc; }
+            .history-meta .pagination span { color: #c8d0dc; }
+            .info-content { background: #2a2e36; color: #c8d0dc; }
+            .disclaimer { background: #3a2a1a; color: #d4a84a; border-left-color: #d4a84a; }
+            .range-title { color: #c8d0dc; }
+            .range-side-row { color: #9aa5b5; }
+            .range-track { background: #3a3f4a; }
+            .range-thumb { background: #2a2e36; border-color: #6ab0ff; }
+            .range-summary { background: #2f343e; color: #c8d0dc; border-bottom-color: #3a3f4a; }
+            .data-hint { color: #6ab0ff; border-top-color: #3a3f4a; background: #2f343e; }
+            .info-content .highlight-red { color: #ff6b7a; }
+            .info-content .highlight-blue { color: #6ab0ff; }
+            .info-content .highlight-green { color: #5dd9b2; }
         }
     </style>
 </head>
@@ -560,6 +625,11 @@
 
 <script>
     (function(){
+        const CONFIG = {
+            ssq: { front: 33, back: 16, frontCount: 6, backCount: 1, label: '双色球' },
+            dlt: { front: 35, back: 12, frontCount: 5, backCount: 2, label: '大乐透' }
+        };
+
         const PAGE_SIZE = 10;
         let currentMode = 'ssq';
         let groups = 1;
@@ -572,6 +642,7 @@
         let isDragging = false, dragTarget = null;
         let lastExcludeReds = [], lastExcludeBlues = [], lastGeneratedGroups = 1;
         let isLoading = false;
+        let lastGeneratedGroupsData = [];
 
         const $ = id => document.getElementById(id);
         const resultArea = $('resultArea');
@@ -611,11 +682,11 @@
 
         function genSSQ(exReds, exBlues) {
             const rs = new Set(exReds||[]), bs = new Set(exBlues||[]);
-            return { reds: pickUnique(6,33,rs), blues: pickUnique(1,16,bs) };
+            return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq.backCount, CONFIG.ssq.back, bs) };
         }
         function genDLT(exReds, exBlues) {
             const rs = new Set(exReds||[]), bs = new Set(exBlues||[]);
-            return { reds: pickUnique(5,35,rs), blues: pickUnique(2,12,bs) };
+            return { reds: pickUnique(CONFIG.dlt.frontCount, CONFIG.dlt.front, rs), blues: pickUnique(CONFIG.dlt.backCount, CONFIG.dlt.back, bs) };
         }
 
         function parseBuiltinData(type, rawArray) {
@@ -627,9 +698,9 @@
                 const reds = parts[2].trim().split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n)&&n>0);
                 const blues = parts[3].trim().split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n)&&n>0);
                 if (!reds.length || !blues.length) continue;
-                if (type==='ssq' && (reds.length!==6 || blues.length!==1)) continue;
-                if (type==='dlt' && (reds.length!==5 || blues.length!==2)) continue;
-                if (reds.some(n=>n<1||n>(type==='ssq'?33:35)) || blues.some(n=>n<1||n>(type==='ssq'?16:12))) continue;
+                const cfg = CONFIG[type];
+                if (reds.length!==cfg.frontCount || blues.length!==cfg.backCount) continue;
+                if (reds.some(n=>n<1||n>cfg.front) || blues.some(n=>n<1||n>cfg.back)) continue;
                 records.push({ issue, date, reds: reds.slice().sort((a,b)=>a-b), blues: blues.slice().sort((a,b)=>a-b) });
             }
             records.sort((a,b)=> a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
@@ -712,13 +783,17 @@
             const isSSQ = currentMode === 'ssq';
             const allReds = [], allBlues = [];
             let html = '';
+            const groupsData = [];
             for (let i=0; i<groups; i++) {
                 const d = isSSQ ? genSSQ() : genDLT();
+                groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
                 allReds.push(...d.reds); allBlues.push(...d.blues);
                 html += '<div class="number-line">';
                 d.reds.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
                 html += '<span class="sep">+</span>';
                 d.blues.forEach(n=> html+=`<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                const numsStr = (isSSQ?'红球':'前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + d.blues.map(pad).join(' ');
+                html += `<span class="copy-btn" data-nums="${numsStr}">📋</span>`;
                 html += '</div>';
             }
             html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">要的就是这些号码！</div>`;
@@ -726,8 +801,10 @@
             lastExcludeReds = [...new Set(allReds)];
             lastExcludeBlues = [...new Set(allBlues)];
             lastGeneratedGroups = groups;
+            lastGeneratedGroupsData = groupsData;
             specificBtn.disabled = false;
             specificBtn.className = 'btn btn-blue';
+            renderHistory();
         }
 
         function specificRandom() {
@@ -737,30 +814,36 @@
             }
             const isSSQ = currentMode === 'ssq';
             let html = '', fallback = false;
+            const groupsData = [];
             for (let i=0; i<lastGeneratedGroups; i++) {
                 let d;
                 if (isSSQ) {
                     const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
-                    if (33 - redSet.size < 6) { fallback=true; d=genSSQ(lastExcludeReds.slice(0,6), lastExcludeBlues.slice(0,1)); }
+                    if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback=true; d=genSSQ(lastExcludeReds.slice(0,CONFIG.ssq.frontCount), lastExcludeBlues.slice(0,CONFIG.ssq.backCount)); }
                     else d = genSSQ(lastExcludeReds, lastExcludeBlues);
                 } else {
                     const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
-                    if (35 - redSet.size < 5) { fallback=true; d=genDLT(lastExcludeReds.slice(0,5), lastExcludeBlues.slice(0,2)); }
+                    if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback=true; d=genDLT(lastExcludeReds.slice(0,CONFIG.dlt.frontCount), lastExcludeBlues.slice(0,CONFIG.dlt.backCount)); }
                     else d = genDLT(lastExcludeReds, lastExcludeBlues);
                 }
+                groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
                 html += '<div class="number-line">';
                 d.reds.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
                 html += '<span class="sep">+</span>';
                 d.blues.forEach(n=> html+=`<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                const numsStr = (isSSQ?'红球':'前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + d.blues.map(pad).join(' ');
+                html += `<span class="copy-btn" data-nums="${numsStr}">📋</span>`;
                 html += '</div>';
             }
             html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${fallback?'特定随机 (排除不足·已降级)':'反其道而行之~'}</div>`;
             resultArea.innerHTML = html;
+            lastGeneratedGroupsData = groupsData;
+            renderHistory();
         }
 
         function showHint() {
             const isSSQ = currentMode === 'ssq';
-            const frontCount = isSSQ?6:5, backCount = isSSQ?1:2;
+            const frontCount = CONFIG[currentMode].frontCount, backCount = CONFIG[currentMode].backCount;
             let html = '';
             for (let g=0; g<groups; g++) {
                 html += '<div class="number-line">';
@@ -773,23 +856,27 @@
             resultArea.innerHTML = html;
             specificBtn.disabled = true;
             specificBtn.className = 'btn btn-blue';
+            lastGeneratedGroupsData = [];
+            renderHistory();
         }
 
         function weightedSelect(pool, count) {
-            let total = pool.reduce((s,o)=>s+o.weight,0);
+            const totalWeight = pool.reduce((s,o)=>s+o.weight,0);
             const selected = new Set(), result = [];
-            let temp = [...pool];
+            const temp = [...pool];
             while (result.length < count && temp.length) {
-                let rand = Math.random()*total, acc=0, pick=null;
+                let rand = Math.random() * totalWeight;
+                let acc = 0;
+                let pick = null;
                 for (let i=0; i<temp.length; i++) {
                     acc += temp[i].weight;
                     if (rand <= acc) { pick = temp[i]; break; }
                 }
                 if (pick && !selected.has(pick.num)) {
-                    selected.add(pick.num); result.push(pick.num);
+                    selected.add(pick.num);
+                    result.push(pick.num);
                     const idx = temp.findIndex(p=>p.num===pick.num);
                     if (idx!==-1) temp.splice(idx,1);
-                    total = temp.reduce((s,o)=>s+o.weight,0);
                 } else if (!pick) break;
             }
             while (result.length < count) {
@@ -809,36 +896,56 @@
             const stats = analyzeStats(records, currentMode);
             if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
             const isSSQ = currentMode === 'ssq';
-            const frontCnt = isSSQ?6:5, backCnt = isSSQ?1:2;
+            const frontCnt = CONFIG[currentMode].frontCount, backCnt = CONFIG[currentMode].backCount;
             const frontMax = stats.frontMax, backMax = stats.backMax;
+            const maxFrontFreq = stats.maxFrontFreq, maxBackFreq = stats.maxBackFreq;
+            const maxFrontMiss = stats.maxFrontMiss, maxBackMiss = stats.maxBackMiss;
             let html = '';
+            const groupsData = [];
             for (let g=0; g<groups; g++) {
                 const frontPool = [], backPool = [];
                 for (let i=1; i<=frontMax; i++) {
-                    let w = mode==='cold' ? (stats.frontMiss[i]+1)*2 : mode==='hot' ? stats.frontFreq[i]+2 : 10-stats.frontFreq[i]+stats.frontMiss[i]*0.7;
-                    frontPool.push({num:i, weight:Math.max(1,w)});
+                    let normFreq = maxFrontFreq? stats.frontFreq[i] / maxFrontFreq : 0;
+                    let normMiss = maxFrontMiss? stats.frontMiss[i] / maxFrontMiss : 0;
+                    let weight;
+                    if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                    else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                    else weight = (normFreq + normMiss) / 2;
+                    weight = Math.max(0.01, weight);
+                    frontPool.push({num:i, weight});
                 }
                 for (let i=1; i<=backMax; i++) {
-                    let w = mode==='cold' ? (stats.backMiss[i]+1)*2 : mode==='hot' ? stats.backFreq[i]+2 : 10-stats.backFreq[i]+stats.backMiss[i]*0.8;
-                    backPool.push({num:i, weight:Math.max(1,w)});
+                    let normFreq = maxBackFreq? stats.backFreq[i] / maxBackFreq : 0;
+                    let normMiss = maxBackMiss? stats.backMiss[i] / maxBackMiss : 0;
+                    let weight;
+                    if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                    else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                    else weight = (normFreq + normMiss) / 2;
+                    weight = Math.max(0.01, weight);
+                    backPool.push({num:i, weight});
                 }
                 const reds = weightedSelect(frontPool, frontCnt);
                 const blues = weightedSelect(backPool, backCnt);
+                groupsData.push({ reds: reds.slice(), blues: blues.slice() });
                 html += '<div class="number-line">';
                 reds.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
                 html += '<span class="sep">+</span>';
                 blues.forEach(n=> html+=`<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                const numsStr = (isSSQ?'红球':'前区') + ':' + reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + blues.map(pad).join(' ');
+                html += `<span class="copy-btn" data-nums="${numsStr}">📋</span>`;
                 html += '</div>';
             }
             const map = { cold:'追冷模式 (侧重高遗漏)', hot:'追热模式 (侧重高频)', balance:'冷热均衡策略' };
             html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${map[mode]||mode}</div>`;
             resultArea.innerHTML = html;
+            lastGeneratedGroupsData = groupsData;
+            renderHistory();
         }
 
         function analyzeStats(records, type) {
             if (!records || !records.length) return null;
-            const isSSQ = type==='ssq';
-            const frontMax = isSSQ?33:35, backMax = isSSQ?16:12;
+            const cfg = CONFIG[type];
+            const frontMax = cfg.front, backMax = cfg.back;
             const frontFreq = new Array(frontMax+1).fill(0), backFreq = new Array(backMax+1).fill(0);
             const frontMiss = new Array(frontMax+1).fill(0), backMiss = new Array(backMax+1).fill(0);
             const frontMet = new Array(frontMax+1).fill(false), backMet = new Array(backMax+1).fill(false);
@@ -849,7 +956,11 @@
             }
             for (let i=1; i<=frontMax; i++) if(!frontMet[i]) frontMiss[i]=records.length;
             for (let i=1; i<=backMax; i++) if(!backMet[i]) backMiss[i]=records.length;
-            return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax };
+            const maxFrontFreq = Math.max(...frontFreq.slice(1));
+            const maxBackFreq = Math.max(...backFreq.slice(1));
+            const maxFrontMiss = Math.max(...frontMiss.slice(1));
+            const maxBackMiss = Math.max(...backMiss.slice(1));
+            return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax, maxFrontFreq, maxBackFreq, maxFrontMiss, maxBackMiss };
         }
 
         function getFilteredData(type) {
@@ -895,14 +1006,34 @@
             const start = (currentPage-1)*PAGE_SIZE, end = Math.min(start+PAGE_SIZE, total);
             const pageItems = items.slice(start, end);
             const isSSQ = currentMode === 'ssq';
+            const matchGroups = lastGeneratedGroupsData || [];
             let html = '';
             pageItems.forEach(item => {
                 html += '<div class="history-row">';
                 html += `<span class="period">${item.period}期</span>`;
-                item.nums.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                item.nums.forEach(n => {
+                    let matched = false;
+                    for (let g of matchGroups) {
+                        if (g.reds.includes(n)) { matched = true; break; }
+                    }
+                    html += `<span class="ball ${isSSQ?'red':'front'}${matched?' match':''}">${pad(n)}</span>`;
+                });
                 html += '<span class="sep">+</span>';
-                if (isSSQ) html+=`<span class="ball blue">${pad(item.blue)}</span>`;
-                else item.blues.forEach(b=> html+=`<span class="ball back">${pad(b)}</span>`);
+                if (isSSQ) {
+                    let matched = false;
+                    for (let g of matchGroups) {
+                        if (g.blues.includes(item.blue)) { matched = true; break; }
+                    }
+                    html += `<span class="ball blue${matched?' match':''}">${pad(item.blue)}</span>`;
+                } else {
+                    item.blues.forEach(b => {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.blues.includes(b)) { matched = true; break; }
+                        }
+                        html += `<span class="ball back${matched?' match':''}">${pad(b)}</span>`;
+                    });
+                }
                 html += `<span class="date">${item.date}</span></div>`;
             });
             historyList.innerHTML = html;
@@ -967,45 +1098,52 @@
             renderNumberTable(backTable, backData, backTitle, 'blue');
         }
 
+        function updateSliderUI() {
+            const allData = getDataSync(currentMode);
+            totalPeriods = allData ? allData.length : 1;
+            if (rangeStart < 1) rangeStart = 1;
+            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+            if (rangeStart > rangeEnd) { const t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
+            if (rangeStart < 1) rangeStart = 1;
+            if (rangeEnd < 1) rangeEnd = 1;
+            if (rangeStart > totalPeriods) rangeStart = totalPeriods;
+            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+
+            const leftVal = rangeStart, rightVal = rangeEnd;
+            const pctLeft = totalPeriods>1 ? ((leftVal-1)/(totalPeriods-1))*100 : 0;
+            const pctRight = totalPeriods>1 ? ((rightVal-1)/(totalPeriods-1))*100 : 100;
+            thumbLeft.style.left = pctLeft + '%';
+            thumbRight.style.left = pctRight + '%';
+            rangeFill.style.left = pctLeft + '%';
+            rangeFill.style.width = (pctRight - pctLeft) + '%';
+
+            const data = allData || [];
+            let leftDate='------', rightDate='------';
+            if (data.length) {
+                const lr = data[leftVal-1], rr = data[rightVal-1];
+                leftDate = lr ? lr.date.replace(/-/g,'') : '------';
+                rightDate = rr ? rr.date.replace(/-/g,'') : '------';
+            }
+            leftText.textContent = `近${leftVal}期 ${leftDate}`;
+            rightText.textContent = `${rightDate} 近${rightVal}期`;
+
+            const selected = rangeEnd - rangeStart + 1;
+            dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
+            rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
+        }
+
+        function updateFullData() {
+            loadHistory(currentMode);
+            renderHistory();
+            renderTrend();
+        }
+
         let rafId = null;
         function updateRangeDisplay() {
             if (rafId) cancelAnimationFrame(rafId);
             rafId = requestAnimationFrame(() => {
-                const allData = getDataSync(currentMode);
-                totalPeriods = allData ? allData.length : 1;
-                if (rangeStart < 1) rangeStart = 1;
-                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
-                if (rangeStart > rangeEnd) { const t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
-                if (rangeStart < 1) rangeStart = 1;
-                if (rangeEnd < 1) rangeEnd = 1;
-                if (rangeStart > totalPeriods) rangeStart = totalPeriods;
-                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
-
-                const leftVal = rangeStart, rightVal = rangeEnd;
-                const pctLeft = totalPeriods>1 ? ((leftVal-1)/(totalPeriods-1))*100 : 0;
-                const pctRight = totalPeriods>1 ? ((rightVal-1)/(totalPeriods-1))*100 : 100;
-                thumbLeft.style.left = pctLeft + '%';
-                thumbRight.style.left = pctRight + '%';
-                rangeFill.style.left = pctLeft + '%';
-                rangeFill.style.width = (pctRight - pctLeft) + '%';
-
-                const data = allData || [];
-                let leftDate='------', rightDate='------';
-                if (data.length) {
-                    const lr = data[leftVal-1], rr = data[rightVal-1];
-                    leftDate = lr ? lr.date.replace(/-/g,'') : '------';
-                    rightDate = rr ? rr.date.replace(/-/g,'') : '------';
-                }
-                leftText.textContent = `近${leftVal}期 ${leftDate}`;
-                rightText.textContent = `${rightDate} 近${rightVal}期`;
-
-                const selected = rangeEnd - rangeStart + 1;
-                dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
-                rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
-
-                loadHistory(currentMode);
-                renderHistory();
-                renderTrend();
+                updateSliderUI();
+                updateFullData();
                 rafId = null;
             });
         }
@@ -1043,7 +1181,7 @@
                     if (newStart >= newEnd) { newStart = Math.max(1, newEnd - 1); if (newStart<1) { newStart=1; newEnd=Math.min(totalPeriods,2); } }
                 }
                 rangeStart = newStart; rangeEnd = newEnd;
-                updateRangeDisplay();
+                updateSliderUI();
             } else if (dragTarget === 'right') {
                 let newEnd = Math.max(1, Math.min(totalPeriods, val));
                 let newStart = rangeStart;
@@ -1053,12 +1191,18 @@
                     if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd>totalPeriods) { newEnd=totalPeriods; newStart=Math.max(1,totalPeriods-1); } }
                 }
                 rangeStart = newStart; rangeEnd = newEnd;
-                updateRangeDisplay();
+                updateSliderUI();
             }
         }
 
         function handleEnd(e) {
-            if (isDragging) { isDragging = false; dragTarget = null; thumbLeft.style.cursor = 'grab'; thumbRight.style.cursor = 'grab'; }
+            if (isDragging) {
+                isDragging = false;
+                dragTarget = null;
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+                updateFullData();
+            }
         }
 
         function initRangeSlider() {
@@ -1067,7 +1211,8 @@
             if (totalPeriods < 1) totalPeriods = 1;
             rangeStart = 1;
             rangeEnd = totalPeriods;
-            updateRangeDisplay();
+            updateSliderUI();
+            updateFullData();
 
             rangeTrack.addEventListener('mousedown', (e) => {
                 if (e.target === thumbLeft || e.target === thumbRight) return;
@@ -1080,7 +1225,8 @@
                     rangeEnd = Math.max(1, Math.min(totalPeriods, val));
                     if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (rangeEnd>totalPeriods) { rangeEnd=totalPeriods; rangeStart=Math.max(1,totalPeriods-1); } }
                 }
-                updateRangeDisplay();
+                updateSliderUI();
+                updateFullData();
             });
 
             thumbLeft.addEventListener('mousedown', handleStart);
@@ -1102,6 +1248,9 @@
             radio.addEventListener('change', (e) => {
                 currentMode = e.target.value;
                 currentPage = 1;
+                lastExcludeReds = [];
+                lastExcludeBlues = [];
+                lastGeneratedGroupsData = [];
                 showHint();
                 trendCache[currentMode] = null;
                 initRangeSlider();
@@ -1125,6 +1274,19 @@
 
         prevPageBtn.addEventListener('click', ()=> goToPage(currentPage-1));
         nextPageBtn.addEventListener('click', ()=> goToPage(currentPage+1));
+
+        resultArea.addEventListener('click', (e) => {
+            const target = e.target.closest('.copy-btn');
+            if (!target) return;
+            const nums = target.getAttribute('data-nums');
+            if (nums && navigator.clipboard) {
+                navigator.clipboard.writeText(nums).then(() => {
+                    const original = target.textContent;
+                    target.textContent = '✅';
+                    setTimeout(() => { target.textContent = original; }, 800);
+                }).catch(() => {});
+            }
+        });
 
         loadAllData(true);
     })();
