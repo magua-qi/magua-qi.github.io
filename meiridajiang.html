@@ -143,6 +143,21 @@
         .ball.red, .ball.front { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
         .ball.blue, .ball.back { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
         .ball.match { outline: 3px solid #f1c40f; outline-offset: 2px; box-shadow: 0 0 12px rgba(241,196,15,0.6); }
+        .ball.rolling {
+            animation: roll 0.08s infinite alternate;
+        }
+        @keyframes roll {
+            0% { transform: scale(0.85) rotate(-6deg); }
+            100% { transform: scale(1.15) rotate(6deg); }
+        }
+        .ball.done {
+            animation: pop 0.25s ease both;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.2); opacity: 0.4; }
+            60% { transform: scale(1.25); }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .placeholder-red, .placeholder-blue {
             display: inline-flex;
             align-items: center;
@@ -750,6 +765,39 @@
 
         function pad(n) { return n<10 ? '0'+n : ''+n; }
 
+        function rollingAnimation(lines, groupsData, isSSQ, callback) {
+            let completed = 0;
+            const total = lines.length;
+            if (total === 0) { callback(); return; }
+            const rollCount = 10;
+            lines.forEach((line, idx) => {
+                const balls = line.querySelectorAll('.ball');
+                const data = groupsData[idx];
+                if (!data) { completed++; if (completed === total) callback(); return; }
+                let counter = 0;
+                const interval = setInterval(() => {
+                    balls.forEach((ball, bi) => {
+                        const maxVal = bi < data.reds.length ? (isSSQ ? 33 : 35) : (isSSQ ? 16 : 12);
+                        const randNum = Math.floor(Math.random() * maxVal) + 1;
+                        ball.textContent = pad(randNum);
+                        ball.classList.add('rolling');
+                    });
+                    counter++;
+                    if (counter >= rollCount) {
+                        clearInterval(interval);
+                        balls.forEach((ball, bi) => {
+                            ball.classList.remove('rolling');
+                            const val = bi < data.reds.length ? data.reds[bi] : data.blues[bi - data.reds.length];
+                            ball.textContent = pad(val);
+                            ball.classList.add('done');
+                        });
+                        completed++;
+                        if (completed === total) callback();
+                    }
+                }, 55);
+            });
+        }
+
         function genSSQ(exReds, exBlues) {
             const rs = new Set(exReds||[]), bs = new Set(exBlues||[]);
             return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq.backCount, CONFIG.ssq.back, bs) };
@@ -912,7 +960,6 @@
             updateGroupDisplay();
             renderHistory();
 
-            // 绑定收藏按钮事件
             document.querySelectorAll('.fav-btn').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -924,6 +971,11 @@
                     vibrate(10);
                 };
             });
+
+            const lines = resultArea.querySelectorAll('.number-line');
+            if (lines.length) {
+                rollingAnimation(lines, groupsData, isSSQ, () => {});
+            }
         }
 
         function getMatchInfo(groupsData) {
@@ -1442,7 +1494,6 @@
                     vibrate(10);
                 };
             });
-            // 为收藏的复制按钮绑定事件
             favList.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
