@@ -195,7 +195,13 @@
             font-weight: 700;
             font-size: 16px;
             background: transparent;
+            transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            user-select: none;
         }
+        .btn-row .btn-group .group-number:hover { background: rgba(58,123,213,0.08); }
+        .btn-row .btn-group .group-number:active { transform: scale(0.96); }
         .btn {
             flex: 1;
             padding: 0;
@@ -779,6 +785,16 @@
             }
         }
 
+        function updateGroupDisplay() {
+            if (lastGeneratedGroupsData && lastGeneratedGroupsData.length > 0) {
+                groupDisplay.textContent = '📋';
+                groupDisplay.style.cursor = 'pointer';
+            } else {
+                groupDisplay.textContent = groups;
+                groupDisplay.style.cursor = 'default';
+            }
+        }
+
         function refreshNumbers() {
             const isSSQ = currentMode === 'ssq';
             const allReds = [], allBlues = [];
@@ -804,6 +820,7 @@
             lastGeneratedGroupsData = groupsData;
             specificBtn.disabled = false;
             specificBtn.className = 'btn btn-blue';
+            updateGroupDisplay();
             renderHistory();
         }
 
@@ -838,6 +855,7 @@
             html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${fallback?'特定随机 (排除不足·已降级)':'反其道而行之~'}</div>`;
             resultArea.innerHTML = html;
             lastGeneratedGroupsData = groupsData;
+            updateGroupDisplay();
             renderHistory();
         }
 
@@ -857,6 +875,7 @@
             specificBtn.disabled = true;
             specificBtn.className = 'btn btn-blue';
             lastGeneratedGroupsData = [];
+            updateGroupDisplay();
             renderHistory();
         }
 
@@ -939,6 +958,7 @@
             html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">${map[mode]||mode}</div>`;
             resultArea.innerHTML = html;
             lastGeneratedGroupsData = groupsData;
+            updateGroupDisplay();
             renderHistory();
         }
 
@@ -1285,6 +1305,34 @@
                     target.textContent = '✅';
                     setTimeout(() => { target.textContent = original; }, 800);
                 }).catch(() => {});
+            }
+        });
+
+        groupDisplay.addEventListener('click', function() {
+            const copyBtns = resultArea.querySelectorAll('.copy-btn');
+            if (copyBtns.length === 0) return;
+            const texts = [];
+            copyBtns.forEach(btn => {
+                const nums = btn.getAttribute('data-nums');
+                if (nums) texts.push(nums);
+            });
+            if (texts.length === 0) return;
+            const fullText = texts.join('\n');
+            const originalText = this.textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(fullText).then(() => {
+                    this.textContent = '✅';
+                    setTimeout(() => { this.textContent = originalText; }, 800);
+                }).catch(() => {});
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = fullText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                textarea.remove();
+                this.textContent = '✅';
+                setTimeout(() => { this.textContent = originalText; }, 800);
             }
         });
 
