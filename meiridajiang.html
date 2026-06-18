@@ -143,6 +143,7 @@
         .ball.red, .ball.front { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
         .ball.blue, .ball.back { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
         .ball.unmatch { filter: grayscale(1); }
+        .ball.blue.unmatch, .ball.back.unmatch { filter: grayscale(1) brightness(0.65); }
         .ball.rolling {
             animation: roll 0.08s infinite alternate;
         }
@@ -191,15 +192,22 @@
         .btn-text.fav.active { color: #f1c40f; }
         .btn-text.del { color: #e74c6f; }
         .btn-text.del:active { opacity: 0.7; }
-        .btn-text.all-copy, .btn-text.all-delete {
+        .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav {
             font-size: 10px;
-            color: #e74c6f;
             opacity: 0.6;
             cursor: pointer;
         }
         .btn-text.all-copy { color: #3a7bd5; }
         .btn-text.all-delete { color: #e74c6f; }
-        .btn-text.all-copy:active, .btn-text.all-delete:active { opacity: 1; }
+        .btn-text.all-fav { color: #95a5a6; }
+        .btn-text.all-copy:active, .btn-text.all-delete:active, .btn-text.all-fav:active { opacity: 1; }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            margin: 4px 0;
+        }
 
         .copy-btn, .fav-btn, .share-line-btn {
             display: inline-block;
@@ -228,7 +236,6 @@
             gap: 8px;
             margin: 2px 0;
         }
-        .match-info .btn-text { font-size: 10px; }
 
         .btn-row {
             display: flex;
@@ -616,7 +623,7 @@
             .range-thumb { width: 20px; height: 20px; }
             .range-summary { font-size: 12px; margin-bottom: 10px; }
             .btn-text { font-size: 11px; }
-            .btn-text.all-copy, .btn-text.all-delete { font-size: 9px; }
+            .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav { font-size: 9px; }
             .title-bar .share-btn { font-size: 11px; padding: 2px 10px; }
         }
         @media (max-width: 360px) {
@@ -636,7 +643,7 @@
             .range-thumb { width: 18px; height: 18px; }
             .range-summary { font-size: 11px; margin-bottom: 8px; }
             .btn-text { font-size: 10px; }
-            .btn-text.all-copy, .btn-text.all-delete { font-size: 8px; }
+            .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav { font-size: 8px; }
             .title-bar .share-btn { font-size: 10px; padding: 2px 8px; }
         }
 
@@ -690,7 +697,9 @@
             .btn-text.del { color: #ff6b7a; }
             .btn-text.all-copy { color: #6ab0ff; }
             .btn-text.all-delete { color: #ff6b7a; }
+            .btn-text.all-fav { color: #7f8c8d; }
             .fav-section .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
+            .ball.blue.unmatch, .ball.back.unmatch { filter: grayscale(1) brightness(0.7); }
         }
     </style>
 </head>
@@ -806,7 +815,7 @@
         let isLoading = false;
         let lastGeneratedGroupsData = [];
         let lastRecommendReason = '';
-        let hasGeneratedNumbers = false; // 重置状态
+        let hasGeneratedNumbers = false;
 
         const $ = id => document.getElementById(id);
         const resultArea = $('resultArea');
@@ -1072,21 +1081,17 @@
                 html += '</div>';
             });
 
-            // 命中信息行，左右添加全部操作按钮
+            // 单独一行放置收藏全部和全部复制
+            html += `<div class="action-row">
+                <span class="btn-text all-fav" id="allFavBtn">收藏全部</span>
+                <span class="btn-text all-copy" id="allCopyBtn2">全部复制</span>
+            </div>`;
+
             const matchInfo = getMatchInfo(groupsData);
             if (matchInfo) {
-                html += `<div class="match-info">`;
-                html += `<span class="btn-text all-copy" id="allCopyBtn">复制全部</span>`;
-                html += `<span>${matchInfo}</span>`;
-                html += `<span class="btn-text all-delete" id="allDeleteBtn">删除全部</span>`;
-                html += `</div>`;
+                html += `<div class="match-info">${matchInfo}</div>`;
             } else {
-                // 无匹配信息时也显示全部操作
-                html += `<div class="match-info" style="justify-content:center;">`;
-                html += `<span class="btn-text all-copy" id="allCopyBtn">复制全部</span>`;
-                html += `<span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span>`;
-                html += `<span class="btn-text all-delete" id="allDeleteBtn">删除全部</span>`;
-                html += `</div>`;
+                html += `<div class="match-info" style="justify-content:center;"><span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span></div>`;
             }
 
             if (reason) {
@@ -1102,7 +1107,7 @@
             updateResetState(false);
             renderHistory();
 
-            // 绑定收藏按钮
+            // 绑定单行收藏
             document.querySelectorAll('.number-line .btn-text.fav').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -1142,11 +1147,36 @@
                 };
             });
 
+            // 绑定全部收藏
+            const allFavBtn = document.getElementById('allFavBtn');
+            if (allFavBtn) {
+                allFavBtn.onclick = function() {
+                    const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
+                    if (!favBtns.length) return;
+                    let changed = false;
+                    favBtns.forEach(btn => {
+                        const mode = btn.dataset.mode;
+                        const reds = btn.dataset.reds.split(',').map(Number);
+                        const blues = btn.dataset.blues.split(',').map(Number);
+                        const nums = { reds, blues };
+                        if (!btn.classList.contains('active')) {
+                            const added = toggleFavorite(mode, nums);
+                            if (added) {
+                                btn.textContent = '已收藏';
+                                btn.classList.add('active');
+                                changed = true;
+                            }
+                        }
+                    });
+                    if (changed) vibrate(10);
+                };
+            }
+
             // 绑定全部复制
-            const allCopyBtn = document.getElementById('allCopyBtn');
-            if (allCopyBtn) {
-                allCopyBtn.onclick = function() {
-                    const copyBtns = resultArea.querySelectorAll('.number-line .btn-text.copy');
+            const allCopyBtn2 = document.getElementById('allCopyBtn2');
+            if (allCopyBtn2) {
+                allCopyBtn2.onclick = function() {
+                    const copyBtns = document.querySelectorAll('.number-line .btn-text.copy');
                     if (!copyBtns.length) return;
                     const texts = [];
                     copyBtns.forEach(btn => {
@@ -1162,34 +1192,6 @@
                             setTimeout(() => { this.textContent = orig; }, 800);
                             vibrate(10);
                         }).catch(() => {});
-                    }
-                };
-            }
-
-            // 绑定全部删除（收藏全部）
-            const allDeleteBtn = document.getElementById('allDeleteBtn');
-            if (allDeleteBtn) {
-                allDeleteBtn.onclick = function() {
-                    const favBtns = resultArea.querySelectorAll('.number-line .btn-text.fav');
-                    if (!favBtns.length) return;
-                    let count = 0;
-                    favBtns.forEach(btn => {
-                        if (!btn.classList.contains('active')) {
-                            // 未收藏的，点击收藏
-                            btn.click();
-                            count++;
-                        } else {
-                            // 已收藏的，点击取消收藏（再次点击）
-                            btn.click();
-                            count++;
-                        }
-                    });
-                    if (count) {
-                        vibrate(10);
-                        // 更新全部按钮文字反馈
-                        const orig = this.textContent;
-                        this.textContent = '已操作';
-                        setTimeout(() => { this.textContent = orig; }, 800);
                     }
                 };
             }
@@ -1429,6 +1431,7 @@
             const pageItems = items.slice(start, end);
             const isSSQ = currentMode === 'ssq';
             const matchGroups = lastGeneratedGroupsData || [];
+            const hasMatchGroups = matchGroups && matchGroups.length > 0;
             let html = '';
             pageItems.forEach(item => {
                 html += '<div class="history-row">';
@@ -1438,7 +1441,7 @@
                     for (let g of matchGroups) {
                         if (g.reds.includes(n)) { matched = true; break; }
                     }
-                    html += `<span class="ball ${isSSQ?'red':'front'}${matched?'':' unmatch'}">${pad(n)}</span>`;
+                    html += `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
                 });
                 html += '<span class="sep">+</span>';
                 if (isSSQ) {
@@ -1446,14 +1449,14 @@
                     for (let g of matchGroups) {
                         if (g.blues.includes(item.blue)) { matched = true; break; }
                     }
-                    html += `<span class="ball blue${matched?'':' unmatch'}">${pad(item.blue)}</span>`;
+                    html += `<span class="ball blue${(hasMatchGroups && !matched)?' unmatch':''}">${pad(item.blue)}</span>`;
                 } else {
                     item.blues.forEach(b => {
                         let matched = false;
                         for (let g of matchGroups) {
                             if (g.blues.includes(b)) { matched = true; break; }
                         }
-                        html += `<span class="ball back${matched?'':' unmatch'}">${pad(b)}</span>`;
+                        html += `<span class="ball back${(hasMatchGroups && !matched)?' unmatch':''}">${pad(b)}</span>`;
                     });
                 }
                 html += `<span class="date">${item.date}</span></div>`;
@@ -1727,7 +1730,6 @@
             }
             favList.innerHTML = html;
 
-            // 单个删除
             favList.querySelectorAll('.btn-text.del').forEach(el => {
                 el.onclick = function() {
                     const idx = parseInt(this.dataset.index);
@@ -1735,7 +1737,6 @@
                     vibrate(10);
                 };
             });
-            // 单个复制
             favList.querySelectorAll('.btn-text.copy').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -1754,7 +1755,6 @@
                     }
                 };
             });
-            // 批量删除和复制
             favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
