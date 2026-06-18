@@ -142,7 +142,7 @@
         }
         .ball.red, .ball.front { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
         .ball.blue, .ball.back { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
-        .ball.unmatch { filter: saturate(0.25) brightness(1.1); }
+        .ball.unmatch { filter: grayscale(1); }
         .ball.rolling {
             animation: roll 0.08s infinite alternate;
         }
@@ -170,7 +170,6 @@
         .placeholder-blue { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
         .sep { margin: 0 2px; color: #b0c4de; font-weight: 700; font-size: 12px; flex-shrink: 0; }
 
-        /* 文字按钮样式 */
         .btn-text {
             background: none;
             border: none;
@@ -192,6 +191,15 @@
         .btn-text.fav.active { color: #f1c40f; }
         .btn-text.del { color: #e74c6f; }
         .btn-text.del:active { opacity: 0.7; }
+        .btn-text.all-copy, .btn-text.all-delete {
+            font-size: 10px;
+            color: #e74c6f;
+            opacity: 0.6;
+            cursor: pointer;
+        }
+        .btn-text.all-copy { color: #3a7bd5; }
+        .btn-text.all-delete { color: #e74c6f; }
+        .btn-text.all-copy:active, .btn-text.all-delete:active { opacity: 1; }
 
         .copy-btn, .fav-btn, .share-line-btn {
             display: inline-block;
@@ -215,9 +223,12 @@
             background: #f0f4fa;
             border-radius: 8px;
             padding: 2px 10px;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin: 2px 0;
         }
+        .match-info .btn-text { font-size: 10px; }
 
         .btn-row {
             display: flex;
@@ -250,13 +261,18 @@
             text-align: center;
         }
         .btn-row .btn-group .btn-cycle:active { transform: scale(0.94); background: rgba(0,0,0,0.05); }
+        .btn-row .btn-group .btn-cycle:disabled {
+            color: #b0b8c4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         .btn-row .btn-group .group-number {
             flex: 1;
             text-align: center;
             line-height: 40px;
             color: #2c3e50;
             font-weight: 700;
-            font-size: 6px;
+            font-size: 13px;
             background: transparent;
             transition: background 0.2s;
             -webkit-tap-highlight-color: transparent;
@@ -264,6 +280,8 @@
             user-select: none;
             white-space: nowrap;
             min-width: 0;
+            border: none;
+            font-family: inherit;
         }
         .btn-row .btn-group .group-number:hover { background: rgba(58,123,213,0.08); }
         .btn-row .btn-group .group-number:active { transform: scale(0.96); }
@@ -346,12 +364,24 @@
         .stat-num {
             width: 32px;
             text-align: center;
-            font-weight: 700;
-            font-size: 13px;
             flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .stat-num.red { color: #e74c6f; }
-        .stat-num.blue { color: #3a7bd5; }
+        .stat-ball {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .stat-ball.red { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
+        .stat-ball.blue { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
         .stat-cell {
             flex: 1;
             display: flex;
@@ -557,6 +587,13 @@
             padding: 4px 8px 8px;
             border-bottom: 1px solid #e8edf5;
             margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .fav-section .sub-title .btn-text {
+            font-size: 10px;
+            margin-left: 8px;
         }
         .fav-list .history-row .btn-text {
             margin: 0 2px;
@@ -569,7 +606,8 @@
             .btn-row .btn-group .group-number { line-height: 36px; font-size: 12px; }
             .ball, .placeholder-red, .placeholder-blue { width: 24px; height: 24px; font-size: 10px; }
             .mode-row label { font-size: 12px; padding: 2px 8px; }
-            .stat-num { width: 28px; font-size: 12px; }
+            .stat-num { width: 28px; }
+            .stat-ball { width: 20px; height: 20px; font-size: 10px; }
             .stat-cell .value { font-size: 12px; }
             .range-title { font-size: 12px; }
             .range-side-row { font-size: 9px; }
@@ -578,6 +616,7 @@
             .range-thumb { width: 20px; height: 20px; }
             .range-summary { font-size: 12px; margin-bottom: 10px; }
             .btn-text { font-size: 11px; }
+            .btn-text.all-copy, .btn-text.all-delete { font-size: 9px; }
             .title-bar .share-btn { font-size: 11px; padding: 2px 10px; }
         }
         @media (max-width: 360px) {
@@ -587,7 +626,8 @@
             .btn-row .btn-group .group-number { line-height: 32px; font-size: 11px; }
             .ball, .placeholder-red, .placeholder-blue { width: 20px; height: 20px; font-size: 9px; }
             .sep { font-size: 10px; }
-            .stat-num { width: 24px; font-size: 11px; }
+            .stat-num { width: 24px; }
+            .stat-ball { width: 18px; height: 18px; font-size: 9px; }
             .stat-cell .value { font-size: 11px; }
             .range-title { font-size: 11px; }
             .range-side-row { font-size: 8px; }
@@ -596,6 +636,7 @@
             .range-thumb { width: 18px; height: 18px; }
             .range-summary { font-size: 11px; margin-bottom: 8px; }
             .btn-text { font-size: 10px; }
+            .btn-text.all-copy, .btn-text.all-delete { font-size: 8px; }
             .title-bar .share-btn { font-size: 10px; padding: 2px 8px; }
         }
 
@@ -611,6 +652,7 @@
             .hint-text { color: #9aa5b5; }
             .btn-row .btn-group { background: #3a3f4a; }
             .btn-row .btn-group .btn-cycle { color: #c8d0dc; }
+            .btn-row .btn-group .btn-cycle:disabled { color: #6a7585; }
             .btn-row .btn-group .group-number { color: #c8d0dc; }
             .btn-red:disabled, .btn-blue:disabled { background: #3a3f4a; color: #6a7585; }
             .chart-container { background: #2a2e36; }
@@ -618,8 +660,7 @@
             .table-container .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
             .stat-row { background: #2a2e36; }
             .stat-row.header { color: #c8d0dc; border-bottom-color: #3a3f4a; }
-            .stat-num.red { color: #ff6b7a; }
-            .stat-num.blue { color: #6ab0ff; }
+            .stat-num { color: #c8d0dc; }
             .stat-cell { background: #3a3f4a; }
             .stat-cell .value { color: #c8d0dc; }
             .stat-cell.freq { background: #4a2a2a; }
@@ -647,6 +688,8 @@
             .btn-text.fav { color: #7f8c8d; }
             .btn-text.fav.active { color: #f1c40f; }
             .btn-text.del { color: #ff6b7a; }
+            .btn-text.all-copy { color: #6ab0ff; }
+            .btn-text.all-delete { color: #ff6b7a; }
             .fav-section .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
         }
     </style>
@@ -658,9 +701,6 @@
         <div class="title-bar tertiary">我的收藏</div>
         <div class="table-container" style="padding-bottom:4px;">
             <div id="favList"></div>
-            <div style="text-align:right; padding:4px 8px 0;">
-                <span class="clear-fav" id="clearFavBtn" style="font-size:10px; color:#e74c6f; cursor:pointer; opacity:0.6;">清空全部</span>
-            </div>
         </div>
     </div>
 
@@ -679,7 +719,7 @@
         <div class="btn-row">
             <div class="btn-group">
                 <button class="btn-cycle" id="decBtn">−</button>
-                <span class="group-number" id="groupDisplay">复制全部</span>
+                <button class="group-number" id="resetBtn">重置</button>
                 <button class="btn-cycle" id="incBtn">+</button>
             </div>
             <button class="btn btn-red" id="refreshBtn">天命所归</button>
@@ -766,6 +806,7 @@
         let isLoading = false;
         let lastGeneratedGroupsData = [];
         let lastRecommendReason = '';
+        let hasGeneratedNumbers = false; // 重置状态
 
         const $ = id => document.getElementById(id);
         const resultArea = $('resultArea');
@@ -776,7 +817,9 @@
         const nextPageBtn = $('nextPageBtn');
         const dataStatus = $('dataStatus');
         const specificBtn = $('specificBtn');
-        const groupDisplay = $('groupDisplay');
+        const resetBtn = $('resetBtn');
+        const decBtn = $('decBtn');
+        const incBtn = $('incBtn');
         const frontTable = $('frontTableContainer');
         const backTable = $('backTableContainer');
         const rangeSummary = $('rangeSummary');
@@ -788,7 +831,6 @@
         const rightText = $('rightText');
         const favList = $('favList');
         const favoritesCard = $('favoritesCard');
-        const clearFavBtn = $('clearFavBtn');
 
         function rand(n) { const arr = new Uint32Array(1); crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
 
@@ -933,6 +975,7 @@
                 dataStatus.textContent = '拖动左右滑块选择数据，已选择' + (rangeEnd-rangeStart+1) + '期，可在数据详情中查看';
                 isLoading = false;
                 renderFavorites();
+                updateResetState(true);
             } catch (err) {
                 console.error('加载数据失败:', err);
                 resultArea.innerHTML = `<div class="error-text">数据加载失败，请检查网络</div>
@@ -947,16 +990,39 @@
             if (navigator.vibrate) navigator.vibrate(ms);
         }
 
-        function updateGroupDisplay() {
-            // 全部复制按钮保持文字
-            groupDisplay.textContent = '复制全部';
+        function updateResetState(resetMode) {
+            hasGeneratedNumbers = !resetMode;
+            if (resetMode) {
+                decBtn.disabled = false;
+                incBtn.disabled = false;
+                decBtn.style.color = '';
+                incBtn.style.color = '';
+                resetBtn.textContent = '重置';
+            } else {
+                decBtn.disabled = true;
+                incBtn.disabled = true;
+                decBtn.style.color = '#b0b8c4';
+                incBtn.style.color = '#b0b8c4';
+                resetBtn.textContent = '重置';
+            }
+        }
+
+        function resetNumbers() {
+            lastGeneratedGroupsData = [];
+            lastExcludeReds = [];
+            lastExcludeBlues = [];
+            lastRecommendReason = '';
+            showHint();
+            specificBtn.disabled = true;
+            specificBtn.className = 'btn btn-blue';
+            updateResetState(true);
+            renderHistory();
         }
 
         function getNumberText(d, isSSQ) {
             return (isSSQ?'红球':'前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + d.blues.map(pad).join(' ');
         }
 
-        // 检查号码是否已收藏
         function isFavorited(mode, nums) {
             const favs = getFavorites();
             return favs.some(item => item.mode === mode && 
@@ -980,7 +1046,7 @@
             }
             setFavorites(favs);
             renderFavorites();
-            return idx === -1; // true表示已添加，false表示已移除
+            return idx === -1;
         }
 
         function displayResult(groupsData, mode, reason) {
@@ -997,20 +1063,30 @@
             groupsData.forEach((d, idx) => {
                 const isFav = isFavorited(mode, d);
                 html += '<div class="number-line">';
-                // 收藏按钮在左侧
                 html += `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
                 d.reds.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
                 html += '<span class="sep">+</span>';
                 d.blues.forEach(n=> html+=`<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
-                // 复制按钮在右侧
                 const numsStr = getNumberText(d, isSSQ);
                 html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
                 html += '</div>';
             });
 
+            // 命中信息行，左右添加全部操作按钮
             const matchInfo = getMatchInfo(groupsData);
             if (matchInfo) {
-                html += `<div class="match-info">${matchInfo}</div>`;
+                html += `<div class="match-info">`;
+                html += `<span class="btn-text all-copy" id="allCopyBtn">复制全部</span>`;
+                html += `<span>${matchInfo}</span>`;
+                html += `<span class="btn-text all-delete" id="allDeleteBtn">删除全部</span>`;
+                html += `</div>`;
+            } else {
+                // 无匹配信息时也显示全部操作
+                html += `<div class="match-info" style="justify-content:center;">`;
+                html += `<span class="btn-text all-copy" id="allCopyBtn">复制全部</span>`;
+                html += `<span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span>`;
+                html += `<span class="btn-text all-delete" id="allDeleteBtn">删除全部</span>`;
+                html += `</div>`;
             }
 
             if (reason) {
@@ -1023,10 +1099,10 @@
             lastGeneratedGroupsData = groupsData;
             specificBtn.disabled = false;
             specificBtn.className = 'btn btn-blue';
-            updateGroupDisplay();
+            updateResetState(false);
             renderHistory();
 
-            // 绑定收藏按钮点击事件
+            // 绑定收藏按钮
             document.querySelectorAll('.number-line .btn-text.fav').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -1035,7 +1111,6 @@
                     const blues = this.dataset.blues.split(',').map(Number);
                     const nums = { reds, blues };
                     const added = toggleFavorite(mode, nums);
-                    // 更新按钮状态
                     if (added) {
                         this.textContent = '已收藏';
                         this.classList.add('active');
@@ -1047,7 +1122,7 @@
                 };
             });
 
-            // 绑定复制按钮点击事件
+            // 绑定单行复制
             document.querySelectorAll('.number-line .btn-text.copy').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -1066,6 +1141,58 @@
                     }
                 };
             });
+
+            // 绑定全部复制
+            const allCopyBtn = document.getElementById('allCopyBtn');
+            if (allCopyBtn) {
+                allCopyBtn.onclick = function() {
+                    const copyBtns = resultArea.querySelectorAll('.number-line .btn-text.copy');
+                    if (!copyBtns.length) return;
+                    const texts = [];
+                    copyBtns.forEach(btn => {
+                        const nums = btn.dataset.nums;
+                        if (nums) texts.push(nums);
+                    });
+                    if (!texts.length) return;
+                    const fullText = texts.join('\n');
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(fullText).then(() => {
+                            const orig = this.textContent;
+                            this.textContent = '已复制';
+                            setTimeout(() => { this.textContent = orig; }, 800);
+                            vibrate(10);
+                        }).catch(() => {});
+                    }
+                };
+            }
+
+            // 绑定全部删除（收藏全部）
+            const allDeleteBtn = document.getElementById('allDeleteBtn');
+            if (allDeleteBtn) {
+                allDeleteBtn.onclick = function() {
+                    const favBtns = resultArea.querySelectorAll('.number-line .btn-text.fav');
+                    if (!favBtns.length) return;
+                    let count = 0;
+                    favBtns.forEach(btn => {
+                        if (!btn.classList.contains('active')) {
+                            // 未收藏的，点击收藏
+                            btn.click();
+                            count++;
+                        } else {
+                            // 已收藏的，点击取消收藏（再次点击）
+                            btn.click();
+                            count++;
+                        }
+                    });
+                    if (count) {
+                        vibrate(10);
+                        // 更新全部按钮文字反馈
+                        const orig = this.textContent;
+                        this.textContent = '已操作';
+                        setTimeout(() => { this.textContent = orig; }, 800);
+                    }
+                };
+            }
 
             const lines = resultArea.querySelectorAll('.number-line');
             if (lines.length) {
@@ -1156,7 +1283,6 @@
             specificBtn.className = 'btn btn-blue';
             lastGeneratedGroupsData = [];
             lastRecommendReason = '';
-            updateGroupDisplay();
             renderHistory();
         }
 
@@ -1202,7 +1328,6 @@
                 const maxFrontFreq = stats.maxFrontFreq, maxBackFreq = stats.maxBackFreq;
                 const maxFrontMiss = stats.maxFrontMiss, maxBackMiss = stats.maxBackMiss;
                 const groupsData = [];
-                const reasons = [];
                 for (let g=0; g<groups; g++) {
                     const frontPool = [], backPool = [];
                     for (let i=1; i<=frontMax; i++) {
@@ -1313,7 +1438,6 @@
                     for (let g of matchGroups) {
                         if (g.reds.includes(n)) { matched = true; break; }
                     }
-                    // 未命中添加 unmatch 类
                     html += `<span class="ball ${isSSQ?'red':'front'}${matched?'':' unmatch'}">${pad(n)}</span>`;
                 });
                 html += '<span class="sep">+</span>';
@@ -1370,8 +1494,8 @@
                 const fAlpha = minAlpha + (maxAlpha-minAlpha)*fRank, mAlpha = minAlpha + (maxAlpha-minAlpha)*mRank;
                 const fColor = fRank>0.45?'#ffffff':'#2c3e50', mColor = mRank>0.45?'#ffffff':'#2c3e50';
                 const fBg = `rgba(231,76,111,${fAlpha})`, mBg = `rgba(58,123,213,${mAlpha})`;
-                const numColor = colorClass==='red'?'red':'blue';
-                html += `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num ${numColor}">${num}</div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
+                const ballClass = colorClass==='red'?'red':'blue';
+                html += `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
             }
             html += '</div>';
             container.innerHTML = html;
@@ -1550,18 +1674,7 @@
         function setFavorites(favs) {
             localStorage.setItem('lottery_favorites', JSON.stringify(favs));
         }
-        function addFavorite(mode, nums) {
-            const favs = getFavorites();
-            favs.push({ mode, nums, time: Date.now() });
-            setFavorites(favs);
-            renderFavorites();
-        }
-        function removeFavorite(index) {
-            const favs = getFavorites();
-            favs.splice(index, 1);
-            setFavorites(favs);
-            renderFavorites();
-        }
+
         function renderFavorites() {
             const favs = getFavorites();
             if (favs.length === 0) {
@@ -1569,38 +1682,44 @@
                 return;
             }
             favoritesCard.style.display = 'block';
-            // 按彩种分组
             const ssqFavs = favs.filter(item => item.mode === 'ssq');
             const dltFavs = favs.filter(item => item.mode === 'dlt');
             let html = '';
             if (ssqFavs.length) {
-                html += '<div class="fav-section"><div class="sub-title">双色球收藏</div>';
+                html += `<div class="fav-section"><div class="sub-title">双色球收藏
+                    <span>
+                        <span class="btn-text all-delete" data-mode="ssq" data-action="delete-all">删除全部</span>
+                        <span class="btn-text all-copy" data-mode="ssq" data-action="copy-all">复制全部</span>
+                    </span>
+                </div>`;
                 ssqFavs.forEach((item, idx) => {
                     const realIdx = favs.indexOf(item);
-                    const isSSQ = true;
                     html += '<div class="history-row">';
-                    // 删除按钮在左侧
                     html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
                     item.nums.reds.forEach(n => html+=`<span class="ball red">${pad(n)}</span>`);
                     html += '<span class="sep">+</span>';
                     item.nums.blues.forEach(n => html+=`<span class="ball blue">${pad(n)}</span>`);
-                    const numsStr = (isSSQ?'红球':'前区') + ':' + item.nums.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + item.nums.blues.map(pad).join(' ');
+                    const numsStr = '红球:' + item.nums.reds.map(pad).join(' ') + ' + 蓝球:' + item.nums.blues.map(pad).join(' ');
                     html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
                     html += '</div>';
                 });
                 html += '</div>';
             }
             if (dltFavs.length) {
-                html += '<div class="fav-section"><div class="sub-title">大乐透收藏</div>';
+                html += `<div class="fav-section"><div class="sub-title">大乐透收藏
+                    <span>
+                        <span class="btn-text all-delete" data-mode="dlt" data-action="delete-all">删除全部</span>
+                        <span class="btn-text all-copy" data-mode="dlt" data-action="copy-all">复制全部</span>
+                    </span>
+                </div>`;
                 dltFavs.forEach((item, idx) => {
                     const realIdx = favs.indexOf(item);
-                    const isSSQ = false;
                     html += '<div class="history-row">';
                     html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
                     item.nums.reds.forEach(n => html+=`<span class="ball front">${pad(n)}</span>`);
                     html += '<span class="sep">+</span>';
                     item.nums.blues.forEach(n => html+=`<span class="ball back">${pad(n)}</span>`);
-                    const numsStr = (isSSQ?'红球':'前区') + ':' + item.nums.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + item.nums.blues.map(pad).join(' ');
+                    const numsStr = '前区:' + item.nums.reds.map(pad).join(' ') + ' + 后区:' + item.nums.blues.map(pad).join(' ');
                     html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
                     html += '</div>';
                 });
@@ -1608,7 +1727,7 @@
             }
             favList.innerHTML = html;
 
-            // 绑定删除事件
+            // 单个删除
             favList.querySelectorAll('.btn-text.del').forEach(el => {
                 el.onclick = function() {
                     const idx = parseInt(this.dataset.index);
@@ -1616,7 +1735,7 @@
                     vibrate(10);
                 };
             });
-            // 绑定复制事件
+            // 单个复制
             favList.querySelectorAll('.btn-text.copy').forEach(btn => {
                 btn.onclick = function(e) {
                     e.stopPropagation();
@@ -1635,14 +1754,48 @@
                     }
                 };
             });
+            // 批量删除和复制
+            favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
+                    const mode = this.dataset.mode;
+                    const action = this.dataset.action;
+                    const allFavs = getFavorites();
+                    const filtered = allFavs.filter(item => item.mode === mode);
+                    if (action === 'delete-all') {
+                        if (filtered.length === 0) return;
+                        if (confirm(`确定删除所有${mode==='ssq'?'双色球':'大乐透'}收藏吗？`)) {
+                            const newFavs = allFavs.filter(item => item.mode !== mode);
+                            setFavorites(newFavs);
+                            renderFavorites();
+                            vibrate(10);
+                        }
+                    } else if (action === 'copy-all') {
+                        if (filtered.length === 0) return;
+                        const texts = filtered.map(item => {
+                            const isSSQ = item.mode === 'ssq';
+                            return (isSSQ?'红球':'前区') + ':' + item.nums.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + item.nums.blues.map(pad).join(' ');
+                        });
+                        const full = texts.join('\n');
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(full).then(() => {
+                                const orig = this.textContent;
+                                this.textContent = '已复制';
+                                setTimeout(() => { this.textContent = orig; }, 800);
+                                vibrate(10);
+                            }).catch(() => {});
+                        }
+                    }
+                };
+            });
         }
-        clearFavBtn.onclick = function() {
-            if (confirm('确定清空所有收藏吗？')) {
-                setFavorites([]);
-                renderFavorites();
-                vibrate(10);
-            }
-        };
+
+        function removeFavorite(index) {
+            const favs = getFavorites();
+            favs.splice(index, 1);
+            setFavorites(favs);
+            renderFavorites();
+        }
 
         function shareContent(text) {
             if (navigator.share) {
@@ -1681,15 +1834,18 @@
                 specificBtn.disabled = true;
                 specificBtn.className = 'btn btn-blue';
                 renderFavorites();
+                updateResetState(true);
             });
         });
 
         document.getElementById('decBtn').addEventListener('click', ()=>{
-            if (groups > 1) { groups--; groupDisplay.textContent = '复制全部'; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
+            if (groups > 1) { groups--; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
         });
         document.getElementById('incBtn').addEventListener('click', ()=>{
-            if (groups < 5) { groups++; groupDisplay.textContent = '复制全部'; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
+            if (groups < 5) { groups++; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
         });
+
+        resetBtn.addEventListener('click', resetNumbers);
 
         document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
         document.getElementById('specificBtn').addEventListener('click', specificRandom);
@@ -1699,42 +1855,6 @@
 
         prevPageBtn.addEventListener('click', ()=> goToPage(currentPage-1));
         nextPageBtn.addEventListener('click', ()=> goToPage(currentPage+1));
-
-        // 全部复制按钮（groupDisplay）点击复制所有号码
-        groupDisplay.addEventListener('click', function() {
-            const copyBtns = resultArea.querySelectorAll('.number-line .btn-text.copy');
-            if (copyBtns.length === 0) {
-                // 如果没有号码，提示
-                if (resultArea.querySelector('.error-text')) return;
-                alert('请先生成号码');
-                return;
-            }
-            const texts = [];
-            copyBtns.forEach(btn => {
-                const nums = btn.getAttribute('data-nums');
-                if (nums) texts.push(nums);
-            });
-            if (texts.length === 0) return;
-            const fullText = texts.join('\n');
-            const originalText = this.textContent;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(fullText).then(() => {
-                    this.textContent = '已复制';
-                    setTimeout(() => { this.textContent = '复制全部'; }, 800);
-                    vibrate(10);
-                }).catch(() => {});
-            } else {
-                const textarea = document.createElement('textarea');
-                textarea.value = fullText;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                textarea.remove();
-                this.textContent = '已复制';
-                setTimeout(() => { this.textContent = '复制全部'; }, 800);
-                vibrate(10);
-            }
-        });
 
         loadAllData(true);
     })();
