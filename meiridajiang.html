@@ -284,7 +284,7 @@
             min-width: 100%;
         }
         .period { color: #2c3e50; font-size: 11px; min-width: 60px; flex-shrink: 0; }
-        .date { color: #7f8c9b; font-size: 10px; margin-left: auto; flex-shrink: 0; }
+        .date { color: #7f8c9b; font-size: 10px; margin-left: 8px; flex-shrink: 0; }
 
         .history-meta {
             display: flex;
@@ -900,6 +900,7 @@
                 html += '<div class="history-row">';
                 html += `<span class="period">${item.period}期</span>`;
                 item.nums.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                html += '<span class="sep">+</span>';
                 if (isSSQ) html+=`<span class="ball blue">${pad(item.blue)}</span>`;
                 else item.blues.forEach(b=> html+=`<span class="ball back">${pad(b)}</span>`);
                 html += `<span class="date">${item.date}</span></div>`;
