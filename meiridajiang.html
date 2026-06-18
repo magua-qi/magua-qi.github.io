@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>搏一搏单车变摩托</title>
     <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23ff1744'/%3E%3Ctext x='50' y='50' font-size='66' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%230000cd' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
-    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGWSURBVFhH7ZbNSoNAFIUPqJ8LcadiP/ANfAW30YVvESj4g4pLKS5cunATiqK7iAu3FgLpJhiPzSU0pWRIZu7Mws6HBIN38ZvJnXPvGBRFUYJElD+gK4jXCRRgQnYyL8sGq6TvYKhHq1tZyYtJVgWHUcTbCCoBbPhh8C2z3DruYVRmXo0VUe8oy1xPqT7hY3AfKDyNwdrTtN/rAox6wlyhwH1MvJZZcF5BTgDME5h7AgwzV0vBYX/8wW+mDrcCeyagTkC3iaMVo8qkOzsjYVt3zomWpSasUFQzH3NR/tsQPVsuW4oRjv8Ho2C7XH/EmS/gggEogD4A/MVAwFkYrQOcRZzrX09m0VokAp2dh1wOiu2VzM4+KJjfPweBw/dCpcIBXcN4CwwXJhQyHxcLlIuF6R/P40m0EwSMBVgU+BjCJED/i4BAAJYGeAEABYwDlhTAAqZR8BALcAeYDmB/gZ0o4A8wI/p4gBi4T9i0awIAQqFQYk3Tvq1em/dGtVrNJBIJg8/nS7Tb7U8AAAD//6az+19p1bwNAAAAAElFTkSuQmCC">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             min-height: 100vh;
             display: flex;
@@ -23,7 +21,6 @@
             font-family: "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
         }
-
         .app-container {
             width: 100%;
             max-width: 380px;
@@ -32,7 +29,6 @@
             flex-direction: column;
             gap: 16px;
         }
-
         .card {
             background: #ffffff;
             border-radius: 20px;
@@ -41,7 +37,6 @@
             width: 100%;
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
-
         .title-bar {
             background: linear-gradient(135deg, #3a7bd5, #2b5ea7);
             text-align: center;
@@ -51,19 +46,15 @@
             color: #ffffff;
             letter-spacing: 2px;
         }
-
         .title-bar.secondary {
             background: linear-gradient(135deg, #5b9bd5, #3a7bd5);
         }
-
         .title-bar.tertiary {
             background: linear-gradient(135deg, #4a8fd4, #2b5ea7);
         }
-
         .title-bar.fourth {
             background: linear-gradient(135deg, #6aafd5, #3a7bd5);
         }
-
         .mode-row {
             display: flex;
             justify-content: center;
@@ -110,14 +101,12 @@
             top: 1.5px;
             left: 1.5px;
         }
-
         .result-box {
             margin: 6px 16px 14px;
             background: #f8faff;
-            border: 1px solid rgba(58, 123, 213, 0.10);
             border-radius: 12px;
             min-height: 150px;
-            padding: 12px;
+            padding: 8px 4px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             text-align: center;
@@ -146,7 +135,6 @@
                 transform: translateY(0);
             }
         }
-
         .ball {
             display: inline-flex;
             align-items: center;
@@ -198,7 +186,6 @@
             font-size: 12px;
             flex-shrink: 0;
         }
-
         .btn-row {
             display: flex;
             gap: 8px;
@@ -241,7 +228,6 @@
             font-size: 16px;
             background: transparent;
         }
-
         .btn {
             flex: 1;
             padding: 0;
@@ -267,7 +253,6 @@
         .btn:active {
             transform: scale(0.96);
         }
-
         .btn-red {
             background: linear-gradient(135deg, #ff6b7a, #e74c6f);
             color: #fff;
@@ -278,7 +263,6 @@
             pointer-events: none;
             transform: none;
         }
-
         .btn-blue {
             background: linear-gradient(135deg, #6ab0ff, #3a7bd5);
             color: #fff;
@@ -289,45 +273,15 @@
             pointer-events: none;
             transform: none;
         }
-
         .btn-smart {
             background: linear-gradient(135deg, #6ab0ff, #5dd9b2);
             color: #fff;
         }
-
-        .trend-header {
-            padding: 8px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: #f8faff;
-            border-bottom: 1px solid rgba(58, 123, 213, 0.08);
-        }
-        .trend-header h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #2c3e50;
-            white-space: nowrap;
-        }
-        .trend-stats {
-            display: flex;
-            gap: 8px;
-            font-size: 10px;
-            background: #e8edf5;
-            padding: 3px 10px;
-            border-radius: 30px;
-            color: #2c3e50;
-            white-space: nowrap;
-        }
-
         .chart-container {
             padding: 12px 12px;
             width: 100%;
             background: #fcfdff;
         }
-
         .table-container {
             background: #f8faff;
             border-radius: 12px;
@@ -342,7 +296,6 @@
             border-bottom: 1px solid #e8edf5;
             margin-bottom: 8px;
         }
-
         .stat-table {
             display: flex;
             flex-direction: column;
@@ -401,17 +354,12 @@
         .stat-cell.miss {
             background: #e8f0fe;
         }
-
-        .hotcold-panel {
-            display: none;
-        }
-
         .history-list {
-            padding: 6px 16px 12px;
+            padding: 6px 0px 12px;
             overflow-x: auto;
             overflow-y: visible;
             -webkit-overflow-scrolling: touch;
-            background: #fcfdff;
+            background: transparent;
         }
         .history-row {
             display: flex;
@@ -437,18 +385,14 @@
         }
         .history-meta {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            padding: 4px 16px 12px;
+            padding: 4px 0px 0px;
             font-size: 10px;
             color: #7f8c9b;
             flex-wrap: wrap;
             gap: 6px;
-            background: #fcfdff;
-        }
-        .history-meta .info {
-            flex: 1;
-            text-align: left;
+            background: transparent;
         }
         .history-meta .pagination {
             display: flex;
@@ -480,7 +424,6 @@
             min-width: 40px;
             text-align: center;
         }
-
         .info-content {
             padding: 14px 16px 16px;
             color: #2c3e50;
@@ -503,7 +446,6 @@
             color: #3ab795;
             font-weight: 600;
         }
-
         button,
         .btn,
         input,
@@ -526,46 +468,91 @@
         }
 
         .range-row {
-            padding: 0 16px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            padding: 10px 16px 14px;
         }
-        .range-row .range-label {
+        .range-title {
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: #2c3e50;
+            padding-bottom: 4px;
+        }
+        .range-side-row {
             display: flex;
             justify-content: space-between;
+            font-size: 10px;
+            color: #7f8c9b;
+            padding-bottom: 4px;
+        }
+        .range-side-row .side-item {
+            white-space: nowrap;
+        }
+
+        .range-track-wrap {
+            position: relative;
+            padding: 0px 0 2px;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .range-track {
+            position: relative;
+            height: 18px;
+            background: #e8ecf2;
+            border-radius: 9px;
+            cursor: pointer;
+            touch-action: none;
+        }
+        .range-track .range-fill {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #6ab0ff, #3a7bd5);
+            border-radius: 9px;
+            pointer-events: none;
+        }
+        .range-thumb {
+            position: absolute;
+            top: 50%;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #3a7bd5;
+            box-shadow: 0 2px 8px rgba(58, 123, 213, 0.30);
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            touch-action: none;
+            z-index: 2;
+            transition: box-shadow 0.15s;
+        }
+        .range-thumb:active {
+            cursor: grabbing;
+            box-shadow: 0 2px 12px rgba(58, 123, 213, 0.45);
+        }
+        .range-thumb-left {
+            z-index: 3;
+        }
+        .range-thumb-right {
+            z-index: 3;
+        }
+
+        .range-info {
+            display: flex;
+            justify-content: center;
+            padding-top: 4px;
+            font-size: 10px;
+            color: #7f8c9b;
+        }
+        .range-info .mid {
+            display: none;
+        }
+
+        .range-summary {
+            text-align: center;
             font-size: 12px;
             color: #2c3e50;
-        }
-        .range-row input[type="range"] {
-            width: 100%;
-            height: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #b0c4de;
-            border-radius: 2px;
-            outline: none;
-            transition: background 0.2s;
-        }
-        .range-row input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #3a7bd5;
-            cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-        .range-row input[type="range"]::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #3a7bd5;
-            cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            padding: 6px 0 2px;
+            font-weight: 500;
         }
 
         @media (max-width: 420px) {
@@ -596,13 +583,6 @@
                 font-size: 12px;
                 padding: 2px 8px;
             }
-            .trend-header h3 {
-                font-size: 11px;
-            }
-            .trend-stats {
-                font-size: 9px;
-                padding: 2px 6px;
-            }
             .info-content {
                 font-size: 11px;
                 padding: 12px 14px 14px;
@@ -614,7 +594,23 @@
             .stat-cell .value {
                 font-size: 12px;
             }
-            .range-row .range-label {
+            .range-title {
+                font-size: 12px;
+            }
+            .range-side-row {
+                font-size: 9px;
+            }
+            .range-info {
+                font-size: 9px;
+            }
+            .range-track {
+                height: 16px;
+            }
+            .range-thumb {
+                width: 16px;
+                height: 16px;
+            }
+            .range-summary {
                 font-size: 11px;
             }
         }
@@ -656,7 +652,23 @@
             .stat-cell .value {
                 font-size: 11px;
             }
-            .range-row .range-label {
+            .range-title {
+                font-size: 11px;
+            }
+            .range-side-row {
+                font-size: 8px;
+            }
+            .range-info {
+                font-size: 8px;
+            }
+            .range-track {
+                height: 14px;
+            }
+            .range-thumb {
+                width: 14px;
+                height: 14px;
+            }
+            .range-summary {
                 font-size: 10px;
             }
         }
@@ -694,39 +706,49 @@
                 <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
             </div>
             <div class="range-row">
-                <div class="range-label">
-                    <span>推荐号码参考数据范围</span>
-                    <span id="rangeDisplay">全部</span>
+                <div class="range-title">推荐号码参考数据范围</div>
+                <div class="range-side-row">
+                    <span class="side-item" id="leftInfo"><span id="leftText">第1期 20260616&gt;</span></span>
+                    <span class="side-item" id="rightInfo"><span id="rightText">&lt;20030223 第3465期</span></span>
                 </div>
-                <input type="range" id="rangeSlider" min="1" max="100" value="100">
+                <div class="range-track-wrap" id="rangeTrackWrap">
+                    <div class="range-track" id="rangeTrack">
+                        <div class="range-fill" id="rangeFill"></div>
+                        <div class="range-thumb range-thumb-left" id="thumbLeft"></div>
+                        <div class="range-thumb range-thumb-right" id="thumbRight"></div>
+                    </div>
+                    <div class="range-info">
+                        <span class="mid" id="midInfo"></span>
+                    </div>
+                </div>
             </div>
-            <div class="data-hint" id="dataStatus">加载数据中...</div>
+            <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
         </div>
 
+        <!-- 合并后的数据详情卡片 -->
         <div class="card">
-            <div class="title-bar secondary" id="historyTitle">历史数据</div>
-            <div class="history-list" id="historyList"></div>
-            <div class="history-meta" id="historyMeta">
-                <span class="info" id="historyInfo"></span>
-                <span class="pagination">
-                    <button id="prevPageBtn" disabled>上一页</button>
-                    <span id="pageInfo">1/10</span>
-                    <button id="nextPageBtn">下一页</button>
-                </span>
+            <div class="title-bar secondary">数据详情</div>
+            <!-- 顶部汇总信息 -->
+            <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
+            <!-- 开奖号码明细区域，包含历史数据和分页 -->
+            <div class="table-container" id="detailResultContainer">
+                <div class="sub-title">开奖号码明细</div>
+                <div id="detailResultArea" style="display:none;"></div>
+                <div class="history-list" id="historyList"></div>
+                <div class="history-meta" id="historyMeta">
+                    <span class="pagination">
+                        <button id="prevPageBtn" disabled>上一页</button>
+                        <span id="pageInfo">1/10</span>
+                        <button id="nextPageBtn">下一页</button>
+                    </span>
+                </div>
+                <div style="border-bottom:1px solid #e8edf5; margin-top:8px;"></div>
             </div>
-        </div>
-
-        <div class="card">
-            <div class="title-bar tertiary" id="trendTitleBar">走势分析</div>
-            <div class="trend-header">
-                <h3 id="trendTitle">双色球 · 红球频率分布</h3>
-                <div class="trend-stats" id="trendStats">加载中...</div>
-            </div>
+            <!-- 走势分析表格 -->
             <div class="chart-container" id="tableContainer">
                 <div id="frontTableContainer" class="table-container"></div>
                 <div id="backTableContainer" class="table-container"></div>
             </div>
-            <div class="hotcold-panel" id="hotcoldPanel"></div>
         </div>
 
         <div class="card">
@@ -748,7 +770,6 @@
         let groups = 1;
         let currentPage = 1;
         const PAGE_SIZE = 10;
-        let currentRange = 'all';
 
         let SSQ_DATA = [];
         let DLT_DATA = [];
@@ -756,12 +777,8 @@
         let trendCache = { ssq: null, dlt: null };
 
         const resultDiv = document.getElementById('resultArea');
-        const trendStatsSpan = document.getElementById('trendStats');
-        const trendTitleSpan = document.getElementById('trendTitle');
-        const hotcoldPanel = document.getElementById('hotcoldPanel');
+        const detailResultArea = document.getElementById('detailResultArea');
         const historyListDiv = document.getElementById('historyList');
-        const historyMetaSpan = document.getElementById('historyMeta');
-        const historyInfoSpan = document.getElementById('historyInfo');
         const pageInfoSpan = document.getElementById('pageInfo');
         const prevPageBtn = document.getElementById('prevPageBtn');
         const nextPageBtn = document.getElementById('nextPageBtn');
@@ -770,8 +787,20 @@
         const groupDisplay = document.getElementById('groupDisplay');
         const frontTableContainer = document.getElementById('frontTableContainer');
         const backTableContainer = document.getElementById('backTableContainer');
-        const rangeSlider = document.getElementById('rangeSlider');
-        const rangeDisplay = document.getElementById('rangeDisplay');
+        const rangeSummary = document.getElementById('rangeSummary');
+
+        const thumbLeft = document.getElementById('thumbLeft');
+        const thumbRight = document.getElementById('thumbRight');
+        const rangeTrack = document.getElementById('rangeTrack');
+        const rangeFill = document.getElementById('rangeFill');
+        const leftText = document.getElementById('leftText');
+        const rightText = document.getElementById('rightText');
+
+        let rangeStart = 1;
+        let rangeEnd = 1;
+        let totalPeriods = 1;
+        let isDragging = false;
+        let dragTarget = null;
 
         let lastExcludeReds = [];
         let lastExcludeBlues = [];
@@ -902,9 +931,6 @@
 
         function showHint() {
             const isSSQ = currentMode === 'ssq';
-            const name = isSSQ ? '双色球' : '大乐透';
-            const data = isSSQ ? SSQ_DATA : DLT_DATA;
-            const count = data.length;
             const frontCount = isSSQ ? 6 : 5;
             const backCount = isSSQ ? 1 : 2;
             let html = '';
@@ -919,7 +945,7 @@
                 }
                 html += '</div>';
             }
-            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">等待操作 (共${groups}组)</div>`;
+            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
             resultDiv.innerHTML = html;
             specificBtn.disabled = true;
             specificBtn.className = 'btn btn-blue';
@@ -969,20 +995,20 @@
             return records;
         }
 
-        function getFilteredData(type, range) {
+        function getFilteredData(type) {
             const all = getData(type);
-            if (range === 'all' || !all || all.length === 0) return all;
-            const limit = parseInt(range, 10);
-            if (isNaN(limit) || limit <= 0) return all;
-            return all.slice(0, Math.min(limit, all.length));
+            if (!all || all.length === 0) return all;
+            const s = Math.max(0, rangeStart - 1);
+            const e = Math.min(all.length, rangeEnd);
+            if (s >= e) return all.slice(0, 1);
+            return all.slice(s, e);
         }
 
         let historyStore = { ssq: [], dlt: [] };
 
         function loadHistory(lotteryType) {
-            const allData = getData(lotteryType);
-            const recent = allData;
-            historyStore[lotteryType] = recent.map(item => ({
+            const filtered = getFilteredData(lotteryType);
+            historyStore[lotteryType] = filtered.map(item => ({
                 period: item.issue,
                 date: item.date.slice(5),
                 nums: item.reds,
@@ -996,7 +1022,6 @@
             const items = historyStore[currentMode];
             if (!items || items.length === 0) {
                 historyListDiv.innerHTML = `<div class="error-text">历史数据加载失败</div>`;
-                historyInfoSpan.textContent = '数据不可用';
                 pageInfoSpan.textContent = '0/0';
                 prevPageBtn.disabled = true;
                 nextPageBtn.disabled = true;
@@ -1027,7 +1052,6 @@
             });
             historyListDiv.innerHTML = html;
 
-            historyInfoSpan.textContent = `共 ${total} 期 (第${start+1}-${end}期)`;
             pageInfoSpan.textContent = `${currentPage}/${totalPages}`;
             prevPageBtn.disabled = (currentPage <= 1);
             nextPageBtn.disabled = (currentPage >= totalPages);
@@ -1079,25 +1103,17 @@
                 frontEntries.push({ num: i, freq: frontFreq[i], miss: frontMiss[i] });
             }
             frontEntries.sort((a, b) => b.freq - a.freq);
-            let hotFront = frontEntries.slice(0, 5);
-            let coldFront = [...frontEntries].sort((a, b) => a.freq - b.freq).slice(0, 5);
             let backEntries = [];
             for (let i = 1; i <= backMax; i++) {
                 backEntries.push({ num: i, freq: backFreq[i], miss: backMiss[i] });
             }
             backEntries.sort((a, b) => b.freq - a.freq);
-            let hotBack = backEntries.slice(0, 3);
-            let coldBack = [...backEntries].sort((a, b) => a.freq - b.freq).slice(0, 3);
             return {
                 frontFreq,
                 backFreq,
                 frontMiss,
                 backMiss,
                 totalPeriods: records.length,
-                hotFront,
-                coldFront,
-                hotBack,
-                coldBack,
                 frontMax,
                 backMax
             };
@@ -1134,7 +1150,7 @@
         }
 
         function smartRecommend(mode) {
-            const records = getFilteredData(currentMode, currentRange);
+            const records = getFilteredData(currentMode);
             if (!records || records.length === 0) {
                 resultDiv.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
                 return;
@@ -1219,8 +1235,8 @@
 
             let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
             html += `<div class="stat-row header">
-                <div class="stat-num">号码</div>
                 <div class="stat-cell" style="background:transparent;">频次</div>
+                <div class="stat-num">号码</div>
                 <div class="stat-cell" style="background:transparent;">遗漏</div>
             </div>`;
 
@@ -1253,10 +1269,10 @@
 
                 const numColor = colorClass === 'red' ? 'red' : 'blue';
                 html += `<div class="stat-row">
-                    <div class="stat-num ${numColor}">${num}</div>
                     <div class="stat-cell freq" style="background:${freqBg};">
                         <div class="value" style="color:${freqTextColor};">${freq}</div>
                     </div>
+                    <div class="stat-num ${numColor}">${num}</div>
                     <div class="stat-cell miss" style="background:${missBg};">
                         <div class="value" style="color:${missTextColor};">${miss}</div>
                     </div>
@@ -1268,21 +1284,16 @@
 
         function renderTrend() {
             const type = currentMode;
-            const name = type === 'ssq' ? '双色球' : '大乐透';
-            trendTitleSpan.innerText = type === 'ssq' ? '双色球 · 红球频率分布' : '大乐透 · 前区频率分布';
-            trendStatsSpan.innerHTML = '加载数据...';
-            const records = getFilteredData(type, currentRange);
+            const records = getFilteredData(type);
             if (!records || records.length === 0) {
-                trendStatsSpan.innerHTML = '数据加载失败';
-                hotcoldPanel.innerHTML = '';
                 frontTableContainer.innerHTML = '<div class="error-text">无数据</div>';
                 backTableContainer.innerHTML = '<div class="error-text">无数据</div>';
                 return;
             }
             const stats = analyzeStats(records, type);
             if (!stats) {
-                trendStatsSpan.innerHTML = '数据解析失败';
-                hotcoldPanel.innerHTML = '';
+                frontTableContainer.innerHTML = '<div class="error-text">数据解析失败</div>';
+                backTableContainer.innerHTML = '<div class="error-text">数据解析失败</div>';
                 return;
             }
 
@@ -1299,45 +1310,177 @@
             const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
             renderNumberTable(frontTableContainer, frontData, frontTitle, 'red');
             renderNumberTable(backTableContainer, backData, backTitle, 'blue');
-
-            const total = stats.totalPeriods;
-            const rangeLabel = currentRange === 'all' ? '全部' : `近${currentRange}期`;
-            trendStatsSpan.innerHTML = `共 ${total} 期 (${rangeLabel}) · 热号高频 · 冷号低开`;
-
-            hotcoldPanel.innerHTML = '';
         }
 
-        function updateRangeSlider() {
+        function updateRangeDisplay() {
             const allData = getData(currentMode);
-            const maxVal = allData ? allData.length : 100;
-            rangeSlider.max = maxVal;
-            if (currentRange === 'all') {
-                rangeSlider.value = maxVal;
-                rangeDisplay.textContent = '全部';
+            totalPeriods = allData ? allData.length : 1;
+            if (rangeStart < 1) rangeStart = 1;
+            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+            if (rangeStart > rangeEnd) { const t = rangeStart;
+                rangeStart = rangeEnd;
+                rangeEnd = t; }
+            if (rangeStart < 1) rangeStart = 1;
+            if (rangeEnd < 1) rangeEnd = 1;
+            if (rangeStart > totalPeriods) rangeStart = totalPeriods;
+            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+
+            const leftVal = rangeStart;
+            const rightVal = rangeEnd;
+
+            const pctLeft = totalPeriods > 1 ? ((leftVal - 1) / (totalPeriods - 1)) * 100 : 0;
+            const pctRight = totalPeriods > 1 ? ((rightVal - 1) / (totalPeriods - 1)) * 100 : 100;
+
+            thumbLeft.style.left = pctLeft + '%';
+            thumbRight.style.left = pctRight + '%';
+            rangeFill.style.left = pctLeft + '%';
+            rangeFill.style.width = (pctRight - pctLeft) + '%';
+
+            const data = allData || [];
+            let leftDateText = '------', rightDateText = '------';
+            if (data.length > 0) {
+                const leftRecord = data[leftVal - 1];
+                const rightRecord = data[rightVal - 1];
+                leftDateText = leftRecord ? leftRecord.date.replace(/-/g, '') : '------';
+                rightDateText = rightRecord ? rightRecord.date.replace(/-/g, '') : '------';
+            }
+            leftText.textContent = `第${leftVal}期 ${leftDateText}>`;
+            rightText.textContent = `<${rightDateText} 第${rightVal}期`;
+
+            const selected = rangeEnd - rangeStart + 1;
+            dataStatusDiv.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
+
+            // 更新顶部汇总
+            rangeSummary.textContent = `第${rangeStart}~${rangeEnd}期（共${rangeEnd - rangeStart + 1}期）`;
+
+            loadHistory(currentMode);
+            renderHistory();
+            renderTrend();
+        }
+
+        function getThumbPos(e) {
+            const rect = rangeTrack.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let pct = (clientX - rect.left) / rect.width;
+            pct = Math.max(0, Math.min(1, pct));
+
+            const d = rangeEnd - rangeStart + 1;
+            const threshold = totalPeriods * 0.15;
+            let k;
+            if (d < threshold) {
+                k = 0.8;
             } else {
-                const num = parseInt(currentRange, 10);
-                if (!isNaN(num) && num > 0 && num <= maxVal) {
-                    rangeSlider.value = num;
-                    rangeDisplay.textContent = `近${num}期`;
-                } else {
-                    rangeSlider.value = maxVal;
-                    rangeDisplay.textContent = '全部';
-                    currentRange = 'all';
-                }
+                k = 1.2;
+            }
+            let val = 1 + Math.pow(pct, k) * (totalPeriods - 1);
+            val = Math.round(Math.max(1, Math.min(totalPeriods, val)));
+            return val;
+        }
+
+        function handleStart(e) {
+            e.preventDefault();
+            const target = e.target;
+            if (target === thumbLeft) {
+                isDragging = true;
+                dragTarget = 'left';
+                thumbLeft.style.cursor = 'grabbing';
+            } else if (target === thumbRight) {
+                isDragging = true;
+                dragTarget = 'right';
+                thumbRight.style.cursor = 'grabbing';
             }
         }
 
-        function onRangeChange() {
-            const val = parseInt(rangeSlider.value, 10);
-            const maxVal = parseInt(rangeSlider.max, 10);
-            if (val >= maxVal) {
-                currentRange = 'all';
-                rangeDisplay.textContent = '全部';
-            } else {
-                currentRange = String(val);
-                rangeDisplay.textContent = `近${val}期`;
+        function handleMove(e) {
+            if (!isDragging || !dragTarget) return;
+            e.preventDefault();
+            const val = getThumbPos(e);
+            if (dragTarget === 'left') {
+                let newStart = Math.max(1, Math.min(totalPeriods, val));
+                let newEnd = rangeEnd;
+                if (newStart >= newEnd) {
+                    newStart = Math.max(1, newEnd - 1);
+                    newEnd = Math.min(totalPeriods, newEnd + 1);
+                    if (newStart >= newEnd) {
+                        newStart = Math.max(1, newEnd - 1);
+                        if (newStart < 1) { newStart = 1;
+                            newEnd = Math.min(totalPeriods, 2); }
+                    }
+                }
+                rangeStart = newStart;
+                rangeEnd = newEnd;
+                updateRangeDisplay();
+            } else if (dragTarget === 'right') {
+                let newEnd = Math.max(1, Math.min(totalPeriods, val));
+                let newStart = rangeStart;
+                if (newEnd <= newStart) {
+                    newEnd = Math.min(totalPeriods, newStart + 1);
+                    newStart = Math.max(1, newStart - 1);
+                    if (newEnd <= newStart) {
+                        newEnd = Math.min(totalPeriods, newStart + 1);
+                        if (newEnd > totalPeriods) { newEnd = totalPeriods;
+                            newStart = Math.max(1, totalPeriods - 1); }
+                    }
+                }
+                rangeStart = newStart;
+                rangeEnd = newEnd;
+                updateRangeDisplay();
             }
-            renderTrend();
+        }
+
+        function handleEnd(e) {
+            if (isDragging) {
+                isDragging = false;
+                dragTarget = null;
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+            }
+        }
+
+        function initRangeSlider() {
+            const allData = getData(currentMode);
+            totalPeriods = allData ? allData.length : 1;
+            if (totalPeriods < 1) totalPeriods = 1;
+            rangeStart = 1;
+            rangeEnd = totalPeriods;
+            updateRangeDisplay();
+
+            rangeTrack.addEventListener('mousedown', (e) => {
+                if (e.target === thumbLeft || e.target === thumbRight) return;
+                const val = getThumbPos(e);
+                const distL = Math.abs(val - rangeStart);
+                const distR = Math.abs(val - rangeEnd);
+                if (distL < distR) {
+                    rangeStart = Math.max(1, Math.min(totalPeriods, val));
+                    if (rangeStart >= rangeEnd) {
+                        rangeStart = Math.max(1, rangeEnd - 1);
+                        if (rangeStart < 1) { rangeStart = 1;
+                            rangeEnd = Math.min(totalPeriods, 2); }
+                    }
+                } else {
+                    rangeEnd = Math.max(1, Math.min(totalPeriods, val));
+                    if (rangeEnd <= rangeStart) {
+                        rangeEnd = Math.min(totalPeriods, rangeStart + 1);
+                        if (rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
+                            rangeStart = Math.max(1, totalPeriods - 1); }
+                    }
+                }
+                updateRangeDisplay();
+            });
+
+            thumbLeft.addEventListener('mousedown', handleStart);
+            thumbRight.addEventListener('mousedown', handleStart);
+            thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
+            thumbRight.addEventListener('touchstart', handleStart, { passive: false });
+
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('touchmove', handleMove, { passive: false });
+            document.addEventListener('mouseup', handleEnd);
+            document.addEventListener('touchend', handleEnd);
+            document.addEventListener('touchcancel', handleEnd);
+
+            thumbLeft.style.cursor = 'grab';
+            thumbRight.style.cursor = 'grab';
         }
 
         async function fetchData() {
@@ -1371,19 +1514,10 @@
                 SSQ_DATA = extractArray(ssqText, 'SSQ_DATA');
                 DLT_DATA = extractArray(dltText, 'DLT_DATA');
 
-                console.log(`双色球数据加载完成: ${SSQ_DATA.length} 期`);
-                console.log(`大乐透数据加载完成: ${DLT_DATA.length} 期`);
-
                 showHint();
-                loadHistory('ssq');
-                loadHistory('dlt');
-                renderHistory();
-                updateRangeSlider();
-                renderTrend();
-
-                const ssqCount = SSQ_DATA.length;
-                const dltCount = DLT_DATA.length;
-                dataStatusDiv.textContent = `推荐数字根据双色球 ${ssqCount} 期 · 大乐透 ${dltCount} 期中奖号码选出`;
+                trendCache.ssq = null;
+                trendCache.dlt = null;
+                initRangeSlider();
 
             } catch (err) {
                 console.error('加载数据失败:', err);
@@ -1397,10 +1531,8 @@
                 currentMode = e.target.value;
                 currentPage = 1;
                 showHint();
-                loadHistory(currentMode);
-                renderHistory();
-                updateRangeSlider();
-                renderTrend();
+                trendCache[currentMode] = null;
+                initRangeSlider();
                 specificBtn.disabled = true;
                 specificBtn.className = 'btn btn-blue';
             });
@@ -1430,8 +1562,6 @@
         document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
         document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
         document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
-
-        rangeSlider.addEventListener('input', onRangeChange);
 
         prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
         nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
