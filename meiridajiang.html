@@ -6,7 +6,11 @@
     <title>搏一搏单车变摩托</title>
     <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23ff1744'/%3E%3Ctext x='50' y='50' font-size='66' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%230000cd' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             min-height: 100vh;
             display: flex;
@@ -30,9 +34,9 @@
             background: #ffffff;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             width: 100%;
-            border: 1px solid rgba(0,0,0,0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
             transition: background 0.3s, border-color 0.3s;
         }
         .title-bar {
@@ -45,25 +49,15 @@
             letter-spacing: 2px;
             position: relative;
         }
-        .title-bar .share-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 30px;
-            padding: 4px 12px;
-            color: #fff;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
+        .title-bar.secondary {
+            background: linear-gradient(135deg, #5b9bd5, #3a7bd5);
         }
-        .title-bar .share-btn:active { background: rgba(255,255,255,0.4); }
-        .title-bar.secondary { background: linear-gradient(135deg, #5b9bd5, #3a7bd5); }
-        .title-bar.tertiary { background: linear-gradient(135deg, #4a8fd4, #2b5ea7); }
-        .title-bar.fourth { background: linear-gradient(135deg, #6aafd5, #3a7bd5); }
+        .title-bar.tertiary {
+            background: linear-gradient(135deg, #4a8fd4, #2b5ea7);
+        }
+        .title-bar.fourth {
+            background: linear-gradient(135deg, #6aafd5, #3a7bd5);
+        }
 
         .mode-row {
             display: flex;
@@ -84,23 +78,32 @@
             white-space: nowrap;
             color: #2c3e50;
         }
-        .mode-row label:hover { background: rgba(58,123,213,0.08); }
-        .mode-row input[type="radio"] { display: none; }
+        .mode-row label:hover {
+            background: rgba(58, 123, 213, 0.08);
+        }
+        .mode-row input[type="radio"] {
+            display: none;
+        }
         .mode-row label .dot {
-            width: 12px; height: 12px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             border: 2px solid #b0c4de;
             display: inline-block;
             position: relative;
         }
-        .mode-row input:checked + span .dot { border-color: #3a7bd5; }
-        .mode-row input:checked + span .dot::after {
+        .mode-row input:checked+span .dot {
+            border-color: #3a7bd5;
+        }
+        .mode-row input:checked+span .dot::after {
             content: '';
             position: absolute;
-            width: 5px; height: 5px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: #3a7bd5;
-            top: 1.5px; left: 1.5px;
+            top: 1.5px;
+            left: 1.5px;
         }
 
         .result-box {
@@ -119,20 +122,109 @@
             color: #7f8c9b;
             font-size: 13px;
         }
+
         .number-line {
             display: flex;
             align-items: center;
-            gap: 5px;
-            margin: 6px 0;
-            flex-wrap: nowrap;
             justify-content: center;
             position: relative;
+            padding: 4px 64px;
+            flex-wrap: nowrap;
+            gap: 3px;
+            min-height: 36px;
+            margin: 4px 0;
         }
+        .number-line .btn-text.fav {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .number-line .btn-text.copy {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        #favList .history-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 4px 64px;
+            flex-wrap: nowrap;
+            gap: 3px;
+            min-height: 36px;
+            margin: 4px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            width: 100%;
+        }
+        #favList .history-row .btn-text.del {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        #favList .history-row .btn-text.copy {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        #historyList .history-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 6px 74px;
+            flex-wrap: nowrap;
+            gap: 3px;
+            min-height: 38px;
+            margin: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            width: 100%;
+        }
+        #historyList .history-row .period {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 11px;
+            color: #2c3e50;
+            min-width: 48px;
+            text-align: left;
+        }
+        #historyList .history-row .date {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 10px;
+            color: #7f8c9b;
+            min-width: 48px;
+            text-align: right;
+        }
+
         .ball {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             font-size: 11px;
             font-weight: 700;
@@ -140,36 +232,77 @@
             flex-shrink: 0;
             transition: filter 0.2s, transform 0.2s;
         }
-        .ball.red, .ball.front { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
-        .ball.blue, .ball.back { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
-        .ball.red.unmatch { background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3); box-shadow: 0 2px 6px rgba(231,76,111,0.15); }
-        .ball.blue.unmatch, .ball.back.unmatch { background: radial-gradient(circle at 35% 35%, #b3d9ff, #80bfff); box-shadow: 0 2px 6px rgba(58,123,213,0.15); }
+        .ball.red,
+        .ball.front {
+            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
+        }
+        .ball.blue,
+        .ball.back {
+            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
+        }
+        .ball.red.unmatch {
+            background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.15);
+        }
+        .ball.blue.unmatch,
+        .ball.back.unmatch {
+            background: radial-gradient(circle at 35% 35%, #b3d9ff, #80bfff);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.15);
+        }
         .ball.rolling {
             animation: roll 0.08s infinite alternate;
         }
         @keyframes roll {
-            0% { transform: scale(0.85) rotate(-6deg); }
-            100% { transform: scale(1.15) rotate(6deg); }
+            0% {
+                transform: scale(0.85) rotate(-6deg);
+            }
+            100% {
+                transform: scale(1.15) rotate(6deg);
+            }
         }
         .ball.done {
             animation: pop 0.25s ease both;
         }
         @keyframes pop {
-            0% { transform: scale(0.2); opacity: 0.4; }
-            60% { transform: scale(1.25); }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.2);
+                opacity: 0.4;
+            }
+            60% {
+                transform: scale(1.25);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
-        .placeholder-red, .placeholder-blue {
+        .placeholder-red,
+        .placeholder-blue {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             flex-shrink: 0;
         }
-        .placeholder-red { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
-        .placeholder-blue { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
-        .sep { margin: 0 2px; color: #b0c4de; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+        .placeholder-red {
+            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
+        }
+        .placeholder-blue {
+            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
+        }
+        .sep {
+            margin: 0 2px;
+            color: #b0c4de;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
 
         .btn-text {
             background: none;
@@ -185,22 +318,48 @@
             line-height: 1;
             flex-shrink: 0;
         }
-        .btn-text:active { transform: scale(0.85); }
-        .btn-text.copy { color: #3a7bd5; }
-        .btn-text.copy.done { color: #2ecc71; }
-        .btn-text.fav { color: #95a5a6; }
-        .btn-text.fav.active { color: #f1c40f; }
-        .btn-text.del { color: #e74c6f; }
-        .btn-text.del:active { opacity: 0.7; }
-        .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav {
+        .btn-text:active {
+            transform: scale(0.85);
+        }
+        .btn-text.copy {
+            color: #3a7bd5;
+        }
+        .btn-text.copy.done {
+            color: #2ecc71;
+        }
+        .btn-text.fav {
+            color: #95a5a6;
+        }
+        .btn-text.fav.active {
+            color: #f1c40f;
+        }
+        .btn-text.del {
+            color: #e74c6f;
+        }
+        .btn-text.del:active {
+            opacity: 0.7;
+        }
+        .btn-text.all-copy,
+        .btn-text.all-delete,
+        .btn-text.all-fav {
             font-size: 12px;
             opacity: 0.6;
             cursor: pointer;
         }
-        .btn-text.all-copy { color: #3a7bd5; }
-        .btn-text.all-delete { color: #e74c6f; }
-        .btn-text.all-fav { color: #95a5a6; }
-        .btn-text.all-copy:active, .btn-text.all-delete:active, .btn-text.all-fav:active { opacity: 1; }
+        .btn-text.all-copy {
+            color: #3a7bd5;
+        }
+        .btn-text.all-delete {
+            color: #e74c6f;
+        }
+        .btn-text.all-fav {
+            color: #95a5a6;
+        }
+        .btn-text.all-copy:active,
+        .btn-text.all-delete:active,
+        .btn-text.all-fav:active {
+            opacity: 1;
+        }
 
         .action-row {
             display: flex;
@@ -209,7 +368,9 @@
             margin: 4px 0;
         }
 
-        .copy-btn, .fav-btn, .share-line-btn {
+        .copy-btn,
+        .fav-btn,
+        .share-line-btn {
             display: inline-block;
             margin-left: 6px;
             cursor: pointer;
@@ -222,8 +383,16 @@
             border: none;
             padding: 0;
         }
-        .copy-btn:hover, .fav-btn:hover, .share-line-btn:hover { opacity: 1; }
-        .copy-btn:active, .fav-btn:active, .share-line-btn:active { transform: scale(0.85); }
+        .copy-btn:hover,
+        .fav-btn:hover,
+        .share-line-btn:hover {
+            opacity: 1;
+        }
+        .copy-btn:active,
+        .fav-btn:active,
+        .share-line-btn:active {
+            transform: scale(0.85);
+        }
 
         .match-info {
             font-size: 10px;
@@ -267,7 +436,10 @@
             line-height: 40px;
             text-align: center;
         }
-        .btn-row .btn-group .btn-cycle:active { transform: scale(0.94); background: rgba(0,0,0,0.05); }
+        .btn-row .btn-group .btn-cycle:active {
+            transform: scale(0.94);
+            background: rgba(0, 0, 0, 0.05);
+        }
         .btn-row .btn-group .btn-cycle:disabled {
             color: #b0b8c4;
             cursor: not-allowed;
@@ -290,8 +462,12 @@
             border: none;
             font-family: inherit;
         }
-        .btn-row .btn-group .group-number:hover { background: rgba(58,123,213,0.08); }
-        .btn-row .btn-group .group-number:active { transform: scale(0.96); }
+        .btn-row .btn-group .group-number:hover {
+            background: rgba(58, 123, 213, 0.08);
+        }
+        .btn-row .btn-group .group-number:active {
+            transform: scale(0.96);
+        }
         .btn {
             flex: 1;
             padding: 0;
@@ -310,16 +486,44 @@
             line-height: 40px;
             min-width: 0;
         }
-        .btn:focus { outline: none; box-shadow: none; }
-        .btn:active { transform: scale(0.96); }
-        .btn-red { background: linear-gradient(135deg, #ff6b7a, #e74c6f); }
-        .btn-red:disabled { background: #d5dbe3; color: #aab3c0; pointer-events: none; transform: none; }
-        .btn-blue { background: linear-gradient(135deg, #6ab0ff, #3a7bd5); }
-        .btn-blue:disabled { background: #d5dbe3; color: #aab3c0; pointer-events: none; transform: none; }
-        .btn-smart { background: linear-gradient(135deg, #6ab0ff, #5dd9b2); }
-        .btn-retry { background: #f39c12; color: #fff; }
+        .btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-red {
+            background: linear-gradient(135deg, #ff6b7a, #e74c6f);
+        }
+        .btn-red:disabled {
+            background: #d5dbe3;
+            color: #aab3c0;
+            pointer-events: none;
+            transform: none;
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #6ab0ff, #3a7bd5);
+        }
+        .btn-blue:disabled {
+            background: #d5dbe3;
+            color: #aab3c0;
+            pointer-events: none;
+            transform: none;
+        }
+        .btn-smart {
+            background: linear-gradient(135deg, #6ab0ff, #5dd9b2);
+        }
+        .btn-retry {
+            background: #f39c12;
+            color: #fff;
+        }
 
-        .chart-container { padding: 12px 12px; width: 100%; background: #fcfdff; }
+        .chart-container {
+            padding: 12px 12px;
+            width: 100%;
+            background: #fcfdff;
+        }
         .table-container {
             background: #f8faff;
             border-radius: 12px;
@@ -344,7 +548,9 @@
             font-weight: normal;
             opacity: 0.6;
         }
-        .sub-title .clear-fav:active { opacity: 1; }
+        .sub-title .clear-fav:active {
+            opacity: 1;
+        }
         .stat-table {
             display: flex;
             flex-direction: column;
@@ -387,8 +593,14 @@
             font-weight: 700;
             color: #fff;
         }
-        .stat-ball.red { background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f); box-shadow: 0 2px 6px rgba(231,76,111,0.35); }
-        .stat-ball.blue { background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5); box-shadow: 0 2px 6px rgba(58,123,213,0.35); }
+        .stat-ball.red {
+            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
+        }
+        .stat-ball.blue {
+            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
+            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
+        }
         .stat-cell {
             flex: 1;
             display: flex;
@@ -400,9 +612,17 @@
             background: #f0f4fa;
             transition: background 0.2s;
         }
-        .stat-cell .value { font-size: 13px; font-weight: 600; color: #2c3e50; }
-        .stat-cell.freq { background: #fde8e8; }
-        .stat-cell.miss { background: #e8f0fe; }
+        .stat-cell .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .stat-cell.freq {
+            background: #fde8e8;
+        }
+        .stat-cell.miss {
+            background: #e8f0fe;
+        }
 
         .history-list {
             padding: 6px 0px 12px;
@@ -411,19 +631,6 @@
             -webkit-overflow-scrolling: touch;
             background: transparent;
         }
-        .history-row {
-            display: flex;
-            align-items: center;
-            flex-wrap: nowrap;
-            gap: 2px;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            width: max-content;
-            min-width: 100%;
-            justify-content: center;
-        }
-        .period { color: #2c3e50; font-size: 11px; min-width: 60px; flex-shrink: 0; }
-        .date { color: #7f8c9b; font-size: 10px; margin-left: 8px; flex-shrink: 0; }
 
         .history-meta {
             display: flex;
@@ -453,9 +660,19 @@
             -webkit-tap-highlight-color: transparent;
             outline: none;
         }
-        .history-meta .pagination button:active { transform: scale(0.94); }
-        .history-meta .pagination button:disabled { opacity: 0.4; pointer-events: none; }
-        .history-meta .pagination span { font-size: 11px; color: #2c3e50; min-width: 40px; text-align: center; }
+        .history-meta .pagination button:active {
+            transform: scale(0.94);
+        }
+        .history-meta .pagination button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .history-meta .pagination span {
+            font-size: 11px;
+            color: #2c3e50;
+            min-width: 40px;
+            text-align: center;
+        }
 
         .info-content {
             padding: 14px 16px 16px;
@@ -464,9 +681,18 @@
             line-height: 1.8;
             background: #fcfdff;
         }
-        .info-content .highlight-red { color: #e74c6f; font-weight: 600; }
-        .info-content .highlight-blue { color: #3a7bd5; font-weight: 600; }
-        .info-content .highlight-green { color: #3ab795; font-weight: 600; }
+        .info-content .highlight-red {
+            color: #e74c6f;
+            font-weight: 600;
+        }
+        .info-content .highlight-blue {
+            color: #3a7bd5;
+            font-weight: 600;
+        }
+        .info-content .highlight-green {
+            color: #3ab795;
+            font-weight: 600;
+        }
         .disclaimer {
             background: #fff3cd;
             border-left: 4px solid #f0ad4e;
@@ -477,7 +703,9 @@
             color: #856404;
         }
 
-        .range-row { padding: 10px 16px 14px; }
+        .range-row {
+            padding: 10px 16px 14px;
+        }
         .range-title {
             text-align: center;
             font-weight: 600;
@@ -492,7 +720,9 @@
             color: #7f8c9b;
             padding-bottom: 4px;
         }
-        .range-side-row .side-item { white-space: nowrap; }
+        .range-side-row .side-item {
+            white-space: nowrap;
+        }
 
         .range-track-wrap {
             position: relative;
@@ -524,7 +754,7 @@
             border-radius: 50%;
             background: #ffffff;
             border: 2.5px solid #3a7bd5;
-            box-shadow: 0 2px 8px rgba(58,123,213,0.30);
+            box-shadow: 0 2px 8px rgba(58, 123, 213, 0.30);
             transform: translate(-50%, -50%);
             cursor: grab;
             touch-action: none;
@@ -533,11 +763,15 @@
         }
         .range-thumb:active {
             cursor: grabbing;
-            box-shadow: 0 2px 12px rgba(58,123,213,0.45);
+            box-shadow: 0 2px 12px rgba(58, 123, 213, 0.45);
             border-color: #1e4f8a;
         }
-        .range-thumb-left { z-index: 3; }
-        .range-thumb-right { z-index: 3; }
+        .range-thumb-left {
+            z-index: 3;
+        }
+        .range-thumb-right {
+            z-index: 3;
+        }
 
         .range-info {
             display: flex;
@@ -546,7 +780,9 @@
             font-size: 10px;
             color: #7f8c9b;
         }
-        .range-info .mid { display: none; }
+        .range-info .mid {
+            display: none;
+        }
 
         .range-summary {
             text-align: center;
@@ -564,7 +800,7 @@
             font-size: 10px;
             text-align: center;
             padding: 6px 12px 10px;
-            border-top: 1px solid rgba(58,123,213,0.06);
+            border-top: 1px solid rgba(58, 123, 213, 0.06);
             background: #f8faff;
         }
 
@@ -579,14 +815,28 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-        .error-text { color: #e74c6f; text-align: center; font-size: 13px; padding: 8px 0; }
+        .error-text {
+            color: #e74c6f;
+            text-align: center;
+            font-size: 13px;
+            padding: 8px 0;
+        }
 
         .fav-section {
             margin-bottom: 12px;
         }
-        .fav-section:last-child { margin-bottom: 0; }
+        .fav-section:last-child {
+            margin-bottom: 0;
+        }
         .fav-section .sub-title {
             font-size: 12px;
             font-weight: 600;
@@ -607,1257 +857,1620 @@
         }
 
         @media (max-width: 420px) {
-            .btn { font-size: 11px; min-height: 36px; line-height: 36px; }
-            .btn-row .btn-group { min-height: 36px; }
-            .btn-row .btn-group .btn-cycle { line-height: 36px; font-size: 16px; }
-            .btn-row .btn-group .group-number { line-height: 36px; font-size: 12px; }
-            .ball, .placeholder-red, .placeholder-blue { width: 24px; height: 24px; font-size: 10px; }
-            .mode-row label { font-size: 12px; padding: 2px 8px; }
-            .stat-num { width: 28px; }
-            .stat-ball { width: 20px; height: 20px; font-size: 10px; }
-            .stat-cell .value { font-size: 12px; }
-            .range-title { font-size: 12px; }
-            .range-side-row { font-size: 9px; }
-            .range-info { font-size: 9px; }
-            .range-track { height: 20px; }
-            .range-thumb { width: 20px; height: 20px; }
-            .range-summary { font-size: 12px; margin-bottom: 10px; }
-            .btn-text { font-size: 11px; }
-            .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav { font-size: 9px; }
-            .title-bar .share-btn { font-size: 11px; padding: 2px 10px; }
+            .btn {
+                font-size: 11px;
+                min-height: 36px;
+                line-height: 36px;
+            }
+            .btn-row .btn-group {
+                min-height: 36px;
+            }
+            .btn-row .btn-group .btn-cycle {
+                line-height: 36px;
+                font-size: 16px;
+            }
+            .btn-row .btn-group .group-number {
+                line-height: 36px;
+                font-size: 12px;
+            }
+            .ball,
+            .placeholder-red,
+            .placeholder-blue {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+            .mode-row label {
+                font-size: 12px;
+                padding: 2px 8px;
+            }
+            .stat-num {
+                width: 28px;
+            }
+            .stat-ball {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+            .stat-cell .value {
+                font-size: 12px;
+            }
+            .range-title {
+                font-size: 12px;
+            }
+            .range-side-row {
+                font-size: 9px;
+            }
+            .range-info {
+                font-size: 9px;
+            }
+            .range-track {
+                height: 20px;
+            }
+            .range-thumb {
+                width: 20px;
+                height: 20px;
+            }
+            .range-summary {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+            .btn-text {
+                font-size: 11px;
+            }
+            .btn-text.all-copy,
+            .btn-text.all-delete,
+            .btn-text.all-fav {
+                font-size: 9px;
+            }
+
+            .number-line {
+                padding: 4px 48px;
+                gap: 2px;
+                min-height: 32px;
+            }
+            #favList .history-row {
+                padding: 4px 48px;
+                gap: 2px;
+                min-height: 32px;
+            }
+            #historyList .history-row {
+                padding: 5px 56px;
+                gap: 2px;
+                min-height: 34px;
+            }
+            #historyList .history-row .period {
+                font-size: 10px;
+                min-width: 40px;
+            }
+            #historyList .history-row .date {
+                font-size: 9px;
+                min-width: 40px;
+            }
+            .number-line .btn-text.fav {
+                font-size: 10px;
+            }
+            .number-line .btn-text.copy {
+                font-size: 10px;
+            }
+            #favList .history-row .btn-text.del {
+                font-size: 10px;
+            }
+            #favList .history-row .btn-text.copy {
+                font-size: 10px;
+            }
         }
         @media (max-width: 360px) {
-            .btn { font-size: 10px; min-height: 32px; line-height: 32px; }
-            .btn-row .btn-group { min-height: 32px; }
-            .btn-row .btn-group .btn-cycle { line-height: 32px; font-size: 14px; }
-            .btn-row .btn-group .group-number { line-height: 32px; font-size: 11px; }
-            .ball, .placeholder-red, .placeholder-blue { width: 20px; height: 20px; font-size: 9px; }
-            .sep { font-size: 10px; }
-            .stat-num { width: 24px; }
-            .stat-ball { width: 18px; height: 18px; font-size: 9px; }
-            .stat-cell .value { font-size: 11px; }
-            .range-title { font-size: 11px; }
-            .range-side-row { font-size: 8px; }
-            .range-info { font-size: 8px; }
-            .range-track { height: 18px; }
-            .range-thumb { width: 18px; height: 18px; }
-            .range-summary { font-size: 11px; margin-bottom: 8px; }
-            .btn-text { font-size: 10px; }
-            .btn-text.all-copy, .btn-text.all-delete, .btn-text.all-fav { font-size: 8px; }
-            .title-bar .share-btn { font-size: 10px; padding: 2px 8px; }
+            .btn {
+                font-size: 10px;
+                min-height: 32px;
+                line-height: 32px;
+            }
+            .btn-row .btn-group {
+                min-height: 32px;
+            }
+            .btn-row .btn-group .btn-cycle {
+                line-height: 32px;
+                font-size: 14px;
+            }
+            .btn-row .btn-group .group-number {
+                line-height: 32px;
+                font-size: 11px;
+            }
+            .ball,
+            .placeholder-red,
+            .placeholder-blue {
+                width: 20px;
+                height: 20px;
+                font-size: 9px;
+            }
+            .sep {
+                font-size: 10px;
+            }
+            .stat-num {
+                width: 24px;
+            }
+            .stat-ball {
+                width: 18px;
+                height: 18px;
+                font-size: 9px;
+            }
+            .stat-cell .value {
+                font-size: 11px;
+            }
+            .range-title {
+                font-size: 11px;
+            }
+            .range-side-row {
+                font-size: 8px;
+            }
+            .range-info {
+                font-size: 8px;
+            }
+            .range-track {
+                height: 18px;
+            }
+            .range-thumb {
+                width: 18px;
+                height: 18px;
+            }
+            .range-summary {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+            .btn-text {
+                font-size: 10px;
+            }
+            .btn-text.all-copy,
+            .btn-text.all-delete,
+            .btn-text.all-fav {
+                font-size: 8px;
+            }
+
+            .number-line {
+                padding: 3px 40px;
+                gap: 2px;
+                min-height: 28px;
+            }
+            #favList .history-row {
+                padding: 3px 40px;
+                gap: 2px;
+                min-height: 28px;
+            }
+            #historyList .history-row {
+                padding: 4px 46px;
+                gap: 2px;
+                min-height: 30px;
+            }
+            #historyList .history-row .period {
+                font-size: 9px;
+                min-width: 34px;
+            }
+            #historyList .history-row .date {
+                font-size: 8px;
+                min-width: 34px;
+            }
+            .number-line .btn-text.fav {
+                font-size: 9px;
+            }
+            .number-line .btn-text.copy {
+                font-size: 9px;
+            }
+            #favList .history-row .btn-text.del {
+                font-size: 9px;
+            }
+            #favList .history-row .btn-text.copy {
+                font-size: 9px;
+            }
         }
 
         @media (prefers-color-scheme: dark) {
-            body { background: #1a1e24; }
-            .card { background: #2a2e36; border-color: #3a3f4a; }
-            .title-bar { background: linear-gradient(135deg, #2b5ea7, #1e4a7a); }
-            .title-bar.secondary { background: linear-gradient(135deg, #4a7fbf, #2b5ea7); }
-            .title-bar.tertiary { background: linear-gradient(135deg, #3a6fb0, #1e4a7a); }
-            .title-bar.fourth { background: linear-gradient(135deg, #5a8fc0, #2b5ea7); }
-            .mode-row label { color: #c8d0dc; }
-            .result-box { background: #2f343e; }
-            .hint-text { color: #9aa5b5; }
-            .btn-row .btn-group { background: #3a3f4a; }
-            .btn-row .btn-group .btn-cycle { color: #c8d0dc; }
-            .btn-row .btn-group .btn-cycle:disabled { color: #6a7585; }
-            .btn-row .btn-group .group-number { color: #c8d0dc; }
-            .btn-red:disabled, .btn-blue:disabled { background: #3a3f4a; color: #6a7585; }
-            .chart-container { background: #2a2e36; }
-            .table-container { background: #2f343e; }
-            .table-container .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
-            .stat-row { background: #2a2e36; }
-            .stat-row.header { color: #c8d0dc; border-bottom-color: #3a3f4a; }
-            .stat-num { color: #c8d0dc; }
-            .stat-cell { background: #3a3f4a; }
-            .stat-cell .value { color: #c8d0dc; }
-            .stat-cell.freq { background: #4a2a2a; }
-            .stat-cell.miss { background: #2a3a4a; }
-            .history-row { border-bottom-color: #3a3f4a; }
-            .period { color: #c8d0dc; }
-            .date { color: #9aa5b5; }
-            .history-meta { color: #9aa5b5; }
-            .history-meta .pagination button { background: #3a3f4a; color: #c8d0dc; }
-            .history-meta .pagination span { color: #c8d0dc; }
-            .info-content { background: #2a2e36; color: #c8d0dc; }
-            .disclaimer { background: #3a2a1a; color: #d4a84a; border-left-color: #d4a84a; }
-            .range-title { color: #c8d0dc; }
-            .range-side-row { color: #9aa5b5; }
-            .range-track { background: #3a3f4a; }
-            .range-thumb { background: #2a2e36; border-color: #6ab0ff; }
-            .range-summary { background: #2f343e; color: #c8d0dc; border-bottom-color: #3a3f4a; }
-            .data-hint { color: #6ab0ff; border-top-color: #3a3f4a; background: #2f343e; }
-            .info-content .highlight-red { color: #ff6b7a; }
-            .info-content .highlight-blue { color: #6ab0ff; }
-            .info-content .highlight-green { color: #5dd9b2; }
-            .match-info { color: #c8d0dc; background: #3a3f4a; }
-            .btn-text.copy { color: #6ab0ff; }
-            .btn-text.copy.done { color: #2ecc71; }
-            .btn-text.fav { color: #7f8c8d; }
-            .btn-text.fav.active { color: #f1c40f; }
-            .btn-text.del { color: #ff6b7a; }
-            .btn-text.all-copy { color: #6ab0ff; }
-            .btn-text.all-delete { color: #ff6b7a; }
-            .btn-text.all-fav { color: #7f8c8d; }
-            .fav-section .sub-title { color: #c8d0dc; border-bottom-color: #3a3f4a; }
-            .ball.blue.unmatch, .ball.back.unmatch { filter: grayscale(1) brightness(0.7); }
+            body {
+                background: #1a1e24;
+            }
+            .card {
+                background: #2a2e36;
+                border-color: #3a3f4a;
+            }
+            .title-bar {
+                background: linear-gradient(135deg, #2b5ea7, #1e4a7a);
+            }
+            .title-bar.secondary {
+                background: linear-gradient(135deg, #4a7fbf, #2b5ea7);
+            }
+            .title-bar.tertiary {
+                background: linear-gradient(135deg, #3a6fb0, #1e4a7a);
+            }
+            .title-bar.fourth {
+                background: linear-gradient(135deg, #5a8fc0, #2b5ea7);
+            }
+            .mode-row label {
+                color: #c8d0dc;
+            }
+            .result-box {
+                background: #2f343e;
+            }
+            .hint-text {
+                color: #9aa5b5;
+            }
+            .btn-row .btn-group {
+                background: #3a3f4a;
+            }
+            .btn-row .btn-group .btn-cycle {
+                color: #c8d0dc;
+            }
+            .btn-row .btn-group .btn-cycle:disabled {
+                color: #6a7585;
+            }
+            .btn-row .btn-group .group-number {
+                color: #c8d0dc;
+            }
+            .btn-red:disabled,
+            .btn-blue:disabled {
+                background: #3a3f4a;
+                color: #6a7585;
+            }
+            .chart-container {
+                background: #2a2e36;
+            }
+            .table-container {
+                background: #2f343e;
+            }
+            .table-container .sub-title {
+                color: #c8d0dc;
+                border-bottom-color: #3a3f4a;
+            }
+            .stat-row {
+                background: #2a2e36;
+            }
+            .stat-row.header {
+                color: #c8d0dc;
+                border-bottom-color: #3a3f4a;
+            }
+            .stat-num {
+                color: #c8d0dc;
+            }
+            .stat-cell {
+                background: #3a3f4a;
+            }
+            .stat-cell .value {
+                color: #c8d0dc;
+            }
+            .stat-cell.freq {
+                background: #4a2a2a;
+            }
+            .stat-cell.miss {
+                background: #2a3a4a;
+            }
+            #historyList .history-row {
+                border-bottom-color: #3a3f4a;
+            }
+            #historyList .history-row .period {
+                color: #c8d0dc;
+            }
+            #historyList .history-row .date {
+                color: #9aa5b5;
+            }
+            #favList .history-row {
+                border-bottom-color: #3a3f4a;
+            }
+            .history-meta {
+                color: #9aa5b5;
+            }
+            .history-meta .pagination button {
+                background: #3a3f4a;
+                color: #c8d0dc;
+            }
+            .history-meta .pagination span {
+                color: #c8d0dc;
+            }
+            .info-content {
+                background: #2a2e36;
+                color: #c8d0dc;
+            }
+            .disclaimer {
+                background: #3a2a1a;
+                color: #d4a84a;
+                border-left-color: #d4a84a;
+            }
+            .range-title {
+                color: #c8d0dc;
+            }
+            .range-side-row {
+                color: #9aa5b5;
+            }
+            .range-track {
+                background: #3a3f4a;
+            }
+            .range-thumb {
+                background: #2a2e36;
+                border-color: #6ab0ff;
+            }
+            .range-summary {
+                background: #2f343e;
+                color: #c8d0dc;
+                border-bottom-color: #3a3f4a;
+            }
+            .data-hint {
+                color: #6ab0ff;
+                border-top-color: #3a3f4a;
+                background: #2f343e;
+            }
+            .info-content .highlight-red {
+                color: #ff6b7a;
+            }
+            .info-content .highlight-blue {
+                color: #6ab0ff;
+            }
+            .info-content .highlight-green {
+                color: #5dd9b2;
+            }
+            .match-info {
+                color: #c8d0dc;
+                background: #3a3f4a;
+            }
+            .btn-text.copy {
+                color: #6ab0ff;
+            }
+            .btn-text.copy.done {
+                color: #2ecc71;
+            }
+            .btn-text.fav {
+                color: #7f8c8d;
+            }
+            .btn-text.fav.active {
+                color: #f1c40f;
+            }
+            .btn-text.del {
+                color: #ff6b7a;
+            }
+            .btn-text.all-copy {
+                color: #6ab0ff;
+            }
+            .btn-text.all-delete {
+                color: #ff6b7a;
+            }
+            .btn-text.all-fav {
+                color: #7f8c8d;
+            }
+            .fav-section .sub-title {
+                color: #c8d0dc;
+                border-bottom-color: #3a3f4a;
+            }
+            .ball.blue.unmatch,
+            .ball.back.unmatch {
+                filter: grayscale(1) brightness(0.7);
+            }
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <!-- 我的收藏 - 移到最顶部 -->
-    <div class="card" id="favoritesCard" style="display:none;">
-        <div class="title-bar tertiary">我的收藏</div>
-        <div class="table-container" style="padding-bottom:4px;">
-            <div id="favList"></div>
+    <div class="app-container">
+        <div class="card" id="favoritesCard" style="display:none;">
+            <div class="title-bar tertiary">我的收藏</div>
+            <div class="table-container" style="padding-bottom:4px;">
+                <div id="favList"></div>
+            </div>
         </div>
-    </div>
 
-    <div class="card">
-        <div class="title-bar">
-            ~急急如律令~
-            <button class="share-btn" id="shareAllBtn">分享</button>
-        </div>
-        <div class="mode-row">
-            <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
-            <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
-        </div>
-        <div class="result-box" id="resultArea">
-            <div class="hint-text">⏳ 加载数据中...</div>
-        </div>
-        <div class="btn-row">
-            <div class="btn-group">
-                <button class="btn-cycle" id="decBtn">−</button>
-                <button class="group-number" id="resetBtn">重置</button>
-                <button class="btn-cycle" id="incBtn">+</button>
+        <div class="card">
+            <div class="title-bar">
+                ~急急如律令~
             </div>
-            <button class="btn btn-red" id="refreshBtn">天命所归</button>
-            <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
-        </div>
-        <div class="btn-row">
-            <button class="btn btn-smart" id="smartBtn">智能推荐</button>
-            <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
-            <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
-        </div>
-        <div class="range-row">
-            <div class="range-title">推荐号码参考数据范围</div>
-            <div class="range-side-row">
-                <span class="side-item" id="leftInfo"><span id="leftText">第1期 20260616</span></span>
-                <span class="side-item" id="rightInfo"><span id="rightText">20030223 第3465期</span></span>
+            <div class="mode-row">
+                <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
+                <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
             </div>
-            <div class="range-track-wrap" id="rangeTrackWrap">
-                <div class="range-track" id="rangeTrack">
-                    <div class="range-fill" id="rangeFill"></div>
-                    <div class="range-thumb range-thumb-left" id="thumbLeft"></div>
-                    <div class="range-thumb range-thumb-right" id="thumbRight"></div>
+            <div class="result-box" id="resultArea">
+                <div class="hint-text">⏳ 加载数据中...</div>
+            </div>
+            <div class="btn-row">
+                <div class="btn-group">
+                    <button class="btn-cycle" id="decBtn">−</button>
+                    <button class="group-number" id="resetBtn">重置</button>
+                    <button class="btn-cycle" id="incBtn">+</button>
                 </div>
-                <div class="range-info"><span class="mid" id="midInfo"></span></div>
+                <button class="btn btn-red" id="refreshBtn">天命所归</button>
+                <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-smart" id="smartBtn">智能推荐</button>
+                <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
+                <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
+            </div>
+            <div class="range-row">
+                <div class="range-title">推荐号码参考数据范围</div>
+                <div class="range-side-row">
+                    <span class="side-item" id="leftInfo"><span id="leftText">第1期 20260616</span></span>
+                    <span class="side-item" id="rightInfo"><span id="rightText">20030223 第3465期</span></span>
+                </div>
+                <div class="range-track-wrap" id="rangeTrackWrap">
+                    <div class="range-track" id="rangeTrack">
+                        <div class="range-fill" id="rangeFill"></div>
+                        <div class="range-thumb range-thumb-left" id="thumbLeft"></div>
+                        <div class="range-thumb range-thumb-right" id="thumbRight"></div>
+                    </div>
+                    <div class="range-info"><span class="mid" id="midInfo"></span></div>
+                </div>
+            </div>
+            <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar secondary">数据详情</div>
+            <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
+            <div class="table-container" id="detailResultContainer">
+                <div class="sub-title">开奖号码明细</div>
+                <div id="detailResultArea" style="display:none;"></div>
+                <div class="history-list" id="historyList"></div>
+                <div class="history-meta" id="historyMeta">
+                    <span class="pagination">
+                        <button id="prevPageBtn" disabled>上一页</button>
+                        <span id="pageInfo">1/10</span>
+                        <button id="nextPageBtn">下一页</button>
+                    </span>
+                </div>
+                <div style="border-bottom:1px solid #e8edf5; margin-top:8px;"></div>
+            </div>
+            <div class="chart-container" id="tableContainer">
+                <div id="frontTableContainer" class="table-container"></div>
+                <div id="backTableContainer" class="table-container"></div>
             </div>
         </div>
-        <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
-    </div>
 
-    <div class="card">
-        <div class="title-bar secondary">数据详情</div>
-        <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
-        <div class="table-container" id="detailResultContainer">
-            <div class="sub-title">开奖号码明细</div>
-            <div id="detailResultArea" style="display:none;"></div>
-            <div class="history-list" id="historyList"></div>
-            <div class="history-meta" id="historyMeta">
-                <span class="pagination">
-                    <button id="prevPageBtn" disabled>上一页</button>
-                    <span id="pageInfo">1/10</span>
-                    <button id="nextPageBtn">下一页</button>
-                </span>
+        <div class="card">
+            <div class="title-bar fourth">功能说明</div>
+            <div class="info-content">
+                <div class="disclaimer">⚠️ 本工具仅供娱乐，所有号码均为随机生成，不构成任何投注建议。请理性对待，切勿沉迷。</div>
+                <p><span class="highlight-red">天命所归</span> —— 完全随机生成，听天由命。</p>
+                <p><span class="highlight-blue">逆天改命</span> —— 排除天命所归生成的号码，另辟蹊径。</p>
+                <p><span class="highlight-green">智能推荐</span> —— 冷热均衡策略，兼顾频率与遗漏。</p>
+                <p><span class="highlight-red">追冷推荐</span> —— 侧重高遗漏号码，博冷门。</p>
+                <p><span class="highlight-blue">追热推荐</span> —— 侧重高频号码，跟热门。</p>
+                <p style="margin-top:6px; color:#7f8c9b; font-size:11px;">数据基于真实历史开奖记录，每次推荐均从当期数据中动态计算。</p>
+                <p style="margin-top:6px; color:#2c3e50; font-size:11px;">频次与遗漏数据采样原理：基于所选参考范围内的历史开奖记录，统计每个号码出现的次数（频次）以及自上次出现以来未出现的期数（遗漏）。所有推荐算法均基于这些统计值动态加权计算。</p>
             </div>
-            <div style="border-bottom:1px solid #e8edf5; margin-top:8px;"></div>
-        </div>
-        <div class="chart-container" id="tableContainer">
-            <div id="frontTableContainer" class="table-container"></div>
-            <div id="backTableContainer" class="table-container"></div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="title-bar fourth">功能说明</div>
-        <div class="info-content">
-            <div class="disclaimer">⚠️ 本工具仅供娱乐，所有号码均为随机生成，不构成任何投注建议。请理性对待，切勿沉迷。</div>
-            <p><span class="highlight-red">天命所归</span> —— 完全随机生成，听天由命。</p>
-            <p><span class="highlight-blue">逆天改命</span> —— 排除天命所归生成的号码，另辟蹊径。</p>
-            <p><span class="highlight-green">智能推荐</span> —— 冷热均衡策略，兼顾频率与遗漏。</p>
-            <p><span class="highlight-red">追冷推荐</span> —— 侧重高遗漏号码，博冷门。</p>
-            <p><span class="highlight-blue">追热推荐</span> —— 侧重高频号码，跟热门。</p>
-            <p style="margin-top:6px; color:#7f8c9b; font-size:11px;">数据基于真实历史开奖记录，每次推荐均从当期数据中动态计算。</p>
-            <p style="margin-top:6px; color:#2c3e50; font-size:11px;">频次与遗漏数据采样原理：基于所选参考范围内的历史开奖记录，统计每个号码出现的次数（频次）以及自上次出现以来未出现的期数（遗漏）。所有推荐算法均基于这些统计值动态加权计算。</p>
-        </div>
-    </div>
-</div>
+    <script>
+        (function() {
+            const CONFIG = {
+                ssq: { front: 33, back: 16, frontCount: 6, backCount: 1, label: '双色球' },
+                dlt: { front: 35, back: 12, frontCount: 5, backCount: 2, label: '大乐透' }
+            };
 
-<script>
-    (function(){
-        const CONFIG = {
-            ssq: { front: 33, back: 16, frontCount: 6, backCount: 1, label: '双色球' },
-            dlt: { front: 35, back: 12, frontCount: 5, backCount: 2, label: '大乐透' }
-        };
+            const PAGE_SIZE = 10;
+            let currentMode = 'ssq';
+            let groups = 1;
+            let currentPage = 1;
+            let SSQ_DATA = [];
+            let DLT_DATA = [];
+            let trendCache = { ssq: null, dlt: null };
+            let historyStore = { ssq: [], dlt: [] };
+            let rangeStart = 1,
+                rangeEnd = 1,
+                totalPeriods = 1;
+            let isDragging = false,
+                dragTarget = null;
+            let lastExcludeReds = [],
+                lastExcludeBlues = [],
+                lastGeneratedGroups = 1;
+            let isLoading = false;
+            let lastGeneratedGroupsData = [];
+            let lastRecommendReason = '';
+            let hasGeneratedNumbers = false;
 
-        const PAGE_SIZE = 10;
-        let currentMode = 'ssq';
-        let groups = 1;
-        let currentPage = 1;
-        let SSQ_DATA = [];
-        let DLT_DATA = [];
-        let trendCache = { ssq: null, dlt: null };
-        let historyStore = { ssq: [], dlt: [] };
-        let rangeStart = 1, rangeEnd = 1, totalPeriods = 1;
-        let isDragging = false, dragTarget = null;
-        let lastExcludeReds = [], lastExcludeBlues = [], lastGeneratedGroups = 1;
-        let isLoading = false;
-        let lastGeneratedGroupsData = [];
-        let lastRecommendReason = '';
-        let hasGeneratedNumbers = false;
+            const $ = id => document.getElementById(id);
+            const resultArea = $('resultArea');
+            const detailResultArea = $('detailResultArea');
+            const historyList = $('historyList');
+            const pageInfo = $('pageInfo');
+            const prevPageBtn = $('prevPageBtn');
+            const nextPageBtn = $('nextPageBtn');
+            const dataStatus = $('dataStatus');
+            const specificBtn = $('specificBtn');
+            const resetBtn = $('resetBtn');
+            const decBtn = $('decBtn');
+            const incBtn = $('incBtn');
+            const frontTable = $('frontTableContainer');
+            const backTable = $('backTableContainer');
+            const rangeSummary = $('rangeSummary');
+            const thumbLeft = $('thumbLeft');
+            const thumbRight = $('thumbRight');
+            const rangeTrack = $('rangeTrack');
+            const rangeFill = $('rangeFill');
+            const leftText = $('leftText');
+            const rightText = $('rightText');
+            const favList = $('favList');
+            const favoritesCard = $('favoritesCard');
 
-        const $ = id => document.getElementById(id);
-        const resultArea = $('resultArea');
-        const detailResultArea = $('detailResultArea');
-        const historyList = $('historyList');
-        const pageInfo = $('pageInfo');
-        const prevPageBtn = $('prevPageBtn');
-        const nextPageBtn = $('nextPageBtn');
-        const dataStatus = $('dataStatus');
-        const specificBtn = $('specificBtn');
-        const resetBtn = $('resetBtn');
-        const decBtn = $('decBtn');
-        const incBtn = $('incBtn');
-        const frontTable = $('frontTableContainer');
-        const backTable = $('backTableContainer');
-        const rangeSummary = $('rangeSummary');
-        const thumbLeft = $('thumbLeft');
-        const thumbRight = $('thumbRight');
-        const rangeTrack = $('rangeTrack');
-        const rangeFill = $('rangeFill');
-        const leftText = $('leftText');
-        const rightText = $('rightText');
-        const favList = $('favList');
-        const favoritesCard = $('favoritesCard');
+            function rand(n) { const arr = new Uint32Array(1);
+                crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
 
-        function rand(n) { const arr = new Uint32Array(1); crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
-
-        function pickUnique(count, max, excludeSet) {
-            const pool = [];
-            for (let i=1; i<=max; i++) if (!excludeSet?.has(i)) pool.push(i);
-            if (pool.length < count) return pickUnique(count, max, new Set());
-            const result = [], used = new Set();
-            while (result.length < count) {
-                const idx = rand(pool.length)-1, val = pool[idx];
-                if (!used.has(val)) { used.add(val); result.push(val); }
-            }
-            return result.sort((a,b)=>a-b);
-        }
-
-        function pad(n) { return n<10 ? '0'+n : ''+n; }
-
-        function rollingAnimation(lines, groupsData, isSSQ, callback) {
-            let completed = 0;
-            const total = lines.length;
-            if (total === 0) { callback(); return; }
-            const rollCount = 10;
-            lines.forEach((line, idx) => {
-                const balls = line.querySelectorAll('.ball');
-                const data = groupsData[idx];
-                if (!data) { completed++; if (completed === total) callback(); return; }
-                let counter = 0;
-                const interval = setInterval(() => {
-                    balls.forEach((ball, bi) => {
-                        const maxVal = bi < data.reds.length ? (isSSQ ? 33 : 35) : (isSSQ ? 16 : 12);
-                        const randNum = Math.floor(Math.random() * maxVal) + 1;
-                        ball.textContent = pad(randNum);
-                        ball.classList.add('rolling');
-                    });
-                    counter++;
-                    if (counter >= rollCount) {
-                        clearInterval(interval);
-                        balls.forEach((ball, bi) => {
-                            ball.classList.remove('rolling');
-                            const val = bi < data.reds.length ? data.reds[bi] : data.blues[bi - data.reds.length];
-                            ball.textContent = pad(val);
-                            ball.classList.add('done');
-                        });
-                        completed++;
-                        if (completed === total) callback();
-                    }
-                }, 55);
-            });
-        }
-
-        function genSSQ(exReds, exBlues) {
-            const rs = new Set(exReds||[]), bs = new Set(exBlues||[]);
-            return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq.backCount, CONFIG.ssq.back, bs) };
-        }
-        function genDLT(exReds, exBlues) {
-            const rs = new Set(exReds||[]), bs = new Set(exBlues||[]);
-            return { reds: pickUnique(CONFIG.dlt.frontCount, CONFIG.dlt.front, rs), blues: pickUnique(CONFIG.dlt.backCount, CONFIG.dlt.back, bs) };
-        }
-
-        function parseBuiltinData(type, rawArray) {
-            const records = [];
-            for (let line of rawArray) {
-                const parts = line.split('|');
-                if (parts.length<4) continue;
-                const issue = parts[0].trim(), date = parts[1].trim();
-                const reds = parts[2].trim().split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n)&&n>0);
-                const blues = parts[3].trim().split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n)&&n>0);
-                if (!reds.length || !blues.length) continue;
-                const cfg = CONFIG[type];
-                if (reds.length!==cfg.frontCount || blues.length!==cfg.backCount) continue;
-                if (reds.some(n=>n<1||n>cfg.front) || blues.some(n=>n<1||n>cfg.back)) continue;
-                records.push({ issue, date, reds: reds.slice().sort((a,b)=>a-b), blues: blues.slice().sort((a,b)=>a-b) });
-            }
-            records.sort((a,b)=> a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
-            return records;
-        }
-
-        function getCachedData(type) {
-            try {
-                const raw = localStorage.getItem('lotteryData_'+type);
-                if (!raw) return null;
-                const data = JSON.parse(raw);
-                if (data && data.timestamp && (Date.now() - data.timestamp < 86400000)) {
-                    return data.records;
+            function pickUnique(count, max, excludeSet) {
+                const pool = [];
+                for (let i = 1; i <= max; i++)
+                    if (!excludeSet?.has(i)) pool.push(i);
+                if (pool.length < count) return pickUnique(count, max, new Set());
+                const result = [],
+                    used = new Set();
+                while (result.length < count) {
+                    const idx = rand(pool.length) - 1,
+                        val = pool[idx];
+                    if (!used.has(val)) { used.add(val);
+                        result.push(val); }
                 }
-                return null;
-            } catch(e){ return null; }
-        }
-
-        function setCachedData(type, records) {
-            try {
-                localStorage.setItem('lotteryData_'+type, JSON.stringify({ timestamp: Date.now(), records }));
-            } catch(e){}
-        }
-
-        async function fetchRemoteData(type) {
-            const url = type==='ssq' ? 'https://magua-qi.github.io/ssqdata.html' : 'https://magua-qi.github.io/dltdata.html';
-            const resp = await fetch(url);
-            if (!resp.ok) throw new Error('网络请求失败');
-            const html = await resp.text();
-            const varName = type==='ssq' ? 'SSQ_DATA' : 'DLT_DATA';
-            const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
-            const match = html.match(regex);
-            if (!match) throw new Error('数据解析失败');
-            let cleaned = match[1].replace(/\/\/.*$/gm, '');
-            const fn = new Function(`return [${cleaned}];`);
-            const raw = fn();
-            if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
-            const records = parseBuiltinData(type, raw);
-            setCachedData(type, records);
-            return records;
-        }
-
-        async function getData(type) {
-            const cached = getCachedData(type);
-            if (cached && cached.length) return cached;
-            return await fetchRemoteData(type);
-        }
-
-        function showSkeleton() {
-            resultArea.innerHTML = `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
-        }
-
-        async function loadAllData(showLoading = true) {
-            if (isLoading) return;
-            isLoading = true;
-            if (showLoading) {
-                showSkeleton();
-                dataStatus.textContent = '正在加载数据...';
+                return result.sort((a, b) => a - b);
             }
-            try {
-                const [ssqRecords, dltRecords] = await Promise.all([
-                    getData('ssq'),
-                    getData('dlt')
-                ]);
-                SSQ_DATA = ssqRecords;
-                DLT_DATA = dltRecords;
-                trendCache.ssq = null;
-                trendCache.dlt = null;
-                showHint();
-                initRangeSlider();
-                dataStatus.textContent = '拖动左右滑块选择数据，已选择' + (rangeEnd-rangeStart+1) + '期，可在数据详情中查看';
-                isLoading = false;
-                renderFavorites();
-                updateResetState(true);
-            } catch (err) {
-                console.error('加载数据失败:', err);
-                resultArea.innerHTML = `<div class="error-text">数据加载失败，请检查网络</div>
+
+            function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+            function rollingAnimation(lines, groupsData, isSSQ, callback) {
+                let completed = 0;
+                const total = lines.length;
+                if (total === 0) { callback(); return; }
+                const rollCount = 10;
+                lines.forEach((line, idx) => {
+                    const balls = line.querySelectorAll('.ball');
+                    const data = groupsData[idx];
+                    if (!data) { completed++; if (completed === total) callback(); return; }
+                    let counter = 0;
+                    const interval = setInterval(() => {
+                        balls.forEach((ball, bi) => {
+                            const maxVal = bi < data.reds.length ? (isSSQ ? 33 : 35) : (isSSQ ? 16 : 12);
+                            const randNum = Math.floor(Math.random() * maxVal) + 1;
+                            ball.textContent = pad(randNum);
+                            ball.classList.add('rolling');
+                        });
+                        counter++;
+                        if (counter >= rollCount) {
+                            clearInterval(interval);
+                            balls.forEach((ball, bi) => {
+                                ball.classList.remove('rolling');
+                                const val = bi < data.reds.length ? data.reds[bi] : data.blues[bi - data
+                                    .reds.length];
+                                ball.textContent = pad(val);
+                                ball.classList.add('done');
+                            });
+                            completed++;
+                            if (completed === total) callback();
+                        }
+                    }, 55);
+                });
+            }
+
+            function genSSQ(exReds, exBlues) {
+                const rs = new Set(exReds || []),
+                    bs = new Set(exBlues || []);
+                return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq
+                        .backCount, CONFIG.ssq.back, bs) };
+            }
+
+            function genDLT(exReds, exBlues) {
+                const rs = new Set(exReds || []),
+                    bs = new Set(exBlues || []);
+                return { reds: pickUnique(CONFIG.dlt.frontCount, CONFIG.dlt.front, rs), blues: pickUnique(CONFIG.dlt
+                        .backCount, CONFIG.dlt.back, bs) };
+            }
+
+            function parseBuiltinData(type, rawArray) {
+                const records = [];
+                for (let line of rawArray) {
+                    const parts = line.split('|');
+                    if (parts.length < 4) continue;
+                    const issue = parts[0].trim(),
+                        date = parts[1].trim();
+                    const reds = parts[2].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
+                        0);
+                    const blues = parts[3].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
+                        0);
+                    if (!reds.length || !blues.length) continue;
+                    const cfg = CONFIG[type];
+                    if (reds.length !== cfg.frontCount || blues.length !== cfg.backCount) continue;
+                    if (reds.some(n => n < 1 || n > cfg.front) || blues.some(n => n < 1 || n > cfg.back)) continue;
+                    records.push({ issue, date, reds: reds.slice().sort((a, b) => a - b), blues: blues.slice().sort((a,
+                            b) => a - b) });
+                }
+                records.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
+                return records;
+            }
+
+            function getCachedData(type) {
+                try {
+                    const raw = localStorage.getItem('lotteryData_' + type);
+                    if (!raw) return null;
+                    const data = JSON.parse(raw);
+                    if (data && data.timestamp && (Date.now() - data.timestamp < 86400000)) {
+                        return data.records;
+                    }
+                    return null;
+                } catch (e) { return null; }
+            }
+
+            function setCachedData(type, records) {
+                try {
+                    localStorage.setItem('lotteryData_' + type, JSON.stringify({ timestamp: Date.now(), records }));
+                } catch (e) {}
+            }
+
+            async function fetchRemoteData(type) {
+                const url = type === 'ssq' ? 'https://magua-qi.github.io/ssqdata.html' :
+                'https://magua-qi.github.io/dltdata.html';
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error('网络请求失败');
+                const html = await resp.text();
+                const varName = type === 'ssq' ? 'SSQ_DATA' : 'DLT_DATA';
+                const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
+                const match = html.match(regex);
+                if (!match) throw new Error('数据解析失败');
+                let cleaned = match[1].replace(/\/\/.*$/gm, '');
+                const fn = new Function(`return [${cleaned}];`);
+                const raw = fn();
+                if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
+                const records = parseBuiltinData(type, raw);
+                setCachedData(type, records);
+                return records;
+            }
+
+            async function getData(type) {
+                const cached = getCachedData(type);
+                if (cached && cached.length) return cached;
+                return await fetchRemoteData(type);
+            }
+
+            function showSkeleton() {
+                resultArea.innerHTML =
+                `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
+            }
+
+            async function loadAllData(showLoading = true) {
+                if (isLoading) return;
+                isLoading = true;
+                if (showLoading) {
+                    showSkeleton();
+                    dataStatus.textContent = '正在加载数据...';
+                }
+                try {
+                    const [ssqRecords, dltRecords] = await Promise.all([
+                        getData('ssq'),
+                        getData('dlt')
+                    ]);
+                    SSQ_DATA = ssqRecords;
+                    DLT_DATA = dltRecords;
+                    trendCache.ssq = null;
+                    trendCache.dlt = null;
+                    showHint();
+                    initRangeSlider();
+                    dataStatus.textContent = '拖动左右滑块选择数据，已选择' + (rangeEnd - rangeStart + 1) + '期，可在数据详情中查看';
+                    isLoading = false;
+                    renderFavorites();
+                    updateResetState(true);
+                } catch (err) {
+                    console.error('加载数据失败:', err);
+                    resultArea.innerHTML =
+                        `<div class="error-text">数据加载失败，请检查网络</div>
                                         <button class="btn btn-retry" id="retryBtn" style="margin-top:8px;">重试</button>`;
-                dataStatus.textContent = '数据加载失败，点击重试';
-                isLoading = false;
-                document.getElementById('retryBtn')?.addEventListener('click', ()=> loadAllData(true));
+                    dataStatus.textContent = '数据加载失败，点击重试';
+                    isLoading = false;
+                    document.getElementById('retryBtn')?.addEventListener('click', () => loadAllData(true));
+                }
             }
-        }
 
-        function vibrate(ms) {
-            if (navigator.vibrate) navigator.vibrate(ms);
-        }
-
-        function updateResetState(resetMode) {
-            hasGeneratedNumbers = !resetMode;
-            if (resetMode) {
-                decBtn.disabled = false;
-                incBtn.disabled = false;
-                decBtn.style.color = '';
-                incBtn.style.color = '';
-                resetBtn.textContent = '重置';
-            } else {
-                decBtn.disabled = true;
-                incBtn.disabled = true;
-                decBtn.style.color = '#b0b8c4';
-                incBtn.style.color = '#b0b8c4';
-                resetBtn.textContent = '重置';
+            function vibrate(ms) {
+                if (navigator.vibrate) navigator.vibrate(ms);
             }
-        }
 
-        function resetNumbers() {
-            lastGeneratedGroupsData = [];
-            lastExcludeReds = [];
-            lastExcludeBlues = [];
-            lastRecommendReason = '';
-            showHint();
-            specificBtn.disabled = true;
-            specificBtn.className = 'btn btn-blue';
-            updateResetState(true);
-            renderHistory();
-        }
-
-        function getNumberText(d, isSSQ) {
-            return (isSSQ?'红球':'前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + d.blues.map(pad).join(' ');
-        }
-
-        function isFavorited(mode, nums) {
-            const favs = getFavorites();
-            return favs.some(item => item.mode === mode && 
-                item.nums.reds.length === nums.reds.length && 
-                item.nums.blues.length === nums.blues.length &&
-                item.nums.reds.every((v,i)=>v===nums.reds[i]) &&
-                item.nums.blues.every((v,i)=>v===nums.blues[i]));
-        }
-
-        function toggleFavorite(mode, nums) {
-            const favs = getFavorites();
-            const idx = favs.findIndex(item => item.mode === mode && 
-                item.nums.reds.length === nums.reds.length && 
-                item.nums.blues.length === nums.blues.length &&
-                item.nums.reds.every((v,i)=>v===nums.reds[i]) &&
-                item.nums.blues.every((v,i)=>v===nums.blues[i]));
-            if (idx !== -1) {
-                favs.splice(idx, 1);
-            } else {
-                favs.push({ mode, nums, time: Date.now() });
+            function updateResetState(resetMode) {
+                hasGeneratedNumbers = !resetMode;
+                if (resetMode) {
+                    decBtn.disabled = false;
+                    incBtn.disabled = false;
+                    decBtn.style.color = '';
+                    incBtn.style.color = '';
+                    resetBtn.textContent = '重置';
+                } else {
+                    decBtn.disabled = true;
+                    incBtn.disabled = true;
+                    decBtn.style.color = '#b0b8c4';
+                    incBtn.style.color = '#b0b8c4';
+                    resetBtn.textContent = '重置';
+                }
             }
-            setFavorites(favs);
-            renderFavorites();
-            return idx === -1;
-        }
 
-        function displayResult(groupsData, mode, reason) {
-            const isSSQ = mode === 'ssq';
-            let html = '';
-            const allReds = [], allBlues = [];
-            groupsData.forEach(d => {
-                allReds.push(...d.reds); allBlues.push(...d.blues);
-            });
-            lastExcludeReds = [...new Set(allReds)];
-            lastExcludeBlues = [...new Set(allBlues)];
-            lastGeneratedGroups = groupsData.length;
+            function resetNumbers() {
+                lastGeneratedGroupsData = [];
+                lastExcludeReds = [];
+                lastExcludeBlues = [];
+                lastRecommendReason = '';
+                showHint();
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+                updateResetState(true);
+                renderHistory();
+            }
 
-            groupsData.forEach((d, idx) => {
-                const isFav = isFavorited(mode, d);
-                html += '<div class="number-line">';
-                html += `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
-                d.reds.forEach(n=> html+=`<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
-                html += '<span class="sep">+</span>';
-                d.blues.forEach(n=> html+=`<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
-                const numsStr = getNumberText(d, isSSQ);
-                html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
-                html += '</div>';
-            });
+            function getNumberText(d, isSSQ) {
+                return (isSSQ ? '红球' : '前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ ? '蓝球' : '后区') + ':' + d
+                    .blues.map(pad).join(' ');
+            }
 
-            // 单独一行放置收藏全部和全部复制
-            html += `<div class="action-row">
+            function isFavorited(mode, nums) {
+                const favs = getFavorites();
+                return favs.some(item => item.mode === mode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]));
+            }
+
+            function toggleFavorite(mode, nums) {
+                const favs = getFavorites();
+                const idx = favs.findIndex(item => item.mode === mode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]));
+                if (idx !== -1) {
+                    favs.splice(idx, 1);
+                } else {
+                    favs.push({ mode, nums, time: Date.now() });
+                }
+                setFavorites(favs);
+                renderFavorites();
+                return idx === -1;
+            }
+
+            function displayResult(groupsData, mode, reason) {
+                const isSSQ = mode === 'ssq';
+                let html = '';
+                const allReds = [],
+                    allBlues = [];
+                groupsData.forEach(d => {
+                    allReds.push(...d.reds);
+                    allBlues.push(...d.blues);
+                });
+                lastExcludeReds = [...new Set(allReds)];
+                lastExcludeBlues = [...new Set(allBlues)];
+                lastGeneratedGroups = groupsData.length;
+
+                groupsData.forEach((d, idx) => {
+                    const isFav = isFavorited(mode, d);
+                    html += '<div class="number-line">';
+                    html +=
+                        `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
+                    d.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                    html += '<span class="sep">+</span>';
+                    d.blues.forEach(n => html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                    const numsStr = getNumberText(d, isSSQ);
+                    html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
+                    html += '</div>';
+                });
+
+                html += `<div class="action-row">
                 <span class="btn-text all-fav" id="allFavBtn">全部收藏</span>
                 <span class="btn-text all-copy" id="allCopyBtn2">复制全部</span>
             </div>`;
 
-            const matchInfo = getMatchInfo(groupsData);
-            if (matchInfo) {
-                html += `<div class="match-info">${matchInfo}</div>`;
-            } else {
-                html += `<div class="match-info" style="justify-content:center;"><span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span></div>`;
-            }
+                const matchInfo = getMatchInfo(groupsData);
+                if (matchInfo) {
+                    html += `<div class="match-info">${matchInfo}</div>`;
+                } else {
+                    html +=
+                        `<div class="match-info" style="justify-content:center;"><span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span></div>`;
+                }
 
-            if (reason) {
-                html += `<div class="hint-text" style="font-size:10px; margin-top:4px; color:#3a7bd5;">${reason}</div>`;
-            } else {
-                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">要的就是这些号码！</div>`;
-            }
+                if (reason) {
+                    html += `<div class="hint-text" style="font-size:10px; margin-top:4px; color:#3a7bd5;">${reason}</div>`;
+                } else {
+                    html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">要的就是这些号码！</div>`;
+                }
 
-            resultArea.innerHTML = html;
-            lastGeneratedGroupsData = groupsData;
-            specificBtn.disabled = false;
-            specificBtn.className = 'btn btn-blue';
-            updateResetState(false);
-            renderHistory();
+                resultArea.innerHTML = html;
+                lastGeneratedGroupsData = groupsData;
+                specificBtn.disabled = false;
+                specificBtn.className = 'btn btn-blue';
+                updateResetState(false);
+                renderHistory();
 
-            // 绑定单行收藏
-            document.querySelectorAll('.number-line .btn-text.fav').forEach(btn => {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    const mode = this.dataset.mode;
-                    const reds = this.dataset.reds.split(',').map(Number);
-                    const blues = this.dataset.blues.split(',').map(Number);
-                    const nums = { reds, blues };
-                    const added = toggleFavorite(mode, nums);
-                    if (added) {
-                        this.textContent = '已收藏';
-                        this.classList.add('active');
-                    } else {
-                        this.textContent = '收藏';
-                        this.classList.remove('active');
-                    }
-                    vibrate(10);
-                };
-            });
-
-            // 绑定单行复制
-            document.querySelectorAll('.number-line .btn-text.copy').forEach(btn => {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    const nums = this.dataset.nums;
-                    if (nums && navigator.clipboard) {
-                        navigator.clipboard.writeText(nums).then(() => {
-                            const original = this.textContent;
-                            this.textContent = '已复制';
-                            this.classList.add('done');
-                            setTimeout(() => {
-                                this.textContent = original;
-                                this.classList.remove('done');
-                            }, 800);
-                            vibrate(10);
-                        }).catch(() => {});
-                    }
-                };
-            });
-
-            // 绑定全部收藏
-            const allFavBtn = document.getElementById('allFavBtn');
-            if (allFavBtn) {
-                allFavBtn.onclick = function() {
-                    const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
-                    if (!favBtns.length) return;
-                    let changed = false;
-                    favBtns.forEach(btn => {
-                        const mode = btn.dataset.mode;
-                        const reds = btn.dataset.reds.split(',').map(Number);
-                        const blues = btn.dataset.blues.split(',').map(Number);
+                document.querySelectorAll('.number-line .btn-text.fav').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const mode = this.dataset.mode;
+                        const reds = this.dataset.reds.split(',').map(Number);
+                        const blues = this.dataset.blues.split(',').map(Number);
                         const nums = { reds, blues };
-                        if (!btn.classList.contains('active')) {
-                            const added = toggleFavorite(mode, nums);
-                            if (added) {
-                                btn.textContent = '已收藏';
-                                btn.classList.add('active');
-                                changed = true;
+                        const added = toggleFavorite(mode, nums);
+                        if (added) {
+                            this.textContent = '已收藏';
+                            this.classList.add('active');
+                        } else {
+                            this.textContent = '收藏';
+                            this.classList.remove('active');
+                        }
+                        vibrate(10);
+                    };
+                });
+
+                document.querySelectorAll('.number-line .btn-text.copy').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const nums = this.dataset.nums;
+                        if (nums && navigator.clipboard) {
+                            navigator.clipboard.writeText(nums).then(() => {
+                                const original = this.textContent;
+                                this.textContent = '已复制';
+                                this.classList.add('done');
+                                setTimeout(() => {
+                                    this.textContent = original;
+                                    this.classList.remove('done');
+                                }, 800);
+                                vibrate(10);
+                            }).catch(() => {});
+                        }
+                    };
+                });
+
+                const allFavBtn = document.getElementById('allFavBtn');
+                if (allFavBtn) {
+                    allFavBtn.onclick = function() {
+                        const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
+                        if (!favBtns.length) return;
+                        let changed = false;
+                        favBtns.forEach(btn => {
+                            const mode = btn.dataset.mode;
+                            const reds = btn.dataset.reds.split(',').map(Number);
+                            const blues = btn.dataset.blues.split(',').map(Number);
+                            const nums = { reds, blues };
+                            if (!btn.classList.contains('active')) {
+                                const added = toggleFavorite(mode, nums);
+                                if (added) {
+                                    btn.textContent = '已收藏';
+                                    btn.classList.add('active');
+                                    changed = true;
+                                }
                             }
-                        }
-                    });
-                    if (changed) vibrate(10);
-                };
-            }
-
-            // 绑定全部复制
-            const allCopyBtn2 = document.getElementById('allCopyBtn2');
-            if (allCopyBtn2) {
-                allCopyBtn2.onclick = function() {
-                    const copyBtns = document.querySelectorAll('.number-line .btn-text.copy');
-                    if (!copyBtns.length) return;
-                    const texts = [];
-                    copyBtns.forEach(btn => {
-                        const nums = btn.dataset.nums;
-                        if (nums) texts.push(nums);
-                    });
-                    if (!texts.length) return;
-                    const fullText = texts.join('\n');
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(fullText).then(() => {
-                            const orig = this.textContent;
-                            this.textContent = '已复制';
-                            setTimeout(() => { this.textContent = orig; }, 800);
-                            vibrate(10);
-                        }).catch(() => {});
-                    }
-                };
-            }
-
-            const lines = resultArea.querySelectorAll('.number-line');
-            if (lines.length) {
-                rollingAnimation(lines, groupsData, isSSQ, () => {});
-            }
-        }
-
-        function getMatchInfo(groupsData) {
-            const items = historyStore[currentMode];
-            if (!items || !items.length) return null;
-            let bestMatch = { red: 0, blue: 0, period: '' };
-            groupsData.forEach(g => {
-                items.forEach(item => {
-                    const redMatch = g.reds.filter(n => item.nums.includes(n)).length;
-                    const blueMatch = g.blues.filter(n => item.blues.includes(n)).length;
-                    if (redMatch + blueMatch > bestMatch.red + bestMatch.blue) {
-                        bestMatch = { red: redMatch, blue: blueMatch, period: item.period };
-                    }
-                });
-            });
-            if (bestMatch.red + bestMatch.blue === 0) return null;
-            const label = currentMode === 'ssq' ? '红/蓝' : '前/后';
-            return `与第${bestMatch.period}期对比：${label}命中 ${bestMatch.red}/${bestMatch.blue}`;
-        }
-
-        function refreshNumbers() {
-            try {
-                const isSSQ = currentMode === 'ssq';
-                const groupsData = [];
-                for (let i=0; i<groups; i++) {
-                    const d = isSSQ ? genSSQ() : genDLT();
-                    groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
-                }
-                displayResult(groupsData, currentMode, '');
-                lastGeneratedGroups = groups;
-                lastRecommendReason = '';
-            } catch (e) {
-                resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
-                console.error(e);
-            }
-        }
-
-        function specificRandom() {
-            try {
-                if (!lastExcludeReds.length && !lastExcludeBlues.length) {
-                    resultArea.innerHTML = `<div class="error-text">请先点击「天命所归」</div>`;
-                    return;
-                }
-                const isSSQ = currentMode === 'ssq';
-                let fallback = false;
-                const groupsData = [];
-                for (let i=0; i<lastGeneratedGroups; i++) {
-                    let d;
-                    if (isSSQ) {
-                        const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
-                        if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback=true; d=genSSQ(lastExcludeReds.slice(0,CONFIG.ssq.frontCount), lastExcludeBlues.slice(0,CONFIG.ssq.backCount)); }
-                        else d = genSSQ(lastExcludeReds, lastExcludeBlues);
-                    } else {
-                        const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
-                        if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback=true; d=genDLT(lastExcludeReds.slice(0,CONFIG.dlt.frontCount), lastExcludeBlues.slice(0,CONFIG.dlt.backCount)); }
-                        else d = genDLT(lastExcludeReds, lastExcludeBlues);
-                    }
-                    groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
-                }
-                const reason = fallback ? '特定随机 (排除不足·已降级)' : '反其道而行之~';
-                displayResult(groupsData, currentMode, reason);
-                lastRecommendReason = reason;
-            } catch (e) {
-                resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
-                console.error(e);
-            }
-        }
-
-        function showHint() {
-            const isSSQ = currentMode === 'ssq';
-            const frontCount = CONFIG[currentMode].frontCount, backCount = CONFIG[currentMode].backCount;
-            let html = '';
-            for (let g=0; g<groups; g++) {
-                html += '<div class="number-line">';
-                for (let f=0; f<frontCount; f++) html += `<span class="placeholder-red"></span>`;
-                html += '<span class="sep">+</span>';
-                for (let b=0; b<backCount; b++) html += `<span class="placeholder-blue"></span>`;
-                html += '</div>';
-            }
-            html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
-            resultArea.innerHTML = html;
-            specificBtn.disabled = true;
-            specificBtn.className = 'btn btn-blue';
-            lastGeneratedGroupsData = [];
-            lastRecommendReason = '';
-            renderHistory();
-        }
-
-        function weightedSelect(pool, count) {
-            const totalWeight = pool.reduce((s,o)=>s+o.weight,0);
-            const selected = new Set(), result = [];
-            const temp = [...pool];
-            while (result.length < count && temp.length) {
-                let rand = Math.random() * totalWeight;
-                let acc = 0;
-                let pick = null;
-                for (let i=0; i<temp.length; i++) {
-                    acc += temp[i].weight;
-                    if (rand <= acc) { pick = temp[i]; break; }
-                }
-                if (pick && !selected.has(pick.num)) {
-                    selected.add(pick.num);
-                    result.push(pick.num);
-                    const idx = temp.findIndex(p=>p.num===pick.num);
-                    if (idx!==-1) temp.splice(idx,1);
-                } else if (!pick) break;
-            }
-            while (result.length < count) {
-                const max = pool.length?Math.max(...pool.map(p=>p.num)):35;
-                const extra = Math.floor(Math.random()*max)+1;
-                if (!selected.has(extra)) { result.push(extra); selected.add(extra); }
-            }
-            return result.sort((a,b)=>a-b);
-        }
-
-        function smartRecommend(mode) {
-            try {
-                const records = getFilteredData(currentMode);
-                if (!records || !records.length) {
-                    resultArea.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
-                    return;
-                }
-                const stats = analyzeStats(records, currentMode);
-                if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
-                const isSSQ = currentMode === 'ssq';
-                const frontCnt = CONFIG[currentMode].frontCount, backCnt = CONFIG[currentMode].backCount;
-                const frontMax = stats.frontMax, backMax = stats.backMax;
-                const maxFrontFreq = stats.maxFrontFreq, maxBackFreq = stats.maxBackFreq;
-                const maxFrontMiss = stats.maxFrontMiss, maxBackMiss = stats.maxBackMiss;
-                const groupsData = [];
-                for (let g=0; g<groups; g++) {
-                    const frontPool = [], backPool = [];
-                    for (let i=1; i<=frontMax; i++) {
-                        let normFreq = maxFrontFreq? stats.frontFreq[i] / maxFrontFreq : 0;
-                        let normMiss = maxFrontMiss? stats.frontMiss[i] / maxFrontMiss : 0;
-                        let weight;
-                        if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
-                        else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
-                        else weight = (normFreq + normMiss) / 2;
-                        weight = Math.max(0.01, weight);
-                        frontPool.push({num:i, weight});
-                    }
-                    for (let i=1; i<=backMax; i++) {
-                        let normFreq = maxBackFreq? stats.backFreq[i] / maxBackFreq : 0;
-                        let normMiss = maxBackMiss? stats.backMiss[i] / maxBackMiss : 0;
-                        let weight;
-                        if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
-                        else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
-                        else weight = (normFreq + normMiss) / 2;
-                        weight = Math.max(0.01, weight);
-                        backPool.push({num:i, weight});
-                    }
-                    const reds = weightedSelect(frontPool, frontCnt);
-                    const blues = weightedSelect(backPool, backCnt);
-                    groupsData.push({ reds: reds.slice(), blues: blues.slice() });
-                }
-                const modeNames = { cold:'追冷(高遗漏)', hot:'追热(高频)', balance:'冷热均衡' };
-                const reasonText = `${modeNames[mode]||mode}`;
-                displayResult(groupsData, currentMode, reasonText);
-                lastRecommendReason = reasonText;
-            } catch (e) {
-                resultArea.innerHTML = `<div class="error-text">推荐失败，请重试</div>`;
-                console.error(e);
-            }
-        }
-
-        function analyzeStats(records, type) {
-            if (!records || !records.length) return null;
-            const cfg = CONFIG[type];
-            const frontMax = cfg.front, backMax = cfg.back;
-            const frontFreq = new Array(frontMax+1).fill(0), backFreq = new Array(backMax+1).fill(0);
-            const frontMiss = new Array(frontMax+1).fill(0), backMiss = new Array(backMax+1).fill(0);
-            const frontMet = new Array(frontMax+1).fill(false), backMet = new Array(backMax+1).fill(false);
-            for (let i=0; i<records.length; i++) {
-                const rec = records[i];
-                rec.reds.forEach(n=>{ frontFreq[n]++; if(!frontMet[n]){ frontMiss[n]=i; frontMet[n]=true; } });
-                rec.blues.forEach(n=>{ backFreq[n]++; if(!backMet[n]){ backMiss[n]=i; backMet[n]=true; } });
-            }
-            for (let i=1; i<=frontMax; i++) if(!frontMet[i]) frontMiss[i]=records.length;
-            for (let i=1; i<=backMax; i++) if(!backMet[i]) backMiss[i]=records.length;
-            const maxFrontFreq = Math.max(...frontFreq.slice(1));
-            const maxBackFreq = Math.max(...backFreq.slice(1));
-            const maxFrontMiss = Math.max(...frontMiss.slice(1));
-            const maxBackMiss = Math.max(...backMiss.slice(1));
-            return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax, maxFrontFreq, maxBackFreq, maxFrontMiss, maxBackMiss };
-        }
-
-        function getFilteredData(type) {
-            const all = getDataSync(type);
-            if (!all || !all.length) return all;
-            const s = Math.max(0, rangeStart-1), e = Math.min(all.length, rangeEnd);
-            if (s>=e) return all.slice(0,1);
-            return all.slice(s, e);
-        }
-
-        function getDataSync(type) {
-            if (trendCache[type]) return trendCache[type];
-            const records = type==='ssq' ? SSQ_DATA : DLT_DATA;
-            trendCache[type] = records;
-            return records;
-        }
-
-        function loadHistory(lotteryType) {
-            const filtered = getFilteredData(lotteryType);
-            historyStore[lotteryType] = filtered.map(item => ({
-                period: item.issue,
-                date: item.date.slice(5),
-                nums: item.reds,
-                blues: item.blues,
-                blue: item.blues[0]
-            }));
-            if (lotteryType === currentMode) renderHistory();
-        }
-
-        function renderHistory() {
-            const items = historyStore[currentMode];
-            if (!items || !items.length) {
-                historyList.innerHTML = `<div class="error-text">暂无数据</div>`;
-                pageInfo.textContent = '0/0';
-                prevPageBtn.disabled = true;
-                nextPageBtn.disabled = true;
-                return;
-            }
-            const total = items.length;
-            const totalPages = Math.ceil(total / PAGE_SIZE);
-            if (currentPage > totalPages) currentPage = totalPages || 1;
-            if (currentPage < 1) currentPage = 1;
-            const start = (currentPage-1)*PAGE_SIZE, end = Math.min(start+PAGE_SIZE, total);
-            const pageItems = items.slice(start, end);
-            const isSSQ = currentMode === 'ssq';
-            const matchGroups = lastGeneratedGroupsData || [];
-            const hasMatchGroups = matchGroups && matchGroups.length > 0;
-            let html = '';
-            pageItems.forEach(item => {
-                html += '<div class="history-row">';
-                html += `<span class="period">${item.period}期</span>`;
-                item.nums.forEach(n => {
-                    let matched = false;
-                    for (let g of matchGroups) {
-                        if (g.reds.includes(n)) { matched = true; break; }
-                    }
-                    html += `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
-                });
-                html += '<span class="sep">+</span>';
-                if (isSSQ) {
-                    let matched = false;
-                    for (let g of matchGroups) {
-                        if (g.blues.includes(item.blue)) { matched = true; break; }
-                    }
-                    html += `<span class="ball blue${(hasMatchGroups && !matched)?' unmatch':''}">${pad(item.blue)}</span>`;
-                } else {
-                    item.blues.forEach(b => {
-                        let matched = false;
-                        for (let g of matchGroups) {
-                            if (g.blues.includes(b)) { matched = true; break; }
-                        }
-                        html += `<span class="ball back${(hasMatchGroups && !matched)?' unmatch':''}">${pad(b)}</span>`;
-                    });
-                }
-                html += `<span class="date">${item.date}</span></div>`;
-            });
-            historyList.innerHTML = html;
-            pageInfo.textContent = `${currentPage}/${totalPages}`;
-            prevPageBtn.disabled = (currentPage <= 1);
-            nextPageBtn.disabled = (currentPage >= totalPages);
-        }
-
-        function goToPage(page) {
-            const items = historyStore[currentMode];
-            if (!items || !items.length) return;
-            const totalPages = Math.ceil(items.length / PAGE_SIZE);
-            if (page < 1) page = 1;
-            if (page > totalPages) page = totalPages;
-            if (currentPage === page) return;
-            currentPage = page;
-            renderHistory();
-        }
-
-        function renderNumberTable(container, data, title, colorClass) {
-            if (!data || !data.length) { container.innerHTML = `<div class="error-text">暂无数据</div>`; return; }
-            const freqValues = data.map(d=>d.freq||0), missValues = data.map(d=>d.miss||0);
-            const getRanks = (arr) => {
-                const sorted = [...arr].sort((a,b)=>a-b);
-                const len = sorted.length;
-                if (!len) return [];
-                return arr.map(v=> len>1 ? sorted.lastIndexOf(v)/(len-1) : 0.5 );
-            };
-            const freqRanks = getRanks(freqValues), missRanks = getRanks(missValues);
-            let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
-            html += `<div class="stat-row header"><div class="stat-cell" style="background:transparent;">频次</div><div class="stat-num">号码</div><div class="stat-cell" style="background:transparent;">遗漏</div></div>`;
-            const minAlpha=0.05, maxAlpha=0.95;
-            for (let i=0; i<data.length; i++) {
-                const freq = data[i].freq||0, miss = data[i].miss||0, num = i+1;
-                const fRank = freqRanks[i]||0, mRank = missRanks[i]||0;
-                const fAlpha = minAlpha + (maxAlpha-minAlpha)*fRank, mAlpha = minAlpha + (maxAlpha-minAlpha)*mRank;
-                const fColor = fRank>0.45?'#ffffff':'#2c3e50', mColor = mRank>0.45?'#ffffff':'#2c3e50';
-                const fBg = `rgba(231,76,111,${fAlpha})`, mBg = `rgba(58,123,213,${mAlpha})`;
-                const ballClass = colorClass==='red'?'red':'blue';
-                html += `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
-            }
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        function renderTrend() {
-            const type = currentMode;
-            const records = getFilteredData(type);
-            if (!records || !records.length) {
-                frontTable.innerHTML = '<div class="error-text">无数据</div>';
-                backTable.innerHTML = '<div class="error-text">无数据</div>';
-                return;
-            }
-            const stats = analyzeStats(records, type);
-            if (!stats) { frontTable.innerHTML = '<div class="error-text">解析失败</div>'; backTable.innerHTML = '<div class="error-text">解析失败</div>'; return; }
-            const frontData = [], backData = [];
-            for (let i=1; i<=stats.frontMax; i++) frontData.push({freq: stats.frontFreq[i], miss: stats.frontMiss[i]});
-            for (let i=1; i<=stats.backMax; i++) backData.push({freq: stats.backFreq[i], miss: stats.backMiss[i]});
-            const frontTitle = type==='ssq'?'红球号码统计':'前区号码统计';
-            const backTitle = type==='ssq'?'蓝球号码统计':'后区号码统计';
-            renderNumberTable(frontTable, frontData, frontTitle, 'red');
-            renderNumberTable(backTable, backData, backTitle, 'blue');
-        }
-
-        function updateSliderUI() {
-            const allData = getDataSync(currentMode);
-            totalPeriods = allData ? allData.length : 1;
-            if (rangeStart < 1) rangeStart = 1;
-            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
-            if (rangeStart > rangeEnd) { const t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
-            if (rangeStart < 1) rangeStart = 1;
-            if (rangeEnd < 1) rangeEnd = 1;
-            if (rangeStart > totalPeriods) rangeStart = totalPeriods;
-            if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
-
-            const leftVal = rangeStart, rightVal = rangeEnd;
-            const pctLeft = totalPeriods>1 ? ((leftVal-1)/(totalPeriods-1))*100 : 0;
-            const pctRight = totalPeriods>1 ? ((rightVal-1)/(totalPeriods-1))*100 : 100;
-            thumbLeft.style.left = pctLeft + '%';
-            thumbRight.style.left = pctRight + '%';
-            rangeFill.style.left = pctLeft + '%';
-            rangeFill.style.width = (pctRight - pctLeft) + '%';
-
-            const data = allData || [];
-            let leftDate='------', rightDate='------';
-            if (data.length) {
-                const lr = data[leftVal-1], rr = data[rightVal-1];
-                leftDate = lr ? lr.date.replace(/-/g,'') : '------';
-                rightDate = rr ? rr.date.replace(/-/g,'') : '------';
-            }
-            leftText.textContent = `近${leftVal}期 ${leftDate}`;
-            rightText.textContent = `${rightDate} 近${rightVal}期`;
-
-            const selected = rangeEnd - rangeStart + 1;
-            dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
-            rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
-        }
-
-        function updateFullData() {
-            loadHistory(currentMode);
-            renderHistory();
-            renderTrend();
-        }
-
-        let rafId = null;
-        function updateRangeDisplay() {
-            if (rafId) cancelAnimationFrame(rafId);
-            rafId = requestAnimationFrame(() => {
-                updateSliderUI();
-                updateFullData();
-                rafId = null;
-            });
-        }
-
-        function getThumbPos(e) {
-            const rect = rangeTrack.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let pct = (clientX - rect.left) / rect.width;
-            pct = Math.max(0, Math.min(1, pct));
-            const d = rangeEnd - rangeStart + 1;
-            const threshold = totalPeriods * 0.15;
-            const k = d < threshold ? 0.8 : 1.2;
-            let val = 1 + Math.pow(pct, k) * (totalPeriods - 1);
-            val = Math.round(Math.max(1, Math.min(totalPeriods, val)));
-            return val;
-        }
-
-        function handleStart(e) {
-            e.preventDefault();
-            const target = e.target;
-            if (target === thumbLeft) { isDragging = true; dragTarget = 'left'; thumbLeft.style.cursor = 'grabbing'; }
-            else if (target === thumbRight) { isDragging = true; dragTarget = 'right'; thumbRight.style.cursor = 'grabbing'; }
-        }
-
-        function handleMove(e) {
-            if (!isDragging || !dragTarget) return;
-            e.preventDefault();
-            const val = getThumbPos(e);
-            if (dragTarget === 'left') {
-                let newStart = Math.max(1, Math.min(totalPeriods, val));
-                let newEnd = rangeEnd;
-                if (newStart >= newEnd) {
-                    newStart = Math.max(1, newEnd - 1);
-                    newEnd = Math.min(totalPeriods, newEnd + 1);
-                    if (newStart >= newEnd) { newStart = Math.max(1, newEnd - 1); if (newStart<1) { newStart=1; newEnd=Math.min(totalPeriods,2); } }
-                }
-                rangeStart = newStart; rangeEnd = newEnd;
-                updateSliderUI();
-            } else if (dragTarget === 'right') {
-                let newEnd = Math.max(1, Math.min(totalPeriods, val));
-                let newStart = rangeStart;
-                if (newEnd <= newStart) {
-                    newEnd = Math.min(totalPeriods, newStart + 1);
-                    newStart = Math.max(1, newStart - 1);
-                    if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd>totalPeriods) { newEnd=totalPeriods; newStart=Math.max(1,totalPeriods-1); } }
-                }
-                rangeStart = newStart; rangeEnd = newEnd;
-                updateSliderUI();
-            }
-        }
-
-        function handleEnd(e) {
-            if (isDragging) {
-                isDragging = false;
-                dragTarget = null;
-                thumbLeft.style.cursor = 'grab';
-                thumbRight.style.cursor = 'grab';
-                updateFullData();
-            }
-        }
-
-        function initRangeSlider() {
-            const allData = getDataSync(currentMode);
-            totalPeriods = allData ? allData.length : 1;
-            if (totalPeriods < 1) totalPeriods = 1;
-            rangeStart = 1;
-            rangeEnd = totalPeriods;
-            updateSliderUI();
-            updateFullData();
-
-            rangeTrack.addEventListener('mousedown', (e) => {
-                if (e.target === thumbLeft || e.target === thumbRight) return;
-                const val = getThumbPos(e);
-                const distL = Math.abs(val - rangeStart), distR = Math.abs(val - rangeEnd);
-                if (distL < distR) {
-                    rangeStart = Math.max(1, Math.min(totalPeriods, val));
-                    if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart<1) { rangeStart=1; rangeEnd=Math.min(totalPeriods,2); } }
-                } else {
-                    rangeEnd = Math.max(1, Math.min(totalPeriods, val));
-                    if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (rangeEnd>totalPeriods) { rangeEnd=totalPeriods; rangeStart=Math.max(1,totalPeriods-1); } }
-                }
-                updateSliderUI();
-                updateFullData();
-            });
-
-            thumbLeft.addEventListener('mousedown', handleStart);
-            thumbRight.addEventListener('mousedown', handleStart);
-            thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
-            thumbRight.addEventListener('touchstart', handleStart, { passive: false });
-
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('touchmove', handleMove, { passive: false });
-            document.addEventListener('mouseup', handleEnd);
-            document.addEventListener('touchend', handleEnd);
-            document.addEventListener('touchcancel', handleEnd);
-
-            thumbLeft.style.cursor = 'grab';
-            thumbRight.style.cursor = 'grab';
-        }
-
-        function getFavorites() {
-            try {
-                return JSON.parse(localStorage.getItem('lottery_favorites')) || [];
-            } catch { return []; }
-        }
-        function setFavorites(favs) {
-            localStorage.setItem('lottery_favorites', JSON.stringify(favs));
-        }
-
-        function renderFavorites() {
-            const favs = getFavorites();
-            if (favs.length === 0) {
-                favoritesCard.style.display = 'none';
-                return;
-            }
-            favoritesCard.style.display = 'block';
-            const ssqFavs = favs.filter(item => item.mode === 'ssq');
-            const dltFavs = favs.filter(item => item.mode === 'dlt');
-            let html = '';
-            if (ssqFavs.length) {
-                html += `<div class="fav-section"><div class="sub-title">双色球收藏
-                    <span>
-                        <span class="btn-text all-delete" data-mode="ssq" data-action="delete-all">删除全部</span>
-                        <span class="btn-text all-copy" data-mode="ssq" data-action="copy-all">复制全部</span>
-                    </span>
-                </div>`;
-                ssqFavs.forEach((item, idx) => {
-                    const realIdx = favs.indexOf(item);
-                    html += '<div class="history-row">';
-                    html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
-                    item.nums.reds.forEach(n => html+=`<span class="ball red">${pad(n)}</span>`);
-                    html += '<span class="sep">+</span>';
-                    item.nums.blues.forEach(n => html+=`<span class="ball blue">${pad(n)}</span>`);
-                    const numsStr = '红球:' + item.nums.reds.map(pad).join(' ') + ' + 蓝球:' + item.nums.blues.map(pad).join(' ');
-                    html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
-                    html += '</div>';
-                });
-                html += '</div>';
-            }
-            if (dltFavs.length) {
-                html += `<div class="fav-section"><div class="sub-title">大乐透收藏
-                    <span>
-                        <span class="btn-text all-delete" data-mode="dlt" data-action="delete-all">删除全部</span>
-                        <span class="btn-text all-copy" data-mode="dlt" data-action="copy-all">复制全部</span>
-                    </span>
-                </div>`;
-                dltFavs.forEach((item, idx) => {
-                    const realIdx = favs.indexOf(item);
-                    html += '<div class="history-row">';
-                    html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
-                    item.nums.reds.forEach(n => html+=`<span class="ball front">${pad(n)}</span>`);
-                    html += '<span class="sep">+</span>';
-                    item.nums.blues.forEach(n => html+=`<span class="ball back">${pad(n)}</span>`);
-                    const numsStr = '前区:' + item.nums.reds.map(pad).join(' ') + ' + 后区:' + item.nums.blues.map(pad).join(' ');
-                    html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
-                    html += '</div>';
-                });
-                html += '</div>';
-            }
-            favList.innerHTML = html;
-
-            favList.querySelectorAll('.btn-text.del').forEach(el => {
-                el.onclick = function() {
-                    const idx = parseInt(this.dataset.index);
-                    removeFavorite(idx);
-                    vibrate(10);
-                };
-            });
-            favList.querySelectorAll('.btn-text.copy').forEach(btn => {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    const nums = this.dataset.nums;
-                    if (nums && navigator.clipboard) {
-                        navigator.clipboard.writeText(nums).then(() => {
-                            const original = this.textContent;
-                            this.textContent = '已复制';
-                            this.classList.add('done');
-                            setTimeout(() => {
-                                this.textContent = original;
-                                this.classList.remove('done');
-                            }, 800);
-                            vibrate(10);
-                        }).catch(() => {});
-                    }
-                };
-            });
-            favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    const mode = this.dataset.mode;
-                    const action = this.dataset.action;
-                    const allFavs = getFavorites();
-                    const filtered = allFavs.filter(item => item.mode === mode);
-                    if (action === 'delete-all') {
-                        if (filtered.length === 0) return;
-                        if (confirm(`确定删除所有${mode==='ssq'?'双色球':'大乐透'}收藏吗？`)) {
-                            const newFavs = allFavs.filter(item => item.mode !== mode);
-                            setFavorites(newFavs);
-                            renderFavorites();
-                            vibrate(10);
-                        }
-                    } else if (action === 'copy-all') {
-                        if (filtered.length === 0) return;
-                        const texts = filtered.map(item => {
-                            const isSSQ = item.mode === 'ssq';
-                            return (isSSQ?'红球':'前区') + ':' + item.nums.reds.map(pad).join(' ') + ' + ' + (isSSQ?'蓝球':'后区') + ':' + item.nums.blues.map(pad).join(' ');
                         });
-                        const full = texts.join('\n');
+                        if (changed) vibrate(10);
+                    };
+                }
+
+                const allCopyBtn2 = document.getElementById('allCopyBtn2');
+                if (allCopyBtn2) {
+                    allCopyBtn2.onclick = function() {
+                        const copyBtns = document.querySelectorAll('.number-line .btn-text.copy');
+                        if (!copyBtns.length) return;
+                        const texts = [];
+                        copyBtns.forEach(btn => {
+                            const nums = btn.dataset.nums;
+                            if (nums) texts.push(nums);
+                        });
+                        if (!texts.length) return;
+                        const fullText = texts.join('\n');
                         if (navigator.clipboard) {
-                            navigator.clipboard.writeText(full).then(() => {
+                            navigator.clipboard.writeText(fullText).then(() => {
                                 const orig = this.textContent;
                                 this.textContent = '已复制';
                                 setTimeout(() => { this.textContent = orig; }, 800);
                                 vibrate(10);
                             }).catch(() => {});
                         }
-                    }
-                };
-            });
-        }
+                    };
+                }
 
-        function removeFavorite(index) {
-            const favs = getFavorites();
-            favs.splice(index, 1);
-            setFavorites(favs);
-            renderFavorites();
-        }
-
-        function shareContent(text) {
-            if (navigator.share) {
-                navigator.share({ title: '搏一搏单车变摩托', text }).catch(() => {});
-            } else {
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        alert('已复制到剪贴板，可粘贴分享');
-                    }).catch(() => {});
-                } else {
-                    prompt('复制以下内容分享：', text);
+                const lines = resultArea.querySelectorAll('.number-line');
+                if (lines.length) {
+                    rollingAnimation(lines, groupsData, isSSQ, () => {});
                 }
             }
-        }
-        document.getElementById('shareAllBtn').onclick = function() {
-            const lines = resultArea.querySelectorAll('.number-line');
-            if (!lines.length) { alert('请先生成号码'); return; }
-            let texts = [];
-            lines.forEach(line => {
-                const copyBtn = line.querySelector('.btn-text.copy');
-                if (copyBtn) texts.push(copyBtn.dataset.nums);
-            });
-            if (texts.length) shareContent(texts.join('\n'));
-        };
 
-        document.querySelectorAll('input[name="mode"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                currentMode = e.target.value;
-                currentPage = 1;
-                lastExcludeReds = [];
-                lastExcludeBlues = [];
-                lastGeneratedGroupsData = [];
-                showHint();
-                trendCache[currentMode] = null;
-                initRangeSlider();
+            function getMatchInfo(groupsData) {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) return null;
+                let bestMatch = { red: 0, blue: 0, period: '' };
+                groupsData.forEach(g => {
+                    items.forEach(item => {
+                        const redMatch = g.reds.filter(n => item.nums.includes(n)).length;
+                        const blueMatch = g.blues.filter(n => item.blues.includes(n)).length;
+                        if (redMatch + blueMatch > bestMatch.red + bestMatch.blue) {
+                            bestMatch = { red: redMatch, blue: blueMatch, period: item.period };
+                        }
+                    });
+                });
+                if (bestMatch.red + bestMatch.blue === 0) return null;
+                const label = currentMode === 'ssq' ? '红/蓝' : '前/后';
+                return `与第${bestMatch.period}期对比：${label}命中 ${bestMatch.red}/${bestMatch.blue}`;
+            }
+
+            function refreshNumbers() {
+                try {
+                    const isSSQ = currentMode === 'ssq';
+                    const groupsData = [];
+                    for (let i = 0; i < groups; i++) {
+                        const d = isSSQ ? genSSQ() : genDLT();
+                        groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
+                    }
+                    displayResult(groupsData, currentMode, '');
+                    lastGeneratedGroups = groups;
+                    lastRecommendReason = '';
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function specificRandom() {
+                try {
+                    if (!lastExcludeReds.length && !lastExcludeBlues.length) {
+                        resultArea.innerHTML = `<div class="error-text">请先点击「天命所归」</div>`;
+                        return;
+                    }
+                    const isSSQ = currentMode === 'ssq';
+                    let fallback = false;
+                    const groupsData = [];
+                    for (let i = 0; i < lastGeneratedGroups; i++) {
+                        let d;
+                        if (isSSQ) {
+                            const redSet = new Set(lastExcludeReds),
+                                blueSet = new Set(lastExcludeBlues);
+                            if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback = true;
+                                d = genSSQ(lastExcludeReds.slice(0, CONFIG.ssq.frontCount), lastExcludeBlues.slice(0,
+                                    CONFIG.ssq.backCount)); } else d = genSSQ(lastExcludeReds, lastExcludeBlues);
+                        } else {
+                            const redSet = new Set(lastExcludeReds),
+                                blueSet = new Set(lastExcludeBlues);
+                            if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback = true;
+                                d = genDLT(lastExcludeReds.slice(0, CONFIG.dlt.frontCount), lastExcludeBlues.slice(0,
+                                    CONFIG.dlt.backCount)); } else d = genDLT(lastExcludeReds, lastExcludeBlues);
+                        }
+                        groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
+                    }
+                    const reason = fallback ? '特定随机 (排除不足·已降级)' : '反其道而行之~';
+                    displayResult(groupsData, currentMode, reason);
+                    lastRecommendReason = reason;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function showHint() {
+                const isSSQ = currentMode === 'ssq';
+                const frontCount = CONFIG[currentMode].frontCount,
+                    backCount = CONFIG[currentMode].backCount;
+                let html = '';
+                for (let g = 0; g < groups; g++) {
+                    html += '<div class="number-line">';
+                    html += `<span class="btn-text fav" style="position:absolute;left:4px;top:50%;transform:translateY(-50%);color:#95a5a6;font-size:12px;">收藏</span>`;
+                    for (let f = 0; f < frontCount; f++) html += `<span class="placeholder-red"></span>`;
+                    html += '<span class="sep">+</span>';
+                    for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
+                    html +=
+                        `<span class="btn-text copy" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:#3a7bd5;font-size:12px;">复制</span>`;
+                    html += '</div>';
+                }
+                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
+                resultArea.innerHTML = html;
                 specificBtn.disabled = true;
                 specificBtn.className = 'btn btn-blue';
+                lastGeneratedGroupsData = [];
+                lastRecommendReason = '';
+                renderHistory();
+            }
+
+            function weightedSelect(pool, count) {
+                const totalWeight = pool.reduce((s, o) => s + o.weight, 0);
+                const selected = new Set(),
+                    result = [];
+                const temp = [...pool];
+                while (result.length < count && temp.length) {
+                    let rand = Math.random() * totalWeight;
+                    let acc = 0;
+                    let pick = null;
+                    for (let i = 0; i < temp.length; i++) {
+                        acc += temp[i].weight;
+                        if (rand <= acc) { pick = temp[i]; break; }
+                    }
+                    if (pick && !selected.has(pick.num)) {
+                        selected.add(pick.num);
+                        result.push(pick.num);
+                        const idx = temp.findIndex(p => p.num === pick.num);
+                        if (idx !== -1) temp.splice(idx, 1);
+                    } else if (!pick) break;
+                }
+                while (result.length < count) {
+                    const max = pool.length ? Math.max(...pool.map(p => p.num)) : 35;
+                    const extra = Math.floor(Math.random() * max) + 1;
+                    if (!selected.has(extra)) { result.push(extra);
+                        selected.add(extra); }
+                }
+                return result.sort((a, b) => a - b);
+            }
+
+            function smartRecommend(mode) {
+                try {
+                    const records = getFilteredData(currentMode);
+                    if (!records || !records.length) {
+                        resultArea.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
+                        return;
+                    }
+                    const stats = analyzeStats(records, currentMode);
+                    if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
+                    const isSSQ = currentMode === 'ssq';
+                    const frontCnt = CONFIG[currentMode].frontCount,
+                        backCnt = CONFIG[currentMode].backCount;
+                    const frontMax = stats.frontMax,
+                        backMax = stats.backMax;
+                    const maxFrontFreq = stats.maxFrontFreq,
+                        maxBackFreq = stats.maxBackFreq;
+                    const maxFrontMiss = stats.maxFrontMiss,
+                        maxBackMiss = stats.maxBackMiss;
+                    const groupsData = [];
+                    for (let g = 0; g < groups; g++) {
+                        const frontPool = [],
+                            backPool = [];
+                        for (let i = 1; i <= frontMax; i++) {
+                            let normFreq = maxFrontFreq ? stats.frontFreq[i] / maxFrontFreq : 0;
+                            let normMiss = maxFrontMiss ? stats.frontMiss[i] / maxFrontMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            frontPool.push({ num: i, weight });
+                        }
+                        for (let i = 1; i <= backMax; i++) {
+                            let normFreq = maxBackFreq ? stats.backFreq[i] / maxBackFreq : 0;
+                            let normMiss = maxBackMiss ? stats.backMiss[i] / maxBackMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            backPool.push({ num: i, weight });
+                        }
+                        const reds = weightedSelect(frontPool, frontCnt);
+                        const blues = weightedSelect(backPool, backCnt);
+                        groupsData.push({ reds: reds.slice(), blues: blues.slice() });
+                    }
+                    const modeNames = { cold: '追冷(高遗漏)', hot: '追热(高频)', balance: '冷热均衡' };
+                    const reasonText = `${modeNames[mode]||mode}`;
+                    displayResult(groupsData, currentMode, reasonText);
+                    lastRecommendReason = reasonText;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">推荐失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function analyzeStats(records, type) {
+                if (!records || !records.length) return null;
+                const cfg = CONFIG[type];
+                const frontMax = cfg.front,
+                    backMax = cfg.back;
+                const frontFreq = new Array(frontMax + 1).fill(0),
+                    backFreq = new Array(backMax + 1).fill(0);
+                const frontMiss = new Array(frontMax + 1).fill(0),
+                    backMiss = new Array(backMax + 1).fill(0);
+                const frontMet = new Array(frontMax + 1).fill(false),
+                    backMet = new Array(backMax + 1).fill(false);
+                for (let i = 0; i < records.length; i++) {
+                    const rec = records[i];
+                    rec.reds.forEach(n => { frontFreq[n]++;
+                        if (!frontMet[n]) { frontMiss[n] = i;
+                            frontMet[n] = true; } });
+                    rec.blues.forEach(n => { backFreq[n]++;
+                        if (!backMet[n]) { backMiss[n] = i;
+                            backMet[n] = true; } });
+                }
+                for (let i = 1; i <= frontMax; i++)
+                    if (!frontMet[i]) frontMiss[i] = records.length;
+                for (let i = 1; i <= backMax; i++)
+                    if (!backMet[i]) backMiss[i] = records.length;
+                const maxFrontFreq = Math.max(...frontFreq.slice(1));
+                const maxBackFreq = Math.max(...backFreq.slice(1));
+                const maxFrontMiss = Math.max(...frontMiss.slice(1));
+                const maxBackMiss = Math.max(...backMiss.slice(1));
+                return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax,
+                    maxFrontFreq, maxBackFreq, maxFrontMiss, maxBackMiss };
+            }
+
+            function getFilteredData(type) {
+                const all = getDataSync(type);
+                if (!all || !all.length) return all;
+                const s = Math.max(0, rangeStart - 1),
+                    e = Math.min(all.length, rangeEnd);
+                if (s >= e) return all.slice(0, 1);
+                return all.slice(s, e);
+            }
+
+            function getDataSync(type) {
+                if (trendCache[type]) return trendCache[type];
+                const records = type === 'ssq' ? SSQ_DATA : DLT_DATA;
+                trendCache[type] = records;
+                return records;
+            }
+
+            function loadHistory(lotteryType) {
+                const filtered = getFilteredData(lotteryType);
+                historyStore[lotteryType] = filtered.map(item => ({
+                    period: item.issue,
+                    date: item.date.slice(5),
+                    nums: item.reds,
+                    blues: item.blues,
+                    blue: item.blues[0]
+                }));
+                if (lotteryType === currentMode) renderHistory();
+            }
+
+            function renderHistory() {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) {
+                    historyList.innerHTML = `<div class="error-text">暂无数据</div>`;
+                    pageInfo.textContent = '0/0';
+                    prevPageBtn.disabled = true;
+                    nextPageBtn.disabled = true;
+                    return;
+                }
+                const total = items.length;
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (currentPage > totalPages) currentPage = totalPages || 1;
+                if (currentPage < 1) currentPage = 1;
+                const start = (currentPage - 1) * PAGE_SIZE,
+                    end = Math.min(start + PAGE_SIZE, total);
+                const pageItems = items.slice(start, end);
+                const isSSQ = currentMode === 'ssq';
+                const matchGroups = lastGeneratedGroupsData || [];
+                const hasMatchGroups = matchGroups && matchGroups.length > 0;
+                let html = '';
+                pageItems.forEach(item => {
+                    html += '<div class="history-row">';
+                    html += `<span class="period">${item.period}期</span>`;
+                    item.nums.forEach(n => {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.reds.includes(n)) { matched = true; break; }
+                        }
+                        html +=
+                            `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
+                    });
+                    html += '<span class="sep">+</span>';
+                    if (isSSQ) {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.blues.includes(item.blue)) { matched = true; break; }
+                        }
+                        html += `<span class="ball blue${(hasMatchGroups && !matched)?' unmatch':''}">${pad(item.blue)}</span>`;
+                    } else {
+                        item.blues.forEach(b => {
+                            let matched = false;
+                            for (let g of matchGroups) {
+                                if (g.blues.includes(b)) { matched = true; break; }
+                            }
+                            html +=
+                                `<span class="ball back${(hasMatchGroups && !matched)?' unmatch':''}">${pad(b)}</span>`;
+                        });
+                    }
+                    html += `<span class="date">${item.date}</span></div>`;
+                });
+                historyList.innerHTML = html;
+                pageInfo.textContent = `${currentPage}/${totalPages}`;
+                prevPageBtn.disabled = (currentPage <= 1);
+                nextPageBtn.disabled = (currentPage >= totalPages);
+            }
+
+            function goToPage(page) {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) return;
+                const totalPages = Math.ceil(items.length / PAGE_SIZE);
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                if (currentPage === page) return;
+                currentPage = page;
+                renderHistory();
+            }
+
+            function renderNumberTable(container, data, title, colorClass) {
+                if (!data || !data.length) { container.innerHTML = `<div class="error-text">暂无数据</div>`; return; }
+                const freqValues = data.map(d => d.freq || 0),
+                    missValues = data.map(d => d.miss || 0);
+                const getRanks = (arr) => {
+                    const sorted = [...arr].sort((a, b) => a - b);
+                    const len = sorted.length;
+                    if (!len) return [];
+                    return arr.map(v => len > 1 ? sorted.lastIndexOf(v) / (len - 1) : 0.5);
+                };
+                const freqRanks = getRanks(freqValues),
+                    missRanks = getRanks(missValues);
+                let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
+                html +=
+                    `<div class="stat-row header"><div class="stat-cell" style="background:transparent;">频次</div><div class="stat-num">号码</div><div class="stat-cell" style="background:transparent;">遗漏</div></div>`;
+                const minAlpha = 0.05,
+                    maxAlpha = 0.95;
+                for (let i = 0; i < data.length; i++) {
+                    const freq = data[i].freq || 0,
+                        miss = data[i].miss || 0,
+                        num = i + 1;
+                    const fRank = freqRanks[i] || 0,
+                        mRank = missRanks[i] || 0;
+                    const fAlpha = minAlpha + (maxAlpha - minAlpha) * fRank,
+                        mAlpha = minAlpha + (maxAlpha - minAlpha) * mRank;
+                    const fColor = fRank > 0.45 ? '#ffffff' : '#2c3e50',
+                        mColor = mRank > 0.45 ? '#ffffff' : '#2c3e50';
+                    const fBg = `rgba(231,76,111,${fAlpha})`,
+                        mBg = `rgba(58,123,213,${mAlpha})`;
+                    const ballClass = colorClass === 'red' ? 'red' : 'blue';
+                    html +=
+                        `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
+                }
+                html += '</div>';
+                container.innerHTML = html;
+            }
+
+            function renderTrend() {
+                const type = currentMode;
+                const records = getFilteredData(type);
+                if (!records || !records.length) {
+                    frontTable.innerHTML = '<div class="error-text">无数据</div>';
+                    backTable.innerHTML = '<div class="error-text">无数据</div>';
+                    return;
+                }
+                const stats = analyzeStats(records, type);
+                if (!stats) { frontTable.innerHTML = '<div class="error-text">解析失败</div>';
+                    backTable.innerHTML = '<div class="error-text">解析失败</div>'; return; }
+                const frontData = [],
+                    backData = [];
+                for (let i = 1; i <= stats.frontMax; i++) frontData.push({ freq: stats.frontFreq[i], miss: stats
+                        .frontMiss[i] });
+                for (let i = 1; i <= stats.backMax; i++) backData.push({ freq: stats.backFreq[i], miss: stats.backMiss[
+                        i] });
+                const frontTitle = type === 'ssq' ? '红球号码统计' : '前区号码统计';
+                const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
+                renderNumberTable(frontTable, frontData, frontTitle, 'red');
+                renderNumberTable(backTable, backData, backTitle, 'blue');
+            }
+
+            function updateSliderUI() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+                if (rangeStart > rangeEnd) { const t = rangeStart;
+                    rangeStart = rangeEnd;
+                    rangeEnd = t; }
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd < 1) rangeEnd = 1;
+                if (rangeStart > totalPeriods) rangeStart = totalPeriods;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+
+                const leftVal = rangeStart,
+                    rightVal = rangeEnd;
+                const pctLeft = totalPeriods > 1 ? ((leftVal - 1) / (totalPeriods - 1)) * 100 : 0;
+                const pctRight = totalPeriods > 1 ? ((rightVal - 1) / (totalPeriods - 1)) * 100 : 100;
+                thumbLeft.style.left = pctLeft + '%';
+                thumbRight.style.left = pctRight + '%';
+                rangeFill.style.left = pctLeft + '%';
+                rangeFill.style.width = (pctRight - pctLeft) + '%';
+
+                const data = allData || [];
+                let leftDate = '------',
+                    rightDate = '------';
+                if (data.length) {
+                    const lr = data[leftVal - 1],
+                        rr = data[rightVal - 1];
+                    leftDate = lr ? lr.date.replace(/-/g, '') : '------';
+                    rightDate = rr ? rr.date.replace(/-/g, '') : '------';
+                }
+                leftText.textContent = `近${leftVal}期 ${leftDate}`;
+                rightText.textContent = `${rightDate} 近${rightVal}期`;
+
+                const selected = rangeEnd - rangeStart + 1;
+                dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
+                rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
+            }
+
+            function updateFullData() {
+                loadHistory(currentMode);
+                renderHistory();
+                renderTrend();
+            }
+
+            let rafId = null;
+
+            function updateRangeDisplay() {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
+                    updateSliderUI();
+                    updateFullData();
+                    rafId = null;
+                });
+            }
+
+            function getThumbPos(e) {
+                const rect = rangeTrack.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let pct = (clientX - rect.left) / rect.width;
+                pct = Math.max(0, Math.min(1, pct));
+                const d = rangeEnd - rangeStart + 1;
+                const threshold = totalPeriods * 0.15;
+                const k = d < threshold ? 0.8 : 1.2;
+                let val = 1 + Math.pow(pct, k) * (totalPeriods - 1);
+                val = Math.round(Math.max(1, Math.min(totalPeriods, val)));
+                return val;
+            }
+
+            function handleStart(e) {
+                e.preventDefault();
+                const target = e.target;
+                if (target === thumbLeft) { isDragging = true;
+                    dragTarget = 'left';
+                    thumbLeft.style.cursor = 'grabbing'; } else if (target === thumbRight) { isDragging = true;
+                    dragTarget = 'right';
+                    thumbRight.style.cursor = 'grabbing'; }
+            }
+
+            function handleMove(e) {
+                if (!isDragging || !dragTarget) return;
+                e.preventDefault();
+                const val = getThumbPos(e);
+                if (dragTarget === 'left') {
+                    let newStart = Math.max(1, Math.min(totalPeriods, val));
+                    let newEnd = rangeEnd;
+                    if (newStart >= newEnd) {
+                        newStart = Math.max(1, newEnd - 1);
+                        newEnd = Math.min(totalPeriods, newEnd + 1);
+                        if (newStart >= newEnd) { newStart = Math.max(1, newEnd - 1); if (newStart < 1) { newStart = 1;
+                                newEnd = Math.min(totalPeriods, 2); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                } else if (dragTarget === 'right') {
+                    let newEnd = Math.max(1, Math.min(totalPeriods, val));
+                    let newStart = rangeStart;
+                    if (newEnd <= newStart) {
+                        newEnd = Math.min(totalPeriods, newStart + 1);
+                        newStart = Math.max(1, newStart - 1);
+                        if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd >
+                            totalPeriods) { newEnd = totalPeriods;
+                                newStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                }
+            }
+
+            function handleEnd(e) {
+                if (isDragging) {
+                    isDragging = false;
+                    dragTarget = null;
+                    thumbLeft.style.cursor = 'grab';
+                    thumbRight.style.cursor = 'grab';
+                    updateFullData();
+                }
+            }
+
+            function initRangeSlider() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (totalPeriods < 1) totalPeriods = 1;
+                rangeStart = 1;
+                rangeEnd = totalPeriods;
+                updateSliderUI();
+                updateFullData();
+
+                rangeTrack.addEventListener('mousedown', (e) => {
+                    if (e.target === thumbLeft || e.target === thumbRight) return;
+                    const val = getThumbPos(e);
+                    const distL = Math.abs(val - rangeStart),
+                        distR = Math.abs(val - rangeEnd);
+                    if (distL < distR) {
+                        rangeStart = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
+                            1) { rangeStart = 1;
+                                rangeEnd = Math.min(totalPeriods, 2); } }
+                    } else {
+                        rangeEnd = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
+                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
+                                rangeStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    updateSliderUI();
+                    updateFullData();
+                });
+
+                thumbLeft.addEventListener('mousedown', handleStart);
+                thumbRight.addEventListener('mousedown', handleStart);
+                thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
+                thumbRight.addEventListener('touchstart', handleStart, { passive: false });
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchend', handleEnd);
+                document.addEventListener('touchcancel', handleEnd);
+
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+            }
+
+            function getFavorites() {
+                try {
+                    return JSON.parse(localStorage.getItem('lottery_favorites')) || [];
+                } catch { return []; }
+            }
+
+            function setFavorites(favs) {
+                localStorage.setItem('lottery_favorites', JSON.stringify(favs));
+            }
+
+            function renderFavorites() {
+                const favs = getFavorites();
+                if (favs.length === 0) {
+                    favoritesCard.style.display = 'none';
+                    return;
+                }
+                favoritesCard.style.display = 'block';
+                const ssqFavs = favs.filter(item => item.mode === 'ssq');
+                const dltFavs = favs.filter(item => item.mode === 'dlt');
+                let html = '';
+                if (ssqFavs.length) {
+                    html += `<div class="fav-section"><div class="sub-title">双色球收藏
+                    <span>
+                        <span class="btn-text all-delete" data-mode="ssq" data-action="delete-all">删除全部</span>
+                        <span class="btn-text all-copy" data-mode="ssq" data-action="copy-all">复制全部</span>
+                    </span>
+                </div>`;
+                    ssqFavs.forEach((item, idx) => {
+                        const realIdx = favs.indexOf(item);
+                        html += '<div class="history-row">';
+                        html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
+                        item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
+                        html += '<span class="sep">+</span>';
+                        item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
+                        const numsStr = '红球:' + item.nums.reds.map(pad).join(' ') + ' + 蓝球:' + item.nums.blues
+                            .map(pad).join(' ');
+                        html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+                if (dltFavs.length) {
+                    html += `<div class="fav-section"><div class="sub-title">大乐透收藏
+                    <span>
+                        <span class="btn-text all-delete" data-mode="dlt" data-action="delete-all">删除全部</span>
+                        <span class="btn-text all-copy" data-mode="dlt" data-action="copy-all">复制全部</span>
+                    </span>
+                </div>`;
+                    dltFavs.forEach((item, idx) => {
+                        const realIdx = favs.indexOf(item);
+                        html += '<div class="history-row">';
+                        html += `<span class="btn-text del" data-index="${realIdx}">删除</span>`;
+                        item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
+                        html += '<span class="sep">+</span>';
+                        item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
+                        const numsStr = '前区:' + item.nums.reds.map(pad).join(' ') + ' + 后区:' + item.nums.blues
+                            .map(pad).join(' ');
+                        html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+                favList.innerHTML = html;
+
+                favList.querySelectorAll('.btn-text.del').forEach(el => {
+                    el.onclick = function() {
+                        const idx = parseInt(this.dataset.index);
+                        removeFavorite(idx);
+                        vibrate(10);
+                    };
+                });
+                favList.querySelectorAll('.btn-text.copy').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const nums = this.dataset.nums;
+                        if (nums && navigator.clipboard) {
+                            navigator.clipboard.writeText(nums).then(() => {
+                                const original = this.textContent;
+                                this.textContent = '已复制';
+                                this.classList.add('done');
+                                setTimeout(() => {
+                                    this.textContent = original;
+                                    this.classList.remove('done');
+                                }, 800);
+                                vibrate(10);
+                            }).catch(() => {});
+                        }
+                    };
+                });
+                favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const mode = this.dataset.mode;
+                        const action = this.dataset.action;
+                        const allFavs = getFavorites();
+                        const filtered = allFavs.filter(item => item.mode === mode);
+                        if (action === 'delete-all') {
+                            if (filtered.length === 0) return;
+                            if (confirm(`确定删除所有${mode==='ssq'?'双色球':'大乐透'}收藏吗？`)) {
+                                const newFavs = allFavs.filter(item => item.mode !== mode);
+                                setFavorites(newFavs);
+                                renderFavorites();
+                                vibrate(10);
+                            }
+                        } else if (action === 'copy-all') {
+                            if (filtered.length === 0) return;
+                            const texts = filtered.map(item => {
+                                const isSSQ = item.mode === 'ssq';
+                                return (isSSQ ? '红球' : '前区') + ':' + item.nums.reds.map(pad).join(
+                                    ' ') + ' + ' + (isSSQ ? '蓝球' : '后区') + ':' + item.nums
+                                    .blues.map(pad).join(' ');
+                            });
+                            const full = texts.join('\n');
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(full).then(() => {
+                                    const orig = this.textContent;
+                                    this.textContent = '已复制';
+                                    setTimeout(() => { this.textContent = orig; }, 800);
+                                    vibrate(10);
+                                }).catch(() => {});
+                            }
+                        }
+                    };
+                });
+            }
+
+            function removeFavorite(index) {
+                const favs = getFavorites();
+                favs.splice(index, 1);
+                setFavorites(favs);
                 renderFavorites();
-                updateResetState(true);
+            }
+
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentMode = e.target.value;
+                    currentPage = 1;
+                    lastExcludeReds = [];
+                    lastExcludeBlues = [];
+                    lastGeneratedGroupsData = [];
+                    showHint();
+                    trendCache[currentMode] = null;
+                    initRangeSlider();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue';
+                    renderFavorites();
+                    updateResetState(true);
+                });
             });
-        });
 
-        document.getElementById('decBtn').addEventListener('click', ()=>{
-            if (groups > 1) { groups--; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
-        });
-        document.getElementById('incBtn').addEventListener('click', ()=>{
-            if (groups < 5) { groups++; showHint(); specificBtn.disabled = true; specificBtn.className = 'btn btn-blue'; }
-        });
+            document.getElementById('decBtn').addEventListener('click', () => {
+                if (groups > 1) { groups--;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
+            document.getElementById('incBtn').addEventListener('click', () => {
+                if (groups < 5) { groups++;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
 
-        resetBtn.addEventListener('click', resetNumbers);
+            resetBtn.addEventListener('click', resetNumbers);
 
-        document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
-        document.getElementById('specificBtn').addEventListener('click', specificRandom);
-        document.getElementById('smartBtn').addEventListener('click', ()=> smartRecommend('balance'));
-        document.getElementById('coldRecommendBtn').addEventListener('click', ()=> smartRecommend('cold'));
-        document.getElementById('hotRecommendBtn').addEventListener('click', ()=> smartRecommend('hot'));
+            document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
+            document.getElementById('specificBtn').addEventListener('click', specificRandom);
+            document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+            document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+            document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
 
-        prevPageBtn.addEventListener('click', ()=> goToPage(currentPage-1));
-        nextPageBtn.addEventListener('click', ()=> goToPage(currentPage+1));
+            prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+            nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
 
-        loadAllData(true);
-    })();
-</script>
+            loadAllData(true);
+        })();
+    </script>
 </body>
 </html>
