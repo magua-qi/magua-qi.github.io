@@ -165,6 +165,14 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
+        .number-line.action-line {
+            justify-content: space-between;
+            padding: 4px 64px;
+        }
+        .number-line.action-line .btn-text {
+            position: static;
+            transform: none;
+        }
         #favList .history-row {
             display: flex;
             align-items: center;
@@ -187,11 +195,12 @@
             line-height: 1.2;
             flex-shrink: 0;
         }
-        #favList .history-row .time-col .year {
+        #favList .history-row .time-col .monthday {
+            font-size: 10px;
             font-weight: 600;
             color: #2c3e50;
         }
-        #favList .history-row .time-col .monthday {
+        #favList .history-row .time-col .year {
             font-size: 9px;
             color: #95a5a6;
         }
@@ -368,7 +377,8 @@
             opacity: 0.7;
         }
         .btn-text.all-copy,
-        .btn-text.all-delete {
+        .btn-text.all-delete,
+        .btn-text.all-fav {
             font-size: 12px;
             opacity: 0.6;
             cursor: pointer;
@@ -379,15 +389,13 @@
         .btn-text.all-delete {
             color: #e74c6f;
         }
-        .btn-text.all-copy:active,
-        .btn-text.all-delete:active {
-            opacity: 1;
+        .btn-text.all-fav {
+            color: #95a5a6;
         }
-        .action-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 8px;
-            margin: 4px 0;
+        .btn-text.all-copy:active,
+        .btn-text.all-delete:active,
+        .btn-text.all-fav:active {
+            opacity: 1;
         }
         .match-info {
             font-size: 10px;
@@ -915,10 +923,10 @@
             #favList .history-row {
                 border-bottom-color: #3a3f4a;
             }
-            #favList .history-row .time-col .year {
+            #favList .history-row .time-col .monthday {
                 color: #c8d0dc;
             }
-            #favList .history-row .time-col .monthday {
+            #favList .history-row .time-col .year {
                 color: #9aa5b5;
             }
             .history-meta {
@@ -997,6 +1005,9 @@
             .btn-text.all-delete {
                 color: #ff6b7a;
             }
+            .btn-text.all-fav {
+                color: #7f8c8d;
+            }
             .fav-section .sub-title {
                 color: #c8d0dc;
                 border-bottom-color: #3a3f4a;
@@ -1070,7 +1081,8 @@
                 font-size: 11px;
             }
             .btn-text.all-copy,
-            .btn-text.all-delete {
+            .btn-text.all-delete,
+            .btn-text.all-fav {
                 font-size: 9px;
             }
             .number-line {
@@ -1084,6 +1096,9 @@
             .number-line .btn-text.copy {
                 font-size: 10px;
             }
+            .number-line.action-line {
+                padding: 4px 48px;
+            }
             #favList .history-row {
                 padding: 4px 6px;
                 gap: 4px;
@@ -1093,10 +1108,10 @@
                 min-width: 36px;
                 font-size: 9px;
             }
-            #favList .history-row .time-col .year {
+            #favList .history-row .time-col .monthday {
                 font-size: 10px;
             }
-            #favList .history-row .time-col .monthday {
+            #favList .history-row .time-col .year {
                 font-size: 8px;
             }
             #favList .history-row .ball-group .ball {
@@ -1186,7 +1201,8 @@
                 font-size: 10px;
             }
             .btn-text.all-copy,
-            .btn-text.all-delete {
+            .btn-text.all-delete,
+            .btn-text.all-fav {
                 font-size: 8px;
             }
             .number-line {
@@ -1200,6 +1216,9 @@
             .number-line .btn-text.copy {
                 font-size: 9px;
             }
+            .number-line.action-line {
+                padding: 3px 40px;
+            }
             #favList .history-row {
                 padding: 3px 4px;
                 gap: 3px;
@@ -1209,10 +1228,10 @@
                 min-width: 30px;
                 font-size: 8px;
             }
-            #favList .history-row .time-col .year {
+            #favList .history-row .time-col .monthday {
                 font-size: 9px;
             }
-            #favList .history-row .time-col .monthday {
+            #favList .history-row .time-col .year {
                 font-size: 7px;
             }
             #favList .history-row .ball-group .ball {
@@ -1264,9 +1283,7 @@
                 <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
                 <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
             </div>
-            <div class="result-box" id="resultArea">
-                <div class="hint-text">⏳ 加载数据中...</div>
-            </div>
+            <!-- 按钮行：重置、天命所归、逆天改命 移到号码生成区域上方 -->
             <div class="btn-row">
                 <div class="btn-group">
                     <button class="btn-cycle" id="decBtn">−</button>
@@ -1275,6 +1292,9 @@
                 </div>
                 <button class="btn btn-red" id="refreshBtn">天命所归</button>
                 <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
+            </div>
+            <div class="result-box" id="resultArea">
+                <div class="hint-text">⏳ 加载数据中...</div>
             </div>
             <div class="btn-row">
                 <button class="btn btn-smart" id="smartBtn">智能推荐</button>
@@ -1365,7 +1385,7 @@
             let lastGeneratedGroupsData = [];
             let lastRecommendReason = '';
             let hasGeneratedNumbers = false;
-            let isManageMode = false; // 管理状态
+            let isManageMode = false;
 
             const $ = id => document.getElementById(id);
             const resultArea = $('resultArea');
@@ -1619,6 +1639,30 @@
                 renderFavorites();
             }
 
+            // 长按处理工具
+            function setupLongPress(element, callback, duration) {
+                duration = duration || 600;
+                let timer = null;
+                const start = function(e) {
+                    timer = setTimeout(function() {
+                        callback(e);
+                        timer = null;
+                    }, duration);
+                };
+                const cancel = function() {
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                };
+                element.addEventListener('mousedown', start);
+                element.addEventListener('mouseup', cancel);
+                element.addEventListener('mouseleave', cancel);
+                element.addEventListener('touchstart', start, { passive: true });
+                element.addEventListener('touchend', cancel, { passive: true });
+                element.addEventListener('touchcancel', cancel, { passive: true });
+            }
+
             function renderFavorites() {
                 const favs = getFavorites();
                 if (favs.length === 0) {
@@ -1627,24 +1671,22 @@
                 }
                 favoritesCard.style.display = 'block';
                 favs.sort((a, b) => b.time - a.time);
-                // 按彩种分组
                 const ssqFavs = favs.filter(item => item.mode === 'ssq');
                 const dltFavs = favs.filter(item => item.mode === 'dlt');
 
                 let html = '';
-                // 双色球
                 if (ssqFavs.length) {
                     html += `<div class="fav-section"><div class="sub-title">双色球收藏`;
                     if (isManageMode) {
                         html +=
-                            `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
+                            `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">长按删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     }
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
                         html += '<div class="history-row">';
                         const timeObj = formatTime(item.time);
-                        html += `<div class="time-col"><span class="year">${timeObj.year}</span><span class="monthday">${timeObj.monthday}</span></div>`;
+                        html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
                         item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
                         html += '<span class="sep">+</span>';
@@ -1661,19 +1703,18 @@
                     });
                     html += '</div>';
                 }
-                // 大乐透
                 if (dltFavs.length) {
                     html += `<div class="fav-section"><div class="sub-title">大乐透收藏`;
                     if (isManageMode) {
                         html +=
-                            `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
+                            `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">长按删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     }
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
                         html += '<div class="history-row">';
                         const timeObj = formatTime(item.time);
-                        html += `<div class="time-col"><span class="year">${timeObj.year}</span><span class="monthday">${timeObj.monthday}</span></div>`;
+                        html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
                         item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
                         html += '<span class="sep">+</span>';
@@ -1692,7 +1733,6 @@
                 }
                 favList.innerHTML = html;
 
-                // 绑定删除和复制事件（管理状态时）
                 if (isManageMode) {
                     favList.querySelectorAll('.btn-text.del').forEach(el => {
                         el.onclick = function() {
@@ -1719,23 +1759,28 @@
                             }
                         };
                     });
-                    // 顶部的全部删除/全部复制
+                    // 处理删除全部（长按）和复制全部（点击）
                     favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
-                        btn.onclick = function(e) {
-                            e.stopPropagation();
-                            const mode = this.dataset.mode;
-                            const action = this.dataset.action;
-                            const allFavs = getFavorites();
-                            const filtered = allFavs.filter(item => item.mode === mode);
-                            if (action === 'deleteAll') {
+                        const action = btn.dataset.action;
+                        if (action === 'deleteAll') {
+                            // 长按删除全部，无弹窗
+                            setupLongPress(btn, function(e) {
+                                e.stopPropagation();
+                                const mode = btn.dataset.mode;
+                                const allFavs = getFavorites();
+                                const filtered = allFavs.filter(item => item.mode === mode);
                                 if (filtered.length === 0) return;
-                                if (confirm(`确定删除所有${mode==='ssq'?'双色球':'大乐透'}收藏吗？`)) {
-                                    const newFavs = allFavs.filter(item => item.mode !== mode);
-                                    setFavorites(newFavs);
-                                    renderFavorites();
-                                    vibrate(10);
-                                }
-                            } else if (action === 'copyAll') {
+                                const newFavs = allFavs.filter(item => item.mode !== mode);
+                                setFavorites(newFavs);
+                                renderFavorites();
+                                vibrate(10);
+                            }, 600);
+                        } else if (action === 'copyAll') {
+                            btn.onclick = function(e) {
+                                e.stopPropagation();
+                                const mode = this.dataset.mode;
+                                const allFavs = getFavorites();
+                                const filtered = allFavs.filter(item => item.mode === mode);
                                 if (filtered.length === 0) return;
                                 const texts = filtered.map(item => {
                                     const isSSQ = item.mode === 'ssq';
@@ -1750,20 +1795,18 @@
                                         vibrate(10);
                                     }).catch(() => {});
                                 }
-                            }
-                        };
+                            };
+                        }
                     });
                 }
             }
 
-            // 管理按钮切换
             manageBtn.addEventListener('click', function() {
                 isManageMode = !isManageMode;
                 this.textContent = isManageMode ? '完成' : '管理';
                 renderFavorites();
             });
 
-            // ---------- 显示结果 ----------
             function rollingAnimation(lines, groupsData, isSSQ, callback) {
                 let completed = 0;
                 const total = lines.length;
@@ -1824,10 +1867,8 @@
                     html += '</div>';
                 });
 
-                html += `<div class="action-row">
-                            <span class="btn-text all-fav" id="allFavBtn">收藏全部</span>
-                            <span class="btn-text all-copy" id="allCopyBtn2">全部复制</span>
-                        </div>`;
+                html +=
+                    `<div class="number-line action-line"><span class="btn-text all-fav" id="allFavBtn">收藏全部</span><span class="btn-text all-copy" id="allCopyBtn2">全部复制</span></div>`;
 
                 const matchInfo = getMatchInfo(groupsData);
                 if (matchInfo) {
@@ -1935,7 +1976,7 @@
                     };
                 }
 
-                const lines = resultArea.querySelectorAll('.number-line');
+                const lines = resultArea.querySelectorAll('.number-line:not(.action-line)');
                 if (lines.length) {
                     rollingAnimation(lines, groupsData, isSSQ, () => {});
                 }
@@ -2025,6 +2066,8 @@
                     for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
                     html += '</div>';
                 }
+                html +=
+                    `<div class="number-line action-line"><span class="btn-text all-fav" style="opacity:0.4;">收藏全部</span><span class="btn-text all-copy" style="opacity:0.4;">全部复制</span></div>`;
                 html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
                 resultArea.innerHTML = html;
                 specificBtn.disabled = true;
