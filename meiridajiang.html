@@ -1930,22 +1930,50 @@
                     allFavBtn.onclick = function() {
                         const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
                         if (!favBtns.length) return;
-                        let changed = false;
+
+                        // 判断是否全部已收藏
+                        const allActive = Array.from(favBtns).every(btn => btn.classList.contains('active'));
+
+                        // 获取当前收藏列表
+                        let favs = getFavorites();
+
+                        // 遍历每个号码行的收藏按钮
                         favBtns.forEach(btn => {
                             const mode = btn.dataset.mode;
                             const reds = btn.dataset.reds.split(',').map(Number);
                             const blues = btn.dataset.blues.split(',').map(Number);
                             const nums = { reds, blues };
-                            if (!btn.classList.contains('active')) {
-                                const added = toggleFavorite(mode, nums);
-                                if (added) {
-                                    btn.textContent = '收藏';
-                                    btn.classList.add('active');
-                                    changed = true;
+
+                            // 查找该号码是否已在收藏列表中
+                            const idx = favs.findIndex(item =>
+                                item.mode === mode &&
+                                item.nums.reds.length === nums.reds.length &&
+                                item.nums.blues.length === nums.blues.length &&
+                                item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                                item.nums.blues.every((v, i) => v === nums.blues[i])
+                            );
+
+                            if (allActive) {
+                                // 全部取消收藏
+                                if (idx !== -1) {
+                                    favs.splice(idx, 1);
                                 }
+                                btn.classList.remove('active');
+                                btn.textContent = '收藏';
+                            } else {
+                                // 全部收藏（不管之前状态，全部设为已收藏）
+                                if (idx === -1) {
+                                    favs.push({ mode, nums, time: Date.now() });
+                                }
+                                btn.classList.add('active');
+                                btn.textContent = '收藏';
                             }
                         });
-                        if (changed) vibrate(10);
+
+                        // 更新收藏列表并重新渲染收藏区域
+                        setFavorites(favs);
+                        renderFavorites();
+                        vibrate(10);
                     };
                 }
 
