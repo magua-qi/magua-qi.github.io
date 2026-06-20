@@ -211,6 +211,39 @@
             flex: 1;
             justify-content: center;
         }
+        #favList .history-row .status-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            flex-shrink: 0;
+            min-width: 48px;
+            margin-left: 4px;
+            line-height: 1.3;
+        }
+        #favList .history-row .status-group .status-prize {
+            font-size: 12px;
+            font-weight: 700;
+            color: #e74c6f;
+        }
+        #favList .history-row .status-group .status-prize.gold {
+            color: #f39c12;
+        }
+        #favList .history-row .status-group .status-prize.silver {
+            color: #7f8c8d;
+        }
+        #favList .history-row .status-group .status-prize.bronze {
+            color: #cd7f32;
+        }
+        #favList .history-row .status-group .status-match {
+            font-size: 12px;
+            font-weight: 600;
+            color: #3a7bd5;
+        }
+        #favList .history-row .status-group .status-pending {
+            font-size: 12px;
+            color: #95a5a6;
+        }
         #favList .history-row .action-group {
             display: flex;
             align-items: center;
@@ -832,7 +865,6 @@
             font-size: 10px;
             margin-left: 8px;
         }
-
         @media (prefers-color-scheme: dark) {
             body {
                 background: #1a1e24;
@@ -929,6 +961,24 @@
             #favList .history-row .time-col .year {
                 color: #9aa5b5;
             }
+            #favList .history-row .status-group .status-prize {
+                color: #ff6b7a;
+            }
+            #favList .history-row .status-group .status-prize.gold {
+                color: #f1c40f;
+            }
+            #favList .history-row .status-group .status-prize.silver {
+                color: #bdc3c7;
+            }
+            #favList .history-row .status-group .status-prize.bronze {
+                color: #e67e22;
+            }
+            #favList .history-row .status-group .status-match {
+                color: #6ab0ff;
+            }
+            #favList .history-row .status-group .status-pending {
+                color: #7f8c8d;
+            }
             .history-meta {
                 color: #9aa5b5;
             }
@@ -1017,7 +1067,6 @@
                 filter: grayscale(1) brightness(0.7);
             }
         }
-
         @media (max-width: 420px) {
             .btn {
                 font-size: 11px;
@@ -1120,6 +1169,15 @@
                 font-size: 9px;
             }
             #favList .history-row .action-group .btn-text {
+                font-size: 10px;
+            }
+            #favList .history-row .status-group .status-prize {
+                font-size: 10px;
+            }
+            #favList .history-row .status-group .status-match {
+                font-size: 10px;
+            }
+            #favList .history-row .status-group .status-pending {
                 font-size: 10px;
             }
             #historyList .history-row {
@@ -1242,6 +1300,15 @@
             #favList .history-row .action-group .btn-text {
                 font-size: 9px;
             }
+            #favList .history-row .status-group .status-prize {
+                font-size: 9px;
+            }
+            #favList .history-row .status-group .status-match {
+                font-size: 9px;
+            }
+            #favList .history-row .status-group .status-pending {
+                font-size: 9px;
+            }
             #historyList .history-row {
                 padding: 3px 6px;
                 gap: 3px;
@@ -1263,7 +1330,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- 我的收藏卡片 -->
         <div class="card" id="favoritesCard" style="display:none;">
             <div class="title-bar tertiary">
                 我的收藏
@@ -1273,8 +1339,6 @@
                 <div id="favList"></div>
             </div>
         </div>
-
-        <!-- 号码生成卡片 -->
         <div class="card">
             <div class="title-bar">
                 ~急急如律令~
@@ -1317,8 +1381,6 @@
             </div>
             <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
         </div>
-
-        <!-- 数据详情卡片 -->
         <div class="card">
             <div class="title-bar secondary">数据详情</div>
             <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
@@ -1340,8 +1402,6 @@
                 <div id="backTableContainer" class="table-container"></div>
             </div>
         </div>
-
-        <!-- 功能说明卡片 -->
         <div class="card">
             <div class="title-bar fourth">功能说明</div>
             <div class="info-content">
@@ -1356,7 +1416,6 @@
             </div>
         </div>
     </div>
-
     <script>
         (function() {
             const CONFIG = {
@@ -1525,7 +1584,7 @@
 
             function showSkeleton() {
                 resultArea.innerHTML =
-                `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
+                    `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
             }
 
             async function loadAllData(showLoading = true) {
@@ -1661,6 +1720,78 @@
                 element.addEventListener('touchcancel', cancel, { passive: true });
             }
 
+            function getPrizeNameSSQ(redMatch, blueMatch) {
+                if (redMatch === 6 && blueMatch === 1) return '一等奖';
+                if (redMatch === 6 && blueMatch === 0) return '二等奖';
+                if (redMatch === 5 && blueMatch === 1) return '三等奖';
+                if (redMatch === 5 && blueMatch === 0) return '四等奖';
+                if (redMatch === 4 && blueMatch === 1) return '四等奖';
+                if (redMatch === 4 && blueMatch === 0) return '五等奖';
+                if (redMatch === 3 && blueMatch === 1) return '五等奖';
+                if (redMatch === 2 && blueMatch === 1) return '六等奖';
+                if (redMatch === 1 && blueMatch === 1) return '六等奖';
+                if (redMatch === 0 && blueMatch === 1) return '六等奖';
+                return null;
+            }
+
+            function getPrizeNameDLT(frontMatch, backMatch) {
+                if (frontMatch === 5 && backMatch === 2) return '一等奖';
+                if (frontMatch === 5 && backMatch === 1) return '二等奖';
+                if (frontMatch === 5 && backMatch === 0) return '三等奖';
+                if (frontMatch === 4 && backMatch === 2) return '四等奖';
+                if (frontMatch === 4 && backMatch === 1) return '五等奖';
+                if (frontMatch === 3 && backMatch === 2) return '六等奖';
+                if (frontMatch === 4 && backMatch === 0) return '七等奖';
+                if (frontMatch === 3 && backMatch === 1) return '八等奖';
+                if (frontMatch === 2 && backMatch === 2) return '八等奖';
+                if (frontMatch === 3 && backMatch === 0) return '九等奖';
+                if (frontMatch === 2 && backMatch === 1) return '九等奖';
+                if (frontMatch === 1 && backMatch === 2) return '九等奖';
+                if (frontMatch === 0 && backMatch === 2) return '九等奖';
+                return null;
+            }
+
+            function getPrizeClass(prizeName) {
+                if (!prizeName) return '';
+                if (prizeName === '一等奖') return 'gold';
+                if (prizeName === '二等奖' || prizeName === '三等奖') return 'silver';
+                return 'bronze';
+            }
+
+            function getLotteryStatus(mode, nums) {
+                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                if (!records || !records.length) return { status: 'pending', redMatch: 0, blueMatch: 0 };
+                let bestRedMatch = 0,
+                    bestBlueMatch = 0;
+                let bestRecord = null;
+                let bestTotal = -1;
+                for (const record of records) {
+                    const redMatch = nums.reds.filter(n => record.reds.includes(n)).length;
+                    const blueMatch = nums.blues.filter(n => record.blues.includes(n)).length;
+                    const total = redMatch + blueMatch;
+                    if (total > bestTotal || (total === bestTotal && record.date > (bestRecord?.date || ''))) {
+                        bestTotal = total;
+                        bestRedMatch = redMatch;
+                        bestBlueMatch = blueMatch;
+                        bestRecord = record;
+                    }
+                }
+                if (bestTotal === 0) {
+                    return { status: 'pending', redMatch: 0, blueMatch: 0 };
+                }
+                let prize = null;
+                if (mode === 'ssq') {
+                    prize = getPrizeNameSSQ(bestRedMatch, bestBlueMatch);
+                } else {
+                    prize = getPrizeNameDLT(bestRedMatch, bestBlueMatch);
+                }
+                if (prize) {
+                    return { status: 'prize', redMatch: bestRedMatch, blueMatch: bestBlueMatch, prize: prize };
+                } else {
+                    return { status: 'partial', redMatch: bestRedMatch, blueMatch: bestBlueMatch };
+                }
+            }
+
             function renderFavorites() {
                 const favs = getFavorites();
                 if (favs.length === 0) {
@@ -1696,6 +1827,19 @@
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
+                        } else {
+                            const status = getLotteryStatus('ssq', item.nums);
+                            html += '<div class="status-group">';
+                            if (status.status === 'pending') {
+                                html += `<span class="status-pending">待开奖</span>`;
+                            } else if (status.status === 'partial') {
+                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
+                            } else if (status.status === 'prize') {
+                                const cls = getPrizeClass(status.prize);
+                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
+                                html += `<span class="status-prize ${cls}">${status.prize}</span>`;
+                            }
+                            html += '</div>';
                         }
                         html += '</div>';
                     });
@@ -1724,6 +1868,19 @@
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
+                        } else {
+                            const status = getLotteryStatus('dlt', item.nums);
+                            html += '<div class="status-group">';
+                            if (status.status === 'pending') {
+                                html += `<span class="status-pending">待开奖</span>`;
+                            } else if (status.status === 'partial') {
+                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
+                            } else if (status.status === 'prize') {
+                                const cls = getPrizeClass(status.prize);
+                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
+                                html += `<span class="status-prize ${cls}">${status.prize}</span>`;
+                            }
+                            html += '</div>';
                         }
                         html += '</div>';
                     });
