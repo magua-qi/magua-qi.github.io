@@ -1283,7 +1283,6 @@
                 <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
                 <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
             </div>
-            <!-- 按钮行：重置、天命所归、逆天改命 移到号码生成区域上方 -->
             <div class="btn-row">
                 <div class="btn-group">
                     <button class="btn-cycle" id="decBtn">−</button>
@@ -1639,7 +1638,6 @@
                 renderFavorites();
             }
 
-            // 长按处理工具
             function setupLongPress(element, callback, duration) {
                 duration = duration || 600;
                 let timer = null;
@@ -1759,11 +1757,9 @@
                             }
                         };
                     });
-                    // 处理删除全部（长按）和复制全部（点击）
                     favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
                         const action = btn.dataset.action;
                         if (action === 'deleteAll') {
-                            // 长按删除全部，无弹窗
                             setupLongPress(btn, function(e) {
                                 e.stopPropagation();
                                 const mode = btn.dataset.mode;
@@ -2066,8 +2062,7 @@
                     for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
                     html += '</div>';
                 }
-                html +=
-                    `<div class="number-line action-line"><span class="btn-text all-fav" style="opacity:0.4;">收藏全部</span><span class="btn-text all-copy" style="opacity:0.4;">全部复制</span></div>`;
+                // 空白号码时完全不显示"收藏全部"和"全部复制"行
                 html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
                 resultArea.innerHTML = html;
                 specificBtn.disabled = true;
