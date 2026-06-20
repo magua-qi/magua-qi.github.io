@@ -1758,23 +1758,30 @@
                 return 'bronze';
             }
 
-            function getLotteryStatus(mode, nums) {
+            function getLotteryStatus(mode, nums, favoriteTime) {
                 const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
                 if (!records || !records.length) return { status: 'pending', redMatch: 0, blueMatch: 0 };
+                const favoriteDate = new Date(favoriteTime);
+                let bestRecord = null;
                 let bestRedMatch = 0,
                     bestBlueMatch = 0;
-                let bestRecord = null;
                 let bestTotal = -1;
                 for (const record of records) {
+                    const recordDate = new Date(record.date);
+                    if (recordDate < favoriteDate) continue;
                     const redMatch = nums.reds.filter(n => record.reds.includes(n)).length;
                     const blueMatch = nums.blues.filter(n => record.blues.includes(n)).length;
                     const total = redMatch + blueMatch;
-                    if (total > bestTotal || (total === bestTotal && record.date > (bestRecord?.date || ''))) {
-                        bestTotal = total;
+                    if (recordDate < favoriteDate) continue;
+                    if (bestRecord === null || recordDate < new Date(bestRecord.date)) {
+                        bestRecord = record;
                         bestRedMatch = redMatch;
                         bestBlueMatch = blueMatch;
-                        bestRecord = record;
+                        bestTotal = total;
                     }
+                }
+                if (!bestRecord) {
+                    return { status: 'pending', redMatch: 0, blueMatch: 0 };
                 }
                 if (bestTotal === 0) {
                     return { status: 'pending', redMatch: 0, blueMatch: 0 };
@@ -1828,7 +1835,7 @@
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
                         } else {
-                            const status = getLotteryStatus('ssq', item.nums);
+                            const status = getLotteryStatus('ssq', item.nums, item.time);
                             html += '<div class="status-group">';
                             if (status.status === 'pending') {
                                 html += `<span class="status-pending">待开奖</span>`;
@@ -1869,7 +1876,7 @@
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
                         } else {
-                            const status = getLotteryStatus('dlt', item.nums);
+                            const status = getLotteryStatus('dlt', item.nums, item.time);
                             html += '<div class="status-group">';
                             if (status.status === 'pending') {
                                 html += `<span class="status-pending">待开奖</span>`;
