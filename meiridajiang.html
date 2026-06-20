@@ -167,7 +167,7 @@
         }
         .number-line.action-line {
             justify-content: space-between;
-            padding: 4px;
+            padding: 4px 64px;
         }
         .number-line.action-line .btn-text {
             position: static;
@@ -1939,7 +1939,7 @@
                             if (!btn.classList.contains('active')) {
                                 const added = toggleFavorite(mode, nums);
                                 if (added) {
-                                    btn.textContent = '已收藏';
+                                    btn.textContent = '收藏';
                                     btn.classList.add('active');
                                     changed = true;
                                 }
@@ -2062,8 +2062,7 @@
                     for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
                     html += '</div>';
                 }
-                // 空白号码时完全不显示"收藏全部"和"全部复制"行
-                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">点击下方按钮 搏一搏单车变摩托！</div>`;
+                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">选择功能立刻生成 搏一搏单车变摩托！</div>`;
                 resultArea.innerHTML = html;
                 specificBtn.disabled = true;
                 specificBtn.className = 'btn btn-blue';
