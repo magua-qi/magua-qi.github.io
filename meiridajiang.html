@@ -313,7 +313,10 @@
             background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
             box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
         }
-        .ball.red.unmatch,
+        .ball.red.unmatch {
+            background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3);
+            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.15);
+        }
         .ball.front.unmatch {
             background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3);
             box-shadow: 0 2px 6px rgba(231, 76, 111, 0.15);
@@ -2244,4 +2247,543 @@
                             const redSet = new Set(lastExcludeReds),
                                 blueSet = new Set(lastExcludeBlues);
                             if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback = true;
-                                d = genSSQ(lastEx
+                                d = genSSQ(lastExcludeReds.slice(0, CONFIG.ssq.frontCount), lastExcludeBlues.slice(
+                                    0, CONFIG.ssq.backCount)); } else d = genSSQ(lastExcludeReds,
+                                lastExcludeBlues);
+                        } else {
+                            const redSet = new Set(lastExcludeReds),
+                                blueSet = new Set(lastExcludeBlues);
+                            if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback = true;
+                                d = genDLT(lastExcludeReds.slice(0, CONFIG.dlt.frontCount), lastExcludeBlues.slice(
+                                    0, CONFIG.dlt.backCount)); } else d = genDLT(lastExcludeReds,
+                                lastExcludeBlues);
+                        }
+                        groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
+                    }
+                    const reason = fallback ? '特定随机 (排除不足·已降级)' : '反其道而行之~';
+                    displayResult(groupsData, currentMode, reason);
+                    lastRecommendReason = reason;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function showHint() {
+                const isSSQ = currentMode === 'ssq';
+                const frontCount = CONFIG[currentMode].frontCount,
+                    backCount = CONFIG[currentMode].backCount;
+                let html = '';
+                for (let g = 0; g < groups; g++) {
+                    html += '<div class="number-line" style="padding:4px 8px;">';
+                    for (let f = 0; f < frontCount; f++) html += `<span class="placeholder-red"></span>`;
+                    html += '<span class="sep">+</span>';
+                    for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
+                    html += '</div>';
+                }
+                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">选择好模式开始~ 搏一搏单车变摩托！</div>`;
+                resultArea.innerHTML = html;
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+                lastGeneratedGroupsData = [];
+                lastRecommendReason = '';
+                renderHistory();
+            }
+
+            function weightedSelect(pool, count) {
+                const totalWeight = pool.reduce((s, o) => s + o.weight, 0);
+                const selected = new Set(),
+                    result = [];
+                const temp = [...pool];
+                while (result.length < count && temp.length) {
+                    let rand = Math.random() * totalWeight;
+                    let acc = 0;
+                    let pick = null;
+                    for (let i = 0; i < temp.length; i++) {
+                        acc += temp[i].weight;
+                        if (rand <= acc) { pick = temp[i]; break; }
+                    }
+                    if (pick && !selected.has(pick.num)) {
+                        selected.add(pick.num);
+                        result.push(pick.num);
+                        const idx = temp.findIndex(p => p.num === pick.num);
+                        if (idx !== -1) temp.splice(idx, 1);
+                    } else if (!pick) break;
+                }
+                while (result.length < count) {
+                    const max = pool.length ? Math.max(...pool.map(p => p.num)) : 35;
+                    const extra = Math.floor(Math.random() * max) + 1;
+                    if (!selected.has(extra)) { result.push(extra);
+                        selected.add(extra); }
+                }
+                return result.sort((a, b) => a - b);
+            }
+
+            function smartRecommend(mode) {
+                try {
+                    const records = getFilteredData(currentMode);
+                    if (!records || !records.length) {
+                        resultArea.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
+                        return;
+                    }
+                    const stats = analyzeStats(records, currentMode);
+                    if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
+                    const isSSQ = currentMode === 'ssq';
+                    const frontCnt = CONFIG[currentMode].frontCount,
+                        backCnt = CONFIG[currentMode].backCount;
+                    const frontMax = stats.frontMax,
+                        backMax = stats.backMax;
+                    const maxFrontFreq = stats.maxFrontFreq,
+                        maxBackFreq = stats.maxBackFreq;
+                    const maxFrontMiss = stats.maxFrontMiss,
+                        maxBackMiss = stats.maxBackMiss;
+                    const groupsData = [];
+                    for (let g = 0; g < groups; g++) {
+                        const frontPool = [],
+                            backPool = [];
+                        for (let i = 1; i <= frontMax; i++) {
+                            let normFreq = maxFrontFreq ? stats.frontFreq[i] / maxFrontFreq : 0;
+                            let normMiss = maxFrontMiss ? stats.frontMiss[i] / maxFrontMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            frontPool.push({ num: i, weight });
+                        }
+                        for (let i = 1; i <= backMax; i++) {
+                            let normFreq = maxBackFreq ? stats.backFreq[i] / maxBackFreq : 0;
+                            let normMiss = maxBackMiss ? stats.backMiss[i] / maxBackMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            backPool.push({ num: i, weight });
+                        }
+                        const reds = weightedSelect(frontPool, frontCnt);
+                        const blues = weightedSelect(backPool, backCnt);
+                        groupsData.push({ reds: reds.slice(), blues: blues.slice() });
+                    }
+                    const modeNames = { cold: '追冷(高遗漏)', hot: '追热(高频)', balance: '冷热均衡' };
+                    const reasonText = `${modeNames[mode]||mode}`;
+                    displayResult(groupsData, currentMode, reasonText);
+                    lastRecommendReason = reasonText;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">推荐失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function analyzeStats(records, type) {
+                if (!records || !records.length) return null;
+                const cfg = CONFIG[type];
+                const frontMax = cfg.front,
+                    backMax = cfg.back;
+                const frontFreq = new Array(frontMax + 1).fill(0),
+                    backFreq = new Array(backMax + 1).fill(0);
+                const frontMiss = new Array(frontMax + 1).fill(0),
+                    backMiss = new Array(backMax + 1).fill(0);
+                const frontMet = new Array(frontMax + 1).fill(false),
+                    backMet = new Array(backMax + 1).fill(false);
+                for (let i = 0; i < records.length; i++) {
+                    const rec = records[i];
+                    rec.reds.forEach(n => { frontFreq[n]++;
+                        if (!frontMet[n]) { frontMiss[n] = i;
+                            frontMet[n] = true; } });
+                    rec.blues.forEach(n => { backFreq[n]++;
+                        if (!backMet[n]) { backMiss[n] = i;
+                            backMet[n] = true; } });
+                }
+                for (let i = 1; i <= frontMax; i++)
+                    if (!frontMet[i]) frontMiss[i] = records.length;
+                for (let i = 1; i <= backMax; i++)
+                    if (!backMet[i]) backMiss[i] = records.length;
+                const maxFrontFreq = Math.max(...frontFreq.slice(1));
+                const maxBackFreq = Math.max(...backFreq.slice(1));
+                const maxFrontMiss = Math.max(...frontMiss.slice(1));
+                const maxBackMiss = Math.max(...backMiss.slice(1));
+                return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax,
+                    maxFrontFreq, maxBackFreq, maxFrontMiss, maxBackMiss };
+            }
+
+            function getFilteredData(type) {
+                const all = getDataSync(type);
+                if (!all || !all.length) return all;
+                const s = Math.max(0, rangeStart - 1),
+                    e = Math.min(all.length, rangeEnd);
+                if (s >= e) return all.slice(0, 1);
+                return all.slice(s, e);
+            }
+
+            function getDataSync(type) {
+                if (trendCache[type]) return trendCache[type];
+                const records = type === 'ssq' ? SSQ_DATA : DLT_DATA;
+                trendCache[type] = records;
+                return records;
+            }
+
+            function loadHistory(lotteryType) {
+                const filtered = getFilteredData(lotteryType);
+                historyStore[lotteryType] = filtered.map(item => ({
+                    period: item.issue,
+                    date: item.date.slice(5),
+                    nums: item.reds,
+                    blues: item.blues,
+                    blue: item.blues[0]
+                }));
+                if (lotteryType === currentMode) renderHistory();
+            }
+
+            function renderHistory() {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) {
+                    historyList.innerHTML = `<div class="error-text">暂无数据</div>`;
+                    pageInfo.textContent = '0/0';
+                    prevPageBtn.disabled = true;
+                    nextPageBtn.disabled = true;
+                    return;
+                }
+                const total = items.length;
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (currentPage > totalPages) currentPage = totalPages || 1;
+                if (currentPage < 1) currentPage = 1;
+                const start = (currentPage - 1) * PAGE_SIZE,
+                    end = Math.min(start + PAGE_SIZE, total);
+                const pageItems = items.slice(start, end);
+                const isSSQ = currentMode === 'ssq';
+                const matchGroups = lastGeneratedGroupsData || [];
+                const hasMatchGroups = matchGroups && matchGroups.length > 0;
+                let html = '';
+                pageItems.forEach(item => {
+                    html += '<div class="history-row">';
+                    html += `<div class="left-info">
+                                <span class="period">${item.period}期</span>
+                                <span class="date">${item.date}</span>
+                            </div>`;
+                    html += '<div class="ball-group">';
+                    item.nums.forEach(n => {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.reds.includes(n)) { matched = true; break; }
+                        }
+                        html +=
+                            `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
+                    });
+                    html += '<span class="sep">+</span>';
+                    if (isSSQ) {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.blues.includes(item.blue)) { matched = true; break; }
+                        }
+                        html += `<span class="ball blue${(hasMatchGroups && !matched)?' unmatch':''}">${pad(item.blue)}</span>`;
+                    } else {
+                        item.blues.forEach(b => {
+                            let matched = false;
+                            for (let g of matchGroups) {
+                                if (g.blues.includes(b)) { matched = true; break; }
+                            }
+                            html +=
+                                `<span class="ball back${(hasMatchGroups && !matched)?' unmatch':''}">${pad(b)}</span>`;
+                        });
+                    }
+                    html += '</div></div>';
+                });
+                historyList.innerHTML = html;
+                pageInfo.textContent = `${currentPage}/${totalPages}`;
+                prevPageBtn.disabled = (currentPage <= 1);
+                nextPageBtn.disabled = (currentPage >= totalPages);
+            }
+
+            function goToPage(page) {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) return;
+                const totalPages = Math.ceil(items.length / PAGE_SIZE);
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                if (currentPage === page) return;
+                currentPage = page;
+                renderHistory();
+            }
+
+            function renderNumberTable(container, data, title, colorClass) {
+                if (!data || !data.length) { container.innerHTML = `<div class="error-text">暂无数据</div>`; return; }
+                const freqValues = data.map(d => d.freq || 0),
+                    missValues = data.map(d => d.miss || 0);
+                const getRanks = (arr) => {
+                    const sorted = [...arr].sort((a, b) => a - b);
+                    const len = sorted.length;
+                    if (!len) return [];
+                    return arr.map(v => len > 1 ? sorted.lastIndexOf(v) / (len - 1) : 0.5);
+                };
+                const freqRanks = getRanks(freqValues),
+                    missRanks = getRanks(missValues);
+                let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
+                html +=
+                    `<div class="stat-row header"><div class="stat-cell" style="background:transparent;">频次</div><div class="stat-num">号码</div><div class="stat-cell" style="background:transparent;">遗漏</div></div>`;
+                const minAlpha = 0.05,
+                    maxAlpha = 0.95;
+                for (let i = 0; i < data.length; i++) {
+                    const freq = data[i].freq || 0,
+                        miss = data[i].miss || 0,
+                        num = i + 1;
+                    const fRank = freqRanks[i] || 0,
+                        mRank = missRanks[i] || 0;
+                    const fAlpha = minAlpha + (maxAlpha - minAlpha) * fRank,
+                        mAlpha = minAlpha + (maxAlpha - minAlpha) * mRank;
+                    const fColor = fRank > 0.45 ? '#ffffff' : '#2c3e50',
+                        mColor = mRank > 0.45 ? '#ffffff' : '#2c3e50';
+                    const fBg = `rgba(231,76,111,${fAlpha})`,
+                        mBg = `rgba(58,123,213,${mAlpha})`;
+                    const ballClass = colorClass === 'red' ? 'red' : 'blue';
+                    html +=
+                        `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
+                }
+                html += '</div>';
+                container.innerHTML = html;
+            }
+
+            function renderTrend() {
+                const type = currentMode;
+                const records = getFilteredData(type);
+                if (!records || !records.length) {
+                    frontTable.innerHTML = '<div class="error-text">无数据</div>';
+                    backTable.innerHTML = '<div class="error-text">无数据</div>';
+                    return;
+                }
+                const stats = analyzeStats(records, type);
+                if (!stats) { frontTable.innerHTML = '<div class="error-text">解析失败</div>';
+                    backTable.innerHTML = '<div class="error-text">解析失败</div>'; return; }
+                const frontData = [],
+                    backData = [];
+                for (let i = 1; i <= stats.frontMax; i++) frontData.push({ freq: stats.frontFreq[i], miss: stats
+                        .frontMiss[i] });
+                for (let i = 1; i <= stats.backMax; i++) backData.push({ freq: stats.backFreq[i], miss: stats.backMiss[
+                        i] });
+                const frontTitle = type === 'ssq' ? '红球号码统计' : '前区号码统计';
+                const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
+                renderNumberTable(frontTable, frontData, frontTitle, 'red');
+                renderNumberTable(backTable, backData, backTitle, 'blue');
+            }
+
+            function updateSliderUI() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+                if (rangeStart > rangeEnd) { const t = rangeStart;
+                    rangeStart = rangeEnd;
+                    rangeEnd = t; }
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd < 1) rangeEnd = 1;
+                if (rangeStart > totalPeriods) rangeStart = totalPeriods;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+
+                const leftVal = rangeStart,
+                    rightVal = rangeEnd;
+                const pctLeft = totalPeriods > 1 ? ((leftVal - 1) / (totalPeriods - 1)) * 100 : 0;
+                const pctRight = totalPeriods > 1 ? ((rightVal - 1) / (totalPeriods - 1)) * 100 : 100;
+                thumbLeft.style.left = pctLeft + '%';
+                thumbRight.style.left = pctRight + '%';
+                rangeFill.style.left = pctLeft + '%';
+                rangeFill.style.width = (pctRight - pctLeft) + '%';
+
+                const data = allData || [];
+                let leftDate = '------',
+                    rightDate = '------';
+                if (data.length) {
+                    const lr = data[leftVal - 1],
+                        rr = data[rightVal - 1];
+                    leftDate = lr ? lr.date.replace(/-/g, '') : '------';
+                    rightDate = rr ? rr.date.replace(/-/g, '') : '------';
+                }
+                leftText.textContent = `近${leftVal}期 ${leftDate}`;
+                rightText.textContent = `${rightDate} 近${rightVal}期`;
+
+                const selected = rangeEnd - rangeStart + 1;
+                dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
+                rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
+            }
+
+            function updateFullData() {
+                loadHistory(currentMode);
+                renderHistory();
+                renderTrend();
+            }
+
+            let rafId = null;
+
+            function updateRangeDisplay() {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
+                    updateSliderUI();
+                    updateFullData();
+                    rafId = null;
+                });
+            }
+
+            function getThumbPos(e) {
+                const rect = rangeTrack.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let pct = (clientX - rect.left) / rect.width;
+                pct = Math.max(0, Math.min(1, pct));
+                const d = rangeEnd - rangeStart + 1;
+                const threshold = totalPeriods * 0.15;
+                const k = d < threshold ? 0.8 : 1.2;
+                let val = 1 + Math.pow(pct, k) * (totalPeriods - 1);
+                val = Math.round(Math.max(1, Math.min(totalPeriods, val)));
+                return val;
+            }
+
+            function handleStart(e) {
+                e.preventDefault();
+                const target = e.target;
+                if (target === thumbLeft) { isDragging = true;
+                    dragTarget = 'left';
+                    thumbLeft.style.cursor = 'grabbing'; } else if (target === thumbRight) { isDragging = true;
+                    dragTarget = 'right';
+                    thumbRight.style.cursor = 'grabbing'; }
+            }
+
+            function handleMove(e) {
+                if (!isDragging || !dragTarget) return;
+                e.preventDefault();
+                const val = getThumbPos(e);
+                if (dragTarget === 'left') {
+                    let newStart = Math.max(1, Math.min(totalPeriods, val));
+                    let newEnd = rangeEnd;
+                    if (newStart >= newEnd) {
+                        newStart = Math.max(1, newEnd - 1);
+                        newEnd = Math.min(totalPeriods, newEnd + 1);
+                        if (newStart >= newEnd) { newStart = Math.max(1, newEnd - 1); if (newStart < 1) { newStart = 1;
+                                newEnd = Math.min(totalPeriods, 2); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                } else if (dragTarget === 'right') {
+                    let newEnd = Math.max(1, Math.min(totalPeriods, val));
+                    let newStart = rangeStart;
+                    if (newEnd <= newStart) {
+                        newEnd = Math.min(totalPeriods, newStart + 1);
+                        newStart = Math.max(1, newStart - 1);
+                        if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd >
+                            totalPeriods) { newEnd = totalPeriods;
+                                newStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                }
+            }
+
+            function handleEnd(e) {
+                if (isDragging) {
+                    isDragging = false;
+                    dragTarget = null;
+                    thumbLeft.style.cursor = 'grab';
+                    thumbRight.style.cursor = 'grab';
+                    updateFullData();
+                }
+            }
+
+            function initRangeSlider() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (totalPeriods < 1) totalPeriods = 1;
+                rangeStart = 1;
+                rangeEnd = totalPeriods;
+                updateSliderUI();
+                updateFullData();
+
+                rangeTrack.addEventListener('mousedown', (e) => {
+                    if (e.target === thumbLeft || e.target === thumbRight) return;
+                    const val = getThumbPos(e);
+                    const distL = Math.abs(val - rangeStart),
+                        distR = Math.abs(val - rangeEnd);
+                    if (distL < distR) {
+                        rangeStart = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
+                            1) { rangeStart = 1;
+                                rangeEnd = Math.min(totalPeriods, 2); } }
+                    } else {
+                        rangeEnd = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
+                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
+                                rangeStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    updateSliderUI();
+                    updateFullData();
+                });
+
+                thumbLeft.addEventListener('mousedown', handleStart);
+                thumbRight.addEventListener('mousedown', handleStart);
+                thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
+                thumbRight.addEventListener('touchstart', handleStart, { passive: false });
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchend', handleEnd);
+                document.addEventListener('touchcancel', handleEnd);
+
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+            }
+
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentMode = e.target.value;
+                    currentPage = 1;
+                    lastExcludeReds = [];
+                    lastExcludeBlues = [];
+                    lastGeneratedGroupsData = [];
+                    showHint();
+                    trendCache[currentMode] = null;
+                    initRangeSlider();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue';
+                    renderFavorites();
+                    updateResetState(true);
+                });
+            });
+
+            document.getElementById('decBtn').addEventListener('click', () => {
+                if (groups > 1) { groups--;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
+            document.getElementById('incBtn').addEventListener('click', () => {
+                if (groups < 5) { groups++;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
+            resetBtn.addEventListener('click', resetNumbers);
+            document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
+            document.getElementById('specificBtn').addEventListener('click', specificRandom);
+            document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+            document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+            document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+            prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+            nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+            document.getElementById('refreshDataBtn').addEventListener('click', function() {
+                if (isLoading) return;
+                try {
+                    localStorage.removeItem('lotteryData_ssq');
+                    localStorage.removeItem('lotteryData_dlt');
+                } catch (e) {}
+                SSQ_DATA = [];
+                DLT_DATA = [];
+                trendCache.ssq = null;
+                trendCache.dlt = null;
+                loadAllData(true);
+            });
+
+            loadAllData(true);
+        })();
+    </script>
+</body>
+</html>
