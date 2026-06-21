@@ -1382,7 +1382,10 @@
             <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
         </div>
         <div class="card">
-            <div class="title-bar secondary">数据详情</div>
+            <div class="title-bar secondary">
+                数据详情
+                <button class="manage-btn" id="refreshDataBtn">刷新</button>
+            </div>
             <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
             <div class="table-container" id="detailResultContainer">
                 <div class="sub-title">开奖号码明细</div>
@@ -2761,6 +2764,23 @@
             document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
             prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
             nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+            // 新增刷新数据按钮
+            document.getElementById('refreshDataBtn').addEventListener('click', function() {
+                if (isLoading) return;
+                // 清除缓存
+                try {
+                    localStorage.removeItem('lotteryData_ssq');
+                    localStorage.removeItem('lotteryData_dlt');
+                } catch (e) {}
+                // 清空内存数据
+                SSQ_DATA = [];
+                DLT_DATA = [];
+                trendCache.ssq = null;
+                trendCache.dlt = null;
+                // 重新加载
+                loadAllData(true);
+            });
 
             loadAllData(true);
         })();
