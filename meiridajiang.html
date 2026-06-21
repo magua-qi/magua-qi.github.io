@@ -1828,9 +1828,22 @@
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
+                        const latest = SSQ_DATA && SSQ_DATA.length > 0 ? SSQ_DATA[0] : null;
+                        let redMatch = 0,
+                            blueMatch = 0;
+                        if (latest) {
+                            redMatch = item.nums.reds.filter(n => latest.reds.includes(n)).length;
+                            blueMatch = item.nums.blues.filter(n => latest.blues.includes(n)).length;
+                        }
+                        item.nums.reds.forEach(n => {
+                            const matched = latest ? latest.reds.includes(n) : false;
+                            html += `<span class="ball red${matched?'':' unmatch'}">${pad(n)}</span>`;
+                        });
                         html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
+                        item.nums.blues.forEach(n => {
+                            const matched = latest ? latest.blues.includes(n) : false;
+                            html += `<span class="ball blue${matched?'':' unmatch'}">${pad(n)}</span>`;
+                        });
                         html += '</div>';
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, true);
@@ -1839,18 +1852,14 @@
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
                         } else {
-                            const status = getLotteryStatus('ssq', item.nums, item.time);
-                            html += '<div class="status-group">';
-                            if (status.status === 'pending') {
-                                html += `<span class="status-pending">待开奖</span>`;
-                            } else if (status.status === 'partial') {
-                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
-                            } else if (status.status === 'prize') {
-                                const cls = getPrizeClass(status.prize);
-                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
-                                html += `<span class="status-prize ${cls}">${status.prize}</span>`;
+                            if (latest) {
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-match">红 ${redMatch}/${item.nums.reds.length} 蓝 ${blueMatch}/${item.nums.blues.length}</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">对比${latest.issue}期</span>
+                                        </div>`;
+                            } else {
+                                html += `<div class="status-group"><span class="status-pending">无开奖</span></div>`;
                             }
-                            html += '</div>';
                         }
                         html += '</div>';
                     });
@@ -1869,9 +1878,22 @@
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
+                        const latest = DLT_DATA && DLT_DATA.length > 0 ? DLT_DATA[0] : null;
+                        let frontMatch = 0,
+                            backMatch = 0;
+                        if (latest) {
+                            frontMatch = item.nums.reds.filter(n => latest.reds.includes(n)).length;
+                            backMatch = item.nums.blues.filter(n => latest.blues.includes(n)).length;
+                        }
+                        item.nums.reds.forEach(n => {
+                            const matched = latest ? latest.reds.includes(n) : false;
+                            html += `<span class="ball front${matched?'':' unmatch'}">${pad(n)}</span>`;
+                        });
                         html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
+                        item.nums.blues.forEach(n => {
+                            const matched = latest ? latest.blues.includes(n) : false;
+                            html += `<span class="ball back${matched?'':' unmatch'}">${pad(n)}</span>`;
+                        });
                         html += '</div>';
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, false);
@@ -1880,18 +1902,14 @@
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
                         } else {
-                            const status = getLotteryStatus('dlt', item.nums, item.time);
-                            html += '<div class="status-group">';
-                            if (status.status === 'pending') {
-                                html += `<span class="status-pending">待开奖</span>`;
-                            } else if (status.status === 'partial') {
-                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
-                            } else if (status.status === 'prize') {
-                                const cls = getPrizeClass(status.prize);
-                                html += `<span class="status-match">${status.redMatch}/${status.blueMatch}</span>`;
-                                html += `<span class="status-prize ${cls}">${status.prize}</span>`;
+                            if (latest) {
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-match">前 ${frontMatch}/${item.nums.reds.length} 后 ${backMatch}/${item.nums.blues.length}</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">对比${latest.issue}期</span>
+                                        </div>`;
+                            } else {
+                                html += `<div class="status-group"><span class="status-pending">无开奖</span></div>`;
                             }
-                            html += '</div>';
                         }
                         html += '</div>';
                     });
