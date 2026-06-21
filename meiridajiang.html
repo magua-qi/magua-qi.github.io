@@ -1930,12 +1930,34 @@
                                 const allFavs = getFavorites();
                                 const filtered = allFavs.filter(item => item.mode === mode);
                                 if (filtered.length === 0) return;
-                                if (confirm(`确定要删除所有${mode === 'ssq' ? '双色球' : '大乐透'}收藏吗？`)) {
+                                const parent = this.parentNode;
+                                const deleteBtn = this;
+                                deleteBtn.style.display = 'none';
+                                const yesBtn = document.createElement('span');
+                                yesBtn.className = 'btn-text';
+                                yesBtn.textContent = '是';
+                                yesBtn.style.color = '#e74c6f';
+                                yesBtn.style.fontWeight = 'bold';
+                                const noBtn = document.createElement('span');
+                                noBtn.className = 'btn-text';
+                                noBtn.textContent = '否';
+                                noBtn.style.color = '#3a7bd5';
+                                noBtn.style.fontWeight = 'bold';
+                                parent.insertBefore(yesBtn, deleteBtn.nextSibling);
+                                parent.insertBefore(noBtn, deleteBtn.nextSibling);
+                                yesBtn.onclick = function(ev) {
+                                    ev.stopPropagation();
                                     const newFavs = allFavs.filter(item => item.mode !== mode);
                                     setFavorites(newFavs);
                                     renderFavorites();
                                     vibrate(10);
-                                }
+                                };
+                                noBtn.onclick = function(ev) {
+                                    ev.stopPropagation();
+                                    parent.removeChild(yesBtn);
+                                    parent.removeChild(noBtn);
+                                    deleteBtn.style.display = '';
+                                };
                             };
                         } else if (action === 'copyAll') {
                             btn.onclick = function(e) {
