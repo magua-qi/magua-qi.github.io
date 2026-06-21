@@ -1648,12 +1648,9 @@
                 updateResetState(true);
                 renderHistory();
             }
-
             function getNumberText(d, isSSQ) {
-                return (isSSQ ? '红球' : '前区') + ':' + d.reds.map(pad).join(' ') + ' + ' + (isSSQ ? '蓝球' : '后区') + ':' + d
-                    .blues.map(pad).join(' ');
+                    return d.reds.map(pad).join(' ') + ' + ' + d.blues.map(pad).join(' ');
             }
-
             function getFavorites() {
                 try {
                     return JSON.parse(localStorage.getItem('lottery_favorites')) || [];
