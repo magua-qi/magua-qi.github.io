@@ -1815,7 +1815,7 @@
                     html += `<div class="fav-section"><div class="sub-title">双色球收藏`;
                     if (isManageMode) {
                         html +=
-                            `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">长按删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
+                            `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     }
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
@@ -1856,7 +1856,7 @@
                     html += `<div class="fav-section"><div class="sub-title">大乐透收藏`;
                     if (isManageMode) {
                         html +=
-                            `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">长按删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
+                            `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     }
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
@@ -1924,17 +1924,19 @@
                     favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
                         const action = btn.dataset.action;
                         if (action === 'deleteAll') {
-                            setupLongPress(btn, function(e) {
+                            btn.onclick = function(e) {
                                 e.stopPropagation();
-                                const mode = btn.dataset.mode;
+                                const mode = this.dataset.mode;
                                 const allFavs = getFavorites();
                                 const filtered = allFavs.filter(item => item.mode === mode);
                                 if (filtered.length === 0) return;
-                                const newFavs = allFavs.filter(item => item.mode !== mode);
-                                setFavorites(newFavs);
-                                renderFavorites();
-                                vibrate(10);
-                            }, 600);
+                                if (confirm(`确定要删除所有${mode === 'ssq' ? '双色球' : '大乐透'}收藏吗？`)) {
+                                    const newFavs = allFavs.filter(item => item.mode !== mode);
+                                    setFavorites(newFavs);
+                                    renderFavorites();
+                                    vibrate(10);
+                                }
+                            };
                         } else if (action === 'copyAll') {
                             btn.onclick = function(e) {
                                 e.stopPropagation();
