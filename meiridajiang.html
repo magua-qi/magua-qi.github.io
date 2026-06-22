@@ -906,18 +906,25 @@
             font-family: inherit;
         }
         .fav-section .sub-title .fav-query-all-btn {
-            font-size: 10px;
-            color: #3a7bd5;
+            font-size: 12px;
+            opacity: 0.6;
             cursor: pointer;
-            font-family: inherit;
+            color: #3a7bd5;
             background: none;
             border: none;
-            padding: 0;
-            text-decoration: underline;
-            -webkit-tap-highlight-color: transparent;
+            padding: 0 4px;
+            font-weight: 600;
+            transition: opacity 0.2s, transform 0.1s;
+            font-family: inherit;
+            line-height: 1;
+            margin-right: 8px;
         }
         .fav-section .sub-title .fav-query-all-btn:active {
-            opacity: 0.6;
+            transform: scale(0.85);
+            opacity: 1;
+        }
+        .fav-section .sub-title .fav-query-all-btn.cancel {
+            color: #e74c6f;
         }
         .group-match-info {
             font-size: 10px;
@@ -1050,6 +1057,9 @@
             }
             .fav-section .sub-title .fav-query-all-btn {
                 color: #6ab0ff;
+            }
+            .fav-section .sub-title .fav-query-all-btn.cancel {
+                color: #ff6b7a;
             }
             .history-meta {
                 color: #9aa5b5;
@@ -1260,7 +1270,7 @@
                 font-size: 9px;
             }
             .fav-section .sub-title .fav-query-all-btn {
-                font-size: 9px;
+                font-size: 11px;
             }
             #historyList .history-row {
                 padding: 4px 8px;
@@ -1394,7 +1404,7 @@
                 font-size: 8px;
             }
             .fav-section .sub-title .fav-query-all-btn {
-                font-size: 8px;
+                font-size: 10px;
             }
             #historyList .history-row {
                 padding: 3px 6px;
@@ -1864,14 +1874,17 @@
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     } else {
-                        html += `<span><button class="fav-query-all-btn" data-mode="ssq">全部查询</button><select class="fav-period-select" data-mode="ssq">`;
+                        html += `<span>
+                                    <span class="fav-query-all-btn" data-mode="ssq">全部查询</span>
+                                    <select class="fav-period-select" data-mode="ssq">`;
                         if (SSQ_DATA && SSQ_DATA.length) {
                             SSQ_DATA.forEach(record => {
                                 const selected = (record.issue === latestSSQ) ? 'selected' : '';
                                 html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
                             });
                         }
-                        html += `</select></span>`;
+                        html += `</select>
+                                </span>`;
                     }
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
@@ -1909,14 +1922,17 @@
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     } else {
-                        html += `<span><button class="fav-query-all-btn" data-mode="dlt">全部查询</button><select class="fav-period-select" data-mode="dlt">`;
+                        html += `<span>
+                                    <span class="fav-query-all-btn" data-mode="dlt">全部查询</span>
+                                    <select class="fav-period-select" data-mode="dlt">`;
                         if (DLT_DATA && DLT_DATA.length) {
                             DLT_DATA.forEach(record => {
                                 const selected = (record.issue === latestDLT) ? 'selected' : '';
                                 html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
                             });
                         }
-                        html += `</select></span>`;
+                        html += `</select>
+                                </span>`;
                     }
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
@@ -2051,32 +2067,122 @@
                 if (allBtn) {
                     e.stopPropagation();
                     const mode = allBtn.dataset.mode;
-                    const rows = favList.querySelectorAll('.history-row');
+                    const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                    if (!select) return;
+                    const issue = select.value;
+                    if (!issue) {
+                        alert('请先选择期号');
+                        return;
+                    }
+                    const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                    const record = records.find(r => r.issue === issue);
+                    if (!record) {
+                        alert('未找到该期号数据');
+                        return;
+                    }
+
+                    const isCancel = allBtn.classList.contains('cancel');
+                    if (isCancel) {
+                        // 取消全部查询
+                        const rows = favList.querySelectorAll(`.history-row`);
+                        rows.forEach(row => {
+                            const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
+                            if (!ballGroup) return;
+                            ballGroup.querySelectorAll('.ball').forEach(ball => {
+                                ball.classList.remove('unmatch');
+                            });
+                            const matchRow = row.querySelector('.fav-match-row');
+                            if (matchRow) {
+                                const queryResult = matchRow.querySelector('.fav-query-result');
+                                if (queryResult) {
+                                    queryResult.style.display = 'none';
+                                    queryResult.innerHTML = '';
+                                }
+                            }
+                            const btn = row.querySelector('.fav-result-btn');
+                            if (btn) {
+                                btn.textContent = '查询';
+                                btn.classList.remove('cancel');
+                            }
+                        });
+                        allBtn.textContent = '全部查询';
+                        allBtn.classList.remove('cancel');
+                        vibrate(10);
+                        return;
+                    }
+
+                    // 执行全部查询
+                    const rows = favList.querySelectorAll(`.history-row`);
                     let found = false;
                     rows.forEach(row => {
                         const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
                         if (!ballGroup) return;
                         found = true;
-                        ballGroup.querySelectorAll('.ball').forEach(ball => {
-                            ball.classList.remove('unmatch');
-                        });
-                        const btn = row.querySelector('.fav-result-btn');
-                        if (btn) {
-                            btn.textContent = '查询';
-                            btn.classList.remove('cancel');
+                        const reds = ballGroup.dataset.reds.split(',').map(Number);
+                        const blues = ballGroup.dataset.blues.split(',').map(Number);
+                        const children = ballGroup.children;
+                        const redBalls = [];
+                        const blueBalls = [];
+                        let isRed = true;
+                        for (let i = 0; i < children.length; i++) {
+                            const child = children[i];
+                            if (child.classList.contains('sep')) {
+                                isRed = false;
+                                continue;
+                            }
+                            if (child.classList.contains('ball')) {
+                                if (isRed) redBalls.push(child);
+                                else blueBalls.push(child);
+                            }
                         }
+                        reds.forEach((n, i) => {
+                            if (i < redBalls.length) {
+                                if (record.reds.includes(n)) redBalls[i].classList.remove(
+                                'unmatch');
+                                else redBalls[i].classList.add('unmatch');
+                            }
+                        });
+                        blues.forEach((n, i) => {
+                            if (i < blueBalls.length) {
+                                if (record.blues.includes(n)) blueBalls[i].classList.remove(
+                                'unmatch');
+                                else blueBalls[i].classList.add('unmatch');
+                            }
+                        });
+                        const redMatch = reds.filter(n => record.reds.includes(n)).length;
+                        const blueMatch = blues.filter(n => record.blues.includes(n)).length;
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redMatch, blueMatch);
+                        } else {
+                            prize = getPrizeNameDLT(redMatch, blueMatch);
+                        }
+                        const prizeText = prize || '未中奖';
                         const matchRow = row.querySelector('.fav-match-row');
                         if (matchRow) {
                             const queryResult = matchRow.querySelector('.fav-query-result');
                             if (queryResult) {
-                                queryResult.style.display = 'none';
-                                queryResult.innerHTML = '';
+                                if (prize) {
+                                    queryResult.innerHTML =
+                                        `<span class="prize-win">${prizeText}</span> ${issue}期`;
+                                } else {
+                                    queryResult.textContent = `${prizeText} ${issue}期`;
+                                }
+                                queryResult.style.display = 'block';
                             }
+                        }
+                        const btn = row.querySelector('.fav-result-btn');
+                        if (btn) {
+                            btn.textContent = '取消';
+                            btn.classList.add('cancel');
                         }
                     });
                     if (!found) {
                         alert('没有找到该类型的收藏号码');
+                        return;
                     }
+                    allBtn.textContent = '取消查询';
+                    allBtn.classList.add('cancel');
                     vibrate(10);
                     return;
                 }
@@ -2092,6 +2198,13 @@
                 if (!matchRow) return;
                 const matchText = matchRow.querySelector('.fav-match-text');
                 const queryResult = matchRow.querySelector('.fav-query-result');
+
+                // 如果全部查询按钮处于激活状态，将其重置
+                const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
+                if (allBtn2 && allBtn2.classList.contains('cancel')) {
+                    allBtn2.textContent = '全部查询';
+                    allBtn2.classList.remove('cancel');
+                }
 
                 if (btn.classList.contains('cancel')) {
                     ballGroup.querySelectorAll('.ball').forEach(ball => {
