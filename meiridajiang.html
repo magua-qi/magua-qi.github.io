@@ -1433,7 +1433,7 @@
     <div class="app-container">
         <div class="card">
             <div class="title-bar">
-                ~撞大运~
+                分类选择
             </div>
             <div class="mode-row">
                 <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
@@ -2293,7 +2293,7 @@
 
                 groupsData.forEach((d, idx) => {
                     const isFav = isFavorited(mode, d);
-                    html += '<div class="number-line">';
+                    html += '<div class="number-line" style="margin:2px 0;">';
                     html +=
                         `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
                     d.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
@@ -2305,11 +2305,11 @@
 
                     const match = getBestMatchForGroup(d, mode);
                     if (match && (match.redMatch > 0 || match.blueMatch > 0)) {
-                        html += `<div style="text-align:center;margin:0 0 4px 0;">
+                        html += `<div style="text-align:center;margin:0 0 2px 0;">
                                     <span class="group-match-info">在第${match.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${match.redMatch}/${match.blueMatch}</span>
                                 </div>`;
                     } else {
-                        html += `<div style="text-align:center;margin:0 0 4px 0;">
+                        html += `<div style="text-align:center;margin:0 0 2px 0;">
                                     <span class="group-match-info" style="color:#7f8c9b;">暂无命中</span>
                                 </div>`;
                     }
