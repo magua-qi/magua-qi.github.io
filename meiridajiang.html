@@ -880,6 +880,16 @@
             color: #2c3e50;
             max-width: 100px;
         }
+        .group-match-info {
+            font-size: 10px;
+            color: #3a7bd5;
+            text-align: center;
+            margin: 0 0 4px 0;
+            background: #f0f4fa;
+            border-radius: 6px;
+            padding: 2px 8px;
+            display: inline-block;
+        }
         @media (prefers-color-scheme: dark) {
             body {
                 background: #1a1e24;
@@ -1086,6 +1096,10 @@
             .ball.back.unmatch {
                 filter: grayscale(1) brightness(0.7);
             }
+            .group-match-info {
+                background: #3a3f4a;
+                color: #6ab0ff;
+            }
         }
         @media (max-width: 420px) {
             .btn {
@@ -1220,6 +1234,10 @@
                 font-size: 9px;
                 max-width: 80px;
             }
+            .group-match-info {
+                font-size: 9px;
+                padding: 1px 6px;
+            }
         }
         @media (max-width: 360px) {
             .btn {
@@ -1352,6 +1370,10 @@
             .fav-section .sub-title .fav-period-select {
                 font-size: 8px;
                 max-width: 70px;
+            }
+            .group-match-info {
+                font-size: 8px;
+                padding: 1px 4px;
             }
         }
     </style>
@@ -1764,47 +1786,6 @@
                 return 'bronze';
             }
 
-            function getLotteryStatus(mode, nums, favoriteTime) {
-                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
-                if (!records || !records.length) return { status: 'pending', redMatch: 0, blueMatch: 0 };
-                const favoriteDate = new Date(favoriteTime);
-                let bestRecord = null;
-                let bestRedMatch = 0,
-                    bestBlueMatch = 0;
-                let bestTotal = -1;
-                for (const record of records) {
-                    const recordDate = new Date(record.date);
-                    if (recordDate < favoriteDate) continue;
-                    const redMatch = nums.reds.filter(n => record.reds.includes(n)).length;
-                    const blueMatch = nums.blues.filter(n => record.blues.includes(n)).length;
-                    const total = redMatch + blueMatch;
-                    if (recordDate < favoriteDate) continue;
-                    if (bestRecord === null || recordDate < new Date(bestRecord.date)) {
-                        bestRecord = record;
-                        bestRedMatch = redMatch;
-                        bestBlueMatch = blueMatch;
-                        bestTotal = total;
-                    }
-                }
-                if (!bestRecord) {
-                    return { status: 'pending', redMatch: 0, blueMatch: 0 };
-                }
-                if (bestTotal === 0) {
-                    return { status: 'pending', redMatch: 0, blueMatch: 0 };
-                }
-                let prize = null;
-                if (mode === 'ssq') {
-                    prize = getPrizeNameSSQ(bestRedMatch, bestBlueMatch);
-                } else {
-                    prize = getPrizeNameDLT(bestRedMatch, bestBlueMatch);
-                }
-                if (prize) {
-                    return { status: 'prize', redMatch: bestRedMatch, blueMatch: bestBlueMatch, prize: prize };
-                } else {
-                    return { status: 'partial', redMatch: bestRedMatch, blueMatch: bestBlueMatch };
-                }
-            }
-
             function renderFavorites() {
                 const favs = getFavorites();
                 if (favs.length === 0) {
@@ -1824,7 +1805,7 @@
                             `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     } else {
                         html += `<select class="fav-period-select" data-mode="ssq">`;
-                        html += `<option value="latest">最新一期</option>`;
+                        html += `<option value="">开奖查询</option>`;
                         if (SSQ_DATA && SSQ_DATA.length) {
                             SSQ_DATA.forEach(record => {
                                 const selected = (favSelectedIssue.ssq === record.issue) ? 'selected' : '';
@@ -1841,11 +1822,8 @@
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
                         let compareRecord = null;
-                        if (favSelectedIssue.ssq && favSelectedIssue.ssq !== 'latest') {
+                        if (favSelectedIssue.ssq) {
                             compareRecord = SSQ_DATA.find(r => r.issue === favSelectedIssue.ssq);
-                        }
-                        if (!compareRecord && SSQ_DATA && SSQ_DATA.length) {
-                            compareRecord = SSQ_DATA[0];
                         }
                         if (compareRecord) {
                             item.nums.reds.forEach(n => {
@@ -1863,7 +1841,7 @@
                                 const blueMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
                                 html += `<div class="status-group" style="min-width:auto;align-items:center;">
                                             <span class="status-match">红 ${redMatch}/${item.nums.reds.length} 蓝 ${blueMatch}/${item.nums.blues.length}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">对比${compareRecord.issue}期</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
                                         </div>`;
                             }
                         } else {
@@ -1872,7 +1850,9 @@
                             item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
                             html += '</div>';
                             if (!isManageMode) {
-                                html += `<div class="status-group"><span class="status-pending">无数据</span></div>`;
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-pending">请选择期号</span>
+                                        </div>`;
                             }
                         }
                         if (isManageMode) {
@@ -1893,7 +1873,7 @@
                             `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     } else {
                         html += `<select class="fav-period-select" data-mode="dlt">`;
-                        html += `<option value="latest">最新一期</option>`;
+                        html += `<option value="">开奖查询</option>`;
                         if (DLT_DATA && DLT_DATA.length) {
                             DLT_DATA.forEach(record => {
                                 const selected = (favSelectedIssue.dlt === record.issue) ? 'selected' : '';
@@ -1910,11 +1890,8 @@
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
                         let compareRecord = null;
-                        if (favSelectedIssue.dlt && favSelectedIssue.dlt !== 'latest') {
+                        if (favSelectedIssue.dlt) {
                             compareRecord = DLT_DATA.find(r => r.issue === favSelectedIssue.dlt);
-                        }
-                        if (!compareRecord && DLT_DATA && DLT_DATA.length) {
-                            compareRecord = DLT_DATA[0];
                         }
                         if (compareRecord) {
                             item.nums.reds.forEach(n => {
@@ -1932,7 +1909,7 @@
                                 const backMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
                                 html += `<div class="status-group" style="min-width:auto;align-items:center;">
                                             <span class="status-match">前 ${frontMatch}/${item.nums.reds.length} 后 ${backMatch}/${item.nums.blues.length}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">对比${compareRecord.issue}期</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
                                         </div>`;
                             }
                         } else {
@@ -1941,7 +1918,9 @@
                             item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
                             html += '</div>';
                             if (!isManageMode) {
-                                html += `<div class="status-group"><span class="status-pending">无数据</span></div>`;
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-pending">请选择期号</span>
+                                        </div>`;
                             }
                         }
                         if (isManageMode) {
@@ -2057,7 +2036,7 @@
                 if (e.target.classList.contains('fav-period-select')) {
                     const mode = e.target.dataset.mode;
                     const value = e.target.value;
-                    favSelectedIssue[mode] = value === 'latest' ? null : value;
+                    favSelectedIssue[mode] = value || null;
                     renderFavorites();
                 }
             });
@@ -2096,6 +2075,23 @@
                 });
             }
 
+            function getBestMatchForGroup(nums, mode) {
+                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                if (!records || !records.length) return null;
+                let best = null;
+                let bestTotal = -1;
+                for (const rec of records) {
+                    const redMatch = nums.reds.filter(n => rec.reds.includes(n)).length;
+                    const blueMatch = nums.blues.filter(n => rec.blues.includes(n)).length;
+                    const total = redMatch + blueMatch;
+                    if (total > bestTotal) {
+                        bestTotal = total;
+                        best = { issue: rec.issue, redMatch, blueMatch };
+                    }
+                }
+                return best;
+            }
+
             function displayResult(groupsData, mode, reason) {
                 const isSSQ = mode === 'ssq';
                 let html = '';
@@ -2120,18 +2116,21 @@
                     const numsStr = getNumberText(d, isSSQ);
                     html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
                     html += '</div>';
+
+                    const match = getBestMatchForGroup(d, mode);
+                    if (match && (match.redMatch > 0 || match.blueMatch > 0)) {
+                        html += `<div style="text-align:center;margin:0 0 4px 0;">
+                                    <span class="group-match-info">与第${match.issue}期：红/蓝命中 ${match.redMatch}/${match.blueMatch}</span>
+                                </div>`;
+                    } else {
+                        html += `<div style="text-align:center;margin:0 0 4px 0;">
+                                    <span class="group-match-info" style="color:#7f8c9b;">暂无命中</span>
+                                </div>`;
+                    }
                 });
 
                 html +=
                     `<div class="number-line action-line"><span class="btn-text all-fav" id="allFavBtn">收藏全部</span><span class="btn-text all-copy" id="allCopyBtn2">全部复制</span></div>`;
-
-                const matchInfo = getMatchInfo(groupsData);
-                if (matchInfo) {
-                    html += `<div class="match-info">${matchInfo}</div>`;
-                } else {
-                    html +=
-                        `<div class="match-info" style="justify-content:center;"><span style="color:#7f8c9b;font-size:10px;">暂无命中对比</span></div>`;
-                }
 
                 if (reason) {
                     html += `<div class="hint-text" style="font-size:10px; margin-top:4px; color:#3a7bd5;">${reason}</div>`;
@@ -2262,24 +2261,6 @@
                 if (lines.length) {
                     rollingAnimation(lines, groupsData, isSSQ, () => {});
                 }
-            }
-
-            function getMatchInfo(groupsData) {
-                const items = historyStore[currentMode];
-                if (!items || !items.length) return null;
-                let bestMatch = { red: 0, blue: 0, period: '' };
-                groupsData.forEach(g => {
-                    items.forEach(item => {
-                        const redMatch = g.reds.filter(n => item.nums.includes(n)).length;
-                        const blueMatch = g.blues.filter(n => item.blues.includes(n)).length;
-                        if (redMatch + blueMatch > bestMatch.red + bestMatch.blue) {
-                            bestMatch = { red: redMatch, blue: blueMatch, period: item.period };
-                        }
-                    });
-                });
-                if (bestMatch.red + bestMatch.blue === 0) return null;
-                const label = currentMode === 'ssq' ? '红/蓝' : '前/后';
-                return `与第${bestMatch.period}期对比：${label}命中 ${bestMatch.red}/${bestMatch.blue}`;
             }
 
             function refreshNumbers() {
