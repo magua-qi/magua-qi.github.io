@@ -2069,15 +2069,22 @@
                 const redMatch = reds.filter(n => record.reds.includes(n)).length;
                 const blueMatch = blues.filter(n => record.blues.includes(n)).length;
 
-                const allBalls = ballGroup.querySelectorAll('.ball');
+                const children = ballGroup.children;
                 const redBalls = [];
                 const blueBalls = [];
                 let isRed = true;
-                allBalls.forEach(ball => {
-                    if (ball.classList.contains('sep')) { isRed = false; return; }
-                    if (isRed) redBalls.push(ball);
-                    else blueBalls.push(ball);
-                });
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    if (child.classList.contains('sep')) {
+                        isRed = false;
+                        continue;
+                    }
+                    if (child.classList.contains('ball')) {
+                        if (isRed) redBalls.push(child);
+                        else blueBalls.push(child);
+                    }
+                }
+
                 reds.forEach((n, i) => {
                     if (i < redBalls.length) {
                         if (record.reds.includes(n)) redBalls[i].classList.remove('unmatch');
