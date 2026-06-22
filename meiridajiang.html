@@ -182,7 +182,6 @@
             min-height: 44px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             width: 100%;
-            flex-wrap: nowrap;
         }
         #favList .history-row .time-col {
             display: flex;
@@ -210,6 +209,7 @@
             gap: 3px;
             flex: 1;
             justify-content: center;
+            flex-wrap: wrap;
         }
         #favList .history-row .status-group {
             display: flex;
@@ -1817,7 +1817,7 @@
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
-                        html += '<div class="history-row">';
+                        html += `<div class="history-row" style="flex-wrap:wrap;">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
@@ -1839,9 +1839,14 @@
                             if (!isManageMode) {
                                 const redMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
                                 const blueMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
+                                let prize = getPrizeNameSSQ(redMatch, blueMatch);
+                                let prizeText = prize ? prize : '未中奖';
                                 html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">红 ${redMatch}/${item.nums.reds.length} 蓝 ${blueMatch}/${item.nums.blues.length}</span>
+                                            <span class="status-match">${prizeText}</span>
                                             <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
+                                        </div>`;
+                                html += `<div style="width:100%;text-align:center;margin:2px 0 0 0;">
+                                            <span class="group-match-info">与第${compareRecord.issue}期：红/蓝命中 ${redMatch}/${blueMatch}</span>
                                         </div>`;
                             }
                         } else {
@@ -1885,7 +1890,7 @@
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
-                        html += '<div class="history-row">';
+                        html += `<div class="history-row" style="flex-wrap:wrap;">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
@@ -1907,9 +1912,14 @@
                             if (!isManageMode) {
                                 const frontMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
                                 const backMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
+                                let prize = getPrizeNameDLT(frontMatch, backMatch);
+                                let prizeText = prize ? prize : '未中奖';
                                 html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">前 ${frontMatch}/${item.nums.reds.length} 后 ${backMatch}/${item.nums.blues.length}</span>
+                                            <span class="status-match">${prizeText}</span>
                                             <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
+                                        </div>`;
+                                html += `<div style="width:100%;text-align:center;margin:2px 0 0 0;">
+                                            <span class="group-match-info">与第${compareRecord.issue}期：前/后命中 ${frontMatch}/${backMatch}</span>
                                         </div>`;
                             }
                         } else {
