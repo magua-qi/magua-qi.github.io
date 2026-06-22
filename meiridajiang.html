@@ -864,10 +864,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .fav-section .sub-title .btn-text {
             font-size: 10px;
             margin-left: 8px;
+        }
+        .fav-section .sub-title .fav-period-select {
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            border: 1px solid #b0c4de;
+            background: #fff;
+            color: #2c3e50;
+            max-width: 100px;
         }
         @media (prefers-color-scheme: dark) {
             body {
@@ -1066,6 +1077,11 @@
                 color: #c8d0dc;
                 border-bottom-color: #3a3f4a;
             }
+            .fav-section .sub-title .fav-period-select {
+                background: #3a3f4a;
+                border-color: #5a6a7a;
+                color: #c8d0dc;
+            }
             .ball.blue.unmatch,
             .ball.back.unmatch {
                 filter: grayscale(1) brightness(0.7);
@@ -1200,6 +1216,10 @@
                 height: 22px;
                 font-size: 9px;
             }
+            .fav-section .sub-title .fav-period-select {
+                font-size: 9px;
+                max-width: 80px;
+            }
         }
         @media (max-width: 360px) {
             .btn {
@@ -1329,6 +1349,10 @@
                 height: 18px;
                 font-size: 8px;
             }
+            .fav-section .sub-title .fav-period-select {
+                font-size: 8px;
+                max-width: 70px;
+            }
         }
     </style>
 </head>
@@ -1451,6 +1475,7 @@
             let lastRecommendReason = '';
             let hasGeneratedNumbers = false;
             let isManageMode = false;
+            let favSelectedIssue = { ssq: null, dlt: null };
 
             const $ = id => document.getElementById(id);
             const resultArea = $('resultArea');
@@ -1701,29 +1726,6 @@
                 renderFavorites();
             }
 
-            function setupLongPress(element, callback, duration) {
-                duration = duration || 600;
-                let timer = null;
-                const start = function(e) {
-                    timer = setTimeout(function() {
-                        callback(e);
-                        timer = null;
-                    }, duration);
-                };
-                const cancel = function() {
-                    if (timer) {
-                        clearTimeout(timer);
-                        timer = null;
-                    }
-                };
-                element.addEventListener('mousedown', start);
-                element.addEventListener('mouseup', cancel);
-                element.addEventListener('mouseleave', cancel);
-                element.addEventListener('touchstart', start, { passive: true });
-                element.addEventListener('touchend', cancel, { passive: true });
-                element.addEventListener('touchcancel', cancel, { passive: true });
-            }
-
             function getPrizeNameSSQ(redMatch, blueMatch) {
                 if (redMatch === 6 && blueMatch === 1) return '一等奖';
                 if (redMatch === 6 && blueMatch === 0) return '二等奖';
@@ -1820,6 +1822,16 @@
                     if (isManageMode) {
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
+                    } else {
+                        html += `<select class="fav-period-select" data-mode="ssq">`;
+                        html += `<option value="latest">最新一期</option>`;
+                        if (SSQ_DATA && SSQ_DATA.length) {
+                            SSQ_DATA.forEach(record => {
+                                const selected = (favSelectedIssue.ssq === record.issue) ? 'selected' : '';
+                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                            });
+                        }
+                        html += `</select>`;
                     }
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
@@ -1828,38 +1840,47 @@
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        const latest = SSQ_DATA && SSQ_DATA.length > 0 ? SSQ_DATA[0] : null;
-                        let redMatch = 0,
-                            blueMatch = 0;
-                        if (latest) {
-                            redMatch = item.nums.reds.filter(n => latest.reds.includes(n)).length;
-                            blueMatch = item.nums.blues.filter(n => latest.blues.includes(n)).length;
+                        let compareRecord = null;
+                        if (favSelectedIssue.ssq && favSelectedIssue.ssq !== 'latest') {
+                            compareRecord = SSQ_DATA.find(r => r.issue === favSelectedIssue.ssq);
                         }
-                        item.nums.reds.forEach(n => {
-                            const matched = latest ? latest.reds.includes(n) : false;
-                            html += `<span class="ball red${matched?'':' unmatch'}">${pad(n)}</span>`;
-                        });
-                        html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => {
-                            const matched = latest ? latest.blues.includes(n) : false;
-                            html += `<span class="ball blue${matched?'':' unmatch'}">${pad(n)}</span>`;
-                        });
-                        html += '</div>';
+                        if (!compareRecord && SSQ_DATA && SSQ_DATA.length) {
+                            compareRecord = SSQ_DATA[0];
+                        }
+                        if (compareRecord) {
+                            item.nums.reds.forEach(n => {
+                                const matched = compareRecord.reds.includes(n);
+                                html += `<span class="ball red${matched?'':' unmatch'}">${pad(n)}</span>`;
+                            });
+                            html += '<span class="sep">+</span>';
+                            item.nums.blues.forEach(n => {
+                                const matched = compareRecord.blues.includes(n);
+                                html += `<span class="ball blue${matched?'':' unmatch'}">${pad(n)}</span>`;
+                            });
+                            html += '</div>';
+                            if (!isManageMode) {
+                                const redMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
+                                const blueMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-match">红 ${redMatch}/${item.nums.reds.length} 蓝 ${blueMatch}/${item.nums.blues.length}</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">对比${compareRecord.issue}期</span>
+                                        </div>`;
+                            }
+                        } else {
+                            item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
+                            html += '<span class="sep">+</span>';
+                            item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
+                            html += '</div>';
+                            if (!isManageMode) {
+                                html += `<div class="status-group"><span class="status-pending">无数据</span></div>`;
+                            }
+                        }
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, true);
                             html += `<div class="action-group">
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
-                        } else {
-                            if (latest) {
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">红 ${redMatch}/${item.nums.reds.length} 蓝 ${blueMatch}/${item.nums.blues.length}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">对比${latest.issue}期</span>
-                                        </div>`;
-                            } else {
-                                html += `<div class="status-group"><span class="status-pending">无开奖</span></div>`;
-                            }
                         }
                         html += '</div>';
                     });
@@ -1870,6 +1891,16 @@
                     if (isManageMode) {
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
+                    } else {
+                        html += `<select class="fav-period-select" data-mode="dlt">`;
+                        html += `<option value="latest">最新一期</option>`;
+                        if (DLT_DATA && DLT_DATA.length) {
+                            DLT_DATA.forEach(record => {
+                                const selected = (favSelectedIssue.dlt === record.issue) ? 'selected' : '';
+                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                            });
+                        }
+                        html += `</select>`;
                     }
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
@@ -1878,38 +1909,47 @@
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        const latest = DLT_DATA && DLT_DATA.length > 0 ? DLT_DATA[0] : null;
-                        let frontMatch = 0,
-                            backMatch = 0;
-                        if (latest) {
-                            frontMatch = item.nums.reds.filter(n => latest.reds.includes(n)).length;
-                            backMatch = item.nums.blues.filter(n => latest.blues.includes(n)).length;
+                        let compareRecord = null;
+                        if (favSelectedIssue.dlt && favSelectedIssue.dlt !== 'latest') {
+                            compareRecord = DLT_DATA.find(r => r.issue === favSelectedIssue.dlt);
                         }
-                        item.nums.reds.forEach(n => {
-                            const matched = latest ? latest.reds.includes(n) : false;
-                            html += `<span class="ball front${matched?'':' unmatch'}">${pad(n)}</span>`;
-                        });
-                        html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => {
-                            const matched = latest ? latest.blues.includes(n) : false;
-                            html += `<span class="ball back${matched?'':' unmatch'}">${pad(n)}</span>`;
-                        });
-                        html += '</div>';
+                        if (!compareRecord && DLT_DATA && DLT_DATA.length) {
+                            compareRecord = DLT_DATA[0];
+                        }
+                        if (compareRecord) {
+                            item.nums.reds.forEach(n => {
+                                const matched = compareRecord.reds.includes(n);
+                                html += `<span class="ball front${matched?'':' unmatch'}">${pad(n)}</span>`;
+                            });
+                            html += '<span class="sep">+</span>';
+                            item.nums.blues.forEach(n => {
+                                const matched = compareRecord.blues.includes(n);
+                                html += `<span class="ball back${matched?'':' unmatch'}">${pad(n)}</span>`;
+                            });
+                            html += '</div>';
+                            if (!isManageMode) {
+                                const frontMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
+                                const backMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
+                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
+                                            <span class="status-match">前 ${frontMatch}/${item.nums.reds.length} 后 ${backMatch}/${item.nums.blues.length}</span>
+                                            <span style="font-size:9px;color:#7f8c9b;">对比${compareRecord.issue}期</span>
+                                        </div>`;
+                            }
+                        } else {
+                            item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
+                            html += '<span class="sep">+</span>';
+                            item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
+                            html += '</div>';
+                            if (!isManageMode) {
+                                html += `<div class="status-group"><span class="status-pending">无数据</span></div>`;
+                            }
+                        }
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, false);
                             html += `<div class="action-group">
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                     </div>`;
-                        } else {
-                            if (latest) {
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">前 ${frontMatch}/${item.nums.reds.length} 后 ${backMatch}/${item.nums.blues.length}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">对比${latest.issue}期</span>
-                                        </div>`;
-                            } else {
-                                html += `<div class="status-group"><span class="status-pending">无开奖</span></div>`;
-                            }
                         }
                         html += '</div>';
                     });
@@ -2011,6 +2051,15 @@
                 isManageMode = !isManageMode;
                 this.textContent = isManageMode ? '完成' : '管理';
                 renderFavorites();
+            });
+
+            favList.addEventListener('change', function(e) {
+                if (e.target.classList.contains('fav-period-select')) {
+                    const mode = e.target.dataset.mode;
+                    const value = e.target.value;
+                    favSelectedIssue[mode] = value === 'latest' ? null : value;
+                    renderFavorites();
+                }
             });
 
             function rollingAnimation(lines, groupsData, isSSQ, callback) {
