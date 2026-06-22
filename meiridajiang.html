@@ -905,6 +905,23 @@
             max-width: 100px;
             font-family: inherit;
         }
+        .fav-section .sub-title .fav-query-all-btn {
+            font-size: 10px;
+            padding: 2px 12px;
+            border: 1px solid #3a7bd5;
+            border-radius: 12px;
+            background: transparent;
+            color: #3a7bd5;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            line-height: 1.6;
+            white-space: nowrap;
+        }
+        .fav-section .sub-title .fav-query-all-btn:active {
+            transform: scale(0.92);
+            background: rgba(58, 123, 213, 0.1);
+        }
         .group-match-info {
             font-size: 10px;
             color: #3a7bd5;
@@ -1033,6 +1050,13 @@
             }
             #favList .history-row .fav-match-row .fav-query-result .prize-win {
                 color: #ff6b7a;
+            }
+            .fav-section .sub-title .fav-query-all-btn {
+                border-color: #6ab0ff;
+                color: #6ab0ff;
+            }
+            .fav-section .sub-title .fav-query-all-btn:active {
+                background: rgba(106, 176, 255, 0.15);
             }
             .history-meta {
                 color: #9aa5b5;
@@ -1242,6 +1266,10 @@
             #favList .history-row .fav-match-row .fav-query-result {
                 font-size: 9px;
             }
+            .fav-section .sub-title .fav-query-all-btn {
+                font-size: 9px;
+                padding: 1px 10px;
+            }
             #historyList .history-row {
                 padding: 4px 8px;
                 gap: 4px;
@@ -1372,6 +1400,10 @@
             }
             #favList .history-row .fav-match-row .fav-query-result {
                 font-size: 8px;
+            }
+            .fav-section .sub-title .fav-query-all-btn {
+                font-size: 8px;
+                padding: 0 8px;
             }
             #historyList .history-row {
                 padding: 3px 6px;
@@ -1841,14 +1873,14 @@
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     } else {
-                        html += `<select class="fav-period-select" data-mode="ssq">`;
+                        html += `<span><span class="fav-query-all-btn" data-mode="ssq">全部查询</span><select class="fav-period-select" data-mode="ssq">`;
                         if (SSQ_DATA && SSQ_DATA.length) {
                             SSQ_DATA.forEach(record => {
                                 const selected = (record.issue === latestSSQ) ? 'selected' : '';
                                 html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
                             });
                         }
-                        html += `</select>`;
+                        html += `</select></span>`;
                     }
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
@@ -1886,14 +1918,14 @@
                         html +=
                             `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     } else {
-                        html += `<select class="fav-period-select" data-mode="dlt">`;
+                        html += `<span><span class="fav-query-all-btn" data-mode="dlt">全部查询</span><select class="fav-period-select" data-mode="dlt">`;
                         if (DLT_DATA && DLT_DATA.length) {
                             DLT_DATA.forEach(record => {
                                 const selected = (record.issue === latestDLT) ? 'selected' : '';
                                 html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
                             });
                         }
-                        html += `</select>`;
+                        html += `</select></span>`;
                     }
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
@@ -2024,6 +2056,95 @@
             });
 
             favList.addEventListener('click', function(e) {
+                const allBtn = e.target.closest('.fav-query-all-btn');
+                if (allBtn) {
+                    e.stopPropagation();
+                    const mode = allBtn.dataset.mode;
+                    const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                    if (!select) return;
+                    const issue = select.value;
+                    if (!issue) {
+                        alert('请先选择期号');
+                        return;
+                    }
+                    const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                    const record = records.find(r => r.issue === issue);
+                    if (!record) {
+                        alert('未找到该期号数据');
+                        return;
+                    }
+                    const rows = favList.querySelectorAll('.history-row');
+                    let found = false;
+                    rows.forEach(row => {
+                        const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
+                        if (!ballGroup) return;
+                        found = true;
+                        const reds = ballGroup.dataset.reds.split(',').map(Number);
+                        const blues = ballGroup.dataset.blues.split(',').map(Number);
+                        const children = ballGroup.children;
+                        const redBalls = [];
+                        const blueBalls = [];
+                        let isRed = true;
+                        for (let i = 0; i < children.length; i++) {
+                            const child = children[i];
+                            if (child.classList.contains('sep')) {
+                                isRed = false;
+                                continue;
+                            }
+                            if (child.classList.contains('ball')) {
+                                if (isRed) redBalls.push(child);
+                                else blueBalls.push(child);
+                            }
+                        }
+                        reds.forEach((n, i) => {
+                            if (i < redBalls.length) {
+                                if (record.reds.includes(n)) redBalls[i].classList.remove(
+                                'unmatch');
+                                else redBalls[i].classList.add('unmatch');
+                            }
+                        });
+                        blues.forEach((n, i) => {
+                            if (i < blueBalls.length) {
+                                if (record.blues.includes(n)) blueBalls[i].classList.remove(
+                                'unmatch');
+                                else blueBalls[i].classList.add('unmatch');
+                            }
+                        });
+                        const redMatch = reds.filter(n => record.reds.includes(n)).length;
+                        const blueMatch = blues.filter(n => record.blues.includes(n)).length;
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redMatch, blueMatch);
+                        } else {
+                            prize = getPrizeNameDLT(redMatch, blueMatch);
+                        }
+                        const prizeText = prize || '未中奖';
+                        const matchRow = row.querySelector('.fav-match-row');
+                        if (matchRow) {
+                            const queryResult = matchRow.querySelector('.fav-query-result');
+                            if (queryResult) {
+                                if (prize) {
+                                    queryResult.innerHTML =
+                                        `<span class="prize-win">${prizeText}</span> ${issue}期`;
+                                } else {
+                                    queryResult.textContent = `${prizeText} ${issue}期`;
+                                }
+                                queryResult.style.display = 'block';
+                            }
+                        }
+                        const btn = row.querySelector('.fav-result-btn');
+                        if (btn) {
+                            btn.textContent = '取消';
+                            btn.classList.add('cancel');
+                        }
+                    });
+                    if (!found) {
+                        alert('没有找到该类型的收藏号码');
+                    }
+                    vibrate(10);
+                    return;
+                }
+
                 const btn = e.target.closest('.fav-result-btn');
                 if (!btn) return;
                 const mode = btn.dataset.mode;
