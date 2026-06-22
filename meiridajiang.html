@@ -182,6 +182,7 @@
             min-height: 44px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             width: 100%;
+            flex-wrap: wrap;
         }
         #favList .history-row .time-col {
             display: flex;
@@ -214,12 +215,14 @@
         #favList .history-row .status-group {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
             flex-shrink: 0;
             min-width: 48px;
             margin-left: 4px;
             line-height: 1.3;
+            flex: 1 1 100%;
+            margin-top: 2px;
         }
         #favList .history-row .status-group .status-prize {
             font-size: 12px;
@@ -253,6 +256,13 @@
         }
         #favList .history-row .action-group .btn-text {
             font-size: 11px;
+        }
+        #favList .history-row .result-detail {
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #3a7bd5;
+            margin-top: 2px;
         }
         #historyList .history-row {
             display: flex;
@@ -890,6 +900,20 @@
             padding: 2px 8px;
             display: inline-block;
         }
+        .fav-result-btn {
+            color: #3a7bd5;
+            font-size: 11px;
+            padding: 2px 8px;
+            border: 1px solid #3a7bd5;
+            border-radius: 12px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fav-result-btn:active {
+            transform: scale(0.95);
+            background: rgba(58, 123, 213, 0.1);
+        }
         @media (prefers-color-scheme: dark) {
             body {
                 background: #1a1e24;
@@ -1100,6 +1124,13 @@
                 background: #3a3f4a;
                 color: #6ab0ff;
             }
+            .fav-result-btn {
+                color: #6ab0ff;
+                border-color: #6ab0ff;
+            }
+            .fav-result-btn:active {
+                background: rgba(106, 176, 255, 0.15);
+            }
         }
         @media (max-width: 420px) {
             .btn {
@@ -1236,6 +1267,10 @@
             }
             .group-match-info {
                 font-size: 9px;
+                padding: 1px 6px;
+            }
+            .fav-result-btn {
+                font-size: 10px;
                 padding: 1px 6px;
             }
         }
@@ -1375,6 +1410,10 @@
                 font-size: 8px;
                 padding: 1px 4px;
             }
+            .fav-result-btn {
+                font-size: 9px;
+                padding: 1px 4px;
+            }
         }
     </style>
 </head>
@@ -1497,7 +1536,6 @@
             let lastRecommendReason = '';
             let hasGeneratedNumbers = false;
             let isManageMode = false;
-            let favSelectedIssue = { ssq: null, dlt: null };
 
             const $ = id => document.getElementById(id);
             const resultArea = $('resultArea');
@@ -1808,8 +1846,7 @@
                         html += `<option value="">开奖查询</option>`;
                         if (SSQ_DATA && SSQ_DATA.length) {
                             SSQ_DATA.forEach(record => {
-                                const selected = (favSelectedIssue.ssq === record.issue) ? 'selected' : '';
-                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                                html += `<option value="${record.issue}">${record.issue}期</option>`;
                             });
                         }
                         html += `</select>`;
@@ -1817,54 +1854,25 @@
                     html += `</div>`;
                     ssqFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
-                        html += `<div class="history-row" style="flex-wrap:wrap;">`;
+                        html += `<div class="history-row">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        let compareRecord = null;
-                        if (favSelectedIssue.ssq) {
-                            compareRecord = SSQ_DATA.find(r => r.issue === favSelectedIssue.ssq);
-                        }
-                        if (compareRecord) {
-                            item.nums.reds.forEach(n => {
-                                const matched = compareRecord.reds.includes(n);
-                                html += `<span class="ball red${matched?'':' unmatch'}">${pad(n)}</span>`;
-                            });
-                            html += '<span class="sep">+</span>';
-                            item.nums.blues.forEach(n => {
-                                const matched = compareRecord.blues.includes(n);
-                                html += `<span class="ball blue${matched?'':' unmatch'}">${pad(n)}</span>`;
-                            });
-                            html += '</div>';
-                            if (!isManageMode) {
-                                const redMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
-                                const blueMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
-                                let prize = getPrizeNameSSQ(redMatch, blueMatch);
-                                let prizeText = prize ? prize : '未中奖';
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">${prizeText}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
-                                        </div>`;
-                                html += `<div style="width:100%;text-align:center;margin:2px 0 0 0;">
-                                            <span class="group-match-info">与第${compareRecord.issue}期：红/蓝命中 ${redMatch}/${blueMatch}</span>
-                                        </div>`;
-                            }
-                        } else {
-                            item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
-                            html += '<span class="sep">+</span>';
-                            item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
-                            html += '</div>';
-                            if (!isManageMode) {
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-pending">请选择期号</span>
-                                        </div>`;
-                            }
-                        }
+                        item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
+                        html += '<span class="sep">+</span>';
+                        item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
+                        html += '</div>';
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, true);
                             html += `<div class="action-group">
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
+                                    </div>`;
+                        } else {
+                            html += `<div class="status-group">
+                                        <button class="fav-result-btn" data-mode="ssq" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}" data-index="${realIdx}">开奖结果</button>
+                                        <span class="fav-prize-display" style="font-size:12px;font-weight:700;color:#e74c6f;margin-top:2px;"></span>
+                                        <span class="fav-match-display group-match-info" style="margin-top:2px;"></span>
                                     </div>`;
                         }
                         html += '</div>';
@@ -1881,8 +1889,7 @@
                         html += `<option value="">开奖查询</option>`;
                         if (DLT_DATA && DLT_DATA.length) {
                             DLT_DATA.forEach(record => {
-                                const selected = (favSelectedIssue.dlt === record.issue) ? 'selected' : '';
-                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                                html += `<option value="${record.issue}">${record.issue}期</option>`;
                             });
                         }
                         html += `</select>`;
@@ -1890,54 +1897,25 @@
                     html += `</div>`;
                     dltFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
-                        html += `<div class="history-row" style="flex-wrap:wrap;">`;
+                        html += `<div class="history-row">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
                         html += '<div class="ball-group">';
-                        let compareRecord = null;
-                        if (favSelectedIssue.dlt) {
-                            compareRecord = DLT_DATA.find(r => r.issue === favSelectedIssue.dlt);
-                        }
-                        if (compareRecord) {
-                            item.nums.reds.forEach(n => {
-                                const matched = compareRecord.reds.includes(n);
-                                html += `<span class="ball front${matched?'':' unmatch'}">${pad(n)}</span>`;
-                            });
-                            html += '<span class="sep">+</span>';
-                            item.nums.blues.forEach(n => {
-                                const matched = compareRecord.blues.includes(n);
-                                html += `<span class="ball back${matched?'':' unmatch'}">${pad(n)}</span>`;
-                            });
-                            html += '</div>';
-                            if (!isManageMode) {
-                                const frontMatch = item.nums.reds.filter(n => compareRecord.reds.includes(n)).length;
-                                const backMatch = item.nums.blues.filter(n => compareRecord.blues.includes(n)).length;
-                                let prize = getPrizeNameDLT(frontMatch, backMatch);
-                                let prizeText = prize ? prize : '未中奖';
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-match">${prizeText}</span>
-                                            <span style="font-size:9px;color:#7f8c9b;">${compareRecord.issue}期</span>
-                                        </div>`;
-                                html += `<div style="width:100%;text-align:center;margin:2px 0 0 0;">
-                                            <span class="group-match-info">与第${compareRecord.issue}期：前/后命中 ${frontMatch}/${backMatch}</span>
-                                        </div>`;
-                            }
-                        } else {
-                            item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
-                            html += '<span class="sep">+</span>';
-                            item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
-                            html += '</div>';
-                            if (!isManageMode) {
-                                html += `<div class="status-group" style="min-width:auto;align-items:center;">
-                                            <span class="status-pending">请选择期号</span>
-                                        </div>`;
-                            }
-                        }
+                        item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
+                        html += '<span class="sep">+</span>';
+                        item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
+                        html += '</div>';
                         if (isManageMode) {
                             const numsStr = getNumberText(item.nums, false);
                             html += `<div class="action-group">
                                         <span class="btn-text del" data-index="${realIdx}">删除</span>
                                         <span class="btn-text copy" data-nums="${numsStr}">复制</span>
+                                    </div>`;
+                        } else {
+                            html += `<div class="status-group">
+                                        <button class="fav-result-btn" data-mode="dlt" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}" data-index="${realIdx}">开奖结果</button>
+                                        <span class="fav-prize-display" style="font-size:12px;font-weight:700;color:#e74c6f;margin-top:2px;"></span>
+                                        <span class="fav-match-display group-match-info" style="margin-top:2px;"></span>
                                     </div>`;
                         }
                         html += '</div>';
@@ -2042,13 +2020,53 @@
                 renderFavorites();
             });
 
-            favList.addEventListener('change', function(e) {
-                if (e.target.classList.contains('fav-period-select')) {
-                    const mode = e.target.dataset.mode;
-                    const value = e.target.value;
-                    favSelectedIssue[mode] = value || null;
-                    renderFavorites();
+            favList.addEventListener('click', function(e) {
+                const btn = e.target.closest('.fav-result-btn');
+                if (!btn) return;
+                const mode = btn.dataset.mode;
+                const reds = btn.dataset.reds.split(',').map(Number);
+                const blues = btn.dataset.blues.split(',').map(Number);
+                const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                if (!select) return;
+                const issue = select.value;
+                if (!issue) {
+                    alert('请先选择期号');
+                    return;
                 }
+                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                const record = records.find(r => r.issue === issue);
+                if (!record) {
+                    alert('未找到该期号数据');
+                    return;
+                }
+                const statusGroup = btn.closest('.status-group');
+                if (!statusGroup) return;
+                const prizeSpan = statusGroup.querySelector('.fav-prize-display');
+                const matchSpan = statusGroup.querySelector('.fav-match-display');
+                const redMatch = reds.filter(n => record.reds.includes(n)).length;
+                const blueMatch = blues.filter(n => record.blues.includes(n)).length;
+                let prize = null;
+                let label = '';
+                if (mode === 'ssq') {
+                    prize = getPrizeNameSSQ(redMatch, blueMatch);
+                    label = '红/蓝';
+                } else {
+                    prize = getPrizeNameDLT(redMatch, blueMatch);
+                    label = '前/后';
+                }
+                const prizeText = prize || '未中奖';
+                const prizeClass = prize ? getPrizeClass(prize) : '';
+                prizeSpan.textContent = prizeText;
+                prizeSpan.className = 'fav-prize-display status-prize' + (prizeClass ? ' ' + prizeClass : '');
+                if (redMatch > 0 || blueMatch > 0) {
+                    matchSpan.textContent = `与第${issue}期：${label}命中 ${redMatch}/${blueMatch}`;
+                    matchSpan.className = 'fav-match-display group-match-info';
+                } else {
+                    matchSpan.textContent = '无命中';
+                    matchSpan.className = 'fav-match-display group-match-info';
+                    matchSpan.style.color = '#7f8c9b';
+                }
+                vibrate(10);
             });
 
             function rollingAnimation(lines, groupsData, isSSQ, callback) {
