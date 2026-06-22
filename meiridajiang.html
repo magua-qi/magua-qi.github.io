@@ -1431,6 +1431,15 @@
 </head>
 <body>
     <div class="app-container">
+        <div class="card">
+            <div class="title-bar">
+                分类选择
+            </div>
+            <div class="mode-row">
+                <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
+                <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
+            </div>
+        </div>
         <div class="card" id="favoritesCard" style="display:none;">
             <div class="title-bar tertiary">
                 我的收藏
@@ -1443,10 +1452,6 @@
         <div class="card">
             <div class="title-bar">
                 ~急急如律令~
-            </div>
-            <div class="mode-row">
-                <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
-                <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
             </div>
             <div class="btn-row">
                 <div class="btn-group">
@@ -1752,9 +1757,11 @@
                 updateResetState(true);
                 renderHistory();
             }
+
             function getNumberText(d, isSSQ) {
-                    return d.reds.map(pad).join(' ') + ' + ' + d.blues.map(pad).join(' ');
+                return d.reds.map(pad).join(' ') + ' + ' + d.blues.map(pad).join(' ');
             }
+
             function getFavorites() {
                 try {
                     return JSON.parse(localStorage.getItem('lottery_favorites')) || [];
@@ -1855,115 +1862,73 @@
 
             function renderFavorites() {
                 const favs = getFavorites();
-                if (favs.length === 0) {
+                const currentFavs = favs.filter(item => item.mode === currentMode);
+                if (currentFavs.length === 0) {
                     favoritesCard.style.display = 'none';
                     return;
                 }
                 favoritesCard.style.display = 'block';
-                favs.sort((a, b) => b.time - a.time);
-                const ssqFavs = favs.filter(item => item.mode === 'ssq');
-                const dltFavs = favs.filter(item => item.mode === 'dlt');
+                currentFavs.sort((a, b) => b.time - a.time);
 
                 const latestSSQ = SSQ_DATA && SSQ_DATA.length ? SSQ_DATA[0].issue : '';
                 const latestDLT = DLT_DATA && DLT_DATA.length ? DLT_DATA[0].issue : '';
 
                 let html = '';
-                if (ssqFavs.length) {
-                    html += `<div class="fav-section"><div class="sub-title">双色球收藏`;
-                    if (isManageMode) {
-                        html +=
-                            `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
-                    } else {
-                        html += `<span>
-                                    <span class="fav-query-all-btn" data-mode="ssq">全部查询</span>
-                                    <select class="fav-period-select" data-mode="ssq">`;
-                        if (SSQ_DATA && SSQ_DATA.length) {
-                            SSQ_DATA.forEach(record => {
-                                const selected = (record.issue === latestSSQ) ? 'selected' : '';
-                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
-                            });
-                        }
-                        html += `</select>
-                                </span>`;
+                const label = currentMode === 'ssq' ? '双色球收藏' : '大乐透收藏';
+                const isSSQ = currentMode === 'ssq';
+                const records = isSSQ ? SSQ_DATA : DLT_DATA;
+                const latestIssue = isSSQ ? latestSSQ : latestDLT;
+
+                html += `<div class="fav-section"><div class="sub-title">${label}`;
+                if (isManageMode) {
+                    html +=
+                        `<span><span class="btn-text all-delete" data-mode="${currentMode}" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="${currentMode}" data-action="copyAll">复制全部</span></span>`;
+                } else {
+                    html += `<span>
+                                <span class="fav-query-all-btn" data-mode="${currentMode}">全部查询</span>
+                                <select class="fav-period-select" data-mode="${currentMode}">`;
+                    if (records && records.length) {
+                        records.forEach(record => {
+                            const selected = (record.issue === latestIssue) ? 'selected' : '';
+                            html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                        });
                     }
-                    html += `</div>`;
-                    ssqFavs.forEach((item, idx) => {
-                        const realIdx = favs.indexOf(item);
-                        const bestMatch = getBestMatchForGroup(item.nums, 'ssq');
-                        const bestText = bestMatch ? `在第${bestMatch.issue}期：红/蓝命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
-                        html += `<div class="history-row">`;
-                        const timeObj = formatTime(item.time);
-                        html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
-                        html += `<div class="ball-group" data-mode="ssq" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
-                        item.nums.reds.forEach(n => html += `<span class="ball red">${pad(n)}</span>`);
-                        html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => html += `<span class="ball blue">${pad(n)}</span>`);
-                        html += '</div>';
-                        if (isManageMode) {
-                            const numsStr = getNumberText(item.nums, true);
-                            html += `<div class="action-group">
-                                        <span class="btn-text del" data-index="${realIdx}">删除</span>
-                                        <span class="btn-text copy" data-nums="${numsStr}">复制</span>
-                                    </div>`;
-                        } else {
-                            html += `<button class="fav-result-btn" data-mode="ssq" data-index="${realIdx}">查询</button>`;
-                        }
-                        html += `<div class="fav-match-row">
-                                    <span class="fav-match-text">${bestText}</span>
-                                    <span class="fav-query-result"></span>
-                                </div>`;
-                        html += '</div>';
-                    });
-                    html += '</div>';
+                    html += `</select>
+                            </span>`;
                 }
-                if (dltFavs.length) {
-                    html += `<div class="fav-section"><div class="sub-title">大乐透收藏`;
+                html += `</div>`;
+
+                currentFavs.forEach((item, idx) => {
+                    const realIdx = favs.indexOf(item);
+                    const bestMatch = getBestMatchForGroup(item.nums, currentMode);
+                    const bestText = bestMatch ? `在第${bestMatch.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
+                    html += `<div class="history-row">`;
+                    const timeObj = formatTime(item.time);
+                    html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
+                    html += `<div class="ball-group" data-mode="${currentMode}" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
+                    item.nums.reds.forEach(n => html +=
+                        `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                    html += '<span class="sep">+</span>';
+                    item.nums.blues.forEach(n => html +=
+                        `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                    html += '</div>';
                     if (isManageMode) {
-                        html +=
-                            `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
-                    } else {
-                        html += `<span>
-                                    <span class="fav-query-all-btn" data-mode="dlt">全部查询</span>
-                                    <select class="fav-period-select" data-mode="dlt">`;
-                        if (DLT_DATA && DLT_DATA.length) {
-                            DLT_DATA.forEach(record => {
-                                const selected = (record.issue === latestDLT) ? 'selected' : '';
-                                html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
-                            });
-                        }
-                        html += `</select>
-                                </span>`;
-                    }
-                    html += `</div>`;
-                    dltFavs.forEach((item, idx) => {
-                        const realIdx = favs.indexOf(item);
-                        const bestMatch = getBestMatchForGroup(item.nums, 'dlt');
-                        const bestText = bestMatch ? `在第${bestMatch.issue}期：前/后命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
-                        html += `<div class="history-row">`;
-                        const timeObj = formatTime(item.time);
-                        html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
-                        html += `<div class="ball-group" data-mode="dlt" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
-                        item.nums.reds.forEach(n => html += `<span class="ball front">${pad(n)}</span>`);
-                        html += '<span class="sep">+</span>';
-                        item.nums.blues.forEach(n => html += `<span class="ball back">${pad(n)}</span>`);
-                        html += '</div>';
-                        if (isManageMode) {
-                            const numsStr = getNumberText(item.nums, false);
-                            html += `<div class="action-group">
-                                        <span class="btn-text del" data-index="${realIdx}">删除</span>
-                                        <span class="btn-text copy" data-nums="${numsStr}">复制</span>
-                                    </div>`;
-                        } else {
-                            html += `<button class="fav-result-btn" data-mode="dlt" data-index="${realIdx}">查询</button>`;
-                        }
-                        html += `<div class="fav-match-row">
-                                    <span class="fav-match-text">${bestText}</span>
-                                    <span class="fav-query-result"></span>
+                        const numsStr = getNumberText(item.nums, isSSQ);
+                        html += `<div class="action-group">
+                                    <span class="btn-text del" data-index="${realIdx}">删除</span>
+                                    <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                 </div>`;
-                        html += '</div>';
-                    });
+                    } else {
+                        html += `<button class="fav-result-btn" data-mode="${currentMode}" data-index="${realIdx}">查询</button>`;
+                    }
+                    html += `<div class="fav-match-row">
+                                <span class="fav-match-text">${bestText}</span>
+                                <span class="fav-query-result"></span>
+                            </div>`;
                     html += '</div>';
-                }
+                });
+                html += '</div>';
+
                 favList.innerHTML = html;
 
                 if (isManageMode) {
@@ -2083,7 +2048,6 @@
 
                     const isCancel = allBtn.classList.contains('cancel');
                     if (isCancel) {
-                        // 取消全部查询
                         const rows = favList.querySelectorAll(`.history-row`);
                         rows.forEach(row => {
                             const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
@@ -2111,7 +2075,6 @@
                         return;
                     }
 
-                    // 执行全部查询
                     const rows = favList.querySelectorAll(`.history-row`);
                     let found = false;
                     rows.forEach(row => {
@@ -2199,7 +2162,6 @@
                 const matchText = matchRow.querySelector('.fav-match-text');
                 const queryResult = matchRow.querySelector('.fav-query-result');
 
-                // 如果全部查询按钮处于激活状态，将其重置
                 const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
                 if (allBtn2 && allBtn2.classList.contains('cancel')) {
                     allBtn2.textContent = '全部查询';
@@ -2352,7 +2314,7 @@
                     const match = getBestMatchForGroup(d, mode);
                     if (match && (match.redMatch > 0 || match.blueMatch > 0)) {
                         html += `<div style="text-align:center;margin:0 0 4px 0;">
-                                    <span class="group-match-info">在第${match.issue}期：红/蓝命中 ${match.redMatch}/${match.blueMatch}</span>
+                                    <span class="group-match-info">在第${match.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${match.redMatch}/${match.blueMatch}</span>
                                 </div>`;
                     } else {
                         html += `<div style="text-align:center;margin:0 0 4px 0;">
@@ -2886,14 +2848,6 @@
             }
 
             function updateFullData() {
-                loadHistory(currentMode);
-                renderHistory();
-                renderTrend();
-            }
-
-            let rafId = null;
-
-            function updateRangeDisplay() {
                 if (rafId) cancelAnimationFrame(rafId);
                 rafId = requestAnimationFrame(() => {
                     updateSliderUI();
@@ -2967,103 +2921,6 @@
                 }
             }
 
-            function initRangeSlider() {
-                const allData = getDataSync(currentMode);
-                totalPeriods = allData ? allData.length : 1;
-                if (totalPeriods < 1) totalPeriods = 1;
-                rangeStart = 1;
-                rangeEnd = totalPeriods;
-                updateSliderUI();
-                updateFullData();
+            let rafId = null;
 
-                rangeTrack.addEventListener('mousedown', (e) => {
-                    if (e.target === thumbLeft || e.target === thumbRight) return;
-                    const val = getThumbPos(e);
-                    const distL = Math.abs(val - rangeStart),
-                        distR = Math.abs(val - rangeEnd);
-                    if (distL < distR) {
-                        rangeStart = Math.max(1, Math.min(totalPeriods, val));
-                        if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
-                            1) { rangeStart = 1;
-                                rangeEnd = Math.min(totalPeriods, 2); } }
-                    } else {
-                        rangeEnd = Math.max(1, Math.min(totalPeriods, val));
-                        if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
-                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
-                                rangeStart = Math.max(1, totalPeriods - 1); } }
-                    }
-                    updateSliderUI();
-                    updateFullData();
-                });
-
-                thumbLeft.addEventListener('mousedown', handleStart);
-                thumbRight.addEventListener('mousedown', handleStart);
-                thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
-                thumbRight.addEventListener('touchstart', handleStart, { passive: false });
-
-                document.addEventListener('mousemove', handleMove);
-                document.addEventListener('touchmove', handleMove, { passive: false });
-                document.addEventListener('mouseup', handleEnd);
-                document.addEventListener('touchend', handleEnd);
-                document.addEventListener('touchcancel', handleEnd);
-
-                thumbLeft.style.cursor = 'grab';
-                thumbRight.style.cursor = 'grab';
-            }
-
-            document.querySelectorAll('input[name="mode"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    currentMode = e.target.value;
-                    currentPage = 1;
-                    lastExcludeReds = [];
-                    lastExcludeBlues = [];
-                    lastGeneratedGroupsData = [];
-                    showHint();
-                    trendCache[currentMode] = null;
-                    initRangeSlider();
-                    specificBtn.disabled = true;
-                    specificBtn.className = 'btn btn-blue';
-                    renderFavorites();
-                    updateResetState(true);
-                });
-            });
-
-            document.getElementById('decBtn').addEventListener('click', () => {
-                if (groups > 1) { groups--;
-                    showHint();
-                    specificBtn.disabled = true;
-                    specificBtn.className = 'btn btn-blue'; }
-            });
-            document.getElementById('incBtn').addEventListener('click', () => {
-                if (groups < 5) { groups++;
-                    showHint();
-                    specificBtn.disabled = true;
-                    specificBtn.className = 'btn btn-blue'; }
-            });
-            resetBtn.addEventListener('click', resetNumbers);
-            document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
-            document.getElementById('specificBtn').addEventListener('click', specificRandom);
-            document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
-            document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
-            document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
-            prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
-            nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
-
-            document.getElementById('refreshDataBtn').addEventListener('click', function() {
-                if (isLoading) return;
-                try {
-                    localStorage.removeItem('lotteryData_ssq');
-                    localStorage.removeItem('lotteryData_dlt');
-                } catch (e) {}
-                SSQ_DATA = [];
-                DLT_DATA = [];
-                trendCache.ssq = null;
-                trendCache.dlt = null;
-                loadAllData(true);
-            });
-
-            loadAllData(true);
-        })();
-    </script>
-</body>
-</html>
+            function
