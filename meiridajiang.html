@@ -254,6 +254,10 @@
         #favList .history-row .fav-match-row .fav-match-text {
             display: inline-block;
         }
+        #favList .history-row .fav-match-row .prize-win {
+            color: #e74c6f;
+            font-weight: 700;
+        }
         #favList .history-row .action-group {
             display: flex;
             align-items: center;
@@ -1013,6 +1017,9 @@
             }
             #favList .history-row .fav-match-row {
                 color: #6ab0ff;
+            }
+            #favList .history-row .fav-match-row .prize-win {
+                color: #ff6b7a;
             }
             .history-meta {
                 color: #9aa5b5;
@@ -1816,7 +1823,6 @@
                             `<span><span class="btn-text all-delete" data-mode="ssq" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="ssq" data-action="copyAll">复制全部</span></span>`;
                     } else {
                         html += `<select class="fav-period-select" data-mode="ssq">`;
-                        html += `<option value="">开奖查询</option>`;
                         if (SSQ_DATA && SSQ_DATA.length) {
                             SSQ_DATA.forEach(record => {
                                 const selected = (record.issue === latestSSQ) ? 'selected' : '';
@@ -1859,7 +1865,6 @@
                             `<span><span class="btn-text all-delete" data-mode="dlt" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="dlt" data-action="copyAll">复制全部</span></span>`;
                     } else {
                         html += `<select class="fav-period-select" data-mode="dlt">`;
-                        html += `<option value="">开奖查询</option>`;
                         if (DLT_DATA && DLT_DATA.length) {
                             DLT_DATA.forEach(record => {
                                 const selected = (record.issue === latestDLT) ? 'selected' : '';
@@ -2017,6 +2022,7 @@
                         const bestMatch = getBestMatchForGroup({ reds, blues }, mode);
                         const label = mode === 'ssq' ? '红/蓝' : '前/后';
                         matchText.textContent = bestMatch ? `与第${bestMatch.issue}期：${label}命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
+                        matchText.className = 'fav-match-text';
                     }
                     vibrate(10);
                     return;
@@ -2073,7 +2079,12 @@
 
                 if (matchRow) {
                     matchRow.className = 'fav-match-row right';
-                    matchText.textContent = `${prizeText} ${issue}期`;
+                    if (prize) {
+                        matchText.innerHTML = `<span class="prize-win">${prizeText}</span> ${issue}期`;
+                    } else {
+                        matchText.textContent = `${prizeText} ${issue}期`;
+                        matchText.className = 'fav-match-text';
+                    }
                 }
 
                 btn.textContent = '取消';
