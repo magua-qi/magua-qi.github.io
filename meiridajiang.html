@@ -1450,10 +1450,10 @@
             </div>
         </div>
         <div class="card">
-            <div class="title-bar">
+            <div class="title-bar" style="margin-bottom:6px;">
                 ~急急如律令~
             </div>
-            <div class="btn-row">
+            <div class="btn-row" style="padding-top:4px;">
                 <div class="btn-group">
                     <button class="btn-cycle" id="decBtn">−</button>
                     <button class="group-number" id="resetBtn">重置</button>
@@ -1556,7 +1556,6 @@
 
             const $ = id => document.getElementById(id);
             const resultArea = $('resultArea');
-            const detailResultArea = $('detailResultArea');
             const historyList = $('historyList');
             const pageInfo = $('pageInfo');
             const prevPageBtn = $('prevPageBtn');
@@ -1668,17 +1667,24 @@
 
             async function fetchRemoteData(type) {
                 const url = type === 'ssq' ? 'https://magua-qi.github.io/ssqdata.html' :
-                'https://magua-qi.github.io/dltdata.html';
+                    'https://magua-qi.github.io/dltdata.html';
                 const resp = await fetch(url);
                 if (!resp.ok) throw new Error('网络请求失败');
                 const html = await resp.text();
                 const varName = type === 'ssq' ? 'SSQ_DATA' : 'DLT_DATA';
-                const regex = new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`);
-                const match = html.match(regex);
+                let match = html.match(new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
+                if (!match) {
+                    match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
+                }
                 if (!match) throw new Error('数据解析失败');
                 let cleaned = match[1].replace(/\/\/.*$/gm, '');
-                const fn = new Function(`return [${cleaned}];`);
-                const raw = fn();
+                let raw;
+                try {
+                    const fn = new Function(`return [${cleaned}];`);
+                    raw = fn();
+                } catch (e) {
+                    raw = eval(`[${cleaned}]`);
+                }
                 if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
                 const records = parseBuiltinData(type, raw);
                 setCachedData(type, records);
@@ -1836,13 +1842,6 @@
                 return null;
             }
 
-            function getPrizeClass(prizeName) {
-                if (!prizeName) return '';
-                if (prizeName === '一等奖') return 'gold';
-                if (prizeName === '二等奖' || prizeName === '三等奖') return 'silver';
-                return 'bronze';
-            }
-
             function getBestMatchForGroup(nums, mode) {
                 const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
                 if (!records || !records.length) return null;
@@ -1870,16 +1869,11 @@
                 favoritesCard.style.display = 'block';
                 currentFavs.sort((a, b) => b.time - a.time);
 
-                const latestSSQ = SSQ_DATA && SSQ_DATA.length ? SSQ_DATA[0].issue : '';
-                const latestDLT = DLT_DATA && DLT_DATA.length ? DLT_DATA[0].issue : '';
-
-                let html = '';
-                const label = currentMode === 'ssq' ? '双色球收藏' : '大乐透收藏';
                 const isSSQ = currentMode === 'ssq';
                 const records = isSSQ ? SSQ_DATA : DLT_DATA;
-                const latestIssue = isSSQ ? latestSSQ : latestDLT;
+                const latestIssue = records && records.length ? records[0].issue : '';
 
-                html += `<div class="fav-section"><div class="sub-title">${label}`;
+                let html = `<div class="fav-section"><div class="sub-title">${isSSQ?'双色球':'大乐透'}收藏`;
                 if (isManageMode) {
                     html +=
                         `<span><span class="btn-text all-delete" data-mode="${currentMode}" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="${currentMode}" data-action="copyAll">复制全部</span></span>`;
@@ -1928,7 +1922,6 @@
                     html += '</div>';
                 });
                 html += '</div>';
-
                 favList.innerHTML = html;
 
                 if (isManageMode) {
@@ -2159,7 +2152,6 @@
                 if (!ballGroup) return;
                 const matchRow = row.querySelector('.fav-match-row');
                 if (!matchRow) return;
-                const matchText = matchRow.querySelector('.fav-match-text');
                 const queryResult = matchRow.querySelector('.fav-query-result');
 
                 const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
@@ -2847,11 +2839,15 @@
                 rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
             }
 
+            let rafId = null;
+
             function updateFullData() {
                 if (rafId) cancelAnimationFrame(rafId);
                 rafId = requestAnimationFrame(() => {
                     updateSliderUI();
-                    updateFullData();
+                    loadHistory(currentMode);
+                    renderHistory();
+                    renderTrend();
                     rafId = null;
                 });
             }
@@ -2920,8 +2916,6 @@
                     updateFullData();
                 }
             }
-
-            let rafId = null;
 
             function initRangeSlider() {
                 const allData = getDataSync(currentMode);
