@@ -1890,7 +1890,7 @@
                     ssqFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
                         const bestMatch = getBestMatchForGroup(item.nums, 'ssq');
-                        const bestText = bestMatch ? `与第${bestMatch.issue}期：红/蓝命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
+                        const bestText = bestMatch ? `在第${bestMatch.issue}期：红/蓝命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
                         html += `<div class="history-row">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
@@ -1938,7 +1938,7 @@
                     dltFavs.forEach((item, idx) => {
                         const realIdx = favs.indexOf(item);
                         const bestMatch = getBestMatchForGroup(item.nums, 'dlt');
-                        const bestText = bestMatch ? `与第${bestMatch.issue}期：前/后命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
+                        const bestText = bestMatch ? `在第${bestMatch.issue}期：前/后命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
                         html += `<div class="history-row">`;
                         const timeObj = formatTime(item.time);
                         html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
