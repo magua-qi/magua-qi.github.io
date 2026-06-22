@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -2923,4 +2924,116 @@
 
             let rafId = null;
 
-            function
+            function initRangeSlider() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (totalPeriods < 1) totalPeriods = 1;
+                rangeStart = 1;
+                rangeEnd = totalPeriods;
+                updateSliderUI();
+                updateFullData();
+
+                rangeTrack.addEventListener('mousedown', (e) => {
+                    if (e.target === thumbLeft || e.target === thumbRight) return;
+                    const val = getThumbPos(e);
+                    const distL = Math.abs(val - rangeStart),
+                        distR = Math.abs(val - rangeEnd);
+                    if (distL < distR) {
+                        rangeStart = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
+                            1) { rangeStart = 1;
+                                rangeEnd = Math.min(totalPeriods, 2); } }
+                    } else {
+                        rangeEnd = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
+                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
+                                rangeStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    updateSliderUI();
+                    updateFullData();
+                });
+
+                thumbLeft.addEventListener('mousedown', handleStart);
+                thumbRight.addEventListener('mousedown', handleStart);
+                thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
+                thumbRight.addEventListener('touchstart', handleStart, { passive: false });
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchend', handleEnd);
+                document.addEventListener('touchcancel', handleEnd);
+
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+            }
+
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentMode = e.target.value;
+                    localStorage.setItem('lottery_current_mode', currentMode);
+                    currentPage = 1;
+                    lastExcludeReds = [];
+                    lastExcludeBlues = [];
+                    lastGeneratedGroupsData = [];
+                    showHint();
+                    trendCache[currentMode] = null;
+                    initRangeSlider();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue';
+                    renderFavorites();
+                    updateResetState(true);
+                });
+            });
+
+            document.getElementById('decBtn').addEventListener('click', () => {
+                if (groups > 1) { groups--;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
+            document.getElementById('incBtn').addEventListener('click', () => {
+                if (groups < 5) { groups++;
+                    showHint();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue'; }
+            });
+            resetBtn.addEventListener('click', resetNumbers);
+            document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
+            document.getElementById('specificBtn').addEventListener('click', specificRandom);
+            document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+            document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+            document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+            prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+            nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+            document.getElementById('refreshDataBtn').addEventListener('click', function() {
+                if (isLoading) return;
+                try {
+                    localStorage.removeItem('lotteryData_ssq');
+                    localStorage.removeItem('lotteryData_dlt');
+                } catch (e) {}
+                SSQ_DATA = [];
+                DLT_DATA = [];
+                trendCache.ssq = null;
+                trendCache.dlt = null;
+                loadAllData(true);
+            });
+
+            const savedMode = localStorage.getItem('lottery_current_mode');
+            if (savedMode && (savedMode === 'ssq' || savedMode === 'dlt')) {
+                currentMode = savedMode;
+                const radios = document.querySelectorAll('input[name="mode"]');
+                radios.forEach(r => {
+                    r.checked = (r.value === currentMode);
+                });
+            } else {
+                localStorage.setItem('lottery_current_mode', 'ssq');
+            }
+
+            loadAllData(true);
+        })();
+    </script>
+</body>
+</html>
+```
