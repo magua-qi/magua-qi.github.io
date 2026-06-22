@@ -224,11 +224,11 @@
             gap: 2px;
         }
         #favList .history-row .status-group .result-status {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             color: #e74c6f;
             min-height: 18px;
-            line-height: 1.2;
+            line-height: 1.3;
             text-align: center;
         }
         #favList .history-row .status-group .result-status.gold {
@@ -240,9 +240,16 @@
         #favList .history-row .status-group .result-status.bronze {
             color: #cd7f32;
         }
+        #favList .history-row .status-group .result-period {
+            font-size: 10px;
+            color: #7f8c9b;
+            min-height: 16px;
+            line-height: 1.2;
+            text-align: center;
+        }
         #favList .history-row .status-group .fav-result-btn {
             font-size: 11px;
-            padding: 1px 10px;
+            padding: 1px 12px;
             border: 1px solid #3a7bd5;
             border-radius: 12px;
             background: transparent;
@@ -251,8 +258,9 @@
             transition: all 0.2s;
             font-family: inherit;
             -webkit-tap-highlight-color: transparent;
-            line-height: 1.6;
+            line-height: 1.8;
             white-space: nowrap;
+            margin-top: 2px;
         }
         #favList .history-row .status-group .fav-result-btn:active {
             transform: scale(0.92);
@@ -265,27 +273,11 @@
         #favList .history-row .status-group .fav-result-btn.cancel:active {
             background: rgba(231, 76, 111, 0.1);
         }
-        #favList .history-row .status-group .result-period {
-            font-size: 9px;
-            color: #7f8c9b;
-            min-height: 14px;
-            line-height: 1.2;
-            text-align: center;
-        }
-        #favList .history-row .result-match {
+        #favList .history-row .status-group .status-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            text-align: center;
-            font-size: 10px;
-            color: #3a7bd5;
-            background: #f0f4fa;
-            border-radius: 6px;
-            padding: 2px 8px;
-            margin-top: 2px;
-            min-height: 20px;
-        }
-        #favList .history-row .result-match.empty {
-            color: #7f8c9b;
-            background: transparent;
         }
         #favList .history-row .action-group {
             display: flex;
@@ -1032,6 +1024,9 @@
             #favList .history-row .status-group .result-status.bronze {
                 color: #e67e22;
             }
+            #favList .history-row .status-group .result-period {
+                color: #9aa5b5;
+            }
             #favList .history-row .status-group .fav-result-btn {
                 border-color: #6ab0ff;
                 color: #6ab0ff;
@@ -1045,17 +1040,6 @@
             }
             #favList .history-row .status-group .fav-result-btn.cancel:active {
                 background: rgba(255, 107, 122, 0.15);
-            }
-            #favList .history-row .status-group .result-period {
-                color: #9aa5b5;
-            }
-            #favList .history-row .result-match {
-                color: #6ab0ff;
-                background: #3a3f4a;
-            }
-            #favList .history-row .result-match.empty {
-                color: #7f8c8d;
-                background: transparent;
             }
             .history-meta {
                 color: #9aa5b5;
@@ -1258,18 +1242,14 @@
                 min-width: 44px;
             }
             #favList .history-row .status-group .result-status {
-                font-size: 10px;
+                font-size: 11px;
+            }
+            #favList .history-row .status-group .result-period {
+                font-size: 9px;
             }
             #favList .history-row .status-group .fav-result-btn {
                 font-size: 10px;
-                padding: 0 8px;
-            }
-            #favList .history-row .status-group .result-period {
-                font-size: 8px;
-            }
-            #favList .history-row .result-match {
-                font-size: 9px;
-                padding: 1px 6px;
+                padding: 0 10px;
             }
             #historyList .history-row {
                 padding: 4px 8px;
@@ -1399,18 +1379,14 @@
                 min-width: 36px;
             }
             #favList .history-row .status-group .result-status {
-                font-size: 9px;
+                font-size: 10px;
+            }
+            #favList .history-row .status-group .result-period {
+                font-size: 8px;
             }
             #favList .history-row .status-group .fav-result-btn {
                 font-size: 9px;
-                padding: 0 6px;
-            }
-            #favList .history-row .status-group .result-period {
-                font-size: 7px;
-            }
-            #favList .history-row .result-match {
-                font-size: 8px;
-                padding: 1px 4px;
+                padding: 0 8px;
             }
             #historyList .history-row {
                 padding: 3px 6px;
@@ -1888,11 +1864,12 @@
                                     </div>`;
                         } else {
                             html += `<div class="status-group">
-                                        <span class="result-status"></span>
+                                        <div class="status-row">
+                                            <span class="result-status"></span>
+                                            <span class="result-period"></span>
+                                        </div>
                                         <button class="fav-result-btn" data-mode="ssq" data-index="${realIdx}">查询</button>
-                                        <span class="result-period"></span>
                                     </div>`;
-                            html += `<div class="result-match empty">请选择期号后查询</div>`;
                         }
                         html += '</div>';
                     });
@@ -1932,11 +1909,12 @@
                                     </div>`;
                         } else {
                             html += `<div class="status-group">
-                                        <span class="result-status"></span>
+                                        <div class="status-row">
+                                            <span class="result-status"></span>
+                                            <span class="result-period"></span>
+                                        </div>
                                         <button class="fav-result-btn" data-mode="dlt" data-index="${realIdx}">查询</button>
-                                        <span class="result-period"></span>
                                     </div>`;
-                            html += `<div class="result-match empty">请选择期号后查询</div>`;
                         }
                         html += '</div>';
                     });
@@ -2050,11 +2028,11 @@
                 if (!ballGroup) return;
                 const statusGroup = row.querySelector('.status-group');
                 if (!statusGroup) return;
-                const resultMatch = row.querySelector('.result-match');
-                if (!resultMatch) return;
 
-                const statusSpan = statusGroup.querySelector('.result-status');
-                const periodSpan = statusGroup.querySelector('.result-period');
+                const statusRow = statusGroup.querySelector('.status-row');
+                if (!statusRow) return;
+                const statusSpan = statusRow.querySelector('.result-status');
+                const periodSpan = statusRow.querySelector('.result-period');
 
                 if (btn.classList.contains('cancel')) {
                     ballGroup.querySelectorAll('.ball').forEach(ball => {
@@ -2063,8 +2041,6 @@
                     statusSpan.textContent = '';
                     statusSpan.className = 'result-status';
                     periodSpan.textContent = '';
-                    resultMatch.textContent = '请选择期号后查询';
-                    resultMatch.className = 'result-match empty';
                     btn.textContent = '查询';
                     btn.classList.remove('cancel');
                     vibrate(10);
@@ -2113,13 +2089,10 @@
                 });
 
                 let prize = null;
-                let label = '';
                 if (mode === 'ssq') {
                     prize = getPrizeNameSSQ(redMatch, blueMatch);
-                    label = '红/蓝';
                 } else {
                     prize = getPrizeNameDLT(redMatch, blueMatch);
-                    label = '前/后';
                 }
                 const prizeText = prize || '未中奖';
                 const prizeClass = prize ? getPrizeClass(prize) : '';
@@ -2127,14 +2100,6 @@
                 statusSpan.className = 'result-status' + (prizeClass ? ' ' + prizeClass : '');
 
                 periodSpan.textContent = issue + '期';
-
-                if (redMatch > 0 || blueMatch > 0) {
-                    resultMatch.textContent = `与第${issue}期：${label}命中 ${redMatch}/${blueMatch}`;
-                    resultMatch.className = 'result-match';
-                } else {
-                    resultMatch.textContent = `与第${issue}期：无命中`;
-                    resultMatch.className = 'result-match';
-                }
 
                 btn.textContent = '取消';
                 btn.classList.add('cancel');
