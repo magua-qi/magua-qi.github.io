@@ -241,20 +241,30 @@
             background: rgba(231, 76, 111, 0.1);
         }
         #favList .history-row .fav-match-row {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
+            min-height: 20px;
+            padding: 2px 0;
+        }
+        #favList .history-row .fav-match-row .fav-match-text {
             text-align: center;
             font-size: 10px;
             color: #3a7bd5;
-            padding: 2px 0;
-            min-height: 20px;
         }
-        #favList .history-row .fav-match-row.right {
-            text-align: right;
+        #favList .history-row .fav-match-row .fav-query-result {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            font-size: 10px;
+            color: #3a7bd5;
+            white-space: nowrap;
         }
-        #favList .history-row .fav-match-row .fav-match-text {
-            display: inline-block;
-        }
-        #favList .history-row .fav-match-row .prize-win {
+        #favList .history-row .fav-match-row .fav-query-result .prize-win {
             color: #e74c6f;
             font-weight: 700;
         }
@@ -1015,10 +1025,13 @@
             #favList .history-row .fav-result-btn.cancel:active {
                 background: rgba(255, 107, 122, 0.15);
             }
-            #favList .history-row .fav-match-row {
+            #favList .history-row .fav-match-row .fav-match-text {
                 color: #6ab0ff;
             }
-            #favList .history-row .fav-match-row .prize-win {
+            #favList .history-row .fav-match-row .fav-query-result {
+                color: #6ab0ff;
+            }
+            #favList .history-row .fav-match-row .fav-query-result .prize-win {
                 color: #ff6b7a;
             }
             .history-meta {
@@ -1223,7 +1236,10 @@
                 font-size: 10px;
                 padding: 1px 10px;
             }
-            #favList .history-row .fav-match-row {
+            #favList .history-row .fav-match-row .fav-match-text {
+                font-size: 9px;
+            }
+            #favList .history-row .fav-match-row .fav-query-result {
                 font-size: 9px;
             }
             #historyList .history-row {
@@ -1351,7 +1367,10 @@
                 font-size: 9px;
                 padding: 0 8px;
             }
-            #favList .history-row .fav-match-row {
+            #favList .history-row .fav-match-row .fav-match-text {
+                font-size: 8px;
+            }
+            #favList .history-row .fav-match-row .fav-query-result {
                 font-size: 8px;
             }
             #historyList .history-row {
@@ -1853,7 +1872,10 @@
                         } else {
                             html += `<button class="fav-result-btn" data-mode="ssq" data-index="${realIdx}">查询</button>`;
                         }
-                        html += `<div class="fav-match-row"><span class="fav-match-text">${bestText}</span></div>`;
+                        html += `<div class="fav-match-row">
+                                    <span class="fav-match-text">${bestText}</span>
+                                    <span class="fav-query-result"></span>
+                                </div>`;
                         html += '</div>';
                     });
                     html += '</div>';
@@ -1895,7 +1917,10 @@
                         } else {
                             html += `<button class="fav-result-btn" data-mode="dlt" data-index="${realIdx}">查询</button>`;
                         }
-                        html += `<div class="fav-match-row"><span class="fav-match-text">${bestText}</span></div>`;
+                        html += `<div class="fav-match-row">
+                                    <span class="fav-match-text">${bestText}</span>
+                                    <span class="fav-query-result"></span>
+                                </div>`;
                         html += '</div>';
                     });
                     html += '</div>';
@@ -2007,7 +2032,9 @@
                 const ballGroup = row.querySelector('.ball-group');
                 if (!ballGroup) return;
                 const matchRow = row.querySelector('.fav-match-row');
-                const matchText = matchRow ? matchRow.querySelector('.fav-match-text') : null;
+                if (!matchRow) return;
+                const matchText = matchRow.querySelector('.fav-match-text');
+                const queryResult = matchRow.querySelector('.fav-query-result');
 
                 if (btn.classList.contains('cancel')) {
                     ballGroup.querySelectorAll('.ball').forEach(ball => {
@@ -2015,14 +2042,9 @@
                     });
                     btn.textContent = '查询';
                     btn.classList.remove('cancel');
-                    if (matchRow) {
-                        matchRow.className = 'fav-match-row';
-                        const reds = ballGroup.dataset.reds.split(',').map(Number);
-                        const blues = ballGroup.dataset.blues.split(',').map(Number);
-                        const bestMatch = getBestMatchForGroup({ reds, blues }, mode);
-                        const label = mode === 'ssq' ? '红/蓝' : '前/后';
-                        matchText.textContent = bestMatch ? `与第${bestMatch.issue}期：${label}命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
-                        matchText.className = 'fav-match-text';
+                    if (queryResult) {
+                        queryResult.style.display = 'none';
+                        queryResult.innerHTML = '';
                     }
                     vibrate(10);
                     return;
@@ -2077,14 +2099,13 @@
                 }
                 const prizeText = prize || '未中奖';
 
-                if (matchRow) {
-                    matchRow.className = 'fav-match-row right';
+                if (queryResult) {
                     if (prize) {
-                        matchText.innerHTML = `<span class="prize-win">${prizeText}</span> ${issue}期`;
+                        queryResult.innerHTML = `<span class="prize-win">${prizeText}</span> ${issue}期`;
                     } else {
-                        matchText.textContent = `${prizeText} ${issue}期`;
-                        matchText.className = 'fav-match-text';
+                        queryResult.textContent = `${prizeText} ${issue}期`;
                     }
+                    queryResult.style.display = 'block';
                 }
 
                 btn.textContent = '取消';
