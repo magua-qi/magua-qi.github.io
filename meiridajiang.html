@@ -20,7 +20,7 @@
             background: #eef2f7;
             font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
             overflow-x: hidden;
-            transition: background 0.3s, color 0.3s;
+            transition: background .3s, color .3s;
         }
         .app-container {
             width: 100%;
@@ -31,13 +31,13 @@
             gap: 16px;
         }
         .card {
-            background: #ffffff;
+            background: #fff;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             width: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: background 0.3s, border-color 0.3s;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: background .3s, border-color .3s;
         }
         .title-bar {
             background: linear-gradient(135deg, #3a7bd5, #2b5ea7);
@@ -48,1411 +48,397 @@
             color: #fff;
             letter-spacing: 2px;
             position: relative;
-        }
-        .title-bar.secondary {
-            background: linear-gradient(135deg, #5b9bd5, #3a7bd5);
-        }
-        .title-bar.tertiary {
-            background: linear-gradient(135deg, #4a8fd4, #2b5ea7);
-        }
-        .title-bar.fourth {
-            background: linear-gradient(135deg, #6aafd5, #3a7bd5);
-        }
-        .title-bar .manage-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 30px;
-            padding: 4px 12px;
-            color: #fff;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .title-bar .manage-btn:active {
-            background: rgba(255, 255, 255, 0.4);
-        }
-        .mode-row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 14px 16px 8px;
-            flex-wrap: nowrap;
-        }
-        .mode-row label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 4px 12px;
-            border-radius: 30px;
-            transition: background 0.2s;
-            white-space: nowrap;
-            color: #2c3e50;
-        }
-        .mode-row label:hover {
-            background: rgba(58, 123, 213, 0.08);
-        }
-        .mode-row input[type="radio"] {
-            display: none;
-        }
-        .mode-row label .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid #b0c4de;
-            display: inline-block;
-            position: relative;
-        }
-        .mode-row input:checked+span .dot {
-            border-color: #3a7bd5;
-        }
-        .mode-row input:checked+span .dot::after {
-            content: '';
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #3a7bd5;
-            top: 1.5px;
-            left: 1.5px;
-        }
-        .result-box {
-            margin: 6px 16px 14px;
-            background: #f8faff;
-            border-radius: 12px;
-            min-height: 60px;
-            padding: 8px 4px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            text-align: center;
-            transition: background 0.3s;
-        }
-        .hint-text {
-            text-align: center;
-            color: #7f8c9b;
-            font-size: 13px;
-        }
-        .number-line {
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            padding: 4px 64px;
-            flex-wrap: nowrap;
-            gap: 3px;
-            min-height: 36px;
-            margin: 4px 0;
-        }
-        .number-line .btn-text.fav {
-            position: absolute;
-            left: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .number-line .btn-text.copy {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .number-line.action-line {
-            justify-content: space-between;
-            padding: 4px 64px;
-        }
-        .number-line.action-line .btn-text {
-            position: static;
-            transform: none;
-        }
-        #favList .history-row {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 6px 8px;
-            gap: 6px;
-            min-height: 44px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            width: 100%;
-            flex-wrap: wrap;
-        }
-        #favList .history-row .time-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 44px;
-            font-size: 10px;
-            color: #7f8c9b;
-            line-height: 1.2;
-            flex-shrink: 0;
-        }
-        #favList .history-row .time-col .monthday {
-            font-size: 10px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        #favList .history-row .time-col .year {
-            font-size: 9px;
-            color: #95a5a6;
-        }
-        #favList .history-row .ball-group {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            flex: 1 1 auto;
-            justify-content: center;
-            flex-wrap: wrap;
-            min-width: 120px;
-        }
-        #favList .history-row .fav-result-btn {
-            font-size: 11px;
-            padding: 2px 14px;
-            border: 1px solid #3a7bd5;
-            border-radius: 12px;
-            background: transparent;
-            color: #3a7bd5;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-            -webkit-tap-highlight-color: transparent;
-            line-height: 1.8;
-            white-space: nowrap;
-            flex-shrink: 0;
-            margin-left: auto;
-        }
-        #favList .history-row .fav-result-btn:active {
-            transform: scale(0.92);
-            background: rgba(58, 123, 213, 0.1);
-        }
-        #favList .history-row .fav-result-btn.cancel {
-            border-color: #e74c6f;
-            color: #e74c6f;
-        }
-        #favList .history-row .fav-result-btn.cancel:active {
-            background: rgba(231, 76, 111, 0.1);
-        }
-        #favList .history-row .fav-match-row {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            min-height: 20px;
-            padding: 2px 0;
-        }
-        #favList .history-row .fav-match-row .fav-match-text {
-            text-align: center;
-            font-size: 10px;
-            color: #3a7bd5;
-        }
-        #favList .history-row .fav-match-row .fav-query-result {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: none;
-            font-size: 10px;
-            color: #3a7bd5;
-            white-space: nowrap;
-        }
-        #favList .history-row .fav-match-row .fav-query-result .prize-win {
-            color: #e74c6f;
-            font-weight: 700;
-        }
-        #favList .history-row .action-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-            margin-left: auto;
-        }
-        #favList .history-row .action-group .btn-text {
-            font-size: 11px;
-        }
-        #historyList .history-row {
-            display: flex;
-            align-items: center;
-            padding: 6px 12px;
-            gap: 8px;
-            min-height: 44px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            width: 100%;
-            flex-wrap: nowrap;
-            justify-content: flex-start;
-        }
-        #historyList .history-row .left-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            min-width: 60px;
-            flex-shrink: 0;
-            line-height: 1.3;
-        }
-        #historyList .history-row .left-info .period {
-            font-size: 12px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        #historyList .history-row .left-info .date {
-            font-size: 10px;
-            color: #7f8c9b;
-        }
-        #historyList .history-row .ball-group {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            flex: 1;
-            justify-content: center;
-        }
-        .ball {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-            transition: filter 0.2s, transform 0.2s;
-        }
-        .ball.red,
-        .ball.front {
-            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
-            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
-        }
-        .ball.blue,
-        .ball.back {
-            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
-            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
-        }
-        .ball.red.unmatch {
-            background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3);
-            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.15);
-        }
-        .ball.front.unmatch {
-            background: radial-gradient(circle at 35% 35%, #ffb3b3, #e6a3a3);
-            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.15);
-        }
-        .ball.blue.unmatch,
-        .ball.back.unmatch {
-            background: radial-gradient(circle at 35% 35%, #b3d9ff, #80bfff);
-            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.15);
-        }
-        .ball.rolling {
-            animation: roll 0.08s infinite alternate;
-        }
-        @keyframes roll {
-            0% {
-                transform: scale(0.85) rotate(-6deg);
-            }
-            100% {
-                transform: scale(1.15) rotate(6deg);
-            }
-        }
-        .ball.done {
-            animation: pop 0.25s ease both;
-        }
-        @keyframes pop {
-            0% {
-                transform: scale(0.2);
-                opacity: 0.4;
-            }
-            60% {
-                transform: scale(1.25);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        .placeholder-red,
-        .placeholder-blue {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .placeholder-red {
-            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
-            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
-        }
-        .placeholder-blue {
-            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
-            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
-        }
-        .sep {
-            margin: 0 2px;
-            color: #b0c4de;
-            font-weight: 700;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-        .btn-text {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 0 4px;
-            font-weight: 600;
-            transition: opacity 0.2s, transform 0.1s;
-            -webkit-tap-highlight-color: transparent;
-            font-family: inherit;
-            display: inline-block;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-        .btn-text:active {
-            transform: scale(0.85);
-        }
-        .btn-text.copy {
-            color: #3a7bd5;
-        }
-        .btn-text.copy.done {
-            color: #2ecc71;
-        }
-        .btn-text.fav {
-            color: #95a5a6;
-        }
-        .btn-text.fav.active {
-            color: #f1c40f;
-        }
-        .btn-text.del {
-            color: #e74c6f;
-        }
-        .btn-text.del:active {
-            opacity: 0.7;
-        }
-        .btn-text.all-copy,
-        .btn-text.all-delete,
-        .btn-text.all-fav {
-            font-size: 12px;
-            opacity: 0.6;
-            cursor: pointer;
-        }
-        .btn-text.all-copy {
-            color: #3a7bd5;
-        }
-        .btn-text.all-delete {
-            color: #e74c6f;
-        }
-        .btn-text.all-fav {
-            color: #3a7bd5;
-        }
-        .btn-text.all-copy:active,
-        .btn-text.all-delete:active,
-        .btn-text.all-fav:active {
-            opacity: 1;
-        }
-        .match-info {
-            font-size: 10px;
-            color: #2c3e50;
-            background: #f0f4fa;
-            border-radius: 8px;
-            padding: 2px 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 2px 0;
-        }
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            padding: 0 16px 12px;
-            flex-wrap: nowrap;
-            align-items: stretch;
-        }
-        .btn-row .btn-group {
-            display: flex;
-            flex: 1;
-            background: #e8edf5;
-            border-radius: 10px;
-            overflow: hidden;
-            min-height: 40px;
-        }
-        .btn-row .btn-group .btn-cycle {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #2c3e50;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 0;
-            transition: transform 0.12s, background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
-            line-height: 40px;
-            text-align: center;
-        }
-        .btn-row .btn-group .btn-cycle:active {
-            transform: scale(0.94);
-            background: rgba(0, 0, 0, 0.05);
-        }
-        .btn-row .btn-group .btn-cycle:disabled {
-            color: #b0b8c4;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-        .btn-row .btn-group .group-number {
-            flex: 1;
-            text-align: center;
-            line-height: 40px;
-            color: #2c3e50;
-            font-weight: 700;
-            font-size: 13px;
-            background: transparent;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            cursor: pointer;
-            user-select: none;
-            white-space: nowrap;
-            min-width: 0;
-            border: none;
-            font-family: inherit;
-        }
-        .btn-row .btn-group .group-number:hover {
-            background: rgba(58, 123, 213, 0.08);
-        }
-        .btn-row .btn-group .group-number:active {
-            transform: scale(0.96);
-        }
-        .btn {
-            flex: 1;
-            padding: 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.12s, box-shadow 0.2s, opacity 0.2s, background 0.2s;
-            color: #fff;
-            text-align: center;
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
-            white-space: nowrap;
-            min-height: 40px;
-            line-height: 40px;
-            min-width: 0;
-        }
-        .btn:focus {
-            outline: none;
-            box-shadow: none;
-        }
-        .btn:active {
-            transform: scale(0.96);
-        }
-        .btn-red {
-            background: linear-gradient(135deg, #ff6b7a, #e74c6f);
-        }
-        .btn-red:disabled {
-            background: #d5dbe3;
-            color: #aab3c0;
-            pointer-events: none;
-            transform: none;
-        }
-        .btn-blue {
-            background: linear-gradient(135deg, #6ab0ff, #3a7bd5);
-        }
-        .btn-blue:disabled {
-            background: #d5dbe3;
-            color: #aab3c0;
-            pointer-events: none;
-            transform: none;
-        }
-        .btn-smart {
-            background: linear-gradient(135deg, #6ab0ff, #5dd9b2);
-        }
-        .btn-retry {
-            background: #f39c12;
-            color: #fff;
-        }
-        .chart-container {
-            padding: 12px 12px;
-            width: 100%;
-            background: #fcfdff;
-        }
-        .table-container {
-            background: #f8faff;
-            border-radius: 12px;
-            padding: 8px 4px;
-            margin-bottom: 12px;
-        }
-        .table-container .sub-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #2c3e50;
-            padding: 4px 8px 8px;
-            border-bottom: 1px solid #e8edf5;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .stat-table {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .stat-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            background: #ffffff;
-            transition: background 0.2s;
-        }
-        .stat-row.header {
-            background: transparent;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 11px;
-            border-bottom: 1px solid #e8edf5;
-            padding-bottom: 4px;
-            margin-bottom: 2px;
-        }
-        .stat-num {
-            width: 32px;
-            text-align: center;
-            flex-shrink: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .stat-ball {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .stat-ball.red {
-            background: radial-gradient(circle at 35% 35%, #ff6b7a, #e74c6f);
-            box-shadow: 0 2px 6px rgba(231, 76, 111, 0.35);
-        }
-        .stat-ball.blue {
-            background: radial-gradient(circle at 35% 35%, #6ab0ff, #3a7bd5);
-            box-shadow: 0 2px 6px rgba(58, 123, 213, 0.35);
-        }
-        .stat-cell {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            padding: 2px 4px;
-            min-height: 24px;
-            background: #f0f4fa;
-            transition: background 0.2s;
-        }
-        .stat-cell .value {
-            font-size: 13px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .stat-cell.freq {
-            background: #fde8e8;
-        }
-        .stat-cell.miss {
-            background: #e8f0fe;
-        }
-        .history-list {
-            padding: 6px 0px 12px;
-            overflow-x: auto;
-            overflow-y: visible;
-            -webkit-overflow-scrolling: touch;
-            background: transparent;
-        }
-        .history-meta {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 4px 0px 0px;
-            font-size: 10px;
-            color: #7f8c9b;
-            flex-wrap: wrap;
-            gap: 6px;
-            background: transparent;
-        }
-        .history-meta .pagination {
-            display: flex;
-            align-items: center;
             gap: 8px;
         }
-        .history-meta .pagination button {
-            background: #e8edf5;
-            border: none;
-            color: #2c3e50;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
+        .title-bar .title-left { display:flex; align-items:center; gap:6px; position:absolute; left:10px; top:50%; transform:translateY(-50%); }
+        .title-bar .title-right { display:flex; align-items:center; gap:6px; position:absolute; right:10px; top:50%; transform:translateY(-50%); }
+        .title-bar .title-center { flex:1; text-align:center; }
+        .title-bar .custom-btn { background:rgba(255,255,255,0.2); border:none; border-radius:30px; padding:3px 12px; color:#fff; font-size:12px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; font-family:inherit; white-space:nowrap; }
+        .title-bar .custom-btn:active { background:rgba(255,255,255,0.4); }
+        .title-bar .custom-btn.active { background:rgba(255,255,255,0.35); }
+        .title-bar .manage-btn { background:rgba(255,255,255,0.2); border:none; border-radius:30px; padding:3px 12px; color:#fff; font-size:12px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; font-family:inherit; white-space:nowrap; }
+        .title-bar .manage-btn:active { background:rgba(255,255,255,0.4); }
+        .title-bar.secondary { background:linear-gradient(135deg,#5b9bd5,#3a7bd5); }
+        .title-bar.tertiary { background:linear-gradient(135deg,#4a8fd4,#2b5ea7); }
+        .title-bar.fourth { background:linear-gradient(135deg,#6aafd5,#3a7bd5); }
+        .mode-row { display:flex; justify-content:center; gap:20px; padding:14px 16px 8px; flex-wrap:nowrap; }
+        .mode-row label { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:14px; padding:4px 12px; border-radius:30px; transition:background .2s; white-space:nowrap; color:#2c3e50; }
+        .mode-row label:hover { background:rgba(58,123,213,0.08); }
+        .mode-row input[type="radio"] { display:none; }
+        .mode-row label .dot { width:12px; height:12px; border-radius:50%; border:2px solid #b0c4de; display:inline-block; position:relative; }
+        .mode-row input:checked+span .dot { border-color:#3a7bd5; }
+        .mode-row input:checked+span .dot::after { content:''; position:absolute; width:5px; height:5px; border-radius:50%; background:#3a7bd5; top:1.5px; left:1.5px; }
+        .result-box { margin:6px 16px 14px; background:#f8faff; border-radius:12px; min-height:60px; padding:8px 4px; overflow-x:auto; -webkit-overflow-scrolling:touch; text-align:center; transition:background .3s; }
+        .hint-text { text-align:center; color:#7f8c9b; font-size:13px; }
+        .number-line { display:flex; align-items:center; justify-content:center; position:relative; padding:4px 64px; flex-wrap:nowrap; gap:3px; min-height:36px; margin:4px 0; }
+        .number-line .btn-text.fav { position:absolute; left:4px; top:50%; transform:translateY(-50%); white-space:nowrap; flex-shrink:0; }
+        .number-line .btn-text.copy { position:absolute; right:4px; top:50%; transform:translateY(-50%); white-space:nowrap; flex-shrink:0; }
+        .number-line.action-line { justify-content:space-between; padding:4px 64px; }
+        .number-line.action-line .btn-text { position:static; transform:none; }
+        #favList .history-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; padding:6px 8px; gap:4px 6px; min-height:44px; border-bottom:1px solid rgba(0,0,0,0.04); width:100%; }
+        #favList .history-row .time-col { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:44px; font-size:10px; color:#7f8c9b; line-height:1.2; flex-shrink:0; }
+        #favList .history-row .time-col .monthday { font-size:10px; font-weight:600; color:#2c3e50; }
+        #favList .history-row .time-col .year { font-size:9px; color:#95a5a6; }
+        #favList .history-row .ball-group { display:flex; align-items:center; gap:3px; flex:1 1 auto; justify-content:center; flex-wrap:wrap; min-width:120px; }
+        #favList .history-row .fav-result-btn { font-size:11px; padding:2px 14px; border:1px solid #3a7bd5; border-radius:12px; background:transparent; color:#3a7bd5; cursor:pointer; transition:all .2s; font-family:inherit; -webkit-tap-highlight-color:transparent; line-height:1.8; white-space:nowrap; flex-shrink:0; margin-left:auto; }
+        #favList .history-row .fav-result-btn:active { transform:scale(0.92); background:rgba(58,123,213,0.1); }
+        #favList .history-row .fav-result-btn.cancel { border-color:#e74c6f; color:#e74c6f; }
+        #favList .history-row .fav-result-btn.cancel:active { background:rgba(231,76,111,0.1); }
+        #favList .history-row .fav-match-row { position:relative; display:flex; justify-content:center; align-items:center; width:100%; min-height:20px; padding:2px 0; flex-wrap:wrap; gap:4px; }
+        #favList .history-row .fav-match-row .fav-match-text { text-align:center; font-size:10px; color:#3a7bd5; transition:color .2s; }
+        #favList .history-row .fav-match-row .fav-query-result { position:absolute; right:0; top:50%; transform:translateY(-50%); display:none; font-size:10px; color:#3a7bd5; white-space:nowrap; }
+        #favList .history-row .fav-match-row .fav-query-result .prize-win { color:#e74c6f; font-weight:700; }
+        #favList .history-row .action-group { display:flex; align-items:center; gap:6px; flex-shrink:0; margin-left:auto; }
+        #favList .history-row .action-group .btn-text { font-size:11px; }
+        #favList .history-row .compound-info { font-size:10px; color:#7f8c9b; font-weight:600; text-align:center; width:100%; margin-top:2px; }
+        #historyList .history-row { display:flex; align-items:center; padding:6px 12px; gap:8px; min-height:44px; border-bottom:1px solid rgba(0,0,0,0.04); width:100%; flex-wrap:nowrap; justify-content:flex-start; }
+        #historyList .history-row .left-info { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; min-width:60px; flex-shrink:0; line-height:1.3; }
+        #historyList .history-row .left-info .period { font-size:12px; font-weight:600; color:#2c3e50; }
+        #historyList .history-row .left-info .date { font-size:10px; color:#7f8c9b; }
+        #historyList .history-row .ball-group { display:flex; align-items:center; gap:3px; flex:1; justify-content:center; }
+        .ball { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; transition:filter .2s,transform .2s; }
+        .ball.red,.ball.front { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .ball.blue,.ball.back { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .ball.red.unmatch,.ball.front.unmatch { background:radial-gradient(circle at 35% 35%,#ffb3b3,#e6a3a3); box-shadow:0 2px 6px rgba(231,76,111,0.15); }
+        .ball.blue.unmatch,.ball.back.unmatch { background:radial-gradient(circle at 35% 35%,#b3d9ff,#80bfff); box-shadow:0 2px 6px rgba(58,123,213,0.15); }
+        .ball.rolling { animation:roll 0.08s infinite alternate; }
+        @keyframes roll { 0% { transform:scale(0.85) rotate(-6deg); } 100% { transform:scale(1.15) rotate(6deg); } }
+        .ball.done { animation:pop 0.25s ease both; }
+        @keyframes pop { 0% { transform:scale(0.2); opacity:0.4; } 60% { transform:scale(1.25); } 100% { transform:scale(1); opacity:1; } }
+        .placeholder-red,.placeholder-blue { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; flex-shrink:0; }
+        .placeholder-red { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .placeholder-blue { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .sep { margin:0 2px; color:#b0c4de; font-weight:700; font-size:12px; flex-shrink:0; }
+        .btn-text { background:none; border:none; cursor:pointer; font-size:12px; padding:0 4px; font-weight:600; transition:opacity .2s,transform .1s; -webkit-tap-highlight-color:transparent; font-family:inherit; display:inline-block; line-height:1; flex-shrink:0; }
+        .btn-text:active { transform:scale(0.85); }
+        .btn-text.copy { color:#3a7bd5; }
+        .btn-text.copy.done { color:#2ecc71; }
+        .btn-text.fav { color:#95a5a6; }
+        .btn-text.fav.active { color:#f1c40f; }
+        .btn-text.del { color:#e74c6f; }
+        .btn-text.del:active { opacity:0.7; }
+        .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:12px; opacity:0.6; cursor:pointer; }
+        .btn-text.all-copy { color:#3a7bd5; }
+        .btn-text.all-delete { color:#e74c6f; }
+        .btn-text.all-fav { color:#3a7bd5; }
+        .btn-text.all-copy:active,.btn-text.all-delete:active,.btn-text.all-fav:active { opacity:1; }
+        .match-info { font-size:10px; color:#2c3e50; background:#f0f4fa; border-radius:8px; padding:2px 10px; display:inline-flex; align-items:center; gap:8px; margin:2px 0; }
+        .btn-row { display:flex; gap:8px; padding:0 16px 12px; flex-wrap:nowrap; align-items:stretch; }
+        .btn-row .btn-group { display:flex; flex:1; background:#e8edf5; border-radius:10px; overflow:hidden; min-height:40px; }
+        .btn-row .btn-group .btn-cycle { flex:1; background:transparent; border:none; color:#2c3e50; font-size:18px; font-weight:700; cursor:pointer; padding:0; transition:transform .12s,background .2s; -webkit-tap-highlight-color:transparent; outline:none; line-height:40px; text-align:center; }
+        .btn-row .btn-group .btn-cycle:active { transform:scale(0.94); background:rgba(0,0,0,0.05); }
+        .btn-row .btn-group .btn-cycle:disabled { color:#b0b8c4; cursor:not-allowed; pointer-events:none; }
+        .btn-row .btn-group .group-number { flex:1; text-align:center; line-height:40px; color:#2c3e50; font-weight:700; font-size:13px; background:transparent; transition:background .2s; -webkit-tap-highlight-color:transparent; cursor:pointer; user-select:none; white-space:nowrap; min-width:0; border:none; font-family:inherit; }
+        .btn-row .btn-group .group-number:hover { background:rgba(58,123,213,0.08); }
+        .btn-row .btn-group .group-number:active { transform:scale(0.96); }
+        .btn { flex:1; padding:0; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; transition:transform .12s,box-shadow .2s,opacity .2s,background .2s; color:#fff; text-align:center; -webkit-tap-highlight-color:transparent; outline:none; white-space:nowrap; min-height:40px; line-height:40px; min-width:0; }
+        .btn:focus { outline:none; box-shadow:none; }
+        .btn:active { transform:scale(0.96); }
+        .btn-red { background:linear-gradient(135deg,#ff6b7a,#e74c6f); }
+        .btn-red:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .btn-blue { background:linear-gradient(135deg,#6ab0ff,#3a7bd5); }
+        .btn-blue:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .btn-smart { background:linear-gradient(135deg,#6ab0ff,#5dd9b2); }
+        .btn-retry { background:#f39c12; color:#fff; }
+        .chart-container { padding:12px 12px; width:100%; background:#fcfdff; }
+        .table-container { background:#f8faff; border-radius:12px; padding:8px 4px; margin-bottom:12px; }
+        .table-container .sub-title { font-size:12px; font-weight:600; color:#2c3e50; padding:4px 8px 8px; border-bottom:1px solid #e8edf5; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+        .stat-table { display:flex; flex-direction:column; gap:2px; }
+        .stat-row { display:flex; align-items:center; gap:6px; padding:2px 4px; border-radius:4px; background:#fff; transition:background .2s; }
+        .stat-row.header { background:transparent; font-weight:600; color:#2c3e50; font-size:11px; border-bottom:1px solid #e8edf5; padding-bottom:4px; margin-bottom:2px; }
+        .stat-num { width:32px; text-align:center; flex-shrink:0; display:flex; justify-content:center; align-items:center; }
+        .stat-ball { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:11px; font-weight:700; color:#fff; }
+        .stat-ball.red { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .stat-ball.blue { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .stat-cell { flex:1; display:flex; align-items:center; justify-content:center; border-radius:4px; padding:2px 4px; min-height:24px; background:#f0f4fa; transition:background .2s; }
+        .stat-cell .value { font-size:13px; font-weight:600; color:#2c3e50; }
+        .stat-cell.freq { background:#fde8e8; }
+        .stat-cell.miss { background:#e8f0fe; }
+        .history-list { padding:6px 0px 12px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; background:transparent; }
+        .history-meta { display:flex; justify-content:flex-end; align-items:center; padding:4px 0px 0px; font-size:10px; color:#7f8c9b; flex-wrap:wrap; gap:6px; background:transparent; }
+        .history-meta .pagination { display:flex; align-items:center; gap:8px; }
+        .history-meta .pagination button { background:#e8edf5; border:none; color:#2c3e50; padding:2px 10px; border-radius:12px; font-size:11px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; outline:none; }
+        .history-meta .pagination button:active { transform:scale(0.94); }
+        .history-meta .pagination button:disabled { opacity:0.4; pointer-events:none; }
+        .history-meta .pagination span { font-size:11px; color:#2c3e50; min-width:40px; text-align:center; }
+        .info-content { padding:14px 16px 16px; color:#2c3e50; font-size:12px; line-height:1.8; background:#fcfdff; }
+        .info-content .highlight-red { color:#e74c6f; font-weight:600; }
+        .info-content .highlight-blue { color:#3a7bd5; font-weight:600; }
+        .info-content .highlight-green { color:#3ab795; font-weight:600; }
+        .disclaimer { background:#fff3cd; border-left:4px solid #f0ad4e; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:12px; color:#856404; }
+        .range-row { padding:10px 16px 14px; }
+        .range-title { text-align:center; font-weight:600; font-size:13px; color:#2c3e50; padding-bottom:4px; }
+        .range-side-row { display:flex; justify-content:space-between; font-size:10px; color:#7f8c9b; padding-bottom:4px; }
+        .range-side-row .side-item { white-space:nowrap; }
+        .range-track-wrap { position:relative; padding:0px 0 2px; touch-action:none; user-select:none; -webkit-user-select:none; }
+        .range-track { position:relative; height:22px; background:#e8ecf2; border-radius:11px; cursor:pointer; touch-action:none; }
+        .range-track .range-fill { position:absolute; height:100%; background:linear-gradient(90deg,#6ab0ff,#3a7bd5); border-radius:11px; pointer-events:none; }
+        .range-thumb { position:absolute; top:50%; width:22px; height:22px; border-radius:50%; background:#fff; border:2.5px solid #3a7bd5; box-shadow:0 2px 8px rgba(58,123,213,0.30); transform:translate(-50%,-50%); cursor:grab; touch-action:none; z-index:2; transition:box-shadow .15s,border-color .2s; }
+        .range-thumb:active { cursor:grabbing; box-shadow:0 2px 12px rgba(58,123,213,0.45); border-color:#1e4f8a; }
+        .range-thumb-left { z-index:3; }
+        .range-thumb-right { z-index:3; }
+        .range-info { display:flex; justify-content:center; padding-top:4px; font-size:10px; color:#7f8c9b; }
+        .range-info .mid { display:none; }
+        .range-summary { text-align:center; font-size:13px; color:#2c3e50; padding:8px 0 4px; font-weight:600; background:#f8faff; border-bottom:1px solid #e8edf5; margin-bottom:12px; }
+        .data-hint { color:#3a7bd5; font-size:10px; text-align:center; padding:6px 12px 10px; border-top:1px solid rgba(58,123,213,0.06); background:#f8faff; }
+        .loading-spinner { display:inline-block; width:20px; height:20px; border:2px solid #e0e0e0; border-top:2px solid #3a7bd5; border-radius:50%; animation:spin 0.8s linear infinite; margin-right:8px; vertical-align:middle; }
+        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+        .error-text { color:#e74c6f; text-align:center; font-size:13px; padding:8px 0; }
+        .fav-section { margin-bottom:12px; }
+        .fav-section:last-child { margin-bottom:0; }
+        .fav-section .sub-title { font-size:12px; font-weight:600; color:#2c3e50; padding:4px 8px 8px; border-bottom:1px solid #e8edf5; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+        .fav-section .sub-title .btn-text { font-size:10px; margin-left:8px; }
+        .fav-section .sub-title .fav-period-select { font-size:10px; padding:2px 4px; border-radius:4px; border:1px solid #b0c4de; background:#fff; color:#2c3e50; max-width:100px; font-family:inherit; }
+        .fav-section .sub-title .fav-query-all-btn { font-size:12px; opacity:0.6; cursor:pointer; color:#3a7bd5; background:none; border:none; padding:0 4px; font-weight:600; transition:opacity .2s,transform .1s; font-family:inherit; line-height:1; margin-right:8px; }
+        .fav-section .sub-title .fav-query-all-btn:active { transform:scale(0.85); opacity:1; }
+        .fav-section .sub-title .fav-query-all-btn.cancel { color:#e74c6f; }
+        .group-match-info { font-size:10px; color:#3a7bd5; text-align:center; margin:0 0 4px 0; background:#f0f4fa; border-radius:6px; padding:2px 8px; display:inline-block; }
+        .picker-container { display:flex; flex-direction:column; gap:8px; padding:6px 8px 4px; }
+        .picker-col { width:100%; padding:0; }
+        .picker-col .picker-title { font-size:10px; font-weight:700; color:#2c3e50; text-align:center; padding-bottom:4px; border-bottom:1px solid #e8edf5; margin-bottom:4px; }
+        .picker-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:4px; justify-items:center; align-items:center; }
+        .picker-num { display:inline-flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; font-size:10px; font-weight:700; cursor:pointer; transition:transform .12s,background .2s,box-shadow .2s,border-color .2s,color .2s; -webkit-tap-highlight-color:transparent; user-select:none; border:2px solid transparent; color:#2c3e50; background:#eef2f7; }
+        .picker-num:active { transform:scale(0.88); }
+        .picker-num.red { background:radial-gradient(circle at 35% 35%,#ffb3b3,#e6a3a3); border-color:#f0c8c8; color:#2c3e50; box-shadow:0 1px 4px rgba(231,76,111,0.10); }
+        .picker-num.red.selected { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); border-color:#e74c6f; color:#fff; box-shadow:0 2px 8px rgba(231,76,111,0.40); }
+        .picker-num.blue { background:radial-gradient(circle at 35% 35%,#b3d9ff,#80bfff); border-color:#b8d4f0; color:#2c3e50; box-shadow:0 1px 4px rgba(58,123,213,0.10); }
+        .picker-num.blue.selected { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); border-color:#3a7bd5; color:#fff; box-shadow:0 2px 8px rgba(58,123,213,0.40); }
+        .picker-num.placeholder { background:transparent !important; border-color:transparent !important; box-shadow:none !important; cursor:default !important; pointer-events:none !important; visibility:hidden; }
+        .picker-info { display:flex; justify-content:center; align-items:center; gap:16px; padding:2px 12px 4px; font-size:11px; color:#2c3e50; flex-wrap:wrap; }
+        .picker-info .info-item { display:flex; align-items:center; gap:4px; }
+        .picker-info .info-item .num { font-weight:700; color:#e74c6f; }
+        .picker-info .info-item .num.blue { color:#3a7bd5; }
+        .picker-actions { display:flex; gap:8px; padding:2px 12px 10px; justify-content:center; flex-wrap:wrap; }
+        .picker-actions .btn { flex:0 1 auto; padding:0 20px; min-height:32px; line-height:32px; font-size:12px; min-width:70px; }
+        .picker-actions .btn:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .picker-actions .btn-clear { background:#95a5a6; }
+        .picker-actions .btn-compound { background:#f39c12; color:#fff; }
+        .picker-actions .btn-compound:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .custom-picker-wrap { overflow:hidden; transition:max-height .35s ease,opacity .25s ease,margin .25s ease; max-height:0; opacity:0; margin:0; }
+        .custom-picker-wrap.open { max-height:600px; opacity:1; margin:2px 0 0; }
+        .fav-empty { text-align:center; padding:16px 0; color:#7f8c9b; font-size:13px; }
+
+        @media (prefers-color-scheme:dark) {
+            body { background:#1a1e24; }
+            .card { background:#2a2e36; border-color:#3a3f4a; }
+            .title-bar { background:linear-gradient(135deg,#2b5ea7,#1e4a7a); }
+            .title-bar.secondary { background:linear-gradient(135deg,#4a7fbf,#2b5ea7); }
+            .title-bar.tertiary { background:linear-gradient(135deg,#3a6fb0,#1e4a7a); }
+            .title-bar.fourth { background:linear-gradient(135deg,#5a8fc0,#2b5ea7); }
+            .mode-row label { color:#c8d0dc; }
+            .result-box { background:#2f343e; }
+            .hint-text { color:#9aa5b5; }
+            .btn-row .btn-group { background:#3a3f4a; }
+            .btn-row .btn-group .btn-cycle { color:#c8d0dc; }
+            .btn-row .btn-group .btn-cycle:disabled { color:#6a7585; }
+            .btn-row .btn-group .group-number { color:#c8d0dc; }
+            .btn-red:disabled,.btn-blue:disabled { background:#3a3f4a; color:#6a7585; }
+            .chart-container { background:#2a2e36; }
+            .table-container { background:#2f343e; }
+            .table-container .sub-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .stat-row { background:#2a2e36; }
+            .stat-row.header { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .stat-num { color:#c8d0dc; }
+            .stat-cell { background:#3a3f4a; }
+            .stat-cell .value { color:#c8d0dc; }
+            .stat-cell.freq { background:#4a2a2a; }
+            .stat-cell.miss { background:#2a3a4a; }
+            #historyList .history-row { border-bottom-color:#3a3f4a; }
+            #historyList .history-row .left-info .period { color:#c8d0dc; }
+            #historyList .history-row .left-info .date { color:#9aa5b5; }
+            #favList .history-row { border-bottom-color:#3a3f4a; }
+            #favList .history-row .time-col .monthday { color:#c8d0dc; }
+            #favList .history-row .time-col .year { color:#9aa5b5; }
+            #favList .history-row .fav-result-btn { border-color:#6ab0ff; color:#6ab0ff; }
+            #favList .history-row .fav-result-btn:active { background:rgba(106,176,255,0.15); }
+            #favList .history-row .fav-result-btn.cancel { border-color:#ff6b7a; color:#ff6b7a; }
+            #favList .history-row .fav-result-btn.cancel:active { background:rgba(255,107,122,0.15); }
+            #favList .history-row .fav-match-row .fav-match-text { color:#6ab0ff; }
+            #favList .history-row .fav-match-row .fav-query-result { color:#6ab0ff; }
+            #favList .history-row .fav-match-row .fav-query-result .prize-win { color:#ff6b7a; }
+            .fav-section .sub-title .fav-query-all-btn { color:#6ab0ff; }
+            .fav-section .sub-title .fav-query-all-btn.cancel { color:#ff6b7a; }
+            .history-meta { color:#9aa5b5; }
+            .history-meta .pagination button { background:#3a3f4a; color:#c8d0dc; }
+            .history-meta .pagination span { color:#c8d0dc; }
+            .info-content { background:#2a2e36; color:#c8d0dc; }
+            .disclaimer { background:#3a2a1a; color:#d4a84a; border-left-color:#d4a84a; }
+            .range-title { color:#c8d0dc; }
+            .range-side-row { color:#9aa5b5; }
+            .range-track { background:#3a3f4a; }
+            .range-thumb { background:#2a2e36; border-color:#6ab0ff; }
+            .range-summary { background:#2f343e; color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .data-hint { color:#6ab0ff; border-top-color:#3a3f4a; background:#2f343e; }
+            .info-content .highlight-red { color:#ff6b7a; }
+            .info-content .highlight-blue { color:#6ab0ff; }
+            .info-content .highlight-green { color:#5dd9b2; }
+            .match-info { color:#c8d0dc; background:#3a3f4a; }
+            .btn-text.copy { color:#6ab0ff; }
+            .btn-text.copy.done { color:#2ecc71; }
+            .btn-text.fav { color:#7f8c8d; }
+            .btn-text.fav.active { color:#f1c40f; }
+            .btn-text.del { color:#ff6b7a; }
+            .btn-text.all-copy { color:#6ab0ff; }
+            .btn-text.all-delete { color:#ff6b7a; }
+            .btn-text.all-fav { color:#6ab0ff; }
+            .fav-section .sub-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .fav-section .sub-title .fav-period-select { background:#3a3f4a; border-color:#5a6a7a; color:#c8d0dc; }
+            .ball.blue.unmatch,.ball.back.unmatch { filter:grayscale(1) brightness(0.7); }
+            .group-match-info { background:#3a3f4a; color:#6ab0ff; }
+            .picker-col .picker-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .picker-num { background:#3a3f4a; color:#c8d0dc; }
+            .picker-num.red { background:radial-gradient(circle at 35% 35%,#6a3a3a,#5a2a2a); border-color:#5a3a3a; color:#c8d0dc; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+            .picker-num.red.selected { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); border-color:#e74c6f; color:#fff; box-shadow:0 2px 8px rgba(231,76,111,0.40); }
+            .picker-num.blue { background:radial-gradient(circle at 35% 35%,#2a4a6a,#1a3a5a); border-color:#3a5a7a; color:#c8d0dc; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+            .picker-num.blue.selected { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); border-color:#3a7bd5; color:#fff; box-shadow:0 2px 8px rgba(58,123,213,0.40); }
+            .picker-num.placeholder { background:transparent !important; border-color:transparent !important; box-shadow:none !important; visibility:hidden; }
+            .picker-info { color:#c8d0dc; }
+            .picker-info .info-item .num { color:#ff6b7a; }
+            .picker-info .info-item .num.blue { color:#6ab0ff; }
+            .picker-actions .btn:disabled { background:#3a3f4a; color:#6a7585; }
+            .picker-actions .btn-clear { background:#5a6a7a; }
+            .picker-actions .btn-compound:disabled { background:#3a3f4a; color:#6a7585; }
+            .fav-empty { color:#9aa5b5; }
+            #favList .history-row .compound-info { color:#9aa5b5; }
         }
-        .history-meta .pagination button:active {
-            transform: scale(0.94);
+        @media (max-width:420px) {
+            .btn { font-size:11px; min-height:36px; line-height:36px; }
+            .btn-row .btn-group { min-height:36px; }
+            .btn-row .btn-group .btn-cycle { line-height:36px; font-size:16px; }
+            .btn-row .btn-group .group-number { line-height:36px; font-size:12px; }
+            .ball,.placeholder-red,.placeholder-blue { width:24px; height:24px; font-size:10px; }
+            .mode-row label { font-size:12px; padding:2px 8px; }
+            .stat-num { width:28px; }
+            .stat-ball { width:20px; height:20px; font-size:10px; }
+            .stat-cell .value { font-size:12px; }
+            .range-title { font-size:12px; }
+            .range-side-row { font-size:9px; }
+            .range-info { font-size:9px; }
+            .range-track { height:20px; }
+            .range-thumb { width:20px; height:20px; }
+            .range-summary { font-size:12px; margin-bottom:10px; }
+            .btn-text { font-size:11px; }
+            .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:9px; }
+            .number-line { padding:4px 48px; gap:2px; min-height:32px; }
+            .number-line .btn-text.fav { font-size:10px; }
+            .number-line .btn-text.copy { font-size:10px; }
+            .number-line.action-line { padding:4px 48px; }
+            #favList .history-row { padding:4px 6px; gap:4px; min-height:40px; }
+            #favList .history-row .time-col { min-width:36px; font-size:9px; }
+            #favList .history-row .time-col .monthday { font-size:10px; }
+            #favList .history-row .time-col .year { font-size:8px; }
+            #favList .history-row .ball-group .ball { width:22px; height:22px; font-size:9px; }
+            #favList .history-row .fav-result-btn { font-size:10px; padding:1px 10px; }
+            #favList .history-row .fav-match-row .fav-match-text { font-size:9px; }
+            #favList .history-row .fav-match-row .fav-query-result { font-size:9px; }
+            .fav-section .sub-title .fav-query-all-btn { font-size:11px; }
+            #historyList .history-row { padding:4px 8px; gap:4px; min-height:38px; }
+            #historyList .history-row .left-info .period { font-size:11px; }
+            #historyList .history-row .left-info .date { font-size:9px; }
+            #historyList .history-row .ball-group .ball { width:22px; height:22px; font-size:9px; }
+            .fav-section .sub-title .fav-period-select { font-size:9px; max-width:80px; }
+            .picker-container { gap:6px; padding:4px 4px 2px; }
+            .picker-grid { grid-template-columns:repeat(10,1fr); gap:3px; }
+            .picker-num { font-size:9px; border-width:1.5px; }
+            .picker-info { font-size:10px; gap:10px; padding:2px 8px 2px; }
+            .picker-actions .btn { min-height:30px; line-height:30px; font-size:11px; padding:0 14px; min-width:60px; }
+            .title-bar .custom-btn,.title-bar .manage-btn { font-size:11px; padding:2px 10px; }
+            .custom-picker-wrap.open { max-height:520px; }
         }
-        .history-meta .pagination button:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        .history-meta .pagination span {
-            font-size: 11px;
-            color: #2c3e50;
-            min-width: 40px;
-            text-align: center;
-        }
-        .info-content {
-            padding: 14px 16px 16px;
-            color: #2c3e50;
-            font-size: 12px;
-            line-height: 1.8;
-            background: #fcfdff;
-        }
-        .info-content .highlight-red {
-            color: #e74c6f;
-            font-weight: 600;
-        }
-        .info-content .highlight-blue {
-            color: #3a7bd5;
-            font-weight: 600;
-        }
-        .info-content .highlight-green {
-            color: #3ab795;
-            font-weight: 600;
-        }
-        .disclaimer {
-            background: #fff3cd;
-            border-left: 4px solid #f0ad4e;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            font-size: 12px;
-            color: #856404;
-        }
-        .range-row {
-            padding: 10px 16px 14px;
-        }
-        .range-title {
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            color: #2c3e50;
-            padding-bottom: 4px;
-        }
-        .range-side-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #7f8c9b;
-            padding-bottom: 4px;
-        }
-        .range-side-row .side-item {
-            white-space: nowrap;
-        }
-        .range-track-wrap {
-            position: relative;
-            padding: 0px 0 2px;
-            touch-action: none;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .range-track {
-            position: relative;
-            height: 22px;
-            background: #e8ecf2;
-            border-radius: 11px;
-            cursor: pointer;
-            touch-action: none;
-        }
-        .range-track .range-fill {
-            position: absolute;
-            height: 100%;
-            background: linear-gradient(90deg, #6ab0ff, #3a7bd5);
-            border-radius: 11px;
-            pointer-events: none;
-        }
-        .range-thumb {
-            position: absolute;
-            top: 50%;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 2.5px solid #3a7bd5;
-            box-shadow: 0 2px 8px rgba(58, 123, 213, 0.30);
-            transform: translate(-50%, -50%);
-            cursor: grab;
-            touch-action: none;
-            z-index: 2;
-            transition: box-shadow 0.15s, border-color 0.2s;
-        }
-        .range-thumb:active {
-            cursor: grabbing;
-            box-shadow: 0 2px 12px rgba(58, 123, 213, 0.45);
-            border-color: #1e4f8a;
-        }
-        .range-thumb-left {
-            z-index: 3;
-        }
-        .range-thumb-right {
-            z-index: 3;
-        }
-        .range-info {
-            display: flex;
-            justify-content: center;
-            padding-top: 4px;
-            font-size: 10px;
-            color: #7f8c9b;
-        }
-        .range-info .mid {
-            display: none;
-        }
-        .range-summary {
-            text-align: center;
-            font-size: 13px;
-            color: #2c3e50;
-            padding: 8px 0 4px;
-            font-weight: 600;
-            background: #f8faff;
-            border-bottom: 1px solid #e8edf5;
-            margin-bottom: 12px;
-        }
-        .data-hint {
-            color: #3a7bd5;
-            font-size: 10px;
-            text-align: center;
-            padding: 6px 12px 10px;
-            border-top: 1px solid rgba(58, 123, 213, 0.06);
-            background: #f8faff;
-        }
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #e0e0e0;
-            border-top: 2px solid #3a7bd5;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        .error-text {
-            color: #e74c6f;
-            text-align: center;
-            font-size: 13px;
-            padding: 8px 0;
-        }
-        .fav-section {
-            margin-bottom: 12px;
-        }
-        .fav-section:last-child {
-            margin-bottom: 0;
-        }
-        .fav-section .sub-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #2c3e50;
-            padding: 4px 8px 8px;
-            border-bottom: 1px solid #e8edf5;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .fav-section .sub-title .btn-text {
-            font-size: 10px;
-            margin-left: 8px;
-        }
-        .fav-section .sub-title .fav-period-select {
-            font-size: 10px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            border: 1px solid #b0c4de;
-            background: #fff;
-            color: #2c3e50;
-            max-width: 100px;
-            font-family: inherit;
-        }
-        .fav-section .sub-title .fav-query-all-btn {
-            font-size: 12px;
-            opacity: 0.6;
-            cursor: pointer;
-            color: #3a7bd5;
-            background: none;
-            border: none;
-            padding: 0 4px;
-            font-weight: 600;
-            transition: opacity 0.2s, transform 0.1s;
-            font-family: inherit;
-            line-height: 1;
-            margin-right: 8px;
-        }
-        .fav-section .sub-title .fav-query-all-btn:active {
-            transform: scale(0.85);
-            opacity: 1;
-        }
-        .fav-section .sub-title .fav-query-all-btn.cancel {
-            color: #e74c6f;
-        }
-        .group-match-info {
-            font-size: 10px;
-            color: #3a7bd5;
-            text-align: center;
-            margin: 0 0 4px 0;
-            background: #f0f4fa;
-            border-radius: 6px;
-            padding: 2px 8px;
-            display: inline-block;
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #1a1e24;
-            }
-            .card {
-                background: #2a2e36;
-                border-color: #3a3f4a;
-            }
-            .title-bar {
-                background: linear-gradient(135deg, #2b5ea7, #1e4a7a);
-            }
-            .title-bar.secondary {
-                background: linear-gradient(135deg, #4a7fbf, #2b5ea7);
-            }
-            .title-bar.tertiary {
-                background: linear-gradient(135deg, #3a6fb0, #1e4a7a);
-            }
-            .title-bar.fourth {
-                background: linear-gradient(135deg, #5a8fc0, #2b5ea7);
-            }
-            .mode-row label {
-                color: #c8d0dc;
-            }
-            .result-box {
-                background: #2f343e;
-            }
-            .hint-text {
-                color: #9aa5b5;
-            }
-            .btn-row .btn-group {
-                background: #3a3f4a;
-            }
-            .btn-row .btn-group .btn-cycle {
-                color: #c8d0dc;
-            }
-            .btn-row .btn-group .btn-cycle:disabled {
-                color: #6a7585;
-            }
-            .btn-row .btn-group .group-number {
-                color: #c8d0dc;
-            }
-            .btn-red:disabled,
-            .btn-blue:disabled {
-                background: #3a3f4a;
-                color: #6a7585;
-            }
-            .chart-container {
-                background: #2a2e36;
-            }
-            .table-container {
-                background: #2f343e;
-            }
-            .table-container .sub-title {
-                color: #c8d0dc;
-                border-bottom-color: #3a3f4a;
-            }
-            .stat-row {
-                background: #2a2e36;
-            }
-            .stat-row.header {
-                color: #c8d0dc;
-                border-bottom-color: #3a3f4a;
-            }
-            .stat-num {
-                color: #c8d0dc;
-            }
-            .stat-cell {
-                background: #3a3f4a;
-            }
-            .stat-cell .value {
-                color: #c8d0dc;
-            }
-            .stat-cell.freq {
-                background: #4a2a2a;
-            }
-            .stat-cell.miss {
-                background: #2a3a4a;
-            }
-            #historyList .history-row {
-                border-bottom-color: #3a3f4a;
-            }
-            #historyList .history-row .left-info .period {
-                color: #c8d0dc;
-            }
-            #historyList .history-row .left-info .date {
-                color: #9aa5b5;
-            }
-            #favList .history-row {
-                border-bottom-color: #3a3f4a;
-            }
-            #favList .history-row .time-col .monthday {
-                color: #c8d0dc;
-            }
-            #favList .history-row .time-col .year {
-                color: #9aa5b5;
-            }
-            #favList .history-row .fav-result-btn {
-                border-color: #6ab0ff;
-                color: #6ab0ff;
-            }
-            #favList .history-row .fav-result-btn:active {
-                background: rgba(106, 176, 255, 0.15);
-            }
-            #favList .history-row .fav-result-btn.cancel {
-                border-color: #ff6b7a;
-                color: #ff6b7a;
-            }
-            #favList .history-row .fav-result-btn.cancel:active {
-                background: rgba(255, 107, 122, 0.15);
-            }
-            #favList .history-row .fav-match-row .fav-match-text {
-                color: #6ab0ff;
-            }
-            #favList .history-row .fav-match-row .fav-query-result {
-                color: #6ab0ff;
-            }
-            #favList .history-row .fav-match-row .fav-query-result .prize-win {
-                color: #ff6b7a;
-            }
-            .fav-section .sub-title .fav-query-all-btn {
-                color: #6ab0ff;
-            }
-            .fav-section .sub-title .fav-query-all-btn.cancel {
-                color: #ff6b7a;
-            }
-            .history-meta {
-                color: #9aa5b5;
-            }
-            .history-meta .pagination button {
-                background: #3a3f4a;
-                color: #c8d0dc;
-            }
-            .history-meta .pagination span {
-                color: #c8d0dc;
-            }
-            .info-content {
-                background: #2a2e36;
-                color: #c8d0dc;
-            }
-            .disclaimer {
-                background: #3a2a1a;
-                color: #d4a84a;
-                border-left-color: #d4a84a;
-            }
-            .range-title {
-                color: #c8d0dc;
-            }
-            .range-side-row {
-                color: #9aa5b5;
-            }
-            .range-track {
-                background: #3a3f4a;
-            }
-            .range-thumb {
-                background: #2a2e36;
-                border-color: #6ab0ff;
-            }
-            .range-summary {
-                background: #2f343e;
-                color: #c8d0dc;
-                border-bottom-color: #3a3f4a;
-            }
-            .data-hint {
-                color: #6ab0ff;
-                border-top-color: #3a3f4a;
-                background: #2f343e;
-            }
-            .info-content .highlight-red {
-                color: #ff6b7a;
-            }
-            .info-content .highlight-blue {
-                color: #6ab0ff;
-            }
-            .info-content .highlight-green {
-                color: #5dd9b2;
-            }
-            .match-info {
-                color: #c8d0dc;
-                background: #3a3f4a;
-            }
-            .btn-text.copy {
-                color: #6ab0ff;
-            }
-            .btn-text.copy.done {
-                color: #2ecc71;
-            }
-            .btn-text.fav {
-                color: #7f8c8d;
-            }
-            .btn-text.fav.active {
-                color: #f1c40f;
-            }
-            .btn-text.del {
-                color: #ff6b7a;
-            }
-            .btn-text.all-copy {
-                color: #6ab0ff;
-            }
-            .btn-text.all-delete {
-                color: #ff6b7a;
-            }
-            .btn-text.all-fav {
-                color: #6ab0ff;
-            }
-            .fav-section .sub-title {
-                color: #c8d0dc;
-                border-bottom-color: #3a3f4a;
-            }
-            .fav-section .sub-title .fav-period-select {
-                background: #3a3f4a;
-                border-color: #5a6a7a;
-                color: #c8d0dc;
-            }
-            .ball.blue.unmatch,
-            .ball.back.unmatch {
-                filter: grayscale(1) brightness(0.7);
-            }
-            .group-match-info {
-                background: #3a3f4a;
-                color: #6ab0ff;
-            }
-        }
-        @media (max-width: 420px) {
-            .btn {
-                font-size: 11px;
-                min-height: 36px;
-                line-height: 36px;
-            }
-            .btn-row .btn-group {
-                min-height: 36px;
-            }
-            .btn-row .btn-group .btn-cycle {
-                line-height: 36px;
-                font-size: 16px;
-            }
-            .btn-row .btn-group .group-number {
-                line-height: 36px;
-                font-size: 12px;
-            }
-            .ball,
-            .placeholder-red,
-            .placeholder-blue {
-                width: 24px;
-                height: 24px;
-                font-size: 10px;
-            }
-            .mode-row label {
-                font-size: 12px;
-                padding: 2px 8px;
-            }
-            .stat-num {
-                width: 28px;
-            }
-            .stat-ball {
-                width: 20px;
-                height: 20px;
-                font-size: 10px;
-            }
-            .stat-cell .value {
-                font-size: 12px;
-            }
-            .range-title {
-                font-size: 12px;
-            }
-            .range-side-row {
-                font-size: 9px;
-            }
-            .range-info {
-                font-size: 9px;
-            }
-            .range-track {
-                height: 20px;
-            }
-            .range-thumb {
-                width: 20px;
-                height: 20px;
-            }
-            .range-summary {
-                font-size: 12px;
-                margin-bottom: 10px;
-            }
-            .btn-text {
-                font-size: 11px;
-            }
-            .btn-text.all-copy,
-            .btn-text.all-delete,
-            .btn-text.all-fav {
-                font-size: 9px;
-            }
-            .number-line {
-                padding: 4px 48px;
-                gap: 2px;
-                min-height: 32px;
-            }
-            .number-line .btn-text.fav {
-                font-size: 10px;
-            }
-            .number-line .btn-text.copy {
-                font-size: 10px;
-            }
-            .number-line.action-line {
-                padding: 4px 48px;
-            }
-            #favList .history-row {
-                padding: 4px 6px;
-                gap: 4px;
-                min-height: 40px;
-            }
-            #favList .history-row .time-col {
-                min-width: 36px;
-                font-size: 9px;
-            }
-            #favList .history-row .time-col .monthday {
-                font-size: 10px;
-            }
-            #favList .history-row .time-col .year {
-                font-size: 8px;
-            }
-            #favList .history-row .ball-group .ball {
-                width: 22px;
-                height: 22px;
-                font-size: 9px;
-            }
-            #favList .history-row .fav-result-btn {
-                font-size: 10px;
-                padding: 1px 10px;
-            }
-            #favList .history-row .fav-match-row .fav-match-text {
-                font-size: 9px;
-            }
-            #favList .history-row .fav-match-row .fav-query-result {
-                font-size: 9px;
-            }
-            .fav-section .sub-title .fav-query-all-btn {
-                font-size: 11px;
-            }
-            #historyList .history-row {
-                padding: 4px 8px;
-                gap: 4px;
-                min-height: 38px;
-            }
-            #historyList .history-row .left-info .period {
-                font-size: 11px;
-            }
-            #historyList .history-row .left-info .date {
-                font-size: 9px;
-            }
-            #historyList .history-row .ball-group .ball {
-                width: 22px;
-                height: 22px;
-                font-size: 9px;
-            }
-            .fav-section .sub-title .fav-period-select {
-                font-size: 9px;
-                max-width: 80px;
-            }
-        }
-        @media (max-width: 360px) {
-            .btn {
-                font-size: 10px;
-                min-height: 32px;
-                line-height: 32px;
-            }
-            .btn-row .btn-group {
-                min-height: 32px;
-            }
-            .btn-row .btn-group .btn-cycle {
-                line-height: 32px;
-                font-size: 14px;
-            }
-            .btn-row .btn-group .group-number {
-                line-height: 32px;
-                font-size: 11px;
-            }
-            .ball,
-            .placeholder-red,
-            .placeholder-blue {
-                width: 20px;
-                height: 20px;
-                font-size: 9px;
-            }
-            .sep {
-                font-size: 10px;
-            }
-            .stat-num {
-                width: 24px;
-            }
-            .stat-ball {
-                width: 18px;
-                height: 18px;
-                font-size: 9px;
-            }
-            .stat-cell .value {
-                font-size: 11px;
-            }
-            .range-title {
-                font-size: 11px;
-            }
-            .range-side-row {
-                font-size: 8px;
-            }
-            .range-info {
-                font-size: 8px;
-            }
-            .range-track {
-                height: 18px;
-            }
-            .range-thumb {
-                width: 18px;
-                height: 18px;
-            }
-            .range-summary {
-                font-size: 11px;
-                margin-bottom: 8px;
-            }
-            .btn-text {
-                font-size: 10px;
-            }
-            .btn-text.all-copy,
-            .btn-text.all-delete,
-            .btn-text.all-fav {
-                font-size: 8px;
-            }
-            .number-line {
-                padding: 3px 40px;
-                gap: 2px;
-                min-height: 28px;
-            }
-            .number-line .btn-text.fav {
-                font-size: 9px;
-            }
-            .number-line .btn-text.copy {
-                font-size: 9px;
-            }
-            .number-line.action-line {
-                padding: 3px 40px;
-            }
-            #favList .history-row {
-                padding: 3px 4px;
-                gap: 3px;
-                min-height: 34px;
-            }
-            #favList .history-row .time-col {
-                min-width: 30px;
-                font-size: 8px;
-            }
-            #favList .history-row .time-col .monthday {
-                font-size: 9px;
-            }
-            #favList .history-row .time-col .year {
-                font-size: 7px;
-            }
-            #favList .history-row .ball-group .ball {
-                width: 18px;
-                height: 18px;
-                font-size: 8px;
-            }
-            #favList .history-row .fav-result-btn {
-                font-size: 9px;
-                padding: 0 8px;
-            }
-            #favList .history-row .fav-match-row .fav-match-text {
-                font-size: 8px;
-            }
-            #favList .history-row .fav-match-row .fav-query-result {
-                font-size: 8px;
-            }
-            .fav-section .sub-title .fav-query-all-btn {
-                font-size: 10px;
-            }
-            #historyList .history-row {
-                padding: 3px 6px;
-                gap: 3px;
-                min-height: 32px;
-            }
-            #historyList .history-row .left-info .period {
-                font-size: 10px;
-            }
-            #historyList .history-row .left-info .date {
-                font-size: 8px;
-            }
-            #historyList .history-row .ball-group .ball {
-                width: 18px;
-                height: 18px;
-                font-size: 8px;
-            }
-            .fav-section .sub-title .fav-period-select {
-                font-size: 8px;
-                max-width: 70px;
-            }
+        @media (max-width:360px) {
+            .btn { font-size:10px; min-height:32px; line-height:32px; }
+            .btn-row .btn-group { min-height:32px; }
+            .btn-row .btn-group .btn-cycle { line-height:32px; font-size:14px; }
+            .btn-row .btn-group .group-number { line-height:32px; font-size:11px; }
+            .ball,.placeholder-red,.placeholder-blue { width:20px; height:20px; font-size:9px; }
+            .sep { font-size:10px; }
+            .stat-num { width:24px; }
+            .stat-ball { width:18px; height:18px; font-size:9px; }
+            .stat-cell .value { font-size:11px; }
+            .range-title { font-size:11px; }
+            .range-side-row { font-size:8px; }
+            .range-info { font-size:8px; }
+            .range-track { height:18px; }
+            .range-thumb { width:18px; height:18px; }
+            .range-summary { font-size:11px; margin-bottom:8px; }
+            .btn-text { font-size:10px; }
+            .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:8px; }
+            .number-line { padding:3px 40px; gap:2px; min-height:28px; }
+            .number-line .btn-text.fav { font-size:9px; }
+            .number-line .btn-text.copy { font-size:9px; }
+            .number-line.action-line { padding:3px 40px; }
+            #favList .history-row { padding:3px 4px; gap:3px; min-height:34px; }
+            #favList .history-row .time-col { min-width:30px; font-size:8px; }
+            #favList .history-row .time-col .monthday { font-size:9px; }
+            #favList .history-row .time-col .year { font-size:7px; }
+            #favList .history-row .ball-group .ball { width:18px; height:18px; font-size:8px; }
+            #favList .history-row .fav-result-btn { font-size:9px; padding:0 8px; }
+            #favList .history-row .fav-match-row .fav-match-text { font-size:8px; }
+            #favList .history-row .fav-match-row .fav-query-result { font-size:8px; }
+            .fav-section .sub-title .fav-query-all-btn { font-size:10px; }
+            #historyList .history-row { padding:3px 6px; gap:3px; min-height:32px; }
+            #historyList .history-row .left-info .period { font-size:10px; }
+            #historyList .history-row .left-info .date { font-size:8px; }
+            #historyList .history-row .ball-group .ball { width:18px; height:18px; font-size:8px; }
+            .fav-section .sub-title .fav-period-select { font-size:8px; max-width:70px; }
+            .picker-grid { grid-template-columns:repeat(10,1fr); gap:2px; }
+            .picker-num { font-size:8px; border-width:1.5px; }
+            .picker-info { font-size:9px; gap:6px; }
+            .picker-actions .btn { min-height:28px; line-height:28px; font-size:10px; padding:0 10px; min-width:50px; }
+            .title-bar .custom-btn,.title-bar .manage-btn { font-size:10px; padding:1px 8px; }
+            .custom-picker-wrap.open { max-height:480px; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="card">
-            <div class="title-bar">
-                分类选择
-            </div>
+            <div class="title-bar">~选择功能~</div>
             <div class="mode-row">
                 <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
                 <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
             </div>
         </div>
-        <div class="card" id="favoritesCard" style="display:none;">
+
+        <div class="card" id="favoritesCard">
             <div class="title-bar tertiary">
-                我的收藏
-                <button class="manage-btn" id="manageBtn">管理</button>
+                <span class="title-left"><button class="custom-btn" id="customBtn">自定义</button></span>
+                <span class="title-center">~关注号码~</span>
+                <span class="title-right"><button class="manage-btn" id="manageBtn">管理</button></span>
+            </div>
+            <div class="custom-picker-wrap" id="customPickerWrap">
+                <div class="table-container" style="padding-bottom:4px;margin:0;border-radius:0;">
+                    <div class="picker-container">
+                        <div class="picker-col">
+                            <div class="picker-title">红球</div>
+                            <div class="picker-grid" id="redPickerGrid"></div>
+                        </div>
+                        <div class="picker-col">
+                            <div class="picker-title">蓝球</div>
+                            <div class="picker-grid" id="bluePickerGrid"></div>
+                        </div>
+                    </div>
+                    <div class="picker-info">
+                        <span class="info-item">红球 <span class="num" id="selectedRedCount">0</span>/<span id="maxRedCount">6</span>+</span>
+                        <span class="info-item">蓝球 <span class="num blue" id="selectedBlueCount">0</span>/<span id="maxBlueCount">1</span>+</span>
+                    </div>
+                    <div class="picker-actions">
+                        <button class="btn btn-blue" id="addFavBtn" disabled>添加单选</button>
+                        <button class="btn btn-compound" id="addCompoundBtn" disabled>添加复试</button>
+                        <button class="btn btn-clear" id="clearPickerBtn">清空</button>
+                    </div>
+                </div>
             </div>
             <div class="table-container" style="padding-bottom:4px;">
                 <div id="favList"></div>
             </div>
         </div>
+
         <div class="card">
-            <div class="title-bar" style="margin-bottom:6px;">
-                ~急急如律令~
-            </div>
+            <div class="title-bar" style="margin-bottom:6px;">~急急如律令~</div>
             <div class="btn-row" style="padding-top:4px;">
                 <div class="btn-group">
                     <button class="btn-cycle" id="decBtn">−</button>
@@ -1462,9 +448,7 @@
                 <button class="btn btn-red" id="refreshBtn">天命所归</button>
                 <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
             </div>
-            <div class="result-box" id="resultArea">
-                <div class="hint-text">⏳ 加载数据中...</div>
-            </div>
+            <div class="result-box" id="resultArea"><div class="hint-text">⏳ 加载数据中...</div></div>
             <div class="btn-row">
                 <button class="btn btn-smart" id="smartBtn">智能推荐</button>
                 <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
@@ -1476,7 +460,7 @@
                     <span class="side-item" id="leftInfo"><span id="leftText">第1期 20260616</span></span>
                     <span class="side-item" id="rightInfo"><span id="rightText">20030223 第3465期</span></span>
                 </div>
-                <div class="range-track-wrap" id="rangeTrackWrap">
+                <div class="range-track-wrap">
                     <div class="range-track" id="rangeTrack">
                         <div class="range-fill" id="rangeFill"></div>
                         <div class="range-thumb range-thumb-left" id="thumbLeft"></div>
@@ -1487,13 +471,14 @@
             </div>
             <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
         </div>
+
         <div class="card">
             <div class="title-bar secondary">
-                数据详情
-                <button class="manage-btn" id="refreshDataBtn">刷新</button>
+                <span class="title-center">~数据详情~</span>
+                <span class="title-right"><button class="manage-btn" id="refreshDataBtn">刷新</button></span>
             </div>
             <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
-            <div class="table-container" id="detailResultContainer">
+            <div class="table-container">
                 <div class="sub-title">开奖号码明细</div>
                 <div id="detailResultArea" style="display:none;"></div>
                 <div class="history-list" id="historyList"></div>
@@ -1511,6 +496,7 @@
                 <div id="backTableContainer" class="table-container"></div>
             </div>
         </div>
+
         <div class="card">
             <div class="title-bar fourth">功能说明</div>
             <div class="info-content">
@@ -1525,6 +511,7 @@
             </div>
         </div>
     </div>
+
     <script>
         (function() {
             const CONFIG = {
@@ -1540,19 +527,18 @@
             let DLT_DATA = [];
             let trendCache = { ssq: null, dlt: null };
             let historyStore = { ssq: [], dlt: [] };
-            let rangeStart = 1,
-                rangeEnd = 1,
-                totalPeriods = 1;
-            let isDragging = false,
-                dragTarget = null;
-            let lastExcludeReds = [],
-                lastExcludeBlues = [];
+            let rangeStart = 1, rangeEnd = 1, totalPeriods = 1;
+            let isDragging = false, dragTarget = null;
+            let lastExcludeReds = [], lastExcludeBlues = [];
             let lastGeneratedGroups = 1;
             let isLoading = false;
             let lastGeneratedGroupsData = [];
             let lastRecommendReason = '';
             let hasGeneratedNumbers = false;
             let isManageMode = false;
+            let isCustomMode = false;
+            let selectedReds = new Set();
+            let selectedBlues = new Set();
 
             const $ = id => document.getElementById(id);
             const resultArea = $('resultArea');
@@ -1577,22 +563,28 @@
             const favList = $('favList');
             const favoritesCard = $('favoritesCard');
             const manageBtn = $('manageBtn');
+            const customBtn = $('customBtn');
+            const customPickerWrap = $('customPickerWrap');
+            const redPickerGrid = $('redPickerGrid');
+            const bluePickerGrid = $('bluePickerGrid');
+            const selectedRedCount = $('selectedRedCount');
+            const selectedBlueCount = $('selectedBlueCount');
+            const maxRedCount = $('maxRedCount');
+            const maxBlueCount = $('maxBlueCount');
+            const addFavBtn = $('addFavBtn');
+            const addCompoundBtn = $('addCompoundBtn');
+            const clearPickerBtn = $('clearPickerBtn');
 
-            function rand(n) { const arr = new Uint32Array(1);
-                crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
+            function rand(n) { const arr = new Uint32Array(1); crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
 
             function pickUnique(count, max, excludeSet) {
                 const pool = [];
-                for (let i = 1; i <= max; i++)
-                    if (!excludeSet?.has(i)) pool.push(i);
+                for (let i = 1; i <= max; i++) if (!excludeSet?.has(i)) pool.push(i);
                 if (pool.length < count) return pickUnique(count, max, new Set());
-                const result = [],
-                    used = new Set();
+                const result = [], used = new Set();
                 while (result.length < count) {
-                    const idx = rand(pool.length) - 1,
-                        val = pool[idx];
-                    if (!used.has(val)) { used.add(val);
-                        result.push(val); }
+                    const idx = rand(pool.length) - 1, val = pool[idx];
+                    if (!used.has(val)) { used.add(val); result.push(val); }
                 }
                 return result.sort((a, b) => a - b);
             }
@@ -1607,20 +599,16 @@
                 return { year: String(year), monthday: month + '-' + day };
             }
 
-            function vibrate(ms) {
-                if (navigator.vibrate) navigator.vibrate(ms);
-            }
+            function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
 
             function genSSQ(exReds, exBlues) {
-                const rs = new Set(exReds || []),
-                    bs = new Set(exBlues || []);
+                const rs = new Set(exReds || []), bs = new Set(exBlues || []);
                 return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq
                         .backCount, CONFIG.ssq.back, bs) };
             }
 
             function genDLT(exReds, exBlues) {
-                const rs = new Set(exReds || []),
-                    bs = new Set(exBlues || []);
+                const rs = new Set(exReds || []), bs = new Set(exBlues || []);
                 return { reds: pickUnique(CONFIG.dlt.frontCount, CONFIG.dlt.front, rs), blues: pickUnique(CONFIG.dlt
                         .backCount, CONFIG.dlt.back, bs) };
             }
@@ -1630,8 +618,7 @@
                 for (let line of rawArray) {
                     const parts = line.split('|');
                     if (parts.length < 4) continue;
-                    const issue = parts[0].trim(),
-                        date = parts[1].trim();
+                    const issue = parts[0].trim(), date = parts[1].trim();
                     const reds = parts[2].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
                         0);
                     const blues = parts[3].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
@@ -1660,9 +647,8 @@
             }
 
             function setCachedData(type, records) {
-                try {
-                    localStorage.setItem('lotteryData_' + type, JSON.stringify({ timestamp: Date.now(), records }));
-                } catch (e) {}
+                try { localStorage.setItem('lotteryData_' + type, JSON.stringify({ timestamp: Date.now(), records })); }
+                catch (e) {}
             }
 
             async function fetchRemoteData(type) {
@@ -1673,18 +659,11 @@
                 const html = await resp.text();
                 const varName = type === 'ssq' ? 'SSQ_DATA' : 'DLT_DATA';
                 let match = html.match(new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
-                if (!match) {
-                    match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
-                }
+                if (!match) { match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`)); }
                 if (!match) throw new Error('数据解析失败');
                 let cleaned = match[1].replace(/\/\/.*$/gm, '');
                 let raw;
-                try {
-                    const fn = new Function(`return [${cleaned}];`);
-                    raw = fn();
-                } catch (e) {
-                    raw = eval(`[${cleaned}]`);
-                }
+                try { const fn = new Function(`return [${cleaned}];`); raw = fn(); } catch (e) { raw = eval(`[${cleaned}]`); }
                 if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
                 const records = parseBuiltinData(type, raw);
                 setCachedData(type, records);
@@ -1698,8 +677,7 @@
             }
 
             function showSkeleton() {
-                resultArea.innerHTML =
-                    `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
+                resultArea.innerHTML = `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
             }
 
             async function loadAllData(showLoading = true) {
@@ -1724,6 +702,7 @@
                     isLoading = false;
                     renderFavorites();
                     updateResetState(true);
+                    initPicker();
                 } catch (err) {
                     console.error('加载数据失败:', err);
                     resultArea.innerHTML =
@@ -1765,13 +744,11 @@
             }
 
             function getNumberText(d, isSSQ) {
-                return d.reds.map(pad).join(' ') + ' + ' + d.blues.map(pad).join(' ');
+                return d.reds.map(pad).join(' ') + ' | ' + d.blues.map(pad).join(' ');
             }
 
             function getFavorites() {
-                try {
-                    return JSON.parse(localStorage.getItem('lottery_favorites')) || [];
-                } catch { return []; }
+                try { return JSON.parse(localStorage.getItem('lottery_favorites')) || []; } catch { return []; }
             }
 
             function setFavorites(favs) {
@@ -1859,19 +836,31 @@
                 return best;
             }
 
+            function combinations(arr, k) {
+                if (k === 0) return [[]];
+                if (arr.length === 0) return [];
+                const result = [];
+                const [first, ...rest] = arr;
+                const withFirst = combinations(rest, k - 1).map(c => [first, ...c]);
+                const withoutFirst = combinations(rest, k);
+                return [...withFirst, ...withoutFirst];
+            }
+
             function renderFavorites() {
                 const favs = getFavorites();
                 const currentFavs = favs.filter(item => item.mode === currentMode);
+                favoritesCard.style.display = 'block';
                 if (currentFavs.length === 0) {
-                    favoritesCard.style.display = 'none';
+                    favList.innerHTML = `<div class="fav-empty">暂无收藏，快去选号吧！</div>`;
                     return;
                 }
-                favoritesCard.style.display = 'block';
                 currentFavs.sort((a, b) => b.time - a.time);
 
                 const isSSQ = currentMode === 'ssq';
                 const records = isSSQ ? SSQ_DATA : DLT_DATA;
                 const latestIssue = records && records.length ? records[0].issue : '';
+                const frontCnt = CONFIG[currentMode].frontCount;
+                const backCnt = CONFIG[currentMode].backCount;
 
                 let html = `<div class="fav-section"><div class="sub-title">${isSSQ?'双色球':'大乐透'}收藏`;
                 if (isManageMode) {
@@ -1894,18 +883,83 @@
 
                 currentFavs.forEach((item, idx) => {
                     const realIdx = favs.indexOf(item);
-                    const bestMatch = getBestMatchForGroup(item.nums, currentMode);
+                    const isCompound = item.isCompound || false;
+                    let bestMatch = null;
+                    let compoundCount = 0;
+                    if (isCompound) {
+                        const reds = item.nums.reds.slice().sort((a, b) => a - b);
+                        const blues = item.nums.blues.slice().sort((a, b) => a - b);
+                        const redCombos = combinations(reds, frontCnt);
+                        const blueCombos = combinations(blues, backCnt);
+                        compoundCount = redCombos.length * blueCombos.length;
+                        let bestTotal = -1;
+                        for (const rc of redCombos) {
+                            for (const bc of blueCombos) {
+                                const nums = { reds: rc, blues: bc };
+                                const match = getBestMatchForGroup(nums, currentMode);
+                                if (match) {
+                                    const total = match.redMatch + match.blueMatch;
+                                    if (total > bestTotal) {
+                                        bestTotal = total;
+                                        bestMatch = match;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        bestMatch = getBestMatchForGroup(item.nums, currentMode);
+                    }
+
                     const bestText = bestMatch ? `在第${bestMatch.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
-                    html += `<div class="history-row">`;
+                    html += `<div class="history-row" data-compound="${isCompound}" data-idx="${realIdx}">`;
                     const timeObj = formatTime(item.time);
                     html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
-                    html += `<div class="ball-group" data-mode="${currentMode}" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
-                    item.nums.reds.forEach(n => html +=
-                        `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
-                    html += '<span class="sep">+</span>';
-                    item.nums.blues.forEach(n => html +=
-                        `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
-                    html += '</div>';
+                    
+                    if (isCompound) {
+                        const reds = item.nums.reds.slice().sort((a,b)=>a-b);
+                        const blues = item.nums.blues.slice().sort((a,b)=>a-b);
+                        const redGroups = [];
+                        for (let i = 0; i < reds.length; i += frontCnt) {
+                            let group = reds.slice(i, i + frontCnt);
+                            while (group.length < frontCnt) group.push(null);
+                            redGroups.push(group);
+                        }
+                        const blueGroups = [];
+                        for (let i = 0; i < blues.length; i += backCnt) {
+                            let group = blues.slice(i, i + backCnt);
+                            while (group.length < backCnt) group.push(null);
+                            blueGroups.push(group);
+                        }
+                        const maxGroups = Math.max(redGroups.length, blueGroups.length);
+                        while (redGroups.length < maxGroups) redGroups.push(new Array(frontCnt).fill(null));
+                        while (blueGroups.length < maxGroups) blueGroups.push(new Array(backCnt).fill(null));
+
+                        html += `<div style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:120px;">`;
+                        for (let g = 0; g < maxGroups; g++) {
+                            const rG = redGroups[g];
+                            const bG = blueGroups[g];
+                            html += `<div style="display:flex;align-items:center;justify-content:center;gap:3px;">`;
+                            rG.forEach(n => {
+                                if (n !== null) html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`;
+                                else html += `<span style="width:28px;height:28px;display:inline-block;"></span>`;
+                            });
+                            html += `<span style="display:inline-flex;align-items:center;height:28px;color:#b0c4de;font-weight:700;font-size:12px;padding:0 2px;">|</span>`;
+                            bG.forEach(n => {
+                                if (n !== null) html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`;
+                                else html += `<span style="width:28px;height:28px;display:inline-block;"></span>`;
+                            });
+                            html += `</div>`;
+                        }
+                        html += `<div class="compound-info">共${compoundCount}组</div>`;
+                        html += `</div>`;
+                    } else {
+                        html += `<div class="ball-group" data-mode="${currentMode}" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
+                        item.nums.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                        html += `<span class="sep">|</span>`;
+                        item.nums.blues.forEach(n => html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                        html += `</div>`;
+                    }
+
                     if (isManageMode) {
                         const numsStr = getNumberText(item.nums, isSSQ);
                         html += `<div class="action-group">
@@ -1913,10 +967,10 @@
                                     <span class="btn-text copy" data-nums="${numsStr}">复制</span>
                                 </div>`;
                     } else {
-                        html += `<button class="fav-result-btn" data-mode="${currentMode}" data-index="${realIdx}">查询</button>`;
+                        html += `<button class="fav-result-btn" data-mode="${currentMode}" data-index="${realIdx}" data-compound="${isCompound}">查询</button>`;
                     }
                     html += `<div class="fav-match-row">
-                                <span class="fav-match-text">${bestText}</span>
+                                <span class="fav-match-text" data-original-text="${bestText}">${bestText}</span>
                                 <span class="fav-query-result"></span>
                             </div>`;
                     html += '</div>';
@@ -2012,6 +1066,112 @@
                         }
                     });
                 }
+
+                // 单个查询
+                favList.querySelectorAll('.fav-result-btn').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const mode = this.dataset.mode;
+                        const idx = parseInt(this.dataset.index);
+                        const isCompound = this.dataset.compound === 'true';
+                        const row = this.closest('.history-row');
+                        if (!row) return;
+                        const matchRow = row.querySelector('.fav-match-row');
+                        if (!matchRow) return;
+                        const queryResult = matchRow.querySelector('.fav-query-result');
+                        const matchText = matchRow.querySelector('.fav-match-text');
+                        const originalText = matchText.dataset.originalText;
+
+                        const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
+                        if (allBtn2 && allBtn2.classList.contains('cancel')) {
+                            allBtn2.textContent = '全部查询';
+                            allBtn2.classList.remove('cancel');
+                        }
+
+                        if (this.classList.contains('cancel')) {
+                            const allBalls = row.querySelectorAll('.ball');
+                            allBalls.forEach(ball => ball.classList.remove('unmatch'));
+                            if (queryResult) {
+                                queryResult.style.display = 'none';
+                                queryResult.innerHTML = '';
+                            }
+                            matchText.textContent = originalText;
+                            this.textContent = '查询';
+                            this.classList.remove('cancel');
+                            vibrate(10);
+                            return;
+                        }
+
+                        const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                        if (!select) return;
+                        const issue = select.value;
+                        if (!issue) {
+                            alert('请先选择期号');
+                            return;
+                        }
+                        const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                        const record = records.find(r => r.issue === issue);
+                        if (!record) {
+                            alert('未找到该期号数据');
+                            return;
+                        }
+
+                        const allBalls = row.querySelectorAll('.ball');
+                        const redBalls = [], blueBalls = [];
+                        allBalls.forEach(ball => {
+                            if (ball.classList.contains('red') || ball.classList.contains('front')) {
+                                redBalls.push(ball);
+                            } else if (ball.classList.contains('blue') || ball.classList.contains('back')) {
+                                blueBalls.push(ball);
+                            }
+                        });
+                        const redNums = redBalls.map(el => parseInt(el.textContent, 10));
+                        const blueNums = blueBalls.map(el => parseInt(el.textContent, 10));
+                        const redHit = redNums.filter(n => record.reds.includes(n)).length;
+                        const blueHit = blueNums.filter(n => record.blues.includes(n)).length;
+
+                        redBalls.forEach((ball, i) => {
+                            const num = redNums[i];
+                            if (record.reds.includes(num)) {
+                                ball.classList.remove('unmatch');
+                            } else {
+                                ball.classList.add('unmatch');
+                            }
+                        });
+                        blueBalls.forEach((ball, i) => {
+                            const num = blueNums[i];
+                            if (record.blues.includes(num)) {
+                                ball.classList.remove('unmatch');
+                            } else {
+                                ball.classList.add('unmatch');
+                            }
+                        });
+
+                        // 去掉期号前缀，只显示命中情况
+                        const newText = `${isSSQ?'红/蓝':'前/后'}命中 ${redHit}/${blueHit}`;
+                        matchText.textContent = newText;
+
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redHit, blueHit);
+                        } else {
+                            prize = getPrizeNameDLT(redHit, blueHit);
+                        }
+                        const prizeText = prize || '未中奖';
+                        if (queryResult) {
+                            if (prize) {
+                                queryResult.innerHTML = `<span class="prize-win">|${prizeText}| </span> ${issue}期`;
+                            } else {
+                                queryResult.textContent = `|${prizeText}| ${issue}期`;
+                            }
+                            queryResult.style.display = 'block';
+                        }
+
+                        this.textContent = '取消';
+                        this.classList.add('cancel');
+                        vibrate(10);
+                    };
+                });
             }
 
             manageBtn.addEventListener('click', function() {
@@ -2022,158 +1182,9 @@
 
             favList.addEventListener('click', function(e) {
                 const allBtn = e.target.closest('.fav-query-all-btn');
-                if (allBtn) {
-                    e.stopPropagation();
-                    const mode = allBtn.dataset.mode;
-                    const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
-                    if (!select) return;
-                    const issue = select.value;
-                    if (!issue) {
-                        alert('请先选择期号');
-                        return;
-                    }
-                    const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
-                    const record = records.find(r => r.issue === issue);
-                    if (!record) {
-                        alert('未找到该期号数据');
-                        return;
-                    }
-
-                    const isCancel = allBtn.classList.contains('cancel');
-                    if (isCancel) {
-                        const rows = favList.querySelectorAll(`.history-row`);
-                        rows.forEach(row => {
-                            const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
-                            if (!ballGroup) return;
-                            ballGroup.querySelectorAll('.ball').forEach(ball => {
-                                ball.classList.remove('unmatch');
-                            });
-                            const matchRow = row.querySelector('.fav-match-row');
-                            if (matchRow) {
-                                const queryResult = matchRow.querySelector('.fav-query-result');
-                                if (queryResult) {
-                                    queryResult.style.display = 'none';
-                                    queryResult.innerHTML = '';
-                                }
-                            }
-                            const btn = row.querySelector('.fav-result-btn');
-                            if (btn) {
-                                btn.textContent = '查询';
-                                btn.classList.remove('cancel');
-                            }
-                        });
-                        allBtn.textContent = '全部查询';
-                        allBtn.classList.remove('cancel');
-                        vibrate(10);
-                        return;
-                    }
-
-                    const rows = favList.querySelectorAll(`.history-row`);
-                    let found = false;
-                    rows.forEach(row => {
-                        const ballGroup = row.querySelector(`.ball-group[data-mode="${mode}"]`);
-                        if (!ballGroup) return;
-                        found = true;
-                        const reds = ballGroup.dataset.reds.split(',').map(Number);
-                        const blues = ballGroup.dataset.blues.split(',').map(Number);
-                        const children = ballGroup.children;
-                        const redBalls = [];
-                        const blueBalls = [];
-                        let isRed = true;
-                        for (let i = 0; i < children.length; i++) {
-                            const child = children[i];
-                            if (child.classList.contains('sep')) {
-                                isRed = false;
-                                continue;
-                            }
-                            if (child.classList.contains('ball')) {
-                                if (isRed) redBalls.push(child);
-                                else blueBalls.push(child);
-                            }
-                        }
-                        reds.forEach((n, i) => {
-                            if (i < redBalls.length) {
-                                if (record.reds.includes(n)) redBalls[i].classList.remove(
-                                'unmatch');
-                                else redBalls[i].classList.add('unmatch');
-                            }
-                        });
-                        blues.forEach((n, i) => {
-                            if (i < blueBalls.length) {
-                                if (record.blues.includes(n)) blueBalls[i].classList.remove(
-                                'unmatch');
-                                else blueBalls[i].classList.add('unmatch');
-                            }
-                        });
-                        const redMatch = reds.filter(n => record.reds.includes(n)).length;
-                        const blueMatch = blues.filter(n => record.blues.includes(n)).length;
-                        let prize = null;
-                        if (mode === 'ssq') {
-                            prize = getPrizeNameSSQ(redMatch, blueMatch);
-                        } else {
-                            prize = getPrizeNameDLT(redMatch, blueMatch);
-                        }
-                        const prizeText = prize || '未中奖';
-                        const matchRow = row.querySelector('.fav-match-row');
-                        if (matchRow) {
-                            const queryResult = matchRow.querySelector('.fav-query-result');
-                            if (queryResult) {
-                                if (prize) {
-                                    queryResult.innerHTML =
-                                        `<span class="prize-win">${prizeText}</span> ${issue}期`;
-                                } else {
-                                    queryResult.textContent = `${prizeText} ${issue}期`;
-                                }
-                                queryResult.style.display = 'block';
-                            }
-                        }
-                        const btn = row.querySelector('.fav-result-btn');
-                        if (btn) {
-                            btn.textContent = '取消';
-                            btn.classList.add('cancel');
-                        }
-                    });
-                    if (!found) {
-                        alert('没有找到该类型的收藏号码');
-                        return;
-                    }
-                    allBtn.textContent = '取消查询';
-                    allBtn.classList.add('cancel');
-                    vibrate(10);
-                    return;
-                }
-
-                const btn = e.target.closest('.fav-result-btn');
-                if (!btn) return;
-                const mode = btn.dataset.mode;
-                const row = btn.closest('.history-row');
-                if (!row) return;
-                const ballGroup = row.querySelector('.ball-group');
-                if (!ballGroup) return;
-                const matchRow = row.querySelector('.fav-match-row');
-                if (!matchRow) return;
-                const queryResult = matchRow.querySelector('.fav-query-result');
-
-                const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
-                if (allBtn2 && allBtn2.classList.contains('cancel')) {
-                    allBtn2.textContent = '全部查询';
-                    allBtn2.classList.remove('cancel');
-                }
-
-                if (btn.classList.contains('cancel')) {
-                    ballGroup.querySelectorAll('.ball').forEach(ball => {
-                        ball.classList.remove('unmatch');
-                    });
-                    btn.textContent = '查询';
-                    btn.classList.remove('cancel');
-                    if (queryResult) {
-                        queryResult.style.display = 'none';
-                        queryResult.innerHTML = '';
-                    }
-                    vibrate(10);
-                    return;
-                }
-
+                if (!allBtn) return;
+                e.stopPropagation();
+                const mode = allBtn.dataset.mode;
                 const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
                 if (!select) return;
                 const issue = select.value;
@@ -2187,60 +1198,107 @@
                     alert('未找到该期号数据');
                     return;
                 }
-                const reds = ballGroup.dataset.reds.split(',').map(Number);
-                const blues = ballGroup.dataset.blues.split(',').map(Number);
 
-                const redMatch = reds.filter(n => record.reds.includes(n)).length;
-                const blueMatch = blues.filter(n => record.blues.includes(n)).length;
-
-                const children = ballGroup.children;
-                const redBalls = [];
-                const blueBalls = [];
-                let isRed = true;
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    if (child.classList.contains('sep')) {
-                        isRed = false;
-                        continue;
-                    }
-                    if (child.classList.contains('ball')) {
-                        if (isRed) redBalls.push(child);
-                        else blueBalls.push(child);
-                    }
+                const isCancel = allBtn.classList.contains('cancel');
+                const rows = favList.querySelectorAll(`.history-row`);
+                if (isCancel) {
+                    rows.forEach(row => {
+                        const allBalls = row.querySelectorAll('.ball');
+                        allBalls.forEach(ball => ball.classList.remove('unmatch'));
+                        const matchRow = row.querySelector('.fav-match-row');
+                        if (matchRow) {
+                            const queryResult = matchRow.querySelector('.fav-query-result');
+                            if (queryResult) {
+                                queryResult.style.display = 'none';
+                                queryResult.innerHTML = '';
+                            }
+                            const matchText = matchRow.querySelector('.fav-match-text');
+                            if (matchText) {
+                                matchText.textContent = matchText.dataset.originalText || '暂无历史数据';
+                            }
+                        }
+                        const btn = row.querySelector('.fav-result-btn');
+                        if (btn) {
+                            btn.textContent = '查询';
+                            btn.classList.remove('cancel');
+                        }
+                    });
+                    allBtn.textContent = '全部查询';
+                    allBtn.classList.remove('cancel');
+                    vibrate(10);
+                    return;
                 }
 
-                reds.forEach((n, i) => {
-                    if (i < redBalls.length) {
-                        if (record.reds.includes(n)) redBalls[i].classList.remove('unmatch');
-                        else redBalls[i].classList.add('unmatch');
+                let found = false;
+                rows.forEach(row => {
+                    const allBalls = row.querySelectorAll('.ball');
+                    if (!allBalls.length) return;
+                    found = true;
+                    const redBalls = [], blueBalls = [];
+                    allBalls.forEach(ball => {
+                        if (ball.classList.contains('red') || ball.classList.contains('front')) {
+                            redBalls.push(ball);
+                        } else if (ball.classList.contains('blue') || ball.classList.contains('back')) {
+                            blueBalls.push(ball);
+                        }
+                    });
+                    const redNums = redBalls.map(el => parseInt(el.textContent, 10));
+                    const blueNums = blueBalls.map(el => parseInt(el.textContent, 10));
+                    const redHit = redNums.filter(n => record.reds.includes(n)).length;
+                    const blueHit = blueNums.filter(n => record.blues.includes(n)).length;
+
+                    redBalls.forEach((ball, i) => {
+                        const num = redNums[i];
+                        if (record.reds.includes(num)) {
+                            ball.classList.remove('unmatch');
+                        } else {
+                            ball.classList.add('unmatch');
+                        }
+                    });
+                    blueBalls.forEach((ball, i) => {
+                        const num = blueNums[i];
+                        if (record.blues.includes(num)) {
+                            ball.classList.remove('unmatch');
+                        } else {
+                            ball.classList.add('unmatch');
+                        }
+                    });
+
+                    const matchRow = row.querySelector('.fav-match-row');
+                    if (matchRow) {
+                        const matchText = matchRow.querySelector('.fav-match-text');
+                        const queryResult = matchRow.querySelector('.fav-query-result');
+                        // 去掉期号前缀
+                        const newText = `${mode==='ssq'?'红/蓝':'前/后'}命中 ${redHit}/${blueHit}`;
+                        if (matchText) matchText.textContent = newText;
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redHit, blueHit);
+                        } else {
+                            prize = getPrizeNameDLT(redHit, blueHit);
+                        }
+                        const prizeText = prize || '未中奖';
+                        if (queryResult) {
+                            if (prize) {
+                                queryResult.innerHTML = `<span class="prize-win">|${prizeText}| </span> ${issue}期`;
+                            } else {
+                                queryResult.textContent = `|${prizeText}|  ${issue}期`;
+                            }
+                            queryResult.style.display = 'block';
+                        }
+                    }
+                    const btn = row.querySelector('.fav-result-btn');
+                    if (btn) {
+                        btn.textContent = '取消';
+                        btn.classList.add('cancel');
                     }
                 });
-                blues.forEach((n, i) => {
-                    if (i < blueBalls.length) {
-                        if (record.blues.includes(n)) blueBalls[i].classList.remove('unmatch');
-                        else blueBalls[i].classList.add('unmatch');
-                    }
-                });
-
-                let prize = null;
-                if (mode === 'ssq') {
-                    prize = getPrizeNameSSQ(redMatch, blueMatch);
-                } else {
-                    prize = getPrizeNameDLT(redMatch, blueMatch);
+                if (!found) {
+                    alert('没有找到该类型的收藏号码');
+                    return;
                 }
-                const prizeText = prize || '未中奖';
-
-                if (queryResult) {
-                    if (prize) {
-                        queryResult.innerHTML = `<span class="prize-win">${prizeText}</span> ${issue}期`;
-                    } else {
-                        queryResult.textContent = `${prizeText} ${issue}期`;
-                    }
-                    queryResult.style.display = 'block';
-                }
-
-                btn.textContent = '取消';
-                btn.classList.add('cancel');
+                allBtn.textContent = '取消查询';
+                allBtn.classList.add('cancel');
                 vibrate(10);
             });
 
@@ -2281,8 +1339,7 @@
             function displayResult(groupsData, mode, reason) {
                 const isSSQ = mode === 'ssq';
                 let html = '';
-                const allReds = [],
-                    allBlues = [];
+                const allReds = [], allBlues = [];
                 groupsData.forEach(d => {
                     allReds.push(...d.reds);
                     allBlues.push(...d.blues);
@@ -2297,7 +1354,7 @@
                     html +=
                         `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
                     d.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
-                    html += '<span class="sep">+</span>';
+                    html += `<span class="sep">|</span>`;
                     d.blues.forEach(n => html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
                     const numsStr = getNumberText(d, isSSQ);
                     html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
@@ -2478,15 +1535,13 @@
                     for (let i = 0; i < lastGeneratedGroups; i++) {
                         let d;
                         if (isSSQ) {
-                            const redSet = new Set(lastExcludeReds),
-                                blueSet = new Set(lastExcludeBlues);
+                            const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
                             if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback = true;
                                 d = genSSQ(lastExcludeReds.slice(0, CONFIG.ssq.frontCount), lastExcludeBlues.slice(
                                     0, CONFIG.ssq.backCount)); } else d = genSSQ(lastExcludeReds,
                                 lastExcludeBlues);
                         } else {
-                            const redSet = new Set(lastExcludeReds),
-                                blueSet = new Set(lastExcludeBlues);
+                            const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
                             if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback = true;
                                 d = genDLT(lastExcludeReds.slice(0, CONFIG.dlt.frontCount), lastExcludeBlues.slice(
                                     0, CONFIG.dlt.backCount)); } else d = genDLT(lastExcludeReds,
@@ -2505,13 +1560,12 @@
 
             function showHint() {
                 const isSSQ = currentMode === 'ssq';
-                const frontCount = CONFIG[currentMode].frontCount,
-                    backCount = CONFIG[currentMode].backCount;
+                const frontCount = CONFIG[currentMode].frontCount, backCount = CONFIG[currentMode].backCount;
                 let html = '';
                 for (let g = 0; g < groups; g++) {
                     html += '<div class="number-line" style="padding:4px 8px;">';
                     for (let f = 0; f < frontCount; f++) html += `<span class="placeholder-red"></span>`;
-                    html += '<span class="sep">+</span>';
+                    html += '<span class="sep">|</span>';
                     for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
                     html += '</div>';
                 }
@@ -2526,8 +1580,7 @@
 
             function weightedSelect(pool, count) {
                 const totalWeight = pool.reduce((s, o) => s + o.weight, 0);
-                const selected = new Set(),
-                    result = [];
+                const selected = new Set(), result = [];
                 const temp = [...pool];
                 while (result.length < count && temp.length) {
                     let rand = Math.random() * totalWeight;
@@ -2547,8 +1600,7 @@
                 while (result.length < count) {
                     const max = pool.length ? Math.max(...pool.map(p => p.num)) : 35;
                     const extra = Math.floor(Math.random() * max) + 1;
-                    if (!selected.has(extra)) { result.push(extra);
-                        selected.add(extra); }
+                    if (!selected.has(extra)) { result.push(extra); selected.add(extra); }
                 }
                 return result.sort((a, b) => a - b);
             }
@@ -2563,18 +1615,13 @@
                     const stats = analyzeStats(records, currentMode);
                     if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
                     const isSSQ = currentMode === 'ssq';
-                    const frontCnt = CONFIG[currentMode].frontCount,
-                        backCnt = CONFIG[currentMode].backCount;
-                    const frontMax = stats.frontMax,
-                        backMax = stats.backMax;
-                    const maxFrontFreq = stats.maxFrontFreq,
-                        maxBackFreq = stats.maxBackFreq;
-                    const maxFrontMiss = stats.maxFrontMiss,
-                        maxBackMiss = stats.maxBackMiss;
+                    const frontCnt = CONFIG[currentMode].frontCount, backCnt = CONFIG[currentMode].backCount;
+                    const frontMax = stats.frontMax, backMax = stats.backMax;
+                    const maxFrontFreq = stats.maxFrontFreq, maxBackFreq = stats.maxBackFreq;
+                    const maxFrontMiss = stats.maxFrontMiss, maxBackMiss = stats.maxBackMiss;
                     const groupsData = [];
                     for (let g = 0; g < groups; g++) {
-                        const frontPool = [],
-                            backPool = [];
+                        const frontPool = [], backPool = [];
                         for (let i = 1; i <= frontMax; i++) {
                             let normFreq = maxFrontFreq ? stats.frontFreq[i] / maxFrontFreq : 0;
                             let normMiss = maxFrontMiss ? stats.frontMiss[i] / maxFrontMiss : 0;
@@ -2612,27 +1659,17 @@
             function analyzeStats(records, type) {
                 if (!records || !records.length) return null;
                 const cfg = CONFIG[type];
-                const frontMax = cfg.front,
-                    backMax = cfg.back;
-                const frontFreq = new Array(frontMax + 1).fill(0),
-                    backFreq = new Array(backMax + 1).fill(0);
-                const frontMiss = new Array(frontMax + 1).fill(0),
-                    backMiss = new Array(backMax + 1).fill(0);
-                const frontMet = new Array(frontMax + 1).fill(false),
-                    backMet = new Array(backMax + 1).fill(false);
+                const frontMax = cfg.front, backMax = cfg.back;
+                const frontFreq = new Array(frontMax + 1).fill(0), backFreq = new Array(backMax + 1).fill(0);
+                const frontMiss = new Array(frontMax + 1).fill(0), backMiss = new Array(backMax + 1).fill(0);
+                const frontMet = new Array(frontMax + 1).fill(false), backMet = new Array(backMax + 1).fill(false);
                 for (let i = 0; i < records.length; i++) {
                     const rec = records[i];
-                    rec.reds.forEach(n => { frontFreq[n]++;
-                        if (!frontMet[n]) { frontMiss[n] = i;
-                            frontMet[n] = true; } });
-                    rec.blues.forEach(n => { backFreq[n]++;
-                        if (!backMet[n]) { backMiss[n] = i;
-                            backMet[n] = true; } });
+                    rec.reds.forEach(n => { frontFreq[n]++; if (!frontMet[n]) { frontMiss[n] = i; frontMet[n] = true; } });
+                    rec.blues.forEach(n => { backFreq[n]++; if (!backMet[n]) { backMiss[n] = i; backMet[n] = true; } });
                 }
-                for (let i = 1; i <= frontMax; i++)
-                    if (!frontMet[i]) frontMiss[i] = records.length;
-                for (let i = 1; i <= backMax; i++)
-                    if (!backMet[i]) backMiss[i] = records.length;
+                for (let i = 1; i <= frontMax; i++) if (!frontMet[i]) frontMiss[i] = records.length;
+                for (let i = 1; i <= backMax; i++) if (!backMet[i]) backMiss[i] = records.length;
                 const maxFrontFreq = Math.max(...frontFreq.slice(1));
                 const maxBackFreq = Math.max(...backFreq.slice(1));
                 const maxFrontMiss = Math.max(...frontMiss.slice(1));
@@ -2644,8 +1681,7 @@
             function getFilteredData(type) {
                 const all = getDataSync(type);
                 if (!all || !all.length) return all;
-                const s = Math.max(0, rangeStart - 1),
-                    e = Math.min(all.length, rangeEnd);
+                const s = Math.max(0, rangeStart - 1), e = Math.min(all.length, rangeEnd);
                 if (s >= e) return all.slice(0, 1);
                 return all.slice(s, e);
             }
@@ -2682,8 +1718,7 @@
                 const totalPages = Math.ceil(total / PAGE_SIZE);
                 if (currentPage > totalPages) currentPage = totalPages || 1;
                 if (currentPage < 1) currentPage = 1;
-                const start = (currentPage - 1) * PAGE_SIZE,
-                    end = Math.min(start + PAGE_SIZE, total);
+                const start = (currentPage - 1) * PAGE_SIZE, end = Math.min(start + PAGE_SIZE, total);
                 const pageItems = items.slice(start, end);
                 const isSSQ = currentMode === 'ssq';
                 const matchGroups = lastGeneratedGroupsData || [];
@@ -2704,7 +1739,7 @@
                         html +=
                             `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
                     });
-                    html += '<span class="sep">+</span>';
+                    html += `<span class="sep">|</span>`;
                     if (isSSQ) {
                         let matched = false;
                         for (let g of matchGroups) {
@@ -2742,33 +1777,25 @@
 
             function renderNumberTable(container, data, title, colorClass) {
                 if (!data || !data.length) { container.innerHTML = `<div class="error-text">暂无数据</div>`; return; }
-                const freqValues = data.map(d => d.freq || 0),
-                    missValues = data.map(d => d.miss || 0);
+                const freqValues = data.map(d => d.freq || 0), missValues = data.map(d => d.miss || 0);
                 const getRanks = (arr) => {
                     const sorted = [...arr].sort((a, b) => a - b);
                     const len = sorted.length;
                     if (!len) return [];
                     return arr.map(v => len > 1 ? sorted.lastIndexOf(v) / (len - 1) : 0.5);
                 };
-                const freqRanks = getRanks(freqValues),
-                    missRanks = getRanks(missValues);
+                const freqRanks = getRanks(freqValues), missRanks = getRanks(missValues);
                 let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
                 html +=
                     `<div class="stat-row header"><div class="stat-cell" style="background:transparent;">频次</div><div class="stat-num">号码</div><div class="stat-cell" style="background:transparent;">遗漏</div></div>`;
-                const minAlpha = 0.05,
-                    maxAlpha = 0.95;
+                const minAlpha = 0.05, maxAlpha = 0.95;
                 for (let i = 0; i < data.length; i++) {
-                    const freq = data[i].freq || 0,
-                        miss = data[i].miss || 0,
-                        num = i + 1;
-                    const fRank = freqRanks[i] || 0,
-                        mRank = missRanks[i] || 0;
-                    const fAlpha = minAlpha + (maxAlpha - minAlpha) * fRank,
-                        mAlpha = minAlpha + (maxAlpha - minAlpha) * mRank;
-                    const fColor = fRank > 0.45 ? '#ffffff' : '#2c3e50',
-                        mColor = mRank > 0.45 ? '#ffffff' : '#2c3e50';
-                    const fBg = `rgba(231,76,111,${fAlpha})`,
-                        mBg = `rgba(58,123,213,${mAlpha})`;
+                    const freq = data[i].freq || 0, miss = data[i].miss || 0, num = i + 1;
+                    const fRank = freqRanks[i] || 0, mRank = missRanks[i] || 0;
+                    const fAlpha = minAlpha + (maxAlpha - minAlpha) * fRank, mAlpha = minAlpha + (maxAlpha - minAlpha) *
+                        mRank;
+                    const fColor = fRank > 0.45 ? '#ffffff' : '#2c3e50', mColor = mRank > 0.45 ? '#ffffff' : '#2c3e50';
+                    const fBg = `rgba(231,76,111,${fAlpha})`, mBg = `rgba(58,123,213,${mAlpha})`;
                     const ballClass = colorClass === 'red' ? 'red' : 'blue';
                     html +=
                         `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
@@ -2788,8 +1815,7 @@
                 const stats = analyzeStats(records, type);
                 if (!stats) { frontTable.innerHTML = '<div class="error-text">解析失败</div>';
                     backTable.innerHTML = '<div class="error-text">解析失败</div>'; return; }
-                const frontData = [],
-                    backData = [];
+                const frontData = [], backData = [];
                 for (let i = 1; i <= stats.frontMax; i++) frontData.push({ freq: stats.frontFreq[i], miss: stats
                         .frontMiss[i] });
                 for (let i = 1; i <= stats.backMax; i++) backData.push({ freq: stats.backFreq[i], miss: stats.backMiss[
@@ -2805,16 +1831,13 @@
                 totalPeriods = allData ? allData.length : 1;
                 if (rangeStart < 1) rangeStart = 1;
                 if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
-                if (rangeStart > rangeEnd) { const t = rangeStart;
-                    rangeStart = rangeEnd;
-                    rangeEnd = t; }
+                if (rangeStart > rangeEnd) { const t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
                 if (rangeStart < 1) rangeStart = 1;
                 if (rangeEnd < 1) rangeEnd = 1;
                 if (rangeStart > totalPeriods) rangeStart = totalPeriods;
                 if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
 
-                const leftVal = rangeStart,
-                    rightVal = rangeEnd;
+                const leftVal = rangeStart, rightVal = rangeEnd;
                 const pctLeft = totalPeriods > 1 ? ((leftVal - 1) / (totalPeriods - 1)) * 100 : 0;
                 const pctRight = totalPeriods > 1 ? ((rightVal - 1) / (totalPeriods - 1)) * 100 : 100;
                 thumbLeft.style.left = pctLeft + '%';
@@ -2823,11 +1846,9 @@
                 rangeFill.style.width = (pctRight - pctLeft) + '%';
 
                 const data = allData || [];
-                let leftDate = '------',
-                    rightDate = '------';
+                let leftDate = '------', rightDate = '------';
                 if (data.length) {
-                    const lr = data[leftVal - 1],
-                        rr = data[rightVal - 1];
+                    const lr = data[leftVal - 1], rr = data[rightVal - 1];
                     leftDate = lr ? lr.date.replace(/-/g, '') : '------';
                     rightDate = rr ? rr.date.replace(/-/g, '') : '------';
                 }
@@ -2868,11 +1889,9 @@
             function handleStart(e) {
                 e.preventDefault();
                 const target = e.target;
-                if (target === thumbLeft) { isDragging = true;
-                    dragTarget = 'left';
-                    thumbLeft.style.cursor = 'grabbing'; } else if (target === thumbRight) { isDragging = true;
-                    dragTarget = 'right';
-                    thumbRight.style.cursor = 'grabbing'; }
+                if (target === thumbLeft) { isDragging = true; dragTarget = 'left'; thumbLeft.style.cursor = 'grabbing'; }
+                else if (target === thumbRight) { isDragging = true; dragTarget = 'right'; thumbRight.style.cursor =
+                        'grabbing'; }
             }
 
             function handleMove(e) {
@@ -2898,8 +1917,7 @@
                         newEnd = Math.min(totalPeriods, newStart + 1);
                         newStart = Math.max(1, newStart - 1);
                         if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd >
-                            totalPeriods) { newEnd = totalPeriods;
-                                newStart = Math.max(1, totalPeriods - 1); } }
+                            totalPeriods) { newEnd = totalPeriods; newStart = Math.max(1, totalPeriods - 1); } }
                     }
                     rangeStart = newStart;
                     rangeEnd = newEnd;
@@ -2929,18 +1947,16 @@
                 rangeTrack.addEventListener('mousedown', (e) => {
                     if (e.target === thumbLeft || e.target === thumbRight) return;
                     const val = getThumbPos(e);
-                    const distL = Math.abs(val - rangeStart),
-                        distR = Math.abs(val - rangeEnd);
+                    const distL = Math.abs(val - rangeStart), distR = Math.abs(val - rangeEnd);
                     if (distL < distR) {
                         rangeStart = Math.max(1, Math.min(totalPeriods, val));
                         if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
-                            1) { rangeStart = 1;
-                                rangeEnd = Math.min(totalPeriods, 2); } }
+                            1) { rangeStart = 1; rangeEnd = Math.min(totalPeriods, 2); } }
                     } else {
                         rangeEnd = Math.max(1, Math.min(totalPeriods, val));
                         if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
-                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods;
-                                rangeStart = Math.max(1, totalPeriods - 1); } }
+                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods; rangeStart = Math.max(1,
+                                    totalPeriods - 1); } }
                     }
                     updateSliderUI();
                     updateFullData();
@@ -2961,6 +1977,205 @@
                 thumbRight.style.cursor = 'grab';
             }
 
+            function initPicker() {
+                const cfg = CONFIG[currentMode];
+                const frontMax = cfg.front, backMax = cfg.back;
+                const frontCnt = cfg.frontCount, backCnt = cfg.backCount;
+                maxRedCount.textContent = frontCnt;
+                maxBlueCount.textContent = backCnt;
+
+                redPickerGrid.innerHTML = '';
+                for (let i = 1; i <= frontMax; i++) {
+                    const el = document.createElement('span');
+                    el.className = 'picker-num red';
+                    el.textContent = pad(i);
+                    el.dataset.num = i;
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const num = parseInt(this.dataset.num);
+                        togglePickerNum(num, 'red');
+                    });
+                    redPickerGrid.appendChild(el);
+                }
+                const redRemainder = (10 - (frontMax % 10)) % 10;
+                for (let i = 0; i < redRemainder; i++) {
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'picker-num placeholder';
+                    placeholder.textContent = '';
+                    redPickerGrid.appendChild(placeholder);
+                }
+
+                bluePickerGrid.innerHTML = '';
+                for (let i = 1; i <= backMax; i++) {
+                    const el = document.createElement('span');
+                    el.className = 'picker-num blue';
+                    el.textContent = pad(i);
+                    el.dataset.num = i;
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const num = parseInt(this.dataset.num);
+                        togglePickerNum(num, 'blue');
+                    });
+                    bluePickerGrid.appendChild(el);
+                }
+                const blueRemainder = (10 - (backMax % 10)) % 10;
+                for (let i = 0; i < blueRemainder; i++) {
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'picker-num placeholder';
+                    placeholder.textContent = '';
+                    bluePickerGrid.appendChild(placeholder);
+                }
+
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function togglePickerNum(num, type) {
+                if (type === 'red') {
+                    if (selectedReds.has(num)) {
+                        selectedReds.delete(num);
+                    } else {
+                        selectedReds.add(num);
+                    }
+                } else {
+                    if (selectedBlues.has(num)) {
+                        selectedBlues.delete(num);
+                    } else {
+                        selectedBlues.add(num);
+                    }
+                }
+                updatePickerUI();
+            }
+
+            function updatePickerUI() {
+                const redItems = redPickerGrid.querySelectorAll('.picker-num:not(.placeholder)');
+                redItems.forEach(el => {
+                    const num = parseInt(el.dataset.num);
+                    if (selectedReds.has(num)) {
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
+                });
+                const blueItems = bluePickerGrid.querySelectorAll('.picker-num:not(.placeholder)');
+                blueItems.forEach(el => {
+                    const num = parseInt(el.dataset.num);
+                    if (selectedBlues.has(num)) {
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
+                });
+
+                selectedRedCount.textContent = selectedReds.size;
+                selectedBlueCount.textContent = selectedBlues.size;
+
+                const cfg = CONFIG[currentMode];
+                const redOk = selectedReds.size === cfg.frontCount;
+                const blueOk = selectedBlues.size === cfg.backCount;
+                addFavBtn.disabled = !(redOk && blueOk);
+                const redEnough = selectedReds.size >= cfg.frontCount;
+                const blueEnough = selectedBlues.size >= cfg.backCount;
+                const compoundOk = redEnough && blueEnough && (selectedReds.size > cfg.frontCount || selectedBlues.size >
+                    cfg.backCount);
+                addCompoundBtn.disabled = !compoundOk;
+            }
+
+            function addCustomToFavorites() {
+                const cfg = CONFIG[currentMode];
+                if (selectedReds.size !== cfg.frontCount || selectedBlues.size !== cfg.backCount) {
+                    alert('请选择正确数量的红球和蓝球');
+                    return;
+                }
+                const reds = Array.from(selectedReds).sort((a, b) => a - b);
+                const blues = Array.from(selectedBlues).sort((a, b) => a - b);
+                const nums = { reds, blues };
+                const favs = getFavorites();
+                const exists = favs.some(item => item.mode === currentMode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]) &&
+                    !item.isCompound);
+                if (exists) {
+                    alert('该号码已存在于收藏夹');
+                    return;
+                }
+                favs.push({ mode: currentMode, nums, time: Date.now() });
+                setFavorites(favs);
+                renderFavorites();
+                vibrate(10);
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function addCompoundToFavorites() {
+                const cfg = CONFIG[currentMode];
+                const reds = Array.from(selectedReds).sort((a, b) => a - b);
+                const blues = Array.from(selectedBlues).sort((a, b) => a - b);
+                if (reds.length < cfg.frontCount || blues.length < cfg.backCount) {
+                    alert('红球或蓝球数量不足');
+                    return;
+                }
+                if (reds.length === cfg.frontCount && blues.length === cfg.backCount) {
+                    alert('请至少选择超出一个号码才能组成复试');
+                    return;
+                }
+                const favs = getFavorites();
+                const exists = favs.some(item => item.mode === currentMode &&
+                    item.isCompound &&
+                    item.nums.reds.length === reds.length &&
+                    item.nums.blues.length === blues.length &&
+                    item.nums.reds.every((v, i) => v === reds[i]) &&
+                    item.nums.blues.every((v, i) => v === blues[i]));
+                if (exists) {
+                    alert('该复试组合已存在于收藏夹');
+                    return;
+                }
+                const redCombos = combinations(reds, cfg.frontCount);
+                const blueCombos = combinations(blues, cfg.backCount);
+                const total = redCombos.length * blueCombos.length;
+                if (total > 200) {
+                    if (!confirm(`生成 ${total} 组号码，可能较多，确定继续吗？`)) return;
+                }
+                favs.push({ mode: currentMode, nums: { reds, blues }, isCompound: true, time: Date.now() });
+                setFavorites(favs);
+                renderFavorites();
+                vibrate(10);
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function clearPicker() {
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+                vibrate(10);
+            }
+
+            customBtn.addEventListener('click', function() {
+                isCustomMode = !isCustomMode;
+                this.classList.toggle('active', isCustomMode);
+                if (isCustomMode) {
+                    customPickerWrap.classList.add('open');
+                    initPicker();
+                    if (isManageMode) {
+                        isManageMode = false;
+                        manageBtn.textContent = '管理';
+                        renderFavorites();
+                    }
+                } else {
+                    customPickerWrap.classList.remove('open');
+                }
+            });
+
+            addFavBtn.addEventListener('click', addCustomToFavorites);
+            addCompoundBtn.addEventListener('click', addCompoundToFavorites);
+            clearPickerBtn.addEventListener('click', clearPicker);
+
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     currentMode = e.target.value;
@@ -2976,20 +2191,19 @@
                     specificBtn.className = 'btn btn-blue';
                     renderFavorites();
                     updateResetState(true);
+                    if (isCustomMode) {
+                        initPicker();
+                    }
                 });
             });
 
             document.getElementById('decBtn').addEventListener('click', () => {
-                if (groups > 1) { groups--;
-                    showHint();
-                    specificBtn.disabled = true;
-                    specificBtn.className = 'btn btn-blue'; }
+                if (groups > 1) { groups--; showHint(); specificBtn.disabled = true; specificBtn.className =
+                        'btn btn-blue'; }
             });
             document.getElementById('incBtn').addEventListener('click', () => {
-                if (groups < 5) { groups++;
-                    showHint();
-                    specificBtn.disabled = true;
-                    specificBtn.className = 'btn btn-blue'; }
+                if (groups < 5) { groups++; showHint(); specificBtn.disabled = true; specificBtn.className =
+                        'btn btn-blue'; }
             });
             resetBtn.addEventListener('click', resetNumbers);
             document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
