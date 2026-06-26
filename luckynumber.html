@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>搏一搏单车变摩托</title>
+    <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23ff1744'/%3E%3Ctext x='50' y='50' font-size='66' font-weight='900' font-family='system-ui, %22PingFang SC%22, %22Microsoft YaHei%22, sans-serif' fill='%230000cd' text-anchor='middle' dominant-baseline='central'%3E中%3C/text%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            background: #eef2f7;
+            font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+            overflow-x: hidden;
+            transition: background .3s, color .3s;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            width: 100%;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: background .3s, border-color .3s;
+        }
+        .title-bar {
+            background: linear-gradient(135deg, #3a7bd5, #2b5ea7);
+            text-align: center;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .title-bar .title-left { display:flex; align-items:center; gap:6px; position:absolute; left:10px; top:50%; transform:translateY(-50%); }
+        .title-bar .title-right { display:flex; align-items:center; gap:6px; position:absolute; right:10px; top:50%; transform:translateY(-50%); }
+        .title-bar .title-center { flex:1; text-align:center; }
+        .title-bar .custom-btn { background:rgba(255,255,255,0.2); border:none; border-radius:30px; padding:3px 12px; color:#fff; font-size:12px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; font-family:inherit; white-space:nowrap; }
+        .title-bar .custom-btn:active { background:rgba(255,255,255,0.4); }
+        .title-bar .custom-btn.active { background:rgba(255,255,255,0.35); }
+        .title-bar .manage-btn { background:rgba(255,255,255,0.2); border:none; border-radius:30px; padding:3px 12px; color:#fff; font-size:12px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; font-family:inherit; white-space:nowrap; }
+        .title-bar .manage-btn:active { background:rgba(255,255,255,0.4); }
+        .title-bar.secondary { background:linear-gradient(135deg,#5b9bd5,#3a7bd5); }
+        .title-bar.tertiary { background:linear-gradient(135deg,#4a8fd4,#2b5ea7); }
+        .title-bar.fourth { background:linear-gradient(135deg,#6aafd5,#3a7bd5); }
+        .mode-row { display:flex; justify-content:center; gap:20px; padding:14px 16px 8px; flex-wrap:nowrap; }
+        .mode-row label { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:14px; padding:4px 12px; border-radius:30px; transition:background .2s; white-space:nowrap; color:#2c3e50; }
+        .mode-row label:hover { background:rgba(58,123,213,0.08); }
+        .mode-row input[type="radio"] { display:none; }
+        .mode-row label .dot { width:12px; height:12px; border-radius:50%; border:2px solid #b0c4de; display:inline-block; position:relative; }
+        .mode-row input:checked+span .dot { border-color:#3a7bd5; }
+        .mode-row input:checked+span .dot::after { content:''; position:absolute; width:5px; height:5px; border-radius:50%; background:#3a7bd5; top:1.5px; left:1.5px; }
+        .result-box { margin:6px 16px 14px; background:#f8faff; border-radius:12px; min-height:60px; padding:8px 4px; overflow-x:auto; -webkit-overflow-scrolling:touch; text-align:center; transition:background .3s; }
+        .hint-text { text-align:center; color:#7f8c9b; font-size:13px; }
+        .number-line { display:flex; align-items:center; justify-content:center; position:relative; padding:4px 64px; flex-wrap:nowrap; gap:3px; min-height:36px; margin:4px 0; }
+        .number-line .btn-text.fav { position:absolute; left:4px; top:50%; transform:translateY(-50%); white-space:nowrap; flex-shrink:0; }
+        .number-line .btn-text.copy { position:absolute; right:4px; top:50%; transform:translateY(-50%); white-space:nowrap; flex-shrink:0; }
+        .number-line.action-line { justify-content:space-between; padding:4px 64px; }
+        .number-line.action-line .btn-text { position:static; transform:none; }
+        #favList .history-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start; padding:6px 8px; gap:4px 6px; min-height:44px; border-bottom:1px solid rgba(0,0,0,0.04); width:100%; }
+        #favList .history-row .time-col { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:44px; font-size:10px; color:#7f8c9b; line-height:1.2; flex-shrink:0; }
+        #favList .history-row .time-col .monthday { font-size:10px; font-weight:600; color:#2c3e50; }
+        #favList .history-row .time-col .year { font-size:9px; color:#95a5a6; }
+        #favList .history-row .ball-group { display:flex; align-items:center; gap:3px; flex:1 1 auto; justify-content:center; flex-wrap:wrap; min-width:120px; }
+        #favList .history-row .fav-result-btn { font-size:11px; padding:2px 14px; border:1px solid #3a7bd5; border-radius:12px; background:transparent; color:#3a7bd5; cursor:pointer; transition:all .2s; font-family:inherit; -webkit-tap-highlight-color:transparent; line-height:1.8; white-space:nowrap; flex-shrink:0; margin-left:auto; }
+        #favList .history-row .fav-result-btn:active { transform:scale(0.92); background:rgba(58,123,213,0.1); }
+        #favList .history-row .fav-result-btn.cancel { border-color:#e74c6f; color:#e74c6f; }
+        #favList .history-row .fav-result-btn.cancel:active { background:rgba(231,76,111,0.1); }
+        #favList .history-row .fav-match-row { position:relative; display:flex; justify-content:center; align-items:center; width:100%; min-height:20px; padding:2px 0; flex-wrap:wrap; gap:4px; }
+        #favList .history-row .fav-match-row .fav-match-text { text-align:center; font-size:10px; color:#3a7bd5; transition:color .2s; }
+        #favList .history-row .fav-match-row .fav-query-result { position:absolute; right:0; top:50%; transform:translateY(-50%); display:none; font-size:10px; color:#3a7bd5; white-space:nowrap; }
+        #favList .history-row .fav-match-row .fav-query-result .prize-win { color:#e74c6f; font-weight:700; }
+        #favList .history-row .action-group { display:flex; align-items:center; gap:6px; flex-shrink:0; margin-left:auto; }
+        #favList .history-row .action-group .btn-text { font-size:11px; }
+        #favList .history-row .compound-info { font-size:10px; color:#7f8c9b; font-weight:600; text-align:center; width:100%; margin-top:2px; }
+        #historyList .history-row { display:flex; align-items:center; padding:6px 12px; gap:8px; min-height:44px; border-bottom:1px solid rgba(0,0,0,0.04); width:100%; flex-wrap:nowrap; justify-content:flex-start; }
+        #historyList .history-row .left-info { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; min-width:60px; flex-shrink:0; line-height:1.3; }
+        #historyList .history-row .left-info .period { font-size:12px; font-weight:600; color:#2c3e50; }
+        #historyList .history-row .left-info .date { font-size:10px; color:#7f8c9b; }
+        #historyList .history-row .ball-group { display:flex; align-items:center; gap:3px; flex:1; justify-content:center; }
+        .ball { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; transition:filter .2s,transform .2s; }
+        .ball.red,.ball.front { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .ball.blue,.ball.back { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .ball.red.unmatch,.ball.front.unmatch { background:radial-gradient(circle at 35% 35%,#ffb3b3,#e6a3a3); box-shadow:0 2px 6px rgba(231,76,111,0.15); }
+        .ball.blue.unmatch,.ball.back.unmatch { background:radial-gradient(circle at 35% 35%,#b3d9ff,#80bfff); box-shadow:0 2px 6px rgba(58,123,213,0.15); }
+        .ball.rolling { animation:roll 0.08s infinite alternate; }
+        @keyframes roll { 0% { transform:scale(0.85) rotate(-6deg); } 100% { transform:scale(1.15) rotate(6deg); } }
+        .ball.done { animation:pop 0.25s ease both; }
+        @keyframes pop { 0% { transform:scale(0.2); opacity:0.4; } 60% { transform:scale(1.25); } 100% { transform:scale(1); opacity:1; } }
+        .placeholder-red,.placeholder-blue { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; flex-shrink:0; }
+        .placeholder-red { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .placeholder-blue { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .sep { margin:0 2px; color:#b0c4de; font-weight:700; font-size:12px; flex-shrink:0; }
+        .btn-text { background:none; border:none; cursor:pointer; font-size:12px; padding:0 4px; font-weight:600; transition:opacity .2s,transform .1s; -webkit-tap-highlight-color:transparent; font-family:inherit; display:inline-block; line-height:1; flex-shrink:0; }
+        .btn-text:active { transform:scale(0.85); }
+        .btn-text.copy { color:#3a7bd5; }
+        .btn-text.copy.done { color:#2ecc71; }
+        .btn-text.fav { color:#95a5a6; }
+        .btn-text.fav.active { color:#f1c40f; }
+        .btn-text.del { color:#e74c6f; }
+        .btn-text.del:active { opacity:0.7; }
+        .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:12px; opacity:0.6; cursor:pointer; }
+        .btn-text.all-copy { color:#3a7bd5; }
+        .btn-text.all-delete { color:#e74c6f; }
+        .btn-text.all-fav { color:#3a7bd5; }
+        .btn-text.all-copy:active,.btn-text.all-delete:active,.btn-text.all-fav:active { opacity:1; }
+        .match-info { font-size:10px; color:#2c3e50; background:#f0f4fa; border-radius:8px; padding:2px 10px; display:inline-flex; align-items:center; gap:8px; margin:2px 0; }
+        .btn-row { display:flex; gap:8px; padding:0 16px 12px; flex-wrap:nowrap; align-items:stretch; }
+        .btn-row .btn-group { display:flex; flex:1; background:#e8edf5; border-radius:10px; overflow:hidden; min-height:40px; }
+        .btn-row .btn-group .btn-cycle { flex:1; background:transparent; border:none; color:#2c3e50; font-size:18px; font-weight:700; cursor:pointer; padding:0; transition:transform .12s,background .2s; -webkit-tap-highlight-color:transparent; outline:none; line-height:40px; text-align:center; }
+        .btn-row .btn-group .btn-cycle:active { transform:scale(0.94); background:rgba(0,0,0,0.05); }
+        .btn-row .btn-group .btn-cycle:disabled { color:#b0b8c4; cursor:not-allowed; pointer-events:none; }
+        .btn-row .btn-group .group-number { flex:1; text-align:center; line-height:40px; color:#2c3e50; font-weight:700; font-size:13px; background:transparent; transition:background .2s; -webkit-tap-highlight-color:transparent; cursor:pointer; user-select:none; white-space:nowrap; min-width:0; border:none; font-family:inherit; }
+        .btn-row .btn-group .group-number:hover { background:rgba(58,123,213,0.08); }
+        .btn-row .btn-group .group-number:active { transform:scale(0.96); }
+        .btn { flex:1; padding:0; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; transition:transform .12s,box-shadow .2s,opacity .2s,background .2s; color:#fff; text-align:center; -webkit-tap-highlight-color:transparent; outline:none; white-space:nowrap; min-height:40px; line-height:40px; min-width:0; }
+        .btn:focus { outline:none; box-shadow:none; }
+        .btn:active { transform:scale(0.96); }
+        .btn-red { background:linear-gradient(135deg,#ff6b7a,#e74c6f); }
+        .btn-red:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .btn-blue { background:linear-gradient(135deg,#6ab0ff,#3a7bd5); }
+        .btn-blue:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .btn-smart { background:linear-gradient(135deg,#6ab0ff,#5dd9b2); }
+        .btn-retry { background:#f39c12; color:#fff; }
+        .chart-container { padding:12px 12px; width:100%; background:#fcfdff; }
+        .table-container { background:#f8faff; border-radius:12px; padding:8px 4px; margin-bottom:12px; }
+        .table-container .sub-title { font-size:12px; font-weight:600; color:#2c3e50; padding:4px 8px 8px; border-bottom:1px solid #e8edf5; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+        .stat-table { display:flex; flex-direction:column; gap:2px; }
+        .stat-row { display:flex; align-items:center; gap:6px; padding:2px 4px; border-radius:4px; background:#fff; transition:background .2s; }
+        .stat-row.header { background:transparent; font-weight:600; color:#2c3e50; font-size:11px; border-bottom:1px solid #e8edf5; padding-bottom:4px; margin-bottom:2px; }
+        .stat-num { width:32px; text-align:center; flex-shrink:0; display:flex; justify-content:center; align-items:center; }
+        .stat-ball { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:11px; font-weight:700; color:#fff; }
+        .stat-ball.red { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); box-shadow:0 2px 6px rgba(231,76,111,0.35); }
+        .stat-ball.blue { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); box-shadow:0 2px 6px rgba(58,123,213,0.35); }
+        .stat-cell { flex:1; display:flex; align-items:center; justify-content:center; border-radius:4px; padding:2px 4px; min-height:24px; background:#f0f4fa; transition:background .2s; }
+        .stat-cell .value { font-size:13px; font-weight:600; color:#2c3e50; }
+        .stat-cell.freq { background:#fde8e8; }
+        .stat-cell.miss { background:#e8f0fe; }
+        .history-list { padding:6px 0px 12px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; background:transparent; }
+        .history-meta { display:flex; justify-content:flex-end; align-items:center; padding:4px 0px 0px; font-size:10px; color:#7f8c9b; flex-wrap:wrap; gap:6px; background:transparent; }
+        .history-meta .pagination { display:flex; align-items:center; gap:8px; }
+        .history-meta .pagination button { background:#e8edf5; border:none; color:#2c3e50; padding:2px 10px; border-radius:12px; font-size:11px; cursor:pointer; transition:background .2s; -webkit-tap-highlight-color:transparent; outline:none; }
+        .history-meta .pagination button:active { transform:scale(0.94); }
+        .history-meta .pagination button:disabled { opacity:0.4; pointer-events:none; }
+        .history-meta .pagination span { font-size:11px; color:#2c3e50; min-width:40px; text-align:center; }
+        .info-content { padding:14px 16px 16px; color:#2c3e50; font-size:12px; line-height:1.8; background:#fcfdff; }
+        .info-content .highlight-red { color:#e74c6f; font-weight:600; }
+        .info-content .highlight-blue { color:#3a7bd5; font-weight:600; }
+        .info-content .highlight-green { color:#3ab795; font-weight:600; }
+        .disclaimer { background:#fff3cd; border-left:4px solid #f0ad4e; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:12px; color:#856404; }
+        .range-row { padding:10px 16px 14px; }
+        .range-title { text-align:center; font-weight:600; font-size:13px; color:#2c3e50; padding-bottom:4px; }
+        .range-side-row { display:flex; justify-content:space-between; font-size:10px; color:#7f8c9b; padding-bottom:4px; }
+        .range-side-row .side-item { white-space:nowrap; }
+        .range-track-wrap { position:relative; padding:0px 0 2px; touch-action:none; user-select:none; -webkit-user-select:none; }
+        .range-track { position:relative; height:22px; background:#e8ecf2; border-radius:11px; cursor:pointer; touch-action:none; }
+        .range-track .range-fill { position:absolute; height:100%; background:linear-gradient(90deg,#6ab0ff,#3a7bd5); border-radius:11px; pointer-events:none; }
+        .range-thumb { position:absolute; top:50%; width:22px; height:22px; border-radius:50%; background:#fff; border:2.5px solid #3a7bd5; box-shadow:0 2px 8px rgba(58,123,213,0.30); transform:translate(-50%,-50%); cursor:grab; touch-action:none; z-index:2; transition:box-shadow .15s,border-color .2s; }
+        .range-thumb:active { cursor:grabbing; box-shadow:0 2px 12px rgba(58,123,213,0.45); border-color:#1e4f8a; }
+        .range-thumb-left { z-index:3; }
+        .range-thumb-right { z-index:3; }
+        .range-info { display:flex; justify-content:center; padding-top:4px; font-size:10px; color:#7f8c9b; }
+        .range-info .mid { display:none; }
+        .range-summary { text-align:center; font-size:13px; color:#2c3e50; padding:8px 0 4px; font-weight:600; background:#f8faff; border-bottom:1px solid #e8edf5; margin-bottom:12px; }
+        .data-hint { color:#3a7bd5; font-size:10px; text-align:center; padding:6px 12px 10px; border-top:1px solid rgba(58,123,213,0.06); background:#f8faff; }
+        .loading-spinner { display:inline-block; width:20px; height:20px; border:2px solid #e0e0e0; border-top:2px solid #3a7bd5; border-radius:50%; animation:spin 0.8s linear infinite; margin-right:8px; vertical-align:middle; }
+        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+        .error-text { color:#e74c6f; text-align:center; font-size:13px; padding:8px 0; }
+        .fav-section { margin-bottom:12px; }
+        .fav-section:last-child { margin-bottom:0; }
+        .fav-section .sub-title { font-size:12px; font-weight:600; color:#2c3e50; padding:4px 8px 8px; border-bottom:1px solid #e8edf5; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+        .fav-section .sub-title .btn-text { font-size:10px; margin-left:8px; }
+        .fav-section .sub-title .fav-period-select { font-size:10px; padding:2px 4px; border-radius:4px; border:1px solid #b0c4de; background:#fff; color:#2c3e50; max-width:100px; font-family:inherit; }
+        .fav-section .sub-title .fav-query-all-btn { font-size:12px; opacity:0.6; cursor:pointer; color:#3a7bd5; background:none; border:none; padding:0 4px; font-weight:600; transition:opacity .2s,transform .1s; font-family:inherit; line-height:1; margin-right:8px; }
+        .fav-section .sub-title .fav-query-all-btn:active { transform:scale(0.85); opacity:1; }
+        .fav-section .sub-title .fav-query-all-btn.cancel { color:#e74c6f; }
+        .group-match-info { font-size:10px; color:#3a7bd5; text-align:center; margin:0 0 4px 0; background:#f0f4fa; border-radius:6px; padding:2px 8px; display:inline-block; }
+        .picker-container { display:flex; flex-direction:column; gap:8px; padding:6px 8px 4px; }
+        .picker-col { width:100%; padding:0; }
+        .picker-col .picker-title { font-size:10px; font-weight:700; color:#2c3e50; text-align:center; padding-bottom:4px; border-bottom:1px solid #e8edf5; margin-bottom:4px; }
+        .picker-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:4px; justify-items:center; align-items:center; }
+        .picker-num { display:inline-flex; align-items:center; justify-content:center; width:100%; aspect-ratio:1/1; border-radius:50%; font-size:10px; font-weight:700; cursor:pointer; transition:transform .12s,background .2s,box-shadow .2s,border-color .2s,color .2s; -webkit-tap-highlight-color:transparent; user-select:none; border:2px solid transparent; color:#2c3e50; background:#eef2f7; }
+        .picker-num:active { transform:scale(0.88); }
+        .picker-num.red { background:radial-gradient(circle at 35% 35%,#ffb3b3,#e6a3a3); border-color:#f0c8c8; color:#2c3e50; box-shadow:0 1px 4px rgba(231,76,111,0.10); }
+        .picker-num.red.selected { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); border-color:#e74c6f; color:#fff; box-shadow:0 2px 8px rgba(231,76,111,0.40); }
+        .picker-num.blue { background:radial-gradient(circle at 35% 35%,#b3d9ff,#80bfff); border-color:#b8d4f0; color:#2c3e50; box-shadow:0 1px 4px rgba(58,123,213,0.10); }
+        .picker-num.blue.selected { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); border-color:#3a7bd5; color:#fff; box-shadow:0 2px 8px rgba(58,123,213,0.40); }
+        .picker-num.placeholder { background:transparent !important; border-color:transparent !important; box-shadow:none !important; cursor:default !important; pointer-events:none !important; visibility:hidden; }
+        .picker-info { display:flex; justify-content:center; align-items:center; gap:16px; padding:2px 12px 4px; font-size:11px; color:#2c3e50; flex-wrap:wrap; }
+        .picker-info .info-item { display:flex; align-items:center; gap:4px; }
+        .picker-info .info-item .num { font-weight:700; color:#e74c6f; }
+        .picker-info .info-item .num.blue { color:#3a7bd5; }
+        .picker-actions { display:flex; gap:8px; padding:2px 12px 10px; justify-content:center; flex-wrap:wrap; }
+        .picker-actions .btn { flex:0 1 auto; padding:0 20px; min-height:32px; line-height:32px; font-size:12px; min-width:70px; }
+        .picker-actions .btn:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .picker-actions .btn-clear { background:#95a5a6; }
+        .picker-actions .btn-compound { background:#f39c12; color:#fff; }
+        .picker-actions .btn-compound:disabled { background:#d5dbe3; color:#aab3c0; pointer-events:none; transform:none; }
+        .custom-picker-wrap { overflow:hidden; transition:max-height .35s ease,opacity .25s ease,margin .25s ease; max-height:0; opacity:0; margin:0; }
+        .custom-picker-wrap.open { max-height:600px; opacity:1; margin:2px 0 0; }
+        .fav-empty { text-align:center; padding:16px 0; color:#7f8c9b; font-size:13px; }
+
+        @media (prefers-color-scheme:dark) {
+            body { background:#1a1e24; }
+            .card { background:#2a2e36; border-color:#3a3f4a; }
+            .title-bar { background:linear-gradient(135deg,#2b5ea7,#1e4a7a); }
+            .title-bar.secondary { background:linear-gradient(135deg,#4a7fbf,#2b5ea7); }
+            .title-bar.tertiary { background:linear-gradient(135deg,#3a6fb0,#1e4a7a); }
+            .title-bar.fourth { background:linear-gradient(135deg,#5a8fc0,#2b5ea7); }
+            .mode-row label { color:#c8d0dc; }
+            .result-box { background:#2f343e; }
+            .hint-text { color:#9aa5b5; }
+            .btn-row .btn-group { background:#3a3f4a; }
+            .btn-row .btn-group .btn-cycle { color:#c8d0dc; }
+            .btn-row .btn-group .btn-cycle:disabled { color:#6a7585; }
+            .btn-row .btn-group .group-number { color:#c8d0dc; }
+            .btn-red:disabled,.btn-blue:disabled { background:#3a3f4a; color:#6a7585; }
+            .chart-container { background:#2a2e36; }
+            .table-container { background:#2f343e; }
+            .table-container .sub-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .stat-row { background:#2a2e36; }
+            .stat-row.header { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .stat-num { color:#c8d0dc; }
+            .stat-cell { background:#3a3f4a; }
+            .stat-cell .value { color:#c8d0dc; }
+            .stat-cell.freq { background:#4a2a2a; }
+            .stat-cell.miss { background:#2a3a4a; }
+            #historyList .history-row { border-bottom-color:#3a3f4a; }
+            #historyList .history-row .left-info .period { color:#c8d0dc; }
+            #historyList .history-row .left-info .date { color:#9aa5b5; }
+            #favList .history-row { border-bottom-color:#3a3f4a; }
+            #favList .history-row .time-col .monthday { color:#c8d0dc; }
+            #favList .history-row .time-col .year { color:#9aa5b5; }
+            #favList .history-row .fav-result-btn { border-color:#6ab0ff; color:#6ab0ff; }
+            #favList .history-row .fav-result-btn:active { background:rgba(106,176,255,0.15); }
+            #favList .history-row .fav-result-btn.cancel { border-color:#ff6b7a; color:#ff6b7a; }
+            #favList .history-row .fav-result-btn.cancel:active { background:rgba(255,107,122,0.15); }
+            #favList .history-row .fav-match-row .fav-match-text { color:#6ab0ff; }
+            #favList .history-row .fav-match-row .fav-query-result { color:#6ab0ff; }
+            #favList .history-row .fav-match-row .fav-query-result .prize-win { color:#ff6b7a; }
+            .fav-section .sub-title .fav-query-all-btn { color:#6ab0ff; }
+            .fav-section .sub-title .fav-query-all-btn.cancel { color:#ff6b7a; }
+            .history-meta { color:#9aa5b5; }
+            .history-meta .pagination button { background:#3a3f4a; color:#c8d0dc; }
+            .history-meta .pagination span { color:#c8d0dc; }
+            .info-content { background:#2a2e36; color:#c8d0dc; }
+            .disclaimer { background:#3a2a1a; color:#d4a84a; border-left-color:#d4a84a; }
+            .range-title { color:#c8d0dc; }
+            .range-side-row { color:#9aa5b5; }
+            .range-track { background:#3a3f4a; }
+            .range-thumb { background:#2a2e36; border-color:#6ab0ff; }
+            .range-summary { background:#2f343e; color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .data-hint { color:#6ab0ff; border-top-color:#3a3f4a; background:#2f343e; }
+            .info-content .highlight-red { color:#ff6b7a; }
+            .info-content .highlight-blue { color:#6ab0ff; }
+            .info-content .highlight-green { color:#5dd9b2; }
+            .match-info { color:#c8d0dc; background:#3a3f4a; }
+            .btn-text.copy { color:#6ab0ff; }
+            .btn-text.copy.done { color:#2ecc71; }
+            .btn-text.fav { color:#7f8c8d; }
+            .btn-text.fav.active { color:#f1c40f; }
+            .btn-text.del { color:#ff6b7a; }
+            .btn-text.all-copy { color:#6ab0ff; }
+            .btn-text.all-delete { color:#ff6b7a; }
+            .btn-text.all-fav { color:#6ab0ff; }
+            .fav-section .sub-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .fav-section .sub-title .fav-period-select { background:#3a3f4a; border-color:#5a6a7a; color:#c8d0dc; }
+            .ball.blue.unmatch,.ball.back.unmatch { filter:grayscale(1) brightness(0.7); }
+            .group-match-info { background:#3a3f4a; color:#6ab0ff; }
+            .picker-col .picker-title { color:#c8d0dc; border-bottom-color:#3a3f4a; }
+            .picker-num { background:#3a3f4a; color:#c8d0dc; }
+            .picker-num.red { background:radial-gradient(circle at 35% 35%,#6a3a3a,#5a2a2a); border-color:#5a3a3a; color:#c8d0dc; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+            .picker-num.red.selected { background:radial-gradient(circle at 35% 35%,#ff6b7a,#e74c6f); border-color:#e74c6f; color:#fff; box-shadow:0 2px 8px rgba(231,76,111,0.40); }
+            .picker-num.blue { background:radial-gradient(circle at 35% 35%,#2a4a6a,#1a3a5a); border-color:#3a5a7a; color:#c8d0dc; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+            .picker-num.blue.selected { background:radial-gradient(circle at 35% 35%,#6ab0ff,#3a7bd5); border-color:#3a7bd5; color:#fff; box-shadow:0 2px 8px rgba(58,123,213,0.40); }
+            .picker-num.placeholder { background:transparent !important; border-color:transparent !important; box-shadow:none !important; visibility:hidden; }
+            .picker-info { color:#c8d0dc; }
+            .picker-info .info-item .num { color:#ff6b7a; }
+            .picker-info .info-item .num.blue { color:#6ab0ff; }
+            .picker-actions .btn:disabled { background:#3a3f4a; color:#6a7585; }
+            .picker-actions .btn-clear { background:#5a6a7a; }
+            .picker-actions .btn-compound:disabled { background:#3a3f4a; color:#6a7585; }
+            .fav-empty { color:#9aa5b5; }
+            #favList .history-row .compound-info { color:#9aa5b5; }
+        }
+        @media (max-width:420px) {
+            .btn { font-size:11px; min-height:36px; line-height:36px; }
+            .btn-row .btn-group { min-height:36px; }
+            .btn-row .btn-group .btn-cycle { line-height:36px; font-size:16px; }
+            .btn-row .btn-group .group-number { line-height:36px; font-size:12px; }
+            .ball,.placeholder-red,.placeholder-blue { width:24px; height:24px; font-size:10px; }
+            .mode-row label { font-size:12px; padding:2px 8px; }
+            .stat-num { width:28px; }
+            .stat-ball { width:20px; height:20px; font-size:10px; }
+            .stat-cell .value { font-size:12px; }
+            .range-title { font-size:12px; }
+            .range-side-row { font-size:9px; }
+            .range-info { font-size:9px; }
+            .range-track { height:20px; }
+            .range-thumb { width:20px; height:20px; }
+            .range-summary { font-size:12px; margin-bottom:10px; }
+            .btn-text { font-size:11px; }
+            .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:9px; }
+            .number-line { padding:4px 48px; gap:2px; min-height:32px; }
+            .number-line .btn-text.fav { font-size:10px; }
+            .number-line .btn-text.copy { font-size:10px; }
+            .number-line.action-line { padding:4px 48px; }
+            #favList .history-row { padding:4px 6px; gap:4px; min-height:40px; }
+            #favList .history-row .time-col { min-width:36px; font-size:9px; }
+            #favList .history-row .time-col .monthday { font-size:10px; }
+            #favList .history-row .time-col .year { font-size:8px; }
+            #favList .history-row .ball-group .ball { width:22px; height:22px; font-size:9px; }
+            #favList .history-row .fav-result-btn { font-size:10px; padding:1px 10px; }
+            #favList .history-row .fav-match-row .fav-match-text { font-size:9px; }
+            #favList .history-row .fav-match-row .fav-query-result { font-size:9px; }
+            .fav-section .sub-title .fav-query-all-btn { font-size:11px; }
+            #historyList .history-row { padding:4px 8px; gap:4px; min-height:38px; }
+            #historyList .history-row .left-info .period { font-size:11px; }
+            #historyList .history-row .left-info .date { font-size:9px; }
+            #historyList .history-row .ball-group .ball { width:22px; height:22px; font-size:9px; }
+            .fav-section .sub-title .fav-period-select { font-size:9px; max-width:80px; }
+            .picker-container { gap:6px; padding:4px 4px 2px; }
+            .picker-grid { grid-template-columns:repeat(10,1fr); gap:3px; }
+            .picker-num { font-size:9px; border-width:1.5px; }
+            .picker-info { font-size:10px; gap:10px; padding:2px 8px 2px; }
+            .picker-actions .btn { min-height:30px; line-height:30px; font-size:11px; padding:0 14px; min-width:60px; }
+            .title-bar .custom-btn,.title-bar .manage-btn { font-size:11px; padding:2px 10px; }
+            .custom-picker-wrap.open { max-height:520px; }
+        }
+        @media (max-width:360px) {
+            .btn { font-size:10px; min-height:32px; line-height:32px; }
+            .btn-row .btn-group { min-height:32px; }
+            .btn-row .btn-group .btn-cycle { line-height:32px; font-size:14px; }
+            .btn-row .btn-group .group-number { line-height:32px; font-size:11px; }
+            .ball,.placeholder-red,.placeholder-blue { width:20px; height:20px; font-size:9px; }
+            .sep { font-size:10px; }
+            .stat-num { width:24px; }
+            .stat-ball { width:18px; height:18px; font-size:9px; }
+            .stat-cell .value { font-size:11px; }
+            .range-title { font-size:11px; }
+            .range-side-row { font-size:8px; }
+            .range-info { font-size:8px; }
+            .range-track { height:18px; }
+            .range-thumb { width:18px; height:18px; }
+            .range-summary { font-size:11px; margin-bottom:8px; }
+            .btn-text { font-size:10px; }
+            .btn-text.all-copy,.btn-text.all-delete,.btn-text.all-fav { font-size:8px; }
+            .number-line { padding:3px 40px; gap:2px; min-height:28px; }
+            .number-line .btn-text.fav { font-size:9px; }
+            .number-line .btn-text.copy { font-size:9px; }
+            .number-line.action-line { padding:3px 40px; }
+            #favList .history-row { padding:3px 4px; gap:3px; min-height:34px; }
+            #favList .history-row .time-col { min-width:30px; font-size:8px; }
+            #favList .history-row .time-col .monthday { font-size:9px; }
+            #favList .history-row .time-col .year { font-size:7px; }
+            #favList .history-row .ball-group .ball { width:18px; height:18px; font-size:8px; }
+            #favList .history-row .fav-result-btn { font-size:9px; padding:0 8px; }
+            #favList .history-row .fav-match-row .fav-match-text { font-size:8px; }
+            #favList .history-row .fav-match-row .fav-query-result { font-size:8px; }
+            .fav-section .sub-title .fav-query-all-btn { font-size:10px; }
+            #historyList .history-row { padding:3px 6px; gap:3px; min-height:32px; }
+            #historyList .history-row .left-info .period { font-size:10px; }
+            #historyList .history-row .left-info .date { font-size:8px; }
+            #historyList .history-row .ball-group .ball { width:18px; height:18px; font-size:8px; }
+            .fav-section .sub-title .fav-period-select { font-size:8px; max-width:70px; }
+            .picker-grid { grid-template-columns:repeat(10,1fr); gap:2px; }
+            .picker-num { font-size:8px; border-width:1.5px; }
+            .picker-info { font-size:9px; gap:6px; }
+            .picker-actions .btn { min-height:28px; line-height:28px; font-size:10px; padding:0 10px; min-width:50px; }
+            .title-bar .custom-btn,.title-bar .manage-btn { font-size:10px; padding:1px 8px; }
+            .custom-picker-wrap.open { max-height:480px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="card">
+            <div class="title-bar">~选择功能~</div>
+            <div class="mode-row">
+                <label><input type="radio" name="mode" value="ssq" checked><span><span class="dot"></span> 双色球</span></label>
+                <label><input type="radio" name="mode" value="dlt"><span><span class="dot"></span> 大乐透</span></label>
+            </div>
+        </div>
+
+        <div class="card" id="favoritesCard">
+            <div class="title-bar tertiary">
+                <span class="title-left"><button class="custom-btn" id="customBtn">自定义</button></span>
+                <span class="title-center">~关注号码~</span>
+                <span class="title-right"><button class="manage-btn" id="manageBtn">管理</button></span>
+            </div>
+            <div class="custom-picker-wrap" id="customPickerWrap">
+                <div class="table-container" style="padding-bottom:4px;margin:0;border-radius:0;">
+                    <div class="picker-container">
+                        <div class="picker-col">
+                            <div class="picker-title">红球</div>
+                            <div class="picker-grid" id="redPickerGrid"></div>
+                        </div>
+                        <div class="picker-col">
+                            <div class="picker-title">蓝球</div>
+                            <div class="picker-grid" id="bluePickerGrid"></div>
+                        </div>
+                    </div>
+                    <div class="picker-info">
+                        <span class="info-item">红球 <span class="num" id="selectedRedCount">0</span>/<span id="maxRedCount">6</span>+</span>
+                        <span class="info-item">蓝球 <span class="num blue" id="selectedBlueCount">0</span>/<span id="maxBlueCount">1</span>+</span>
+                    </div>
+                    <div class="picker-actions">
+                        <button class="btn btn-blue" id="addFavBtn" disabled>添加单选</button>
+                        <button class="btn btn-compound" id="addCompoundBtn" disabled>添加复试</button>
+                        <button class="btn btn-clear" id="clearPickerBtn">清空</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container" style="padding-bottom:4px;">
+                <div id="favList"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar" style="margin-bottom:6px;">~急急如律令~</div>
+            <div class="btn-row" style="padding-top:4px;">
+                <div class="btn-group">
+                    <button class="btn-cycle" id="decBtn">−</button>
+                    <button class="group-number" id="resetBtn">重置</button>
+                    <button class="btn-cycle" id="incBtn">+</button>
+                </div>
+                <button class="btn btn-red" id="refreshBtn">天命所归</button>
+                <button class="btn btn-blue" id="specificBtn" disabled>逆天改命</button>
+            </div>
+            <div class="result-box" id="resultArea"><div class="hint-text">⏳ 加载数据中...</div></div>
+            <div class="btn-row">
+                <button class="btn btn-smart" id="smartBtn">智能推荐</button>
+                <button class="btn btn-red" id="coldRecommendBtn">追冷推荐</button>
+                <button class="btn btn-blue" id="hotRecommendBtn">追热推荐</button>
+            </div>
+            <div class="range-row">
+                <div class="range-title">推荐号码参考数据范围</div>
+                <div class="range-side-row">
+                    <span class="side-item" id="leftInfo"><span id="leftText">第1期 20260616</span></span>
+                    <span class="side-item" id="rightInfo"><span id="rightText">20030223 第3465期</span></span>
+                </div>
+                <div class="range-track-wrap">
+                    <div class="range-track" id="rangeTrack">
+                        <div class="range-fill" id="rangeFill"></div>
+                        <div class="range-thumb range-thumb-left" id="thumbLeft"></div>
+                        <div class="range-thumb range-thumb-right" id="thumbRight"></div>
+                    </div>
+                    <div class="range-info"><span class="mid" id="midInfo"></span></div>
+                </div>
+            </div>
+            <div class="data-hint" id="dataStatus">拖动左右滑块选择数据，已选择0期，可在数据详情中查看</div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar secondary">
+                <span class="title-center">~数据详情~</span>
+                <span class="title-right"><button class="manage-btn" id="refreshDataBtn">刷新</button></span>
+            </div>
+            <div class="range-summary" id="rangeSummary">第1~3465期（共3465期）</div>
+            <div class="table-container">
+                <div class="sub-title">开奖号码明细</div>
+                <div id="detailResultArea" style="display:none;"></div>
+                <div class="history-list" id="historyList"></div>
+                <div class="history-meta" id="historyMeta">
+                    <span class="pagination">
+                        <button id="prevPageBtn" disabled>上一页</button>
+                        <span id="pageInfo">1/10</span>
+                        <button id="nextPageBtn">下一页</button>
+                    </span>
+                </div>
+                <div style="border-bottom:1px solid #e8edf5; margin-top:8px;"></div>
+            </div>
+            <div class="chart-container" id="tableContainer">
+                <div id="frontTableContainer" class="table-container"></div>
+                <div id="backTableContainer" class="table-container"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title-bar fourth">功能说明</div>
+            <div class="info-content">
+                <div class="disclaimer">⚠️ 本工具仅供娱乐，所有号码均为随机生成，不构成任何投注建议。请理性对待，切勿沉迷。</div>
+                <p><span class="highlight-red">天命所归</span> —— 完全随机生成，听天由命。</p>
+                <p><span class="highlight-blue">逆天改命</span> —— 排除天命所归生成的号码，另辟蹊径。</p>
+                <p><span class="highlight-green">智能推荐</span> —— 冷热均衡策略，兼顾频率与遗漏。</p>
+                <p><span class="highlight-red">追冷推荐</span> —— 侧重高遗漏号码，博冷门。</p>
+                <p><span class="highlight-blue">追热推荐</span> —— 侧重高频号码，跟热门。</p>
+                <p style="margin-top:6px; color:#7f8c9b; font-size:11px;">数据基于真实历史开奖记录，每次推荐均从当期数据中动态计算。</p>
+                <p style="margin-top:6px; color:#2c3e50; font-size:11px;">频次与遗漏数据采样原理：基于所选参考范围内的历史开奖记录，统计每个号码出现的次数（频次）以及自上次出现以来未出现的期数（遗漏）。所有推荐算法均基于这些统计值动态加权计算。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const CONFIG = {
+                ssq: { front: 33, back: 16, frontCount: 6, backCount: 1, label: '双色球' },
+                dlt: { front: 35, back: 12, frontCount: 5, backCount: 2, label: '大乐透' }
+            };
+            const PAGE_SIZE = 10;
+
+            let currentMode = 'ssq';
+            let groups = 1;
+            let currentPage = 1;
+            let SSQ_DATA = [];
+            let DLT_DATA = [];
+            let trendCache = { ssq: null, dlt: null };
+            let historyStore = { ssq: [], dlt: [] };
+            let rangeStart = 1, rangeEnd = 1, totalPeriods = 1;
+            let isDragging = false, dragTarget = null;
+            let lastExcludeReds = [], lastExcludeBlues = [];
+            let lastGeneratedGroups = 1;
+            let isLoading = false;
+            let lastGeneratedGroupsData = [];
+            let lastRecommendReason = '';
+            let hasGeneratedNumbers = false;
+            let isManageMode = false;
+            let isCustomMode = false;
+            let selectedReds = new Set();
+            let selectedBlues = new Set();
+
+            const $ = id => document.getElementById(id);
+            const resultArea = $('resultArea');
+            const historyList = $('historyList');
+            const pageInfo = $('pageInfo');
+            const prevPageBtn = $('prevPageBtn');
+            const nextPageBtn = $('nextPageBtn');
+            const dataStatus = $('dataStatus');
+            const specificBtn = $('specificBtn');
+            const resetBtn = $('resetBtn');
+            const decBtn = $('decBtn');
+            const incBtn = $('incBtn');
+            const frontTable = $('frontTableContainer');
+            const backTable = $('backTableContainer');
+            const rangeSummary = $('rangeSummary');
+            const thumbLeft = $('thumbLeft');
+            const thumbRight = $('thumbRight');
+            const rangeTrack = $('rangeTrack');
+            const rangeFill = $('rangeFill');
+            const leftText = $('leftText');
+            const rightText = $('rightText');
+            const favList = $('favList');
+            const favoritesCard = $('favoritesCard');
+            const manageBtn = $('manageBtn');
+            const customBtn = $('customBtn');
+            const customPickerWrap = $('customPickerWrap');
+            const redPickerGrid = $('redPickerGrid');
+            const bluePickerGrid = $('bluePickerGrid');
+            const selectedRedCount = $('selectedRedCount');
+            const selectedBlueCount = $('selectedBlueCount');
+            const maxRedCount = $('maxRedCount');
+            const maxBlueCount = $('maxBlueCount');
+            const addFavBtn = $('addFavBtn');
+            const addCompoundBtn = $('addCompoundBtn');
+            const clearPickerBtn = $('clearPickerBtn');
+
+            function rand(n) { const arr = new Uint32Array(1); crypto.getRandomValues(arr); return 1 + (arr[0] % n); }
+
+            function pickUnique(count, max, excludeSet) {
+                const pool = [];
+                for (let i = 1; i <= max; i++) if (!excludeSet?.has(i)) pool.push(i);
+                if (pool.length < count) return pickUnique(count, max, new Set());
+                const result = [], used = new Set();
+                while (result.length < count) {
+                    const idx = rand(pool.length) - 1, val = pool[idx];
+                    if (!used.has(val)) { used.add(val); result.push(val); }
+                }
+                return result.sort((a, b) => a - b);
+            }
+
+            function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+            function formatTime(ts) {
+                const d = new Date(ts);
+                const year = d.getFullYear();
+                const month = pad(d.getMonth() + 1);
+                const day = pad(d.getDate());
+                return { year: String(year), monthday: month + '-' + day };
+            }
+
+            function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+
+            function genSSQ(exReds, exBlues) {
+                const rs = new Set(exReds || []), bs = new Set(exBlues || []);
+                return { reds: pickUnique(CONFIG.ssq.frontCount, CONFIG.ssq.front, rs), blues: pickUnique(CONFIG.ssq
+                        .backCount, CONFIG.ssq.back, bs) };
+            }
+
+            function genDLT(exReds, exBlues) {
+                const rs = new Set(exReds || []), bs = new Set(exBlues || []);
+                return { reds: pickUnique(CONFIG.dlt.frontCount, CONFIG.dlt.front, rs), blues: pickUnique(CONFIG.dlt
+                        .backCount, CONFIG.dlt.back, bs) };
+            }
+
+            function parseBuiltinData(type, rawArray) {
+                const records = [];
+                for (let line of rawArray) {
+                    const parts = line.split('|');
+                    if (parts.length < 4) continue;
+                    const issue = parts[0].trim(), date = parts[1].trim();
+                    const reds = parts[2].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
+                        0);
+                    const blues = parts[3].trim().split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n) && n >
+                        0);
+                    if (!reds.length || !blues.length) continue;
+                    const cfg = CONFIG[type];
+                    if (reds.length !== cfg.frontCount || blues.length !== cfg.backCount) continue;
+                    if (reds.some(n => n < 1 || n > cfg.front) || blues.some(n => n < 1 || n > cfg.back)) continue;
+                    records.push({ issue, date, reds: reds.slice().sort((a, b) => a - b), blues: blues.slice().sort((a,
+                            b) => a - b) });
+                }
+                records.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
+                return records;
+            }
+
+            function getCachedData(type) {
+                try {
+                    const raw = localStorage.getItem('lotteryData_' + type);
+                    if (!raw) return null;
+                    const data = JSON.parse(raw);
+                    if (data && data.timestamp && (Date.now() - data.timestamp < 86400000)) {
+                        return data.records;
+                    }
+                    return null;
+                } catch (e) { return null; }
+            }
+
+            function setCachedData(type, records) {
+                try { localStorage.setItem('lotteryData_' + type, JSON.stringify({ timestamp: Date.now(), records })); }
+                catch (e) {}
+            }
+
+            async function fetchRemoteData(type) {
+                const url = type === 'ssq' ? 'https://magua-qi.github.io/ssqdata.html' :
+                    'https://magua-qi.github.io/dltdata.html';
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error('网络请求失败');
+                const html = await resp.text();
+                const varName = type === 'ssq' ? 'SSQ_DATA' : 'DLT_DATA';
+                let match = html.match(new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
+                if (!match) { match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`)); }
+                if (!match) throw new Error('数据解析失败');
+                let cleaned = match[1].replace(/\/\/.*$/gm, '');
+                let raw;
+                try { const fn = new Function(`return [${cleaned}];`); raw = fn(); } catch (e) { raw = eval(`[${cleaned}]`); }
+                if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
+                const records = parseBuiltinData(type, raw);
+                setCachedData(type, records);
+                return records;
+            }
+
+            async function getData(type) {
+                const cached = getCachedData(type);
+                if (cached && cached.length) return cached;
+                return await fetchRemoteData(type);
+            }
+
+            function showSkeleton() {
+                resultArea.innerHTML = `<div class="hint-text"><span class="loading-spinner"></span> 加载数据中...</div>`;
+            }
+
+            async function loadAllData(showLoading = true) {
+                if (isLoading) return;
+                isLoading = true;
+                if (showLoading) {
+                    showSkeleton();
+                    dataStatus.textContent = '正在加载数据...';
+                }
+                try {
+                    const [ssqRecords, dltRecords] = await Promise.all([
+                        getData('ssq'),
+                        getData('dlt')
+                    ]);
+                    SSQ_DATA = ssqRecords;
+                    DLT_DATA = dltRecords;
+                    trendCache.ssq = null;
+                    trendCache.dlt = null;
+                    showHint();
+                    initRangeSlider();
+                    dataStatus.textContent = '拖动左右滑块选择数据，已选择' + (rangeEnd - rangeStart + 1) + '期，可在数据详情中查看';
+                    isLoading = false;
+                    renderFavorites();
+                    updateResetState(true);
+                    initPicker();
+                } catch (err) {
+                    console.error('加载数据失败:', err);
+                    resultArea.innerHTML =
+                        `<div class="error-text">数据加载失败，请检查网络</div>
+                                    <button class="btn btn-retry" id="retryBtn" style="margin-top:8px;">重试</button>`;
+                    dataStatus.textContent = '数据加载失败，点击重试';
+                    isLoading = false;
+                    document.getElementById('retryBtn')?.addEventListener('click', () => loadAllData(true));
+                }
+            }
+
+            function updateResetState(resetMode) {
+                hasGeneratedNumbers = !resetMode;
+                if (resetMode) {
+                    decBtn.disabled = false;
+                    incBtn.disabled = false;
+                    decBtn.style.color = '';
+                    incBtn.style.color = '';
+                    resetBtn.textContent = '重置';
+                } else {
+                    decBtn.disabled = true;
+                    incBtn.disabled = true;
+                    decBtn.style.color = '#b0b8c4';
+                    incBtn.style.color = '#b0b8c4';
+                    resetBtn.textContent = '重置';
+                }
+            }
+
+            function resetNumbers() {
+                lastGeneratedGroupsData = [];
+                lastExcludeReds = [];
+                lastExcludeBlues = [];
+                lastRecommendReason = '';
+                showHint();
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+                updateResetState(true);
+                renderHistory();
+            }
+
+            function getNumberText(d, isSSQ) {
+                return d.reds.map(pad).join(' ') + ' | ' + d.blues.map(pad).join(' ');
+            }
+
+            function getFavorites() {
+                try { return JSON.parse(localStorage.getItem('lottery_favorites')) || []; } catch { return []; }
+            }
+
+            function setFavorites(favs) {
+                localStorage.setItem('lottery_favorites', JSON.stringify(favs));
+            }
+
+            function isFavorited(mode, nums) {
+                const favs = getFavorites();
+                return favs.some(item => item.mode === mode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]));
+            }
+
+            function toggleFavorite(mode, nums) {
+                const favs = getFavorites();
+                const idx = favs.findIndex(item => item.mode === mode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]));
+                if (idx !== -1) {
+                    favs.splice(idx, 1);
+                } else {
+                    favs.push({ mode, nums, time: Date.now() });
+                }
+                setFavorites(favs);
+                renderFavorites();
+                return idx === -1;
+            }
+
+            function removeFavorite(index) {
+                const favs = getFavorites();
+                favs.splice(index, 1);
+                setFavorites(favs);
+                renderFavorites();
+            }
+
+            function getPrizeNameSSQ(redMatch, blueMatch) {
+                if (redMatch === 6 && blueMatch === 1) return '一等奖';
+                if (redMatch === 6 && blueMatch === 0) return '二等奖';
+                if (redMatch === 5 && blueMatch === 1) return '三等奖';
+                if (redMatch === 5 && blueMatch === 0) return '四等奖';
+                if (redMatch === 4 && blueMatch === 1) return '四等奖';
+                if (redMatch === 4 && blueMatch === 0) return '五等奖';
+                if (redMatch === 3 && blueMatch === 1) return '五等奖';
+                if (redMatch === 2 && blueMatch === 1) return '六等奖';
+                if (redMatch === 1 && blueMatch === 1) return '六等奖';
+                if (redMatch === 0 && blueMatch === 1) return '六等奖';
+                return null;
+            }
+
+            function getPrizeNameDLT(frontMatch, backMatch) {
+                if (frontMatch === 5 && backMatch === 2) return '一等奖';
+                if (frontMatch === 5 && backMatch === 1) return '二等奖';
+                if (frontMatch === 5 && backMatch === 0) return '三等奖';
+                if (frontMatch === 4 && backMatch === 2) return '四等奖';
+                if (frontMatch === 4 && backMatch === 1) return '五等奖';
+                if (frontMatch === 3 && backMatch === 2) return '六等奖';
+                if (frontMatch === 4 && backMatch === 0) return '七等奖';
+                if (frontMatch === 3 && backMatch === 1) return '八等奖';
+                if (frontMatch === 2 && backMatch === 2) return '八等奖';
+                if (frontMatch === 3 && backMatch === 0) return '九等奖';
+                if (frontMatch === 2 && backMatch === 1) return '九等奖';
+                if (frontMatch === 1 && backMatch === 2) return '九等奖';
+                if (frontMatch === 0 && backMatch === 2) return '九等奖';
+                return null;
+            }
+
+            function getBestMatchForGroup(nums, mode) {
+                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                if (!records || !records.length) return null;
+                let best = null;
+                let bestTotal = -1;
+                for (const rec of records) {
+                    const redMatch = nums.reds.filter(n => rec.reds.includes(n)).length;
+                    const blueMatch = nums.blues.filter(n => rec.blues.includes(n)).length;
+                    const total = redMatch + blueMatch;
+                    if (total > bestTotal) {
+                        bestTotal = total;
+                        best = { issue: rec.issue, redMatch, blueMatch };
+                    }
+                }
+                return best;
+            }
+
+            function combinations(arr, k) {
+                if (k === 0) return [[]];
+                if (arr.length === 0) return [];
+                const result = [];
+                const [first, ...rest] = arr;
+                const withFirst = combinations(rest, k - 1).map(c => [first, ...c]);
+                const withoutFirst = combinations(rest, k);
+                return [...withFirst, ...withoutFirst];
+            }
+
+            function renderFavorites() {
+                const favs = getFavorites();
+                const currentFavs = favs.filter(item => item.mode === currentMode);
+                favoritesCard.style.display = 'block';
+                if (currentFavs.length === 0) {
+                    favList.innerHTML = `<div class="fav-empty">暂无收藏，快去选号吧！</div>`;
+                    return;
+                }
+                currentFavs.sort((a, b) => b.time - a.time);
+
+                const isSSQ = currentMode === 'ssq';
+                const records = isSSQ ? SSQ_DATA : DLT_DATA;
+                const latestIssue = records && records.length ? records[0].issue : '';
+                const frontCnt = CONFIG[currentMode].frontCount;
+                const backCnt = CONFIG[currentMode].backCount;
+
+                let html = `<div class="fav-section"><div class="sub-title">${isSSQ?'双色球':'大乐透'}收藏`;
+                if (isManageMode) {
+                    html +=
+                        `<span><span class="btn-text all-delete" data-mode="${currentMode}" data-action="deleteAll">删除全部</span><span class="btn-text all-copy" data-mode="${currentMode}" data-action="copyAll">复制全部</span></span>`;
+                } else {
+                    html += `<span>
+                                <span class="fav-query-all-btn" data-mode="${currentMode}">全部查询</span>
+                                <select class="fav-period-select" data-mode="${currentMode}">`;
+                    if (records && records.length) {
+                        records.forEach(record => {
+                            const selected = (record.issue === latestIssue) ? 'selected' : '';
+                            html += `<option value="${record.issue}" ${selected}>${record.issue}期</option>`;
+                        });
+                    }
+                    html += `</select>
+                            </span>`;
+                }
+                html += `</div>`;
+
+                currentFavs.forEach((item, idx) => {
+                    const realIdx = favs.indexOf(item);
+                    const isCompound = item.isCompound || false;
+                    let bestMatch = null;
+                    let compoundCount = 0;
+                    if (isCompound) {
+                        const reds = item.nums.reds.slice().sort((a, b) => a - b);
+                        const blues = item.nums.blues.slice().sort((a, b) => a - b);
+                        const redCombos = combinations(reds, frontCnt);
+                        const blueCombos = combinations(blues, backCnt);
+                        compoundCount = redCombos.length * blueCombos.length;
+                        let bestTotal = -1;
+                        for (const rc of redCombos) {
+                            for (const bc of blueCombos) {
+                                const nums = { reds: rc, blues: bc };
+                                const match = getBestMatchForGroup(nums, currentMode);
+                                if (match) {
+                                    const total = match.redMatch + match.blueMatch;
+                                    if (total > bestTotal) {
+                                        bestTotal = total;
+                                        bestMatch = match;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        bestMatch = getBestMatchForGroup(item.nums, currentMode);
+                    }
+
+                    const bestText = bestMatch ? `在第${bestMatch.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${bestMatch.redMatch}/${bestMatch.blueMatch}` : '暂无历史数据';
+                    html += `<div class="history-row" data-compound="${isCompound}" data-idx="${realIdx}">`;
+                    const timeObj = formatTime(item.time);
+                    html += `<div class="time-col"><span class="monthday">${timeObj.monthday}</span><span class="year">${timeObj.year}</span></div>`;
+                    
+                    if (isCompound) {
+                        const reds = item.nums.reds.slice().sort((a,b)=>a-b);
+                        const blues = item.nums.blues.slice().sort((a,b)=>a-b);
+                        const redGroups = [];
+                        for (let i = 0; i < reds.length; i += frontCnt) {
+                            let group = reds.slice(i, i + frontCnt);
+                            while (group.length < frontCnt) group.push(null);
+                            redGroups.push(group);
+                        }
+                        const blueGroups = [];
+                        for (let i = 0; i < blues.length; i += backCnt) {
+                            let group = blues.slice(i, i + backCnt);
+                            while (group.length < backCnt) group.push(null);
+                            blueGroups.push(group);
+                        }
+                        const maxGroups = Math.max(redGroups.length, blueGroups.length);
+                        while (redGroups.length < maxGroups) redGroups.push(new Array(frontCnt).fill(null));
+                        while (blueGroups.length < maxGroups) blueGroups.push(new Array(backCnt).fill(null));
+
+                        html += `<div style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:120px;">`;
+                        for (let g = 0; g < maxGroups; g++) {
+                            const rG = redGroups[g];
+                            const bG = blueGroups[g];
+                            html += `<div style="display:flex;align-items:center;justify-content:center;gap:3px;">`;
+                            rG.forEach(n => {
+                                if (n !== null) html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`;
+                                else html += `<span style="width:28px;height:28px;display:inline-block;"></span>`;
+                            });
+                            html += `<span style="display:inline-flex;align-items:center;height:28px;color:#b0c4de;font-weight:700;font-size:12px;padding:0 2px;">|</span>`;
+                            bG.forEach(n => {
+                                if (n !== null) html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`;
+                                else html += `<span style="width:28px;height:28px;display:inline-block;"></span>`;
+                            });
+                            html += `</div>`;
+                        }
+                        html += `<div class="compound-info">共${compoundCount}组</div>`;
+                        html += `</div>`;
+                    } else {
+                        html += `<div class="ball-group" data-mode="${currentMode}" data-reds="${item.nums.reds.join(',')}" data-blues="${item.nums.blues.join(',')}">`;
+                        item.nums.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                        html += `<span class="sep">|</span>`;
+                        item.nums.blues.forEach(n => html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                        html += `</div>`;
+                    }
+
+                    if (isManageMode) {
+                        const numsStr = getNumberText(item.nums, isSSQ);
+                        html += `<div class="action-group">
+                                    <span class="btn-text del" data-index="${realIdx}">删除</span>
+                                    <span class="btn-text copy" data-nums="${numsStr}">复制</span>
+                                </div>`;
+                    } else {
+                        html += `<button class="fav-result-btn" data-mode="${currentMode}" data-index="${realIdx}" data-compound="${isCompound}">查询</button>`;
+                    }
+                    html += `<div class="fav-match-row">
+                                <span class="fav-match-text" data-original-text="${bestText}">${bestText}</span>
+                                <span class="fav-query-result"></span>
+                            </div>`;
+                    html += '</div>';
+                });
+                html += '</div>';
+                favList.innerHTML = html;
+
+                if (isManageMode) {
+                    favList.querySelectorAll('.btn-text.del').forEach(el => {
+                        el.onclick = function() {
+                            const idx = parseInt(this.dataset.index);
+                            removeFavorite(idx);
+                            vibrate(10);
+                        };
+                    });
+                    favList.querySelectorAll('.btn-text.copy').forEach(btn => {
+                        btn.onclick = function(e) {
+                            e.stopPropagation();
+                            const nums = this.dataset.nums;
+                            if (nums && navigator.clipboard) {
+                                navigator.clipboard.writeText(nums).then(() => {
+                                    const original = this.textContent;
+                                    this.textContent = '已复制';
+                                    this.classList.add('done');
+                                    setTimeout(() => {
+                                        this.textContent = original;
+                                        this.classList.remove('done');
+                                    }, 800);
+                                    vibrate(10);
+                                }).catch(() => {});
+                            }
+                        };
+                    });
+                    favList.querySelectorAll('.fav-section .sub-title .btn-text').forEach(btn => {
+                        const action = btn.dataset.action;
+                        if (action === 'deleteAll') {
+                            btn.onclick = function(e) {
+                                e.stopPropagation();
+                                const mode = this.dataset.mode;
+                                const allFavs = getFavorites();
+                                const filtered = allFavs.filter(item => item.mode === mode);
+                                if (filtered.length === 0) return;
+                                const parent = this.parentNode;
+                                const deleteBtn = this;
+                                deleteBtn.style.display = 'none';
+                                const yesBtn = document.createElement('span');
+                                yesBtn.className = 'btn-text';
+                                yesBtn.textContent = '是';
+                                yesBtn.style.color = '#e74c6f';
+                                yesBtn.style.fontWeight = 'bold';
+                                const noBtn = document.createElement('span');
+                                noBtn.className = 'btn-text';
+                                noBtn.textContent = '否';
+                                noBtn.style.color = '#3a7bd5';
+                                noBtn.style.fontWeight = 'bold';
+                                parent.insertBefore(yesBtn, deleteBtn.nextSibling);
+                                parent.insertBefore(noBtn, deleteBtn.nextSibling);
+                                yesBtn.onclick = function(ev) {
+                                    ev.stopPropagation();
+                                    const newFavs = allFavs.filter(item => item.mode !== mode);
+                                    setFavorites(newFavs);
+                                    renderFavorites();
+                                    vibrate(10);
+                                };
+                                noBtn.onclick = function(ev) {
+                                    ev.stopPropagation();
+                                    parent.removeChild(yesBtn);
+                                    parent.removeChild(noBtn);
+                                    deleteBtn.style.display = '';
+                                };
+                            };
+                        } else if (action === 'copyAll') {
+                            btn.onclick = function(e) {
+                                e.stopPropagation();
+                                const mode = this.dataset.mode;
+                                const allFavs = getFavorites();
+                                const filtered = allFavs.filter(item => item.mode === mode);
+                                if (filtered.length === 0) return;
+                                const texts = filtered.map(item => {
+                                    const isSSQ = item.mode === 'ssq';
+                                    return getNumberText(item.nums, isSSQ);
+                                });
+                                const full = texts.join('\n');
+                                if (navigator.clipboard) {
+                                    navigator.clipboard.writeText(full).then(() => {
+                                        const orig = this.textContent;
+                                        this.textContent = '已复制';
+                                        setTimeout(() => { this.textContent = orig; }, 800);
+                                        vibrate(10);
+                                    }).catch(() => {});
+                                }
+                            };
+                        }
+                    });
+                }
+
+                // 单个查询
+                favList.querySelectorAll('.fav-result-btn').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const mode = this.dataset.mode;
+                        const idx = parseInt(this.dataset.index);
+                        const isCompound = this.dataset.compound === 'true';
+                        const row = this.closest('.history-row');
+                        if (!row) return;
+                        const matchRow = row.querySelector('.fav-match-row');
+                        if (!matchRow) return;
+                        const queryResult = matchRow.querySelector('.fav-query-result');
+                        const matchText = matchRow.querySelector('.fav-match-text');
+                        const originalText = matchText.dataset.originalText;
+
+                        const allBtn2 = document.querySelector(`.fav-query-all-btn[data-mode="${mode}"]`);
+                        if (allBtn2 && allBtn2.classList.contains('cancel')) {
+                            allBtn2.textContent = '全部查询';
+                            allBtn2.classList.remove('cancel');
+                        }
+
+                        if (this.classList.contains('cancel')) {
+                            const allBalls = row.querySelectorAll('.ball');
+                            allBalls.forEach(ball => ball.classList.remove('unmatch'));
+                            if (queryResult) {
+                                queryResult.style.display = 'none';
+                                queryResult.innerHTML = '';
+                            }
+                            matchText.textContent = originalText;
+                            this.textContent = '查询';
+                            this.classList.remove('cancel');
+                            vibrate(10);
+                            return;
+                        }
+
+                        const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                        if (!select) return;
+                        const issue = select.value;
+                        if (!issue) {
+                            alert('请先选择期号');
+                            return;
+                        }
+                        const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                        const record = records.find(r => r.issue === issue);
+                        if (!record) {
+                            alert('未找到该期号数据');
+                            return;
+                        }
+
+                        const allBalls = row.querySelectorAll('.ball');
+                        const redBalls = [], blueBalls = [];
+                        allBalls.forEach(ball => {
+                            if (ball.classList.contains('red') || ball.classList.contains('front')) {
+                                redBalls.push(ball);
+                            } else if (ball.classList.contains('blue') || ball.classList.contains('back')) {
+                                blueBalls.push(ball);
+                            }
+                        });
+                        const redNums = redBalls.map(el => parseInt(el.textContent, 10));
+                        const blueNums = blueBalls.map(el => parseInt(el.textContent, 10));
+                        const redHit = redNums.filter(n => record.reds.includes(n)).length;
+                        const blueHit = blueNums.filter(n => record.blues.includes(n)).length;
+
+                        redBalls.forEach((ball, i) => {
+                            const num = redNums[i];
+                            if (record.reds.includes(num)) {
+                                ball.classList.remove('unmatch');
+                            } else {
+                                ball.classList.add('unmatch');
+                            }
+                        });
+                        blueBalls.forEach((ball, i) => {
+                            const num = blueNums[i];
+                            if (record.blues.includes(num)) {
+                                ball.classList.remove('unmatch');
+                            } else {
+                                ball.classList.add('unmatch');
+                            }
+                        });
+
+                        // 去掉期号前缀，只显示命中情况
+                        const newText = `${isSSQ?'红/蓝':'前/后'}命中 ${redHit}/${blueHit}`;
+                        matchText.textContent = newText;
+
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redHit, blueHit);
+                        } else {
+                            prize = getPrizeNameDLT(redHit, blueHit);
+                        }
+                        const prizeText = prize || '未中奖';
+                        if (queryResult) {
+                            if (prize) {
+                                queryResult.innerHTML = `<span class="prize-win">|${prizeText}| </span> ${issue}期`;
+                            } else {
+                                queryResult.textContent = `|${prizeText}| ${issue}期`;
+                            }
+                            queryResult.style.display = 'block';
+                        }
+
+                        this.textContent = '取消';
+                        this.classList.add('cancel');
+                        vibrate(10);
+                    };
+                });
+            }
+
+            manageBtn.addEventListener('click', function() {
+                isManageMode = !isManageMode;
+                this.textContent = isManageMode ? '完成' : '管理';
+                renderFavorites();
+            });
+
+            favList.addEventListener('click', function(e) {
+                const allBtn = e.target.closest('.fav-query-all-btn');
+                if (!allBtn) return;
+                e.stopPropagation();
+                const mode = allBtn.dataset.mode;
+                const select = document.querySelector(`.fav-period-select[data-mode="${mode}"]`);
+                if (!select) return;
+                const issue = select.value;
+                if (!issue) {
+                    alert('请先选择期号');
+                    return;
+                }
+                const records = mode === 'ssq' ? SSQ_DATA : DLT_DATA;
+                const record = records.find(r => r.issue === issue);
+                if (!record) {
+                    alert('未找到该期号数据');
+                    return;
+                }
+
+                const isCancel = allBtn.classList.contains('cancel');
+                const rows = favList.querySelectorAll(`.history-row`);
+                if (isCancel) {
+                    rows.forEach(row => {
+                        const allBalls = row.querySelectorAll('.ball');
+                        allBalls.forEach(ball => ball.classList.remove('unmatch'));
+                        const matchRow = row.querySelector('.fav-match-row');
+                        if (matchRow) {
+                            const queryResult = matchRow.querySelector('.fav-query-result');
+                            if (queryResult) {
+                                queryResult.style.display = 'none';
+                                queryResult.innerHTML = '';
+                            }
+                            const matchText = matchRow.querySelector('.fav-match-text');
+                            if (matchText) {
+                                matchText.textContent = matchText.dataset.originalText || '暂无历史数据';
+                            }
+                        }
+                        const btn = row.querySelector('.fav-result-btn');
+                        if (btn) {
+                            btn.textContent = '查询';
+                            btn.classList.remove('cancel');
+                        }
+                    });
+                    allBtn.textContent = '全部查询';
+                    allBtn.classList.remove('cancel');
+                    vibrate(10);
+                    return;
+                }
+
+                let found = false;
+                rows.forEach(row => {
+                    const allBalls = row.querySelectorAll('.ball');
+                    if (!allBalls.length) return;
+                    found = true;
+                    const redBalls = [], blueBalls = [];
+                    allBalls.forEach(ball => {
+                        if (ball.classList.contains('red') || ball.classList.contains('front')) {
+                            redBalls.push(ball);
+                        } else if (ball.classList.contains('blue') || ball.classList.contains('back')) {
+                            blueBalls.push(ball);
+                        }
+                    });
+                    const redNums = redBalls.map(el => parseInt(el.textContent, 10));
+                    const blueNums = blueBalls.map(el => parseInt(el.textContent, 10));
+                    const redHit = redNums.filter(n => record.reds.includes(n)).length;
+                    const blueHit = blueNums.filter(n => record.blues.includes(n)).length;
+
+                    redBalls.forEach((ball, i) => {
+                        const num = redNums[i];
+                        if (record.reds.includes(num)) {
+                            ball.classList.remove('unmatch');
+                        } else {
+                            ball.classList.add('unmatch');
+                        }
+                    });
+                    blueBalls.forEach((ball, i) => {
+                        const num = blueNums[i];
+                        if (record.blues.includes(num)) {
+                            ball.classList.remove('unmatch');
+                        } else {
+                            ball.classList.add('unmatch');
+                        }
+                    });
+
+                    const matchRow = row.querySelector('.fav-match-row');
+                    if (matchRow) {
+                        const matchText = matchRow.querySelector('.fav-match-text');
+                        const queryResult = matchRow.querySelector('.fav-query-result');
+                        // 去掉期号前缀
+                        const newText = `${mode==='ssq'?'红/蓝':'前/后'}命中 ${redHit}/${blueHit}`;
+                        if (matchText) matchText.textContent = newText;
+                        let prize = null;
+                        if (mode === 'ssq') {
+                            prize = getPrizeNameSSQ(redHit, blueHit);
+                        } else {
+                            prize = getPrizeNameDLT(redHit, blueHit);
+                        }
+                        const prizeText = prize || '未中奖';
+                        if (queryResult) {
+                            if (prize) {
+                                queryResult.innerHTML = `<span class="prize-win">|${prizeText}| </span> ${issue}期`;
+                            } else {
+                                queryResult.textContent = `|${prizeText}|  ${issue}期`;
+                            }
+                            queryResult.style.display = 'block';
+                        }
+                    }
+                    const btn = row.querySelector('.fav-result-btn');
+                    if (btn) {
+                        btn.textContent = '取消';
+                        btn.classList.add('cancel');
+                    }
+                });
+                if (!found) {
+                    alert('没有找到该类型的收藏号码');
+                    return;
+                }
+                allBtn.textContent = '取消查询';
+                allBtn.classList.add('cancel');
+                vibrate(10);
+            });
+
+            function rollingAnimation(lines, groupsData, isSSQ, callback) {
+                let completed = 0;
+                const total = lines.length;
+                if (total === 0) { callback(); return; }
+                const rollCount = 10;
+                lines.forEach((line, idx) => {
+                    const balls = line.querySelectorAll('.ball');
+                    const data = groupsData[idx];
+                    if (!data) { completed++; if (completed === total) callback(); return; }
+                    let counter = 0;
+                    const interval = setInterval(() => {
+                        balls.forEach((ball, bi) => {
+                            const maxVal = bi < data.reds.length ? (isSSQ ? 33 : 35) : (isSSQ ? 16 : 12);
+                            const randNum = Math.floor(Math.random() * maxVal) + 1;
+                            ball.textContent = pad(randNum);
+                            ball.classList.add('rolling');
+                        });
+                        counter++;
+                        if (counter >= rollCount) {
+                            clearInterval(interval);
+                            balls.forEach((ball, bi) => {
+                                ball.classList.remove('rolling');
+                                const val = bi < data.reds.length ? data.reds[bi] : data.blues[bi - data
+                                    .reds.length];
+                                ball.textContent = pad(val);
+                                ball.classList.add('done');
+                            });
+                            completed++;
+                            if (completed === total) callback();
+                        }
+                    }, 55);
+                });
+            }
+
+            function displayResult(groupsData, mode, reason) {
+                const isSSQ = mode === 'ssq';
+                let html = '';
+                const allReds = [], allBlues = [];
+                groupsData.forEach(d => {
+                    allReds.push(...d.reds);
+                    allBlues.push(...d.blues);
+                });
+                lastExcludeReds = [...new Set(allReds)];
+                lastExcludeBlues = [...new Set(allBlues)];
+                lastGeneratedGroups = groupsData.length;
+
+                groupsData.forEach((d, idx) => {
+                    const isFav = isFavorited(mode, d);
+                    html += '<div class="number-line" style="margin:2px 0;">';
+                    html +=
+                        `<span class="btn-text fav${isFav?' active':''}" data-mode="${mode}" data-reds="${d.reds.join(',')}" data-blues="${d.blues.join(',')}">${isFav?'已收藏':'收藏'}</span>`;
+                    d.reds.forEach(n => html += `<span class="ball ${isSSQ?'red':'front'}">${pad(n)}</span>`);
+                    html += `<span class="sep">|</span>`;
+                    d.blues.forEach(n => html += `<span class="ball ${isSSQ?'blue':'back'}">${pad(n)}</span>`);
+                    const numsStr = getNumberText(d, isSSQ);
+                    html += `<span class="btn-text copy" data-nums="${numsStr}">复制</span>`;
+                    html += '</div>';
+
+                    const match = getBestMatchForGroup(d, mode);
+                    if (match && (match.redMatch > 0 || match.blueMatch > 0)) {
+                        html += `<div style="text-align:center;margin:0 0 2px 0;">
+                                    <span class="group-match-info">在第${match.issue}期：${isSSQ?'红/蓝':'前/后'}命中 ${match.redMatch}/${match.blueMatch}</span>
+                                </div>`;
+                    } else {
+                        html += `<div style="text-align:center;margin:0 0 2px 0;">
+                                    <span class="group-match-info" style="color:#7f8c9b;">暂无命中</span>
+                                </div>`;
+                    }
+                });
+
+                html +=
+                    `<div class="number-line action-line"><span class="btn-text all-fav" id="allFavBtn">收藏全部</span><span class="btn-text all-copy" id="allCopyBtn2">全部复制</span></div>`;
+
+                if (reason) {
+                    html += `<div class="hint-text" style="font-size:10px; margin-top:4px; color:#3a7bd5;">${reason}</div>`;
+                } else {
+                    html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">要的就是这些号码！</div>`;
+                }
+
+                resultArea.innerHTML = html;
+                lastGeneratedGroupsData = groupsData;
+                specificBtn.disabled = false;
+                specificBtn.className = 'btn btn-blue';
+                updateResetState(false);
+                renderHistory();
+
+                function updateAllFavBtn() {
+                    const allFavBtn = document.getElementById('allFavBtn');
+                    if (!allFavBtn) return;
+                    const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
+                    if (!favBtns.length) return;
+                    const allActive = Array.from(favBtns).every(btn => btn.classList.contains('active'));
+                    allFavBtn.textContent = allActive ? '取消收藏' : '收藏全部';
+                }
+
+                document.querySelectorAll('.number-line .btn-text.fav').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const mode = this.dataset.mode;
+                        const reds = this.dataset.reds.split(',').map(Number);
+                        const blues = this.dataset.blues.split(',').map(Number);
+                        const nums = { reds, blues };
+                        const added = toggleFavorite(mode, nums);
+                        if (added) {
+                            this.textContent = '收藏';
+                            this.classList.add('active');
+                        } else {
+                            this.textContent = '收藏';
+                            this.classList.remove('active');
+                        }
+                        vibrate(10);
+                        updateAllFavBtn();
+                    };
+                });
+
+                document.querySelectorAll('.number-line .btn-text.copy').forEach(btn => {
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        const nums = this.dataset.nums;
+                        if (nums && navigator.clipboard) {
+                            navigator.clipboard.writeText(nums).then(() => {
+                                const original = this.textContent;
+                                this.textContent = '已复制';
+                                this.classList.add('done');
+                                setTimeout(() => {
+                                    this.textContent = original;
+                                    this.classList.remove('done');
+                                }, 800);
+                                vibrate(10);
+                            }).catch(() => {});
+                        }
+                    };
+                });
+
+                const allFavBtn = document.getElementById('allFavBtn');
+                if (allFavBtn) {
+                    allFavBtn.onclick = function() {
+                        const favBtns = document.querySelectorAll('.number-line .btn-text.fav');
+                        if (!favBtns.length) return;
+                        const allActive = Array.from(favBtns).every(btn => btn.classList.contains('active'));
+                        let favs = getFavorites();
+                        favBtns.forEach(btn => {
+                            const mode = btn.dataset.mode;
+                            const reds = btn.dataset.reds.split(',').map(Number);
+                            const blues = btn.dataset.blues.split(',').map(Number);
+                            const nums = { reds, blues };
+                            const idx = favs.findIndex(item =>
+                                item.mode === mode &&
+                                item.nums.reds.length === nums.reds.length &&
+                                item.nums.blues.length === nums.blues.length &&
+                                item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                                item.nums.blues.every((v, i) => v === nums.blues[i])
+                            );
+                            if (allActive) {
+                                if (idx !== -1) {
+                                    favs.splice(idx, 1);
+                                }
+                                btn.classList.remove('active');
+                                btn.textContent = '收藏';
+                            } else {
+                                if (idx === -1) {
+                                    favs.push({ mode, nums, time: Date.now() });
+                                }
+                                btn.classList.add('active');
+                                btn.textContent = '收藏';
+                            }
+                        });
+                        setFavorites(favs);
+                        renderFavorites();
+                        vibrate(10);
+                        updateAllFavBtn();
+                    };
+                    updateAllFavBtn();
+                }
+
+                const allCopyBtn2 = document.getElementById('allCopyBtn2');
+                if (allCopyBtn2) {
+                    allCopyBtn2.onclick = function() {
+                        const copyBtns = document.querySelectorAll('.number-line .btn-text.copy');
+                        if (!copyBtns.length) return;
+                        const texts = [];
+                        copyBtns.forEach(btn => {
+                            const nums = btn.dataset.nums;
+                            if (nums) texts.push(nums);
+                        });
+                        if (!texts.length) return;
+                        const fullText = texts.join('\n');
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(fullText).then(() => {
+                                const orig = this.textContent;
+                                this.textContent = '已复制';
+                                setTimeout(() => { this.textContent = orig; }, 800);
+                                vibrate(10);
+                            }).catch(() => {});
+                        }
+                    };
+                }
+
+                const lines = resultArea.querySelectorAll('.number-line:not(.action-line)');
+                if (lines.length) {
+                    rollingAnimation(lines, groupsData, isSSQ, () => {});
+                }
+            }
+
+            function refreshNumbers() {
+                try {
+                    const isSSQ = currentMode === 'ssq';
+                    const groupsData = [];
+                    for (let i = 0; i < groups; i++) {
+                        const d = isSSQ ? genSSQ() : genDLT();
+                        groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
+                    }
+                    displayResult(groupsData, currentMode, '');
+                    lastGeneratedGroups = groups;
+                    lastRecommendReason = '';
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function specificRandom() {
+                try {
+                    if (!lastExcludeReds.length && !lastExcludeBlues.length) {
+                        resultArea.innerHTML = `<div class="error-text">请先点击「天命所归」</div>`;
+                        return;
+                    }
+                    const isSSQ = currentMode === 'ssq';
+                    let fallback = false;
+                    const groupsData = [];
+                    for (let i = 0; i < lastGeneratedGroups; i++) {
+                        let d;
+                        if (isSSQ) {
+                            const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
+                            if (CONFIG.ssq.front - redSet.size < CONFIG.ssq.frontCount) { fallback = true;
+                                d = genSSQ(lastExcludeReds.slice(0, CONFIG.ssq.frontCount), lastExcludeBlues.slice(
+                                    0, CONFIG.ssq.backCount)); } else d = genSSQ(lastExcludeReds,
+                                lastExcludeBlues);
+                        } else {
+                            const redSet = new Set(lastExcludeReds), blueSet = new Set(lastExcludeBlues);
+                            if (CONFIG.dlt.front - redSet.size < CONFIG.dlt.frontCount) { fallback = true;
+                                d = genDLT(lastExcludeReds.slice(0, CONFIG.dlt.frontCount), lastExcludeBlues.slice(
+                                    0, CONFIG.dlt.backCount)); } else d = genDLT(lastExcludeReds,
+                                lastExcludeBlues);
+                        }
+                        groupsData.push({ reds: d.reds.slice(), blues: d.blues.slice() });
+                    }
+                    const reason = fallback ? '特定随机 (排除不足·已降级)' : '反其道而行之~';
+                    displayResult(groupsData, currentMode, reason);
+                    lastRecommendReason = reason;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">生成失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function showHint() {
+                const isSSQ = currentMode === 'ssq';
+                const frontCount = CONFIG[currentMode].frontCount, backCount = CONFIG[currentMode].backCount;
+                let html = '';
+                for (let g = 0; g < groups; g++) {
+                    html += '<div class="number-line" style="padding:4px 8px;">';
+                    for (let f = 0; f < frontCount; f++) html += `<span class="placeholder-red"></span>`;
+                    html += '<span class="sep">|</span>';
+                    for (let b = 0; b < backCount; b++) html += `<span class="placeholder-blue"></span>`;
+                    html += '</div>';
+                }
+                html += `<div class="hint-text" style="font-size:10px; margin-top:4px;">选择好模式开始~ 搏一搏单车变摩托！</div>`;
+                resultArea.innerHTML = html;
+                specificBtn.disabled = true;
+                specificBtn.className = 'btn btn-blue';
+                lastGeneratedGroupsData = [];
+                lastRecommendReason = '';
+                renderHistory();
+            }
+
+            function weightedSelect(pool, count) {
+                const totalWeight = pool.reduce((s, o) => s + o.weight, 0);
+                const selected = new Set(), result = [];
+                const temp = [...pool];
+                while (result.length < count && temp.length) {
+                    let rand = Math.random() * totalWeight;
+                    let acc = 0;
+                    let pick = null;
+                    for (let i = 0; i < temp.length; i++) {
+                        acc += temp[i].weight;
+                        if (rand <= acc) { pick = temp[i]; break; }
+                    }
+                    if (pick && !selected.has(pick.num)) {
+                        selected.add(pick.num);
+                        result.push(pick.num);
+                        const idx = temp.findIndex(p => p.num === pick.num);
+                        if (idx !== -1) temp.splice(idx, 1);
+                    } else if (!pick) break;
+                }
+                while (result.length < count) {
+                    const max = pool.length ? Math.max(...pool.map(p => p.num)) : 35;
+                    const extra = Math.floor(Math.random() * max) + 1;
+                    if (!selected.has(extra)) { result.push(extra); selected.add(extra); }
+                }
+                return result.sort((a, b) => a - b);
+            }
+
+            function smartRecommend(mode) {
+                try {
+                    const records = getFilteredData(currentMode);
+                    if (!records || !records.length) {
+                        resultArea.innerHTML = `<div class="error-text">走势数据未加载，无法推荐</div>`;
+                        return;
+                    }
+                    const stats = analyzeStats(records, currentMode);
+                    if (!stats) { resultArea.innerHTML = `<div class="error-text">数据解析异常</div>`; return; }
+                    const isSSQ = currentMode === 'ssq';
+                    const frontCnt = CONFIG[currentMode].frontCount, backCnt = CONFIG[currentMode].backCount;
+                    const frontMax = stats.frontMax, backMax = stats.backMax;
+                    const maxFrontFreq = stats.maxFrontFreq, maxBackFreq = stats.maxBackFreq;
+                    const maxFrontMiss = stats.maxFrontMiss, maxBackMiss = stats.maxBackMiss;
+                    const groupsData = [];
+                    for (let g = 0; g < groups; g++) {
+                        const frontPool = [], backPool = [];
+                        for (let i = 1; i <= frontMax; i++) {
+                            let normFreq = maxFrontFreq ? stats.frontFreq[i] / maxFrontFreq : 0;
+                            let normMiss = maxFrontMiss ? stats.frontMiss[i] / maxFrontMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            frontPool.push({ num: i, weight });
+                        }
+                        for (let i = 1; i <= backMax; i++) {
+                            let normFreq = maxBackFreq ? stats.backFreq[i] / maxBackFreq : 0;
+                            let normMiss = maxBackMiss ? stats.backMiss[i] / maxBackMiss : 0;
+                            let weight;
+                            if (mode === 'cold') weight = normMiss * 0.8 + (1 - normFreq) * 0.2;
+                            else if (mode === 'hot') weight = normFreq * 0.8 + (1 - normMiss) * 0.2;
+                            else weight = (normFreq + normMiss) / 2;
+                            weight = Math.max(0.01, weight);
+                            backPool.push({ num: i, weight });
+                        }
+                        const reds = weightedSelect(frontPool, frontCnt);
+                        const blues = weightedSelect(backPool, backCnt);
+                        groupsData.push({ reds: reds.slice(), blues: blues.slice() });
+                    }
+                    const modeNames = { cold: '追冷(高遗漏)', hot: '追热(高频)', balance: '冷热均衡' };
+                    const reasonText = `${modeNames[mode]||mode}`;
+                    displayResult(groupsData, currentMode, reasonText);
+                    lastRecommendReason = reasonText;
+                } catch (e) {
+                    resultArea.innerHTML = `<div class="error-text">推荐失败，请重试</div>`;
+                    console.error(e);
+                }
+            }
+
+            function analyzeStats(records, type) {
+                if (!records || !records.length) return null;
+                const cfg = CONFIG[type];
+                const frontMax = cfg.front, backMax = cfg.back;
+                const frontFreq = new Array(frontMax + 1).fill(0), backFreq = new Array(backMax + 1).fill(0);
+                const frontMiss = new Array(frontMax + 1).fill(0), backMiss = new Array(backMax + 1).fill(0);
+                const frontMet = new Array(frontMax + 1).fill(false), backMet = new Array(backMax + 1).fill(false);
+                for (let i = 0; i < records.length; i++) {
+                    const rec = records[i];
+                    rec.reds.forEach(n => { frontFreq[n]++; if (!frontMet[n]) { frontMiss[n] = i; frontMet[n] = true; } });
+                    rec.blues.forEach(n => { backFreq[n]++; if (!backMet[n]) { backMiss[n] = i; backMet[n] = true; } });
+                }
+                for (let i = 1; i <= frontMax; i++) if (!frontMet[i]) frontMiss[i] = records.length;
+                for (let i = 1; i <= backMax; i++) if (!backMet[i]) backMiss[i] = records.length;
+                const maxFrontFreq = Math.max(...frontFreq.slice(1));
+                const maxBackFreq = Math.max(...backFreq.slice(1));
+                const maxFrontMiss = Math.max(...frontMiss.slice(1));
+                const maxBackMiss = Math.max(...backMiss.slice(1));
+                return { frontFreq, backFreq, frontMiss, backMiss, totalPeriods: records.length, frontMax, backMax,
+                    maxFrontFreq, maxBackFreq, maxFrontMiss, maxBackMiss };
+            }
+
+            function getFilteredData(type) {
+                const all = getDataSync(type);
+                if (!all || !all.length) return all;
+                const s = Math.max(0, rangeStart - 1), e = Math.min(all.length, rangeEnd);
+                if (s >= e) return all.slice(0, 1);
+                return all.slice(s, e);
+            }
+
+            function getDataSync(type) {
+                if (trendCache[type]) return trendCache[type];
+                const records = type === 'ssq' ? SSQ_DATA : DLT_DATA;
+                trendCache[type] = records;
+                return records;
+            }
+
+            function loadHistory(lotteryType) {
+                const filtered = getFilteredData(lotteryType);
+                historyStore[lotteryType] = filtered.map(item => ({
+                    period: item.issue,
+                    date: item.date.slice(5),
+                    nums: item.reds,
+                    blues: item.blues,
+                    blue: item.blues[0]
+                }));
+                if (lotteryType === currentMode) renderHistory();
+            }
+
+            function renderHistory() {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) {
+                    historyList.innerHTML = `<div class="error-text">暂无数据</div>`;
+                    pageInfo.textContent = '0/0';
+                    prevPageBtn.disabled = true;
+                    nextPageBtn.disabled = true;
+                    return;
+                }
+                const total = items.length;
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (currentPage > totalPages) currentPage = totalPages || 1;
+                if (currentPage < 1) currentPage = 1;
+                const start = (currentPage - 1) * PAGE_SIZE, end = Math.min(start + PAGE_SIZE, total);
+                const pageItems = items.slice(start, end);
+                const isSSQ = currentMode === 'ssq';
+                const matchGroups = lastGeneratedGroupsData || [];
+                const hasMatchGroups = matchGroups && matchGroups.length > 0;
+                let html = '';
+                pageItems.forEach(item => {
+                    html += '<div class="history-row">';
+                    html += `<div class="left-info">
+                                <span class="period">${item.period}期</span>
+                                <span class="date">${item.date}</span>
+                            </div>`;
+                    html += '<div class="ball-group">';
+                    item.nums.forEach(n => {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.reds.includes(n)) { matched = true; break; }
+                        }
+                        html +=
+                            `<span class="ball ${isSSQ?'red':'front'}${(hasMatchGroups && !matched)?' unmatch':''}">${pad(n)}</span>`;
+                    });
+                    html += `<span class="sep">|</span>`;
+                    if (isSSQ) {
+                        let matched = false;
+                        for (let g of matchGroups) {
+                            if (g.blues.includes(item.blue)) { matched = true; break; }
+                        }
+                        html += `<span class="ball blue${(hasMatchGroups && !matched)?' unmatch':''}">${pad(item.blue)}</span>`;
+                    } else {
+                        item.blues.forEach(b => {
+                            let matched = false;
+                            for (let g of matchGroups) {
+                                if (g.blues.includes(b)) { matched = true; break; }
+                            }
+                            html +=
+                                `<span class="ball back${(hasMatchGroups && !matched)?' unmatch':''}">${pad(b)}</span>`;
+                        });
+                    }
+                    html += '</div></div>';
+                });
+                historyList.innerHTML = html;
+                pageInfo.textContent = `${currentPage}/${totalPages}`;
+                prevPageBtn.disabled = (currentPage <= 1);
+                nextPageBtn.disabled = (currentPage >= totalPages);
+            }
+
+            function goToPage(page) {
+                const items = historyStore[currentMode];
+                if (!items || !items.length) return;
+                const totalPages = Math.ceil(items.length / PAGE_SIZE);
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                if (currentPage === page) return;
+                currentPage = page;
+                renderHistory();
+            }
+
+            function renderNumberTable(container, data, title, colorClass) {
+                if (!data || !data.length) { container.innerHTML = `<div class="error-text">暂无数据</div>`; return; }
+                const freqValues = data.map(d => d.freq || 0), missValues = data.map(d => d.miss || 0);
+                const getRanks = (arr) => {
+                    const sorted = [...arr].sort((a, b) => a - b);
+                    const len = sorted.length;
+                    if (!len) return [];
+                    return arr.map(v => len > 1 ? sorted.lastIndexOf(v) / (len - 1) : 0.5);
+                };
+                const freqRanks = getRanks(freqValues), missRanks = getRanks(missValues);
+                let html = `<div class="sub-title">${title}</div><div class="stat-table">`;
+                html +=
+                    `<div class="stat-row header"><div class="stat-cell" style="background:transparent;">频次</div><div class="stat-num">号码</div><div class="stat-cell" style="background:transparent;">遗漏</div></div>`;
+                const minAlpha = 0.05, maxAlpha = 0.95;
+                for (let i = 0; i < data.length; i++) {
+                    const freq = data[i].freq || 0, miss = data[i].miss || 0, num = i + 1;
+                    const fRank = freqRanks[i] || 0, mRank = missRanks[i] || 0;
+                    const fAlpha = minAlpha + (maxAlpha - minAlpha) * fRank, mAlpha = minAlpha + (maxAlpha - minAlpha) *
+                        mRank;
+                    const fColor = fRank > 0.45 ? '#ffffff' : '#2c3e50', mColor = mRank > 0.45 ? '#ffffff' : '#2c3e50';
+                    const fBg = `rgba(231,76,111,${fAlpha})`, mBg = `rgba(58,123,213,${mAlpha})`;
+                    const ballClass = colorClass === 'red' ? 'red' : 'blue';
+                    html +=
+                        `<div class="stat-row"><div class="stat-cell freq" style="background:${fBg};"><div class="value" style="color:${fColor};">${freq}</div></div><div class="stat-num"><span class="stat-ball ${ballClass}">${num}</span></div><div class="stat-cell miss" style="background:${mBg};"><div class="value" style="color:${mColor};">${miss}</div></div></div>`;
+                }
+                html += '</div>';
+                container.innerHTML = html;
+            }
+
+            function renderTrend() {
+                const type = currentMode;
+                const records = getFilteredData(type);
+                if (!records || !records.length) {
+                    frontTable.innerHTML = '<div class="error-text">无数据</div>';
+                    backTable.innerHTML = '<div class="error-text">无数据</div>';
+                    return;
+                }
+                const stats = analyzeStats(records, type);
+                if (!stats) { frontTable.innerHTML = '<div class="error-text">解析失败</div>';
+                    backTable.innerHTML = '<div class="error-text">解析失败</div>'; return; }
+                const frontData = [], backData = [];
+                for (let i = 1; i <= stats.frontMax; i++) frontData.push({ freq: stats.frontFreq[i], miss: stats
+                        .frontMiss[i] });
+                for (let i = 1; i <= stats.backMax; i++) backData.push({ freq: stats.backFreq[i], miss: stats.backMiss[
+                        i] });
+                const frontTitle = type === 'ssq' ? '红球号码统计' : '前区号码统计';
+                const backTitle = type === 'ssq' ? '蓝球号码统计' : '后区号码统计';
+                renderNumberTable(frontTable, frontData, frontTitle, 'red');
+                renderNumberTable(backTable, backData, backTitle, 'blue');
+            }
+
+            function updateSliderUI() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+                if (rangeStart > rangeEnd) { const t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
+                if (rangeStart < 1) rangeStart = 1;
+                if (rangeEnd < 1) rangeEnd = 1;
+                if (rangeStart > totalPeriods) rangeStart = totalPeriods;
+                if (rangeEnd > totalPeriods) rangeEnd = totalPeriods;
+
+                const leftVal = rangeStart, rightVal = rangeEnd;
+                const pctLeft = totalPeriods > 1 ? ((leftVal - 1) / (totalPeriods - 1)) * 100 : 0;
+                const pctRight = totalPeriods > 1 ? ((rightVal - 1) / (totalPeriods - 1)) * 100 : 100;
+                thumbLeft.style.left = pctLeft + '%';
+                thumbRight.style.left = pctRight + '%';
+                rangeFill.style.left = pctLeft + '%';
+                rangeFill.style.width = (pctRight - pctLeft) + '%';
+
+                const data = allData || [];
+                let leftDate = '------', rightDate = '------';
+                if (data.length) {
+                    const lr = data[leftVal - 1], rr = data[rightVal - 1];
+                    leftDate = lr ? lr.date.replace(/-/g, '') : '------';
+                    rightDate = rr ? rr.date.replace(/-/g, '') : '------';
+                }
+                leftText.textContent = `近${leftVal}期 ${leftDate}`;
+                rightText.textContent = `${rightDate} 近${rightVal}期`;
+
+                const selected = rangeEnd - rangeStart + 1;
+                dataStatus.textContent = `拖动左右滑块选择数据，已选择${selected}期，可在数据详情中查看`;
+                rangeSummary.textContent = `近${rangeStart}~${rangeEnd}期（共${selected}期）`;
+            }
+
+            let rafId = null;
+
+            function updateFullData() {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
+                    updateSliderUI();
+                    loadHistory(currentMode);
+                    renderHistory();
+                    renderTrend();
+                    rafId = null;
+                });
+            }
+
+            function getThumbPos(e) {
+                const rect = rangeTrack.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let pct = (clientX - rect.left) / rect.width;
+                pct = Math.max(0, Math.min(1, pct));
+                const d = rangeEnd - rangeStart + 1;
+                const threshold = totalPeriods * 0.15;
+                const k = d < threshold ? 0.8 : 1.2;
+                let val = 1 + Math.pow(pct, k) * (totalPeriods - 1);
+                val = Math.round(Math.max(1, Math.min(totalPeriods, val)));
+                return val;
+            }
+
+            function handleStart(e) {
+                e.preventDefault();
+                const target = e.target;
+                if (target === thumbLeft) { isDragging = true; dragTarget = 'left'; thumbLeft.style.cursor = 'grabbing'; }
+                else if (target === thumbRight) { isDragging = true; dragTarget = 'right'; thumbRight.style.cursor =
+                        'grabbing'; }
+            }
+
+            function handleMove(e) {
+                if (!isDragging || !dragTarget) return;
+                e.preventDefault();
+                const val = getThumbPos(e);
+                if (dragTarget === 'left') {
+                    let newStart = Math.max(1, Math.min(totalPeriods, val));
+                    let newEnd = rangeEnd;
+                    if (newStart >= newEnd) {
+                        newStart = Math.max(1, newEnd - 1);
+                        newEnd = Math.min(totalPeriods, newEnd + 1);
+                        if (newStart >= newEnd) { newStart = Math.max(1, newEnd - 1); if (newStart < 1) { newStart = 1;
+                                newEnd = Math.min(totalPeriods, 2); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                } else if (dragTarget === 'right') {
+                    let newEnd = Math.max(1, Math.min(totalPeriods, val));
+                    let newStart = rangeStart;
+                    if (newEnd <= newStart) {
+                        newEnd = Math.min(totalPeriods, newStart + 1);
+                        newStart = Math.max(1, newStart - 1);
+                        if (newEnd <= newStart) { newEnd = Math.min(totalPeriods, newStart + 1); if (newEnd >
+                            totalPeriods) { newEnd = totalPeriods; newStart = Math.max(1, totalPeriods - 1); } }
+                    }
+                    rangeStart = newStart;
+                    rangeEnd = newEnd;
+                    updateSliderUI();
+                }
+            }
+
+            function handleEnd(e) {
+                if (isDragging) {
+                    isDragging = false;
+                    dragTarget = null;
+                    thumbLeft.style.cursor = 'grab';
+                    thumbRight.style.cursor = 'grab';
+                    updateFullData();
+                }
+            }
+
+            function initRangeSlider() {
+                const allData = getDataSync(currentMode);
+                totalPeriods = allData ? allData.length : 1;
+                if (totalPeriods < 1) totalPeriods = 1;
+                rangeStart = 1;
+                rangeEnd = totalPeriods;
+                updateSliderUI();
+                updateFullData();
+
+                rangeTrack.addEventListener('mousedown', (e) => {
+                    if (e.target === thumbLeft || e.target === thumbRight) return;
+                    const val = getThumbPos(e);
+                    const distL = Math.abs(val - rangeStart), distR = Math.abs(val - rangeEnd);
+                    if (distL < distR) {
+                        rangeStart = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeStart >= rangeEnd) { rangeStart = Math.max(1, rangeEnd - 1); if (rangeStart <
+                            1) { rangeStart = 1; rangeEnd = Math.min(totalPeriods, 2); } }
+                    } else {
+                        rangeEnd = Math.max(1, Math.min(totalPeriods, val));
+                        if (rangeEnd <= rangeStart) { rangeEnd = Math.min(totalPeriods, rangeStart + 1); if (
+                                rangeEnd > totalPeriods) { rangeEnd = totalPeriods; rangeStart = Math.max(1,
+                                    totalPeriods - 1); } }
+                    }
+                    updateSliderUI();
+                    updateFullData();
+                });
+
+                thumbLeft.addEventListener('mousedown', handleStart);
+                thumbRight.addEventListener('mousedown', handleStart);
+                thumbLeft.addEventListener('touchstart', handleStart, { passive: false });
+                thumbRight.addEventListener('touchstart', handleStart, { passive: false });
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchend', handleEnd);
+                document.addEventListener('touchcancel', handleEnd);
+
+                thumbLeft.style.cursor = 'grab';
+                thumbRight.style.cursor = 'grab';
+            }
+
+            function initPicker() {
+                const cfg = CONFIG[currentMode];
+                const frontMax = cfg.front, backMax = cfg.back;
+                const frontCnt = cfg.frontCount, backCnt = cfg.backCount;
+                maxRedCount.textContent = frontCnt;
+                maxBlueCount.textContent = backCnt;
+
+                redPickerGrid.innerHTML = '';
+                for (let i = 1; i <= frontMax; i++) {
+                    const el = document.createElement('span');
+                    el.className = 'picker-num red';
+                    el.textContent = pad(i);
+                    el.dataset.num = i;
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const num = parseInt(this.dataset.num);
+                        togglePickerNum(num, 'red');
+                    });
+                    redPickerGrid.appendChild(el);
+                }
+                const redRemainder = (10 - (frontMax % 10)) % 10;
+                for (let i = 0; i < redRemainder; i++) {
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'picker-num placeholder';
+                    placeholder.textContent = '';
+                    redPickerGrid.appendChild(placeholder);
+                }
+
+                bluePickerGrid.innerHTML = '';
+                for (let i = 1; i <= backMax; i++) {
+                    const el = document.createElement('span');
+                    el.className = 'picker-num blue';
+                    el.textContent = pad(i);
+                    el.dataset.num = i;
+                    el.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const num = parseInt(this.dataset.num);
+                        togglePickerNum(num, 'blue');
+                    });
+                    bluePickerGrid.appendChild(el);
+                }
+                const blueRemainder = (10 - (backMax % 10)) % 10;
+                for (let i = 0; i < blueRemainder; i++) {
+                    const placeholder = document.createElement('span');
+                    placeholder.className = 'picker-num placeholder';
+                    placeholder.textContent = '';
+                    bluePickerGrid.appendChild(placeholder);
+                }
+
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function togglePickerNum(num, type) {
+                if (type === 'red') {
+                    if (selectedReds.has(num)) {
+                        selectedReds.delete(num);
+                    } else {
+                        selectedReds.add(num);
+                    }
+                } else {
+                    if (selectedBlues.has(num)) {
+                        selectedBlues.delete(num);
+                    } else {
+                        selectedBlues.add(num);
+                    }
+                }
+                updatePickerUI();
+            }
+
+            function updatePickerUI() {
+                const redItems = redPickerGrid.querySelectorAll('.picker-num:not(.placeholder)');
+                redItems.forEach(el => {
+                    const num = parseInt(el.dataset.num);
+                    if (selectedReds.has(num)) {
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
+                });
+                const blueItems = bluePickerGrid.querySelectorAll('.picker-num:not(.placeholder)');
+                blueItems.forEach(el => {
+                    const num = parseInt(el.dataset.num);
+                    if (selectedBlues.has(num)) {
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
+                });
+
+                selectedRedCount.textContent = selectedReds.size;
+                selectedBlueCount.textContent = selectedBlues.size;
+
+                const cfg = CONFIG[currentMode];
+                const redOk = selectedReds.size === cfg.frontCount;
+                const blueOk = selectedBlues.size === cfg.backCount;
+                addFavBtn.disabled = !(redOk && blueOk);
+                const redEnough = selectedReds.size >= cfg.frontCount;
+                const blueEnough = selectedBlues.size >= cfg.backCount;
+                const compoundOk = redEnough && blueEnough && (selectedReds.size > cfg.frontCount || selectedBlues.size >
+                    cfg.backCount);
+                addCompoundBtn.disabled = !compoundOk;
+            }
+
+            function addCustomToFavorites() {
+                const cfg = CONFIG[currentMode];
+                if (selectedReds.size !== cfg.frontCount || selectedBlues.size !== cfg.backCount) {
+                    alert('请选择正确数量的红球和蓝球');
+                    return;
+                }
+                const reds = Array.from(selectedReds).sort((a, b) => a - b);
+                const blues = Array.from(selectedBlues).sort((a, b) => a - b);
+                const nums = { reds, blues };
+                const favs = getFavorites();
+                const exists = favs.some(item => item.mode === currentMode &&
+                    item.nums.reds.length === nums.reds.length &&
+                    item.nums.blues.length === nums.blues.length &&
+                    item.nums.reds.every((v, i) => v === nums.reds[i]) &&
+                    item.nums.blues.every((v, i) => v === nums.blues[i]) &&
+                    !item.isCompound);
+                if (exists) {
+                    alert('该号码已存在于收藏夹');
+                    return;
+                }
+                favs.push({ mode: currentMode, nums, time: Date.now() });
+                setFavorites(favs);
+                renderFavorites();
+                vibrate(10);
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function addCompoundToFavorites() {
+                const cfg = CONFIG[currentMode];
+                const reds = Array.from(selectedReds).sort((a, b) => a - b);
+                const blues = Array.from(selectedBlues).sort((a, b) => a - b);
+                if (reds.length < cfg.frontCount || blues.length < cfg.backCount) {
+                    alert('红球或蓝球数量不足');
+                    return;
+                }
+                if (reds.length === cfg.frontCount && blues.length === cfg.backCount) {
+                    alert('请至少选择超出一个号码才能组成复试');
+                    return;
+                }
+                const favs = getFavorites();
+                const exists = favs.some(item => item.mode === currentMode &&
+                    item.isCompound &&
+                    item.nums.reds.length === reds.length &&
+                    item.nums.blues.length === blues.length &&
+                    item.nums.reds.every((v, i) => v === reds[i]) &&
+                    item.nums.blues.every((v, i) => v === blues[i]));
+                if (exists) {
+                    alert('该复试组合已存在于收藏夹');
+                    return;
+                }
+                const redCombos = combinations(reds, cfg.frontCount);
+                const blueCombos = combinations(blues, cfg.backCount);
+                const total = redCombos.length * blueCombos.length;
+                if (total > 200) {
+                    if (!confirm(`生成 ${total} 组号码，可能较多，确定继续吗？`)) return;
+                }
+                favs.push({ mode: currentMode, nums: { reds, blues }, isCompound: true, time: Date.now() });
+                setFavorites(favs);
+                renderFavorites();
+                vibrate(10);
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+            }
+
+            function clearPicker() {
+                selectedReds.clear();
+                selectedBlues.clear();
+                updatePickerUI();
+                vibrate(10);
+            }
+
+            customBtn.addEventListener('click', function() {
+                isCustomMode = !isCustomMode;
+                this.classList.toggle('active', isCustomMode);
+                if (isCustomMode) {
+                    customPickerWrap.classList.add('open');
+                    initPicker();
+                    if (isManageMode) {
+                        isManageMode = false;
+                        manageBtn.textContent = '管理';
+                        renderFavorites();
+                    }
+                } else {
+                    customPickerWrap.classList.remove('open');
+                }
+            });
+
+            addFavBtn.addEventListener('click', addCustomToFavorites);
+            addCompoundBtn.addEventListener('click', addCompoundToFavorites);
+            clearPickerBtn.addEventListener('click', clearPicker);
+
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentMode = e.target.value;
+                    localStorage.setItem('lottery_current_mode', currentMode);
+                    currentPage = 1;
+                    lastExcludeReds = [];
+                    lastExcludeBlues = [];
+                    lastGeneratedGroupsData = [];
+                    showHint();
+                    trendCache[currentMode] = null;
+                    initRangeSlider();
+                    specificBtn.disabled = true;
+                    specificBtn.className = 'btn btn-blue';
+                    renderFavorites();
+                    updateResetState(true);
+                    if (isCustomMode) {
+                        initPicker();
+                    }
+                });
+            });
+
+            document.getElementById('decBtn').addEventListener('click', () => {
+                if (groups > 1) { groups--; showHint(); specificBtn.disabled = true; specificBtn.className =
+                        'btn btn-blue'; }
+            });
+            document.getElementById('incBtn').addEventListener('click', () => {
+                if (groups < 5) { groups++; showHint(); specificBtn.disabled = true; specificBtn.className =
+                        'btn btn-blue'; }
+            });
+            resetBtn.addEventListener('click', resetNumbers);
+            document.getElementById('refreshBtn').addEventListener('click', refreshNumbers);
+            document.getElementById('specificBtn').addEventListener('click', specificRandom);
+            document.getElementById('smartBtn').addEventListener('click', () => smartRecommend('balance'));
+            document.getElementById('coldRecommendBtn').addEventListener('click', () => smartRecommend('cold'));
+            document.getElementById('hotRecommendBtn').addEventListener('click', () => smartRecommend('hot'));
+            prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+            nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+            document.getElementById('refreshDataBtn').addEventListener('click', function() {
+                if (isLoading) return;
+                try {
+                    localStorage.removeItem('lotteryData_ssq');
+                    localStorage.removeItem('lotteryData_dlt');
+                } catch (e) {}
+                SSQ_DATA = [];
+                DLT_DATA = [];
+                trendCache.ssq = null;
+                trendCache.dlt = null;
+                loadAllData(true);
+            });
+
+            const savedMode = localStorage.getItem('lottery_current_mode');
+            if (savedMode && (savedMode === 'ssq' || savedMode === 'dlt')) {
+                currentMode = savedMode;
+                const radios = document.querySelectorAll('input[name="mode"]');
+                radios.forEach(r => {
+                    r.checked = (r.value === currentMode);
+                });
+            } else {
+                localStorage.setItem('lottery_current_mode', 'ssq');
+            }
+
+            loadAllData(true);
+        })();
+    </script>
+</body>
+</html>
