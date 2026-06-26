@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>脚手架配杆计算器</title>
+    <!-- 图标：模拟脚手架网格线 -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232a5f8f'/%3E%3Cg stroke='%23ffffff' stroke-width='3'%3E%3Cline x1='16' y1='0' x2='16' y2='64'/%3E%3Cline x1='32' y1='0' x2='32' y2='64'/%3E%3Cline x1='48' y1='0' x2='48' y2='64'/%3E%3Cline x1='0' y1='16' x2='64' y2='16'/%3E%3Cline x1='0' y1='32' x2='64' y2='32'/%3E%3Cline x1='0' y1='48' x2='64' y2='48'/%3E%3C/g%3E%3C/svg%3E" type="image/svg+xml">
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+            padding: 12px 12px 30px;
+            min-height: 100vh;
+        }
+        .app {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .app-header {
+            text-align: center;
+            padding: 16px 0 12px;
+            background: linear-gradient(135deg, #1e3a5f, #2a5f8f);
+            border-radius: 16px;
+            color: #fff;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
+        }
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .app-header p {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.25s ease;
+            letter-spacing: 0.3px;
+        }
+        .tab-btn.active {
+            background: #1e3a5f;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.25);
+        }
+        .tab-btn:active {
+            transform: scale(0.96);
+        }
+
+        .panel {
+            display: none;
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 16px 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            animation: fadeUp 0.3s ease;
+        }
+        .panel.active {
+            display: block;
+        }
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        .form-group .hint {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f8fafc;
+            transition: 0.2s;
+            color: #0f172a;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #2a5f8f;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(42, 95, 143, 0.15);
+        }
+        .form-control[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .form-control[type="number"]::-webkit-inner-spin-button,
+        .form-control[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+        }
+
+        /* 底座勾选框独立一行 */
+        .base-toggle-wrap {
+            margin: 8px 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .base-toggle-wrap input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2a5f8f;
+            cursor: pointer;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e3a5f, #2a5f8f);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+        }
+        .btn-calc:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 6px rgba(30, 58, 95, 0.15);
+        }
+
+        .result-area {
+            margin-top: 18px;
+            border-top: 1.5px solid #eef2f6;
+            padding-top: 16px;
+        }
+        .result-area .empty {
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px 0 10px;
+            font-size: 14px;
+        }
+
+        .result-summary {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+        .result-summary .item {
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+        }
+        .result-summary .item .num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .result-summary .item .label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        .result-summary .item.highlight .num {
+            color: #2a5f8f;
+        }
+        .result-summary .item.warning .num {
+            color: #b45309;
+        }
+
+        .result-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 12px 0;
+        }
+        .result-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: #f8fafc;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .result-list li .name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .result-list li .detail {
+            color: #64748b;
+            font-size: 13px;
+        }
+        .result-list li .badge {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            background: #e2e8f0;
+        }
+        .result-list li .badge.green { background: #d1fae5; color: #065f46; }
+        .result-list li .badge.blue { background: #dbeafe; color: #1e40af; }
+        .result-list li .badge.amber { background: #fef3c7; color: #92400e; }
+        .result-list li .badge.red { background: #fecaca; color: #991b1b; }
+        .result-list li.remain { background: #fef2f2; border-left: 3px solid #ef4444; }
+
+        .svg-container {
+            margin-top: 12px;
+            background: #fafcff;
+            border-radius: 12px;
+            padding: 12px 8px 8px;
+            border: 1px solid #eef2f6;
+        }
+        .svg-container svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            min-height: 320px;
+        }
+        .svg-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            justify-content: center;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #334155;
+        }
+        .svg-legend .item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .svg-legend .color-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            border: 1px solid #d1d5db;
+        }
+
+        .rule-hint {
+            margin-top: 18px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.7;
+            border-left: 3px solid #2a5f8f;
+        }
+        .rule-hint strong {
+            color: #0f172a;
+        }
+        .rule-hint .highlight {
+            color: #2a5f8f;
+            font-weight: 600;
+        }
+        .rule-hint .list {
+            margin: 2px 0 2px 16px;
+        }
+        .rule-hint .list-item {
+            display: block;
+        }
+
+        .result-mode {
+            font-size: 13px;
+            color: #64748b;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .result-mode .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        @media (max-width: 400px) {
+            .app-header h1 { font-size: 19px; }
+            .tab-btn { font-size: 13px; padding: 8px 0; }
+            .form-control { font-size: 15px; padding: 8px 10px; }
+            .btn-calc { font-size: 15px; padding: 12px; }
+            .result-summary .item .num { font-size: 17px; }
+            .rule-hint { font-size: 12px; }
+            .base-toggle-wrap { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="app-header">
+        <h1>脚手架配杆计算</h1>
+        <p>盘扣 · 碗扣 · 智能配杆</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="tab-wlg">碗扣 WLG</button>
+        <button class="tab-btn" data-tab="tab-blg">盘扣 BLG</button>
+        <button class="tab-btn" data-tab="tab-zlg">盘扣 ZLG</button>
+    </div>
+
+    <!-- ========== 碗扣 WLG ========== -->
+    <div class="panel active" id="tab-wlg" role="tabpanel">
+        <div class="form-row">
+            <div class="form-group">
+                <label>总长 (mm) <span class="hint">线段长度</span></label>
+                <input class="form-control" type="number" id="wlg-total" value="6000" step="10" min="0">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>底部偏移 <span class="hint">起点</span></label>
+                <input class="form-control" type="number" id="wlg-bottom" value="240" step="10" min="0">
+            </div>
+            <div class="form-group">
+                <label>顶部预留 <span class="hint">终点</span></label>
+                <input class="form-control" type="number" id="wlg-top" value="260" step="10" min="0">
+            </div>
+        </div>
+        <!-- 碗扣无底座选项 -->
+        <button class="btn-calc" id="wlg-calc">计算配杆</button>
+        <div class="result-area" id="wlg-result"><div class="empty">输入参数后点击计算</div></div>
+        <div class="rule-hint">
+            <strong>🔹 底部立杆 (JL系列)</strong> 3000, 2500, 2000, 1500, 1000 — 贪心+动态规划<br>
+            <strong>🔹 顶部立杆 (L系列)</strong> 常规/宽松双模式，双杆组合自动拆分显示<br>
+            <strong>🔹 特殊规则</strong> 常规模式下 L800 需剩余 ≥ 110
+        </div>
+    </div>
+
+    <!-- ========== 盘扣 BLG ========== -->
+    <div class="panel" id="tab-blg" role="tabpanel">
+        <div class="form-row">
+            <div class="form-group">
+                <label>总长 (mm) <span class="hint">线段长度</span></label>
+                <input class="form-control" type="number" id="blg-total" value="6000" step="10" min="0">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>底部偏移 <span class="hint">起点</span></label>
+                <input class="form-control" type="number" id="blg-bottom" value="300" step="10" min="0">
+            </div>
+            <div class="form-group">
+                <label>顶部预留 <span class="hint">终点</span></label>
+                <input class="form-control" type="number" id="blg-top" value="100" step="10" min="0">
+            </div>
+        </div>
+        <!-- 底座勾选框 -->
+        <div class="base-toggle-wrap">
+            <input type="checkbox" id="blg-base" checked>
+            <label for="blg-base">插入底座（BL350）</label>
+        </div>
+        <button class="btn-calc" id="blg-calc">计算配杆</button>
+        <div class="result-area" id="blg-result"><div class="empty">输入参数后点击计算</div></div>
+        <div class="rule-hint">
+            <strong>🔹 标准杆</strong> 3000, 2500, 2000, 1500, 1000, 500 — 从长到短贪心<br>
+            <strong>🔹 底座</strong> BL350 可选（默认勾选）<br>
+            <strong>🔹 特殊杆</strong> 剩余 ≥ 400 自动添加 BL200
+        </div>
+    </div>
+
+    <!-- ========== 盘扣 ZLG ========== -->
+    <div class="panel" id="tab-zlg" role="tabpanel">
+        <div class="form-row">
+            <div class="form-group">
+                <label>总长 (mm) <span class="hint">线段长度</span></label>
+                <input class="form-control" type="number" id="zlg-total" value="6000" step="10" min="0">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>底部偏移 <span class="hint">起点</span></label>
+                <input class="form-control" type="number" id="zlg-bottom" value="300" step="10" min="0">
+            </div>
+            <div class="form-group">
+                <label>顶部预留 <span class="hint">终点</span></label>
+                <input class="form-control" type="number" id="zlg-top" value="230" step="10" min="0">
+            </div>
+        </div>
+        <!-- 底座勾选框 -->
+        <div class="base-toggle-wrap">
+            <input type="checkbox" id="zlg-base" checked>
+            <label for="zlg-base">插入底座（PL200）</label>
+        </div>
+        <button class="btn-calc" id="zlg-calc">计算配杆</button>
+        <div class="result-area" id="zlg-result"><div class="empty">输入参数后点击计算</div></div>
+        <div class="rule-hint">
+            <strong>🔹 顶部 PL</strong> 2000, 1500, 1000 — 选择使剩余最小<br>
+            <strong>🔹 底部 PJL</strong> 2000, 1500, 1000 — 贪心填充<br>
+            <strong>🔹 底座</strong> PL200 可选（默认勾选）<br>
+            <strong>🔹 特殊杆</strong> 剩余 ≥ 400 自动添加 PJL200
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================== 工具 ========================
+    function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function el(id) { return document.getElementById(id); }
+    function getChecked(id) { return document.getElementById(id).checked; }
+
+    // ======================== 渲染结果 ========================
+    function renderResult(containerId, data) {
+        const container = el(containerId);
+        if (!data || data.error) {
+            container.innerHTML = `<div class="empty">${data?.error || '无法配杆，请检查参数'}</div>`;
+            return;
+        }
+
+        let html = '';
+        html += `<div class="result-summary">
+            <div class="item highlight"><div class="num">${data.netHeight}</div><div class="label">净高 (mm)</div></div>
+            <div class="item"><div class="num">${data.totalUsed || 0}</div><div class="label">配杆总长 (mm)</div></div>
+            <div class="item ${data.remain > 0 ? 'warning' : ''}"><div class="num">${data.remain}</div><div class="label">剩余 (mm)</div></div>
+        </div>`;
+
+        if (data.list && data.list.length > 0) {
+            html += `<ul class="result-list">`;
+            for (const item of data.list) {
+                let badge = '';
+                if (item.type === '底座') badge = `<span class="badge green">底座</span>`;
+                else if (item.type === '特殊') badge = `<span class="badge amber">特殊</span>`;
+                else if (item.type === '杆件') badge = `<span class="badge blue">杆件</span>`;
+                else if (item.type === '剩余') badge = `<span class="badge red">未配</span>`;
+                const cls = item.type === '剩余' ? 'remain' : '';
+                html += `<li class="${cls}">
+                    <span class="name">${item.name}</span>
+                    <span>${item.detail || ''} ${badge}</span>
+                </li>`;
+            }
+            html += `</ul>`;
+        }
+
+        // ---- SVG 示意图 ----
+        if (data.total && data.list) {
+            const total = data.total;
+            const bottom = data.bottomOff || 0;
+            const top = data.topOff || 0;
+
+            const drawSegs = [];
+            if (bottom > 0) drawSegs.push({ name: '底部偏移', length: bottom, type: 'offset' });
+
+            // 处理杆件：如果是WLG且有原始顶部块，则拆分；否则从list解析
+            let segments = [];
+            if (data.topBlocksRaw && data.topBlocksRaw.length > 0) {
+                for (const it of data.list) {
+                    if (it.type === '剩余') continue;
+                    if (it.name === '顶部组合') continue;
+                    let len = 0;
+                    const match = it.detail?.match(/(\d+)mm/);
+                    if (match) len = parseFloat(match[1]);
+                    const nameMatch = it.name.match(/(\d+)/);
+                    if (nameMatch && !len) len = parseFloat(nameMatch[1]);
+                    if (len > 0) segments.push({ name: it.name, length: len, type: it.type });
+                }
+                for (const len of data.topBlocksRaw) {
+                    segments.push({ name: `L${len}`, length: len, type: '杆件' });
+                }
+            } else {
+                for (const it of data.list) {
+                    if (it.type === '剩余') continue;
+                    let len = 0;
+                    const match = it.detail?.match(/(\d+)mm/);
+                    if (match) len = parseFloat(match[1]);
+                    const nameMatch = it.name.match(/(\d+)/);
+                    if (nameMatch && !len) len = parseFloat(nameMatch[1]);
+                    if (len > 0) segments.push({ name: it.name, length: len, type: it.type });
+                }
+            }
+
+            for (const s of segments) {
+                drawSegs.push({ name: s.name, length: s.length, type: s.type === '底座' ? 'base' : 'rod' });
+            }
+            if (data.remain > 0) {
+                drawSegs.push({ name: '剩余未配', length: data.remain, type: 'remain' });
+            }
+            if (top > 0) drawSegs.push({ name: '顶部预留', length: top, type: 'offset' });
+
+            const totalDraw = drawSegs.reduce((s, seg) => s + seg.length, 0);
+            const maxHeight = 420;
+            const topMargin = 20;
+            const bottomMargin = 20;
+            const effectiveHeight = maxHeight - topMargin - bottomMargin;
+            const scale = totalDraw > 0 ? effectiveHeight / totalDraw : 0;
+
+            const colors = {
+                'offset': '#d1d5db',
+                'base': '#34d399',
+                'rod': '#60a5fa',
+                'remain': '#f87171',
+                'special': '#fbbf24'
+            };
+
+            const rectWidth = 50;
+            const rectLeft = 50;
+            const rectRight = rectLeft + rectWidth;
+            const leaderEndX = rectRight + 40;
+            const viewWidth = leaderEndX + 70;
+
+            let svg = `<svg viewBox="0 0 ${viewWidth} ${maxHeight}" xmlns="http://www.w3.org/2000/svg" style="height:${maxHeight}px; width:100%;">`;
+
+            const segInfos = [];
+            let y = maxHeight - bottomMargin;
+            for (const seg of drawSegs) {
+                const h = seg.length * scale;
+                if (h < 0.5) continue;
+                const y0 = y - h;
+                let color = colors[seg.type] || '#cbd5e1';
+                if (seg.type === 'rod' && seg.name.includes('200')) color = colors.special;
+                svg += `<rect x="${rectLeft}" y="${y0}" width="${rectWidth}" height="${h}" fill="${color}" stroke="#e2e8f0" stroke-width="0.8" rx="2"/>`;
+                segInfos.push({ y0, y1: y, length: seg.length, name: seg.name, type: seg.type });
+                y = y0;
+            }
+
+            const totalTextX = 12;
+            const totalTextY = (topMargin + maxHeight - bottomMargin) / 2 + 4;
+            svg += `<text x="${totalTextX}" y="${totalTextY}" font-size="13" fill="#1e293b" font-weight="600" transform="rotate(-90 ${totalTextX},${totalTextY})" text-anchor="middle">总长 ${total}mm</text>`;
+
+            for (const info of segInfos) {
+                info.yMid = (info.y0 + info.y1) / 2;
+                info.labelOffset = 0;
+            }
+
+            const minDist = 20;
+            for (let i = 0; i < segInfos.length - 1; i++) {
+                const cur = segInfos[i];
+                const next = segInfos[i+1];
+                const dist = Math.abs(cur.yMid - next.yMid);
+                if (dist < minDist) {
+                    const offset = (minDist - dist) / 2 + 4;
+                    next.labelOffset = (next.labelOffset || 0) - offset;
+                }
+            }
+
+            for (const info of segInfos) {
+                if (info.labelOffset === undefined) info.labelOffset = 0;
+                if (info.labelOffset > 0) info.labelOffset = 0;
+                if (info.labelOffset < -20) info.labelOffset = -20;
+                let yLabel = info.yMid + info.labelOffset;
+                if (yLabel < topMargin) yLabel = topMargin;
+                if (yLabel > info.yMid) yLabel = info.yMid;
+                info.yLabel = yLabel;
+            }
+
+            for (const info of segInfos) {
+                const yLabel = info.yLabel;
+                const startX = rectRight + 2;
+                const endX = leaderEndX;
+                if (Math.abs(info.labelOffset) < 0.5) {
+                    svg += `<line x1="${startX}" y1="${info.yMid}" x2="${endX}" y2="${info.yMid}" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+                } else {
+                    const midX = startX + 12;
+                    svg += `<line x1="${startX}" y1="${info.yMid}" x2="${midX}" y2="${info.yMid}" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+                    svg += `<line x1="${midX}" y1="${info.yMid}" x2="${midX}" y2="${yLabel}" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+                    svg += `<line x1="${midX}" y1="${yLabel}" x2="${endX}" y2="${yLabel}" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+                }
+                const textStr = `${info.length}mm`;
+                svg += `<text x="${endX + 4}" y="${yLabel + 4}" font-size="12" fill="#1e293b" font-weight="500">${textStr}</text>`;
+            }
+
+            svg += `</svg>`;
+
+            const legend = `
+                <div class="svg-legend">
+                    <span class="item"><span class="color-box" style="background:#d1d5db;"></span> 偏移/预留</span>
+                    <span class="item"><span class="color-box" style="background:#34d399;"></span> 底座</span>
+                    <span class="item"><span class="color-box" style="background:#60a5fa;"></span> 标准杆</span>
+                    <span class="item"><span class="color-box" style="background:#fbbf24;"></span> 特殊杆</span>
+                    <span class="item"><span class="color-box" style="background:#f87171;"></span> 剩余未配</span>
+                </div>
+            `;
+            html += `<div class="svg-container">${svg}${legend}</div>`;
+        }
+
+        if (data.mode) {
+            const dotColor = data.mode === '常规' ? '#22c55e' : (data.mode === '宽松' ? '#f59e0b' : '#3b82f6');
+            html += `<div class="result-mode">
+                <span class="dot" style="background:${dotColor}"></span>
+                配杆模式：<strong>${data.mode}</strong> ${data.modeNote ? ' · ' + data.modeNote : ''}
+            </div>`;
+        }
+
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    //  算法实现（支持底座可选）
+    // ============================================================
+
+    // ---- BLG ----
+    function calcBLG(total, bottomOff, topOff, useBase) {
+        const net = total - bottomOff - topOff;
+        if (net <= 0) return { error: `净高 ≤ 0 (${net}mm)` };
+        const list = [];
+        let remain = net;
+        let totalUsed = 0;
+
+        if (useBase) {
+            if (remain < 350) return { error: `净高不足，无法插入BL350 (剩余 ${remain}mm)` };
+            remain -= 350;
+            totalUsed += 350;
+            list.push({ name: 'BL350 底座', type: '底座', detail: '350mm' });
+        }
+
+        const std = [3000, 2500, 2000, 1500, 1000, 500];
+        for (const len of std) {
+            if (remain >= len) {
+                const cnt = Math.floor(remain / len);
+                remain -= cnt * len;
+                totalUsed += cnt * len;
+                list.push({ name: `BL${len}`, type: '杆件', detail: `${cnt} 根 × ${len}mm` });
+            }
+        }
+        if (remain >= 400) {
+            remain -= 200;
+            totalUsed += 200;
+            list.push({ name: 'BL200', type: '特殊', detail: '1 根 × 200mm (剩余≥400触发)' });
+        }
+        if (remain > 0) {
+            list.push({ name: '剩余未配', type: '剩余', detail: `${remain}mm` });
+        }
+        return { netHeight: net, list, remain, totalUsed, total, bottomOff, topOff };
+    }
+
+    // ---- ZLG ----
+    function calcZLG(total, bottomOff, topOff, useBase) {
+        const net = total - bottomOff - topOff;
+        if (net <= 0) return { error: `净高 ≤ 0 (${net}mm)` };
+        const list = [];
+        let remain = net;
+        let totalUsed = 0;
+
+        if (useBase) {
+            if (remain < 200) return { error: `净高不足，无法插入PL200 (剩余 ${remain}mm)` };
+            remain -= 200;
+            totalUsed += 200;
+            list.push({ name: 'PL200 底座', type: '底座', detail: '200mm' });
+        }
+
+        const plStd = [2000, 1500, 1000];
+        const pjlStd = [2000, 1500, 1000];
+        let best = null, bestRemain = Infinity;
+
+        for (const pl of plStd) {
+            if (pl > remain) continue;
+            let r = remain - pl;
+            const used = [];
+            for (const len of pjlStd) {
+                while (r >= len) { used.push(len); r -= len; }
+            }
+            if (r >= 400) { used.push(200); r -= 200; }
+            if (r < bestRemain) {
+                bestRemain = r;
+                best = { pl, pjlList: used, remain: r };
+            }
+        }
+        {
+            let r = remain;
+            const used = [];
+            for (const len of pjlStd) {
+                while (r >= len) { used.push(len); r -= len; }
+            }
+            if (r >= 400) { used.push(200); r -= 200; }
+            if (r < bestRemain) {
+                bestRemain = r;
+                best = { pl: null, pjlList: used, remain: r };
+            }
+        }
+
+        if (!best) return { error: `可用净高不足 (${remain}mm，最小需 ${Math.min(...plStd)}mm)` };
+
+        if (best.pl !== null) {
+            remain -= best.pl;
+            totalUsed += best.pl;
+            list.push({ name: `PL${best.pl}`, type: '杆件', detail: `1 根 × ${best.pl}mm` });
+        }
+        const countMap = {};
+        for (const len of best.pjlList) countMap[len] = (countMap[len] || 0) + 1;
+        for (const len of [...pjlStd, 200]) {
+            if (countMap[len]) {
+                const cnt = countMap[len];
+                remain -= cnt * len;
+                totalUsed += cnt * len;
+                const name = len === 200 ? 'PJL200' : `PJL${len}`;
+                const typ = len === 200 ? '特殊' : '杆件';
+                const det = len === 200 ? `${cnt} 根 × 200mm (剩余≥400触发)` : `${cnt} 根 × ${len}mm`;
+                list.push({ name, type: typ, detail: det });
+            }
+        }
+        if (bestRemain > 0) {
+            list.push({ name: '剩余未配', type: '剩余', detail: `${bestRemain}mm` });
+        }
+        return { netHeight: net, list, remain: bestRemain, totalUsed, total, bottomOff, topOff };
+    }
+
+    // ---- WLG (无底座) ----
+    function calcWLG(total, bottomOff, topOff) {
+        const net = total - bottomOff - topOff;
+        if (net <= 0) return { error: `净高 ≤ 0 (${net}mm)` };
+        const relax = net < 910;
+        if (relax && net < 300) return { error: `净高过小 (${net}mm)，最小需要300mm` };
+
+        const bottomLengths = [3000, 2500, 2000, 1500, 1000];
+        const topSinglesNormal = [800, 1000, 1300, 1500, 1800, 2000, 2300];
+        const topPairsNormal = [[800,300],[1300,300],[2300,300]];
+        const topSinglesRelaxed = [300,500,800,1000,1300,1500,1800,2000,2300];
+        const topPairsRelaxed = [[300,300],[500,300],[800,300],[1000,300],[1300,300],[1500,300],[1800,300],[2000,300],[2300,300]];
+
+        function buildTopSchemes(relaxMode) {
+            const singles = relaxMode ? topSinglesRelaxed : topSinglesNormal;
+            const pairs = relaxMode ? topPairsRelaxed : topPairsNormal;
+            const schemes = singles.map(s => [s]);
+            for (const p of pairs) schemes.push(p);
+            return schemes;
+        }
+
+        function getBestTopCombination(target, relaxMode) {
+            const schemes = buildTopSchemes(relaxMode);
+            let best = null, bestSum = 0;
+            for (const scheme of schemes) {
+                const sum = scheme.reduce((a,b) => a+b, 0);
+                if (sum <= target && sum > bestSum) {
+                    if (!relaxMode && scheme.length === 1 && scheme[0] === 800) {
+                        if (target - sum >= 110) {
+                            bestSum = sum;
+                            best = scheme;
+                        }
+                    } else {
+                        bestSum = sum;
+                        best = scheme;
+                    }
+                }
+            }
+            return { scheme: best, sum: bestSum };
+        }
+
+        function enumBottom(rem, startIdx, chosen) {
+            let bestLocal = { chosen: chosen.slice(), remain: rem, unmatched: 9999999 };
+            for (let i = startIdx; i < bottomLengths.length; i++) {
+                const len = bottomLengths[i];
+                if (rem >= len) {
+                    const sub = enumBottom(rem - len, i, [...chosen, len]);
+                    if (sub.unmatched < bestLocal.unmatched) bestLocal = sub;
+                }
+            }
+            const topRes = getBestTopCombination(rem, relax);
+            const topSum = topRes.sum;
+            let canUseTop = false;
+            if (relax) {
+                canUseTop = topSum > 0;
+            } else {
+                canUseTop = (rem >= 800) && topSum > 0;
+            }
+            if (canUseTop) {
+                const curUnmatched = rem - topSum;
+                if (curUnmatched < bestLocal.unmatched) {
+                    bestLocal = { chosen: chosen.slice(), remain: rem, unmatched: curUnmatched };
+                }
+            }
+            return bestLocal;
+        }
+
+        const result = enumBottom(net, 0, []);
+        const bottomBlocks = result.chosen;
+        const remainAfterBottom = result.remain;
+        const unmatched = result.unmatched;
+        const topRes = getBestTopCombination(remainAfterBottom, relax);
+        const topBlocks = topRes.scheme || [];
+        const topSum = topRes.sum || 0;
+
+        const list = [];
+        let totalUsed = 0;
+
+        const bottomCount = {};
+        for (const len of bottomBlocks) { bottomCount[len] = (bottomCount[len] || 0) + 1; totalUsed += len; }
+        for (const len of bottomLengths) {
+            if (bottomCount[len]) {
+                list.push({ name: `JL${len}`, type: '杆件', detail: `${bottomCount[len]} 根 × ${len}mm` });
+            }
+        }
+        if (topBlocks.length > 0) {
+            const detail = topBlocks.map(l => `L${l}`).join(' + ');
+            list.push({ name: '顶部组合', type: '杆件', detail: `${detail}  (总长 ${topSum}mm)` });
+            totalUsed += topSum;
+        }
+        if (unmatched > 0) {
+            list.push({ name: '剩余未配', type: '剩余', detail: `${unmatched}mm` });
+        }
+
+        const mode = relax ? '宽松' : '常规';
+        const modeNote = relax ? '净高 < 910，启用全部杆件' : '净高 ≥ 910，标准配杆';
+        return {
+            netHeight: net,
+            list,
+            remain: unmatched,
+            totalUsed,
+            total,
+            bottomOff,
+            topOff,
+            mode,
+            modeNote,
+            topBlocksRaw: topBlocks
+        };
+    }
+
+    // ======================== UI 绑定 ========================
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = {
+        'tab-wlg': el('tab-wlg'),
+        'tab-blg': el('tab-blg'),
+        'tab-zlg': el('tab-zlg')
+    };
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const target = this.dataset.tab;
+            Object.keys(panels).forEach(key => panels[key].classList.toggle('active', key === target));
+        });
+    });
+
+    el('wlg-calc').addEventListener('click', function() {
+        const total = getVal('wlg-total'), bottom = getVal('wlg-bottom'), top = getVal('wlg-top');
+        const result = calcWLG(total, bottom, top);
+        renderResult('wlg-result', result);
+    });
+
+    el('blg-calc').addEventListener('click', function() {
+        const total = getVal('blg-total'), bottom = getVal('blg-bottom'), top = getVal('blg-top');
+        const useBase = getChecked('blg-base');
+        const result = calcBLG(total, bottom, top, useBase);
+        renderResult('blg-result', result);
+    });
+
+    el('zlg-calc').addEventListener('click', function() {
+        const total = getVal('zlg-total'), bottom = getVal('zlg-bottom'), top = getVal('zlg-top');
+        const useBase = getChecked('zlg-base');
+        const result = calcZLG(total, bottom, top, useBase);
+        renderResult('zlg-result', result);
+    });
+
+    document.querySelectorAll('.form-control').forEach(inp => {
+        inp.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const panel = this.closest('.panel');
+                if (panel) { const btn = panel.querySelector('.btn-calc'); if (btn) btn.click(); }
+            }
+        });
+    });
+
+    // 默认激活碗扣并计算
+    window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => el('wlg-calc').click(), 100);
+    });
+    let blgDone = false, zlgDone = false;
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const target = this.dataset.tab;
+            if (target === 'tab-blg' && !blgDone) { setTimeout(() => { el('blg-calc').click(); blgDone = true; }, 50); }
+            else if (target === 'tab-zlg' && !zlgDone) { setTimeout(() => { el('zlg-calc').click(); zlgDone = true; }, 50); }
+        });
+    });
+</script>
+</body>
+</html>
