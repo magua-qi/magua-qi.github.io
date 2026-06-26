@@ -387,7 +387,7 @@
             earth.className = 'earth-img';
             earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
             const moon = document.createElement('div');
-            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';
+            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';// 月球转速（秒），改为你想要的数值
             moon.classList.add('moon-orbit');
             const anim = document.createElement('style');
             anim.textContent = `
@@ -461,8 +461,8 @@
             const gamepad = document.getElementById('gamepad');
             if (!gamepad) return;
 
-            const EDGE_THRESHOLD = 150;
-            const HOVER_DELAY_MS = 5000;
+            const EDGE_THRESHOLD = 150;// 触发区域大小（像素）
+            const HOVER_DELAY_MS = 1000; // 悬停延时（毫秒），改为你想要的数值
             
             let pendingTimer = null;
             let isVisible = false;
