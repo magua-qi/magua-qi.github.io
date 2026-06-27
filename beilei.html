@@ -333,29 +333,9 @@
             color: #94a3b8;
         }
 
+        /* 底部汇总栏已移除，保留容器但不显示 */
         .result-summary {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 24px;
-            margin-top: 20px;
-            padding: 16px 24px;
-            background: #f1f5f9;
-            border-radius: 14px;
-            flex-wrap: wrap;
-        }
-        .result-summary .total-weight {
-            font-size: 22px;
-            font-weight: 700;
-            color: #0b2a4a;
-        }
-        .result-summary .total-weight span {
-            color: #2563eb;
-            font-size: 26px;
-        }
-        .result-summary .detail-info {
-            font-size: 14px;
-            color: #475569;
+            display: none !important;
         }
 
         /* ---------- 错误提示 ---------- */
@@ -431,19 +411,6 @@
             .result-table .title-row td {
                 font-size: 14px;
                 padding: 10px 12px;
-            }
-            .result-summary {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-                gap: 8px;
-                padding: 14px 16px;
-            }
-            .result-summary .total-weight {
-                font-size: 18px;
-            }
-            .result-summary .total-weight span {
-                font-size: 22px;
             }
             .input-hint {
                 font-size: 12px;
@@ -545,6 +512,9 @@
             }
             .result-table .total-row td {
                 background: #f0f4ff;
+            }
+            .result-summary {
+                display: none !important;
             }
         }
     </style>
@@ -648,6 +618,7 @@
             </div>
             <div id="resultContent" style="display:none;">
                 <div class="table-wrapper" id="tableWrapper"></div>
+                <!-- 底部汇总栏已移除，容器保留但永久隐藏 -->
                 <div class="result-summary" id="summaryBar"></div>
             </div>
         </div>
@@ -961,23 +932,9 @@
 
                 tableWrapper.innerHTML = html;
 
-                // 汇总栏
-                let supInfo = '';
-                if (result.qSup450 > 0 && result.qSup900 > 0) {
-                    supInfo = `450mm×${result.qSup450}  +  900mm×${result.qSup900}`;
-                } else if (result.qSup450 > 0) {
-                    supInfo = `450mm×${result.qSup450}`;
-                } else if (result.qSup900 > 0) {
-                    supInfo = `900mm×${result.qSup900}`;
-                } else {
-                    supInfo = '无支撑架 (单排)';
-                }
-
-                summaryBar.innerHTML = `
-                    <span class="detail-info">支撑架：${supInfo}</span>
-                    <span class="detail-info">销子：${result.qPins} 颗 &nbsp;|&nbsp; 弦杆螺栓：${result.qStrBolts} 颗 &nbsp;|&nbsp; 支撑架螺栓：${result.qSupBolts} 颗</span>
-                    <span class="total-weight">总重量：<span>${result.totalW.toFixed(2)}</span> kg</span>
-                `;
+                // 底部汇总栏已移除（不再显示任何内容）
+                summaryBar.style.display = 'none';
+                summaryBar.innerHTML = '';
 
                 // 显示结果
                 placeholder.style.display = 'none';
@@ -1032,6 +989,8 @@
                 // 隐藏结果
                 placeholder.style.display = 'block';
                 resultContent.style.display = 'none';
+                summaryBar.style.display = 'none';
+                summaryBar.innerHTML = '';
             }
 
             // ---------- 重置 ----------
@@ -1046,6 +1005,7 @@
                 placeholder.style.display = 'block';
                 resultContent.style.display = 'none';
                 tableWrapper.innerHTML = '';
+                summaryBar.style.display = 'none';
                 summaryBar.innerHTML = '';
             }
 
@@ -1059,6 +1019,8 @@
                         // 确保显示占位符
                         placeholder.style.display = 'block';
                         resultContent.style.display = 'none';
+                        summaryBar.style.display = 'none';
+                        summaryBar.innerHTML = '';
                     }
                 }, 100);
             }
