@@ -1,97 +1,1025 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Flip Clock · 麻瓜</title>
-<link rel="icon" id="dynamicFavicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231e6df2'/%3E%3Ctext x='50' y='72' font-size='70' font-family='Arial Black, Impact, sans-serif' font-weight='900' fill='white' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#000000;font-family:'Roboto Mono',monospace;overflow:hidden;cursor:default}
-#app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.clock{display:flex;align-items:center;gap:8px;pointer-events:none;user-select:none}
-.clock *{pointer-events:none;user-select:none;cursor:default}
-.card{--w:140px;--h:160px;position:relative;width:var(--w);height:var(--h);border-radius:12px}
-.card .half{position:absolute;left:0;width:100%;height:50%;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.card .half-top{top:0;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#1e1e35 0%,#1a1a2e 100%);border-bottom:1px solid rgba(0,0,0,0.6);z-index:1}
-.card .half-bottom{bottom:0;border-radius:0 0 12px 12px;background:linear-gradient(180deg,#16162a 0%,#1a1a2e 100%);z-index:1}
-.card::after{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(0,0,0,0.7);z-index:5;pointer-events:none}
-.time-card .half span{font-size:96px;font-weight:700;color:#e8e8f0;text-shadow:0 2px 8px rgba(0,0,0,0.4);line-height:1}
-.time-card .half span{position:absolute;left:0;right:0;height:var(--h);display:flex;align-items:center;justify-content:center}
-.time-card .half-top span{top:0}
-.time-card .half-bottom span{bottom:0}
-.flip-top,.flip-bottom{position:absolute;left:0;width:100%;height:50%;overflow:hidden;backface-visibility:hidden;border-radius:12px 12px 0 0}
-.flip-top{top:0;background:linear-gradient(180deg,#1e1e35 0%,#1a1a2e 100%);transform-origin:bottom center;z-index:10;animation:flipTopAnim 0.3s ease-in forwards}
-.flip-bottom{bottom:0;border-radius:0 0 12px 12px;background:linear-gradient(180deg,#16162a 0%,#1a1a2e 100%);transform-origin:top center;z-index:10;animation:flipBottomAnim 0.3s ease-out forwards;animation-delay:0.3s;transform:rotateX(90deg)}
-.flip-top span,.flip-bottom span{position:absolute;left:0;right:0;height:var(--h);display:flex;align-items:center;justify-content:center;font-size:96px;font-weight:700;color:#e8e8f0;text-shadow:0 2px 8px rgba(0,0,0,0.4);line-height:1}
-.flip-top span{top:0}
-.flip-bottom span{bottom:0}
-@keyframes flipTopAnim{0%{transform:rotateX(0deg)}100%{transform:rotateX(-90deg)}}
-@keyframes flipBottomAnim{0%{transform:rotateX(90deg)}100%{transform:rotateX(0deg)}}
-.flip-top::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0);animation:shadowIn 0.3s ease-in forwards;border-radius:12px 12px 0 0}
-@keyframes shadowIn{100%{background:rgba(0,0,0,0.3)}}
-.flip-bottom::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.3);animation:shadowOut 0.3s ease-out forwards;animation-delay:0.3s;border-radius:0 0 12px 12px}
-@keyframes shadowOut{0%{background:rgba(0,0,0,0.3)}100%{background:rgba(0,0,0,0)}}
-.info-card .half{flex-direction:column;gap:2px}
-.info-card .half-top{padding-bottom:4px}
-.info-card .half-bottom{padding-top:4px}
-.info-card .weekday{font-size:32px;font-weight:700;color:#e8e8f0;text-shadow:0 2px 8px rgba(0,0,0,0.4);letter-spacing:4px}
-.info-card .date-line{font-size:15px;font-weight:500;color:#8888aa;letter-spacing:2px}
-.info-card .ampm{font-size:24px;font-weight:700;color:#e85d75;text-shadow:0 0 12px rgba(232,93,117,0.4);letter-spacing:3px}
-.sep{display:flex;flex-direction:column;gap:20px;padding:0 2px}
-.sep .dot{width:12px;height:12px;border-radius:50%;background:#e85d75;box-shadow:0 0 12px rgba(232,93,117,0.5);animation:pulse 1s ease-in-out infinite alternate}
-@keyframes pulse{0%{opacity:0.4;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
-.controls{position:fixed;bottom:20px;right:20px;opacity:0;transform:translateY(10px);transition:opacity 0.3s,transform 0.3s;pointer-events:none;z-index:100}
-.controls:hover,.controls-trigger:hover .controls,.controls.active{opacity:1;transform:translateY(0);pointer-events:auto}
-.controls-trigger{position:fixed;bottom:0;right:0;width:200px;height:200px;z-index:99;pointer-events:auto}
-.controls-panel{background:rgba(20,20,40,0.92);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px 24px;backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:18px;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
-.control-row{display:flex;flex-direction:column;gap:8px}
-.control-label{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#666680;user-select:none;cursor:default}
-.control-label .val{color:#9999bb;font-size:12px;min-width:28px;text-align:right}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:#2a2a45;outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#e85d75;box-shadow:0 0 8px rgba(232,93,117,0.4);cursor:pointer;transition:transform 0.15s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
-input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#e85d75;box-shadow:0 0 8px rgba(232,93,117,0.4);border:none;cursor:pointer}
-@media (max-width:700px){.card{--w:90px;--h:100px}.time-card .half span,.flip-top span,.flip-bottom span{font-size:60px}.info-card .weekday{font-size:22px;letter-spacing:2px}.info-card .date-line{font-size:11px}.info-card .ampm{font-size:16px}.sep .dot{width:8px;height:8px}.clock{gap:5px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flip Clock · 麻瓜</title>
+    <link rel="icon" id="dynamicFavicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231e6df2'/%3E%3Ctext x='50' y='72' font-size='70' font-family='Arial Black, Impact, sans-serif' font-weight='900' fill='white' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap');
+
+        /* 全局 CSS 变量（主题控制） */
+        :root {
+            --bg-top: #1e1e35;
+            --bg-bottom: #16162a;
+            --bg-common: #1a1a2e;
+            --text-main: #e8e8f0;
+            --accent: #e85d75;
+            --text-sub: #8888aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000000;
+            font-family: 'Roboto Mono', monospace;
+            overflow: hidden;
+            cursor: default;
+            touch-action: manipulation;
+        }
+
+        #app {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .clock {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .clock * {
+            pointer-events: none;
+            user-select: none;
+            cursor: default;
+        }
+
+        .card {
+            --w: 140px;
+            --h: 160px;
+            position: relative;
+            width: var(--w);
+            height: var(--h);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .card .half {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card .half-top {
+            top: 0;
+            border-radius: 12px 12px 0 0;
+            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-common) 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .card .half-bottom {
+            bottom: 0;
+            border-radius: 0 0 12px 12px;
+            background: linear-gradient(180deg, var(--bg-bottom) 0%, var(--bg-common) 100%);
+            z-index: 1;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .time-card .half span {
+            font-size: 96px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            line-height: 1;
+        }
+
+        .time-card .half span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: var(--h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-card .half-top span {
+            top: 0;
+        }
+        .time-card .half-bottom span {
+            bottom: 0;
+        }
+
+        .flip-top,
+        .flip-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .flip-top {
+            top: 0;
+            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-common) 100%);
+            transform-origin: bottom center;
+            z-index: 10;
+            animation: flipTopAnim 0.3s ease-in forwards;
+        }
+
+        .flip-bottom {
+            bottom: 0;
+            border-radius: 0 0 12px 12px;
+            background: linear-gradient(180deg, var(--bg-bottom) 0%, var(--bg-common) 100%);
+            transform-origin: top center;
+            z-index: 10;
+            animation: flipBottomAnim 0.3s ease-out forwards;
+            animation-delay: 0.3s;
+            transform: rotateX(90deg);
+        }
+
+        .flip-top span,
+        .flip-bottom span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: var(--h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 96px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            line-height: 1;
+        }
+
+        .flip-top span {
+            top: 0;
+        }
+        .flip-bottom span {
+            bottom: 0;
+        }
+
+        @keyframes flipTopAnim {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(-90deg);
+            }
+        }
+
+        @keyframes flipBottomAnim {
+            0% {
+                transform: rotateX(90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+
+        .flip-top::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            animation: shadowIn 0.3s ease-in forwards;
+            border-radius: 12px 12px 0 0;
+        }
+
+        @keyframes shadowIn {
+            100% {
+                background: rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .flip-bottom::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            animation: shadowOut 0.3s ease-out forwards;
+            animation-delay: 0.3s;
+            border-radius: 0 0 12px 12px;
+        }
+
+        @keyframes shadowOut {
+            0% {
+                background: rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                background: rgba(0, 0, 0, 0);
+            }
+        }
+
+        .info-card .half {
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .info-card .half-top {
+            padding-bottom: 4px;
+        }
+        .info-card .half-bottom {
+            padding-top: 4px;
+        }
+
+        .info-card .weekday {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            letter-spacing: 4px;
+        }
+
+        .info-card .date-line {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+        }
+
+        .info-card .ampm {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 12px rgba(232, 93, 117, 0.4);
+            letter-spacing: 3px;
+        }
+
+        .sep {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 2px;
+            flex-shrink: 0;
+        }
+
+        .sep .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.4;
+                transform: scale(0.85);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== 控制面板 ===== */
+        .controls-trigger {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            z-index: 99;
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .controls:hover,
+        .controls-trigger:hover .controls,
+        .controls.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .controls-panel {
+            background: rgba(20, 20, 40, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 20px 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            min-width: 200px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .control-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #666680;
+            user-select: none;
+            cursor: default;
+        }
+
+        .control-label .val {
+            color: #9999bb;
+            font-size: 12px;
+            min-width: 28px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #2a2a45;
+            outline: none;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            border: none;
+            cursor: pointer;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 700px) {
+            .card {
+                --w: 90px;
+                --h: 100px;
+            }
+
+            .time-card .half span,
+            .flip-top span,
+            .flip-bottom span {
+                font-size: 60px;
+            }
+
+            .info-card .weekday {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+            .info-card .date-line {
+                font-size: 11px;
+            }
+            .info-card .ampm {
+                font-size: 22px;
+            }
+
+            .sep .dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .clock {
+                gap: 5px;
+            }
+
+            .controls {
+                bottom: 12px;
+                right: 12px;
+            }
+
+            .controls-panel {
+                min-width: 160px;
+                padding: 14px 18px;
+                gap: 14px;
+            }
+
+            .control-label {
+                font-size: 10px;
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+                width: 22px;
+                height: 22px;
+            }
+
+            input[type="range"]::-moz-range-thumb {
+                width: 22px;
+                height: 22px;
+            }
+
+            .controls-trigger {
+                width: 160px;
+                height: 160px;
+                bottom: 0;
+                right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                --w: 74px;
+                --h: 84px;
+            }
+
+            .time-card .half span,
+            .flip-top span,
+            .flip-bottom span {
+                font-size: 48px;
+            }
+
+            .info-card .weekday {
+                font-size: 18px;
+                letter-spacing: 1px;
+            }
+            .info-card .date-line {
+                font-size: 9px;
+            }
+            .info-card .ampm {
+                font-size: 18px;
+            }
+
+            .clock {
+                gap: 4px;
+            }
+
+            .sep {
+                gap: 14px;
+                padding: 0 1px;
+            }
+            .sep .dot {
+                width: 6px;
+                height: 6px;
+            }
+
+            .controls-panel {
+                min-width: 140px;
+                padding: 12px 14px;
+                gap: 12px;
+            }
+
+            .controls-trigger {
+                width: 130px;
+                height: 130px;
+            }
+
+            .controls {
+                bottom: 8px;
+                right: 8px;
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+                width: 26px;
+                height: 26px;
+            }
+
+            input[type="range"]::-moz-range-thumb {
+                width: 26px;
+                height: 26px;
+            }
+
+            .control-label {
+                font-size: 9px;
+            }
+            .control-label .val {
+                font-size: 10px;
+                min-width: 22px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .card {
+                --w: 62px;
+                --h: 72px;
+            }
+
+            .time-card .half span,
+            .flip-top span,
+            .flip-bottom span {
+                font-size: 40px;
+            }
+
+            .info-card .weekday {
+                font-size: 15px;
+                letter-spacing: 0.5px;
+            }
+            .info-card .date-line {
+                font-size: 8px;
+            }
+            .info-card .ampm {
+                font-size: 15px;
+            }
+
+            .clock {
+                gap: 3px;
+            }
+
+            .sep {
+                gap: 10px;
+                padding: 0 1px;
+            }
+            .sep .dot {
+                width: 5px;
+                height: 5px;
+            }
+
+            .controls-panel {
+                min-width: 120px;
+                padding: 10px 12px;
+                gap: 10px;
+            }
+
+            .controls-trigger {
+                width: 110px;
+                height: 110px;
+            }
+
+            .controls {
+                bottom: 6px;
+                right: 6px;
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+                width: 28px;
+                height: 28px;
+            }
+
+            input[type="range"]::-moz-range-thumb {
+                width: 28px;
+                height: 28px;
+            }
+
+            .control-label {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+            .control-label .val {
+                font-size: 9px;
+                min-width: 18px;
+            }
+        }
+
+        /* 横屏 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .card {
+                --w: 60px;
+                --h: 68px;
+            }
+
+            .time-card .half span,
+            .flip-top span,
+            .flip-bottom span {
+                font-size: 38px;
+            }
+
+            .info-card .weekday {
+                font-size: 14px;
+            }
+            .info-card .date-line {
+                font-size: 8px;
+            }
+            .info-card .ampm {
+                font-size: 14px;
+            }
+
+            .clock {
+                gap: 3px;
+            }
+
+            .sep {
+                gap: 8px;
+            }
+            .sep .dot {
+                width: 5px;
+                height: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div id="app">
-<div class="clock" id="clock"></div>
-<div class="controls-trigger">
-<div class="controls" id="controls">
-<div class="controls-panel">
-<div class="control-row">
-<div class="control-label"><span>Size</span><span class="val" id="sizeVal">50</span></div>
-<input type="range" id="sizeSlider" min="1" max="100" value="50">
-</div>
-<div class="control-row">
-<div class="control-label"><span>Brightness</span><span class="val" id="brightVal">50</span></div>
-<input type="range" id="brightSlider" min="1" max="100" value="50">
-</div>
-</div>
-</div>
-</div>
-</div>
-<script>
-(function setCustomFavicon(){const canvas=document.createElement('canvas');const size=64;canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');ctx.fillStyle='#1a6df5';const radius=14;ctx.beginPath();ctx.moveTo(radius,0);ctx.lineTo(size-radius,0);ctx.quadraticCurveTo(size,0,size,radius);ctx.lineTo(size,size-radius);ctx.quadraticCurveTo(size,size,size-radius,size);ctx.lineTo(radius,size);ctx.quadraticCurveTo(0,size,0,size-radius);ctx.lineTo(0,radius);ctx.quadraticCurveTo(0,0,radius,0);ctx.fill();ctx.fillStyle='#ffffff';ctx.font='bold '+(size*0.6)+'px "Arial Black","Impact","Segoe UI Black",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('T',size/2,size/2+2);const faviconUrl=canvas.toDataURL('image/png');let link=document.querySelector("link[rel*='icon']");if(!link){link=document.createElement('link');link.rel='icon';document.head.appendChild(link)}link.href=faviconUrl})();
-const clockContainer=document.getElementById('clock');
-function createSep(){const s=document.createElement('div');s.className='sep';s.innerHTML='<div class="dot"></div><div class="dot"></div>';return s}
-const infoCard=document.createElement('div');infoCard.className='card info-card';infoCard.innerHTML='<div class="half half-top"><div class="weekday" id="weekday">FRI</div><div class="date-line" id="dateLine">06 / 12</div></div><div class="half half-bottom"><div class="ampm" id="ampm">AM</div></div>';
-clockContainer.appendChild(infoCard);
-const weekdayEl=infoCard.querySelector('#weekday');const dateLineEl=infoCard.querySelector('#dateLine');const ampmEl=infoCard.querySelector('#ampm');
-const timeCards=[];clockContainer.appendChild(createSep());
-for(let i=0;i<3;i++){const card=document.createElement('div');card.className='card time-card';card.innerHTML='<div class="half half-top"><span>00</span></div><div class="half half-bottom"><span>00</span></div>';timeCards.push(card);clockContainer.appendChild(card);if(i<2)clockContainer.appendChild(createSep())}
-let prevValues=['--','--','--'];let prevInfo={weekday:'',date:'',ampm:''};
-function pad2(n){return n<10?'0'+n:''+n}
-function updateCard(card,oldVal,newVal){if(oldVal===newVal)return;const existingFlips=card.querySelectorAll('.flip-top,.flip-bottom');existingFlips.forEach(el=>el.remove());const topSpan=card.querySelector('.half-top span');const bottomSpan=card.querySelector('.half-bottom span');const flipTop=document.createElement('div');flipTop.className='flip-top';flipTop.innerHTML='<span>'+oldVal+'</span>';const flipBottom=document.createElement('div');flipBottom.className='flip-bottom';flipBottom.innerHTML='<span>'+newVal+'</span>';topSpan.textContent=newVal;bottomSpan.textContent=oldVal;card.appendChild(flipTop);card.appendChild(flipBottom);setTimeout(()=>{if(flipTop&&flipTop.parentNode)flipTop.remove();if(flipBottom&&flipBottom.parentNode)flipBottom.remove();if(bottomSpan)bottomSpan.textContent=newVal},650)}
-function tick(){const now=new Date();const hours=now.getHours();const minutes=now.getMinutes();const seconds=now.getSeconds();const timeVals=[pad2(hours),pad2(minutes),pad2(seconds)];for(let i=0;i<3;i++){updateCard(timeCards[i],prevValues[i],timeVals[i])}prevValues=[...timeVals];const weekdays=['SUN','MON','TUE','WED','THU','FRI','SAT'];const weekday=weekdays[now.getDay()];const dateStr=pad2(now.getMonth()+1)+' / '+pad2(now.getDate());const ampm=hours<12?'AM':'PM';if(prevInfo.weekday!==weekday){weekdayEl.textContent=weekday;prevInfo.weekday=weekday}if(prevInfo.date!==dateStr){dateLineEl.textContent=dateStr;prevInfo.date=dateStr}if(prevInfo.ampm!==ampm){ampmEl.textContent=ampm;prevInfo.ampm=ampm}}
-tick();setInterval(tick,1000);
-const sizeSlider=document.getElementById('sizeSlider');const brightSlider=document.getElementById('brightSlider');const sizeVal=document.getElementById('sizeVal');const brightVal=document.getElementById('brightVal');const clockElement=document.getElementById('clock');const appElement=document.getElementById('app');
-function applyControls(){const size=parseFloat(sizeSlider.value);const bright=parseFloat(brightSlider.value);const scale=0.4+(size-1)*(1.6/99);clockElement.style.transform='scale('+scale.toFixed(3)+')';const brightnessVal=0.1+(bright-1)*(1.4/99);appElement.style.filter='brightness('+brightnessVal.toFixed(3)+')';sizeVal.textContent=Math.round(size);brightVal.textContent=Math.round(bright)}
-sizeSlider.addEventListener('input',applyControls);brightSlider.addEventListener('input',applyControls);applyControls();
-const observer=new MutationObserver((mutations)=>{mutations.forEach((mutation)=>{mutation.addedNodes.forEach((node)=>{if(node.nodeType===1&&clockContainer.contains(node)){node.style.pointerEvents='none';node.style.userSelect='none'}})})});observer.observe(clockContainer,{childList:true,subtree:true});
-</script>
+    <div id="app">
+        <div class="clock" id="clock"></div>
+
+        <!-- 控制面板触发区域 -->
+        <div class="controls-trigger" id="controlsTrigger">
+            <div class="controls" id="controls">
+                <div class="controls-panel">
+                    <div class="control-row">
+                        <div class="control-label">
+                            <span>Size</span>
+                            <span class="val" id="sizeVal">50</span>
+                        </div>
+                        <input type="range" id="sizeSlider" min="1" max="100" value="50">
+                    </div>
+                    <div class="control-row">
+                        <div class="control-label">
+                            <span>Brightness</span>
+                            <span class="val" id="brightVal">50</span>
+                        </div>
+                        <input type="range" id="brightSlider" min="1" max="100" value="50">
+                    </div>
+                    <!-- 新增主题滑块（节点式） -->
+                    <div class="control-row">
+                        <div class="control-label">
+                            <span>Theme</span>
+                            <span class="val" id="themeVal">Classic</span>
+                        </div>
+                        <input type="range" id="themeSlider" min="1" max="9" value="1" step="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 9 种经典配色方案 =====
+        const themes = [{
+            name: 'Classic',
+            bgTop: '#1e1e35',
+            bgBottom: '#16162a',
+            bgCommon: '#1a1a2e',
+            textMain: '#e8e8f0',
+            accent: '#e85d75',
+            textSub: '#8888aa'
+        }, {
+            name: 'Aurora',
+            bgTop: '#0b1a2f',
+            bgBottom: '#0a101f',
+            bgCommon: '#0d1a2b',
+            textMain: '#d0e8ff',
+            accent: '#00d4ff',
+            textSub: '#6b8fbf'
+        }, {
+            name: 'Amber',
+            bgTop: '#2b1408',
+            bgBottom: '#1f0e04',
+            bgCommon: '#261a10',
+            textMain: '#f0c8a0',
+            accent: '#ff8c00',
+            textSub: '#b08050'
+        }, {
+            name: 'Forest',
+            bgTop: '#0a1f14',
+            bgBottom: '#06120a',
+            bgCommon: '#0d2618',
+            textMain: '#c0e0c0',
+            accent: '#2ecc71',
+            textSub: '#5a8c6a'
+        }, {
+            name: 'Royal',
+            bgTop: '#1a1028',
+            bgBottom: '#10081a',
+            bgCommon: '#201830',
+            textMain: '#f0e8d0',
+            accent: '#ffd700',
+            textSub: '#a08860'
+        }, {
+            name: 'Neon',
+            bgTop: '#1e0a2e',
+            bgBottom: '#12041e',
+            bgCommon: '#28103a',
+            textMain: '#f0e0ff',
+            accent: '#d500f9',
+            textSub: '#9a6ab0'
+        }, {
+            name: 'Ocean',
+            bgTop: '#0a1a30',
+            bgBottom: '#040e1e',
+            bgCommon: '#0f2440',
+            textMain: '#e0f0ff',
+            accent: '#64ffda',
+            textSub: '#5a8caa'
+        }, {
+            name: 'Sakura',
+            bgTop: '#2a0a18',
+            bgBottom: '#1a040e',
+            bgCommon: '#301020',
+            textMain: '#ffe0e8',
+            accent: '#ff4081',
+            textSub: '#b0607a'
+        }, {
+            name: 'Graphite',
+            bgTop: '#1e1e1e',
+            bgBottom: '#121212',
+            bgCommon: '#282828',
+            textMain: '#e8e8e8',
+            accent: '#9e9e9e',
+            textSub: '#6a6a6a'
+        }];
+
+        // ===== 设置 Favicon =====
+        (function setCustomFavicon() {
+            const canvas = document.createElement('canvas');
+            const size = 64;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#1a6df5';
+            const radius = 14;
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold ' + (size * 0.6) + 'px "Arial Black","Impact","Segoe UI Black",sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('T', size / 2, size / 2 + 2);
+            const faviconUrl = canvas.toDataURL('image/png');
+            let link = document.querySelector("link[rel*='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = faviconUrl;
+        })();
+
+        // ===== 构建时钟 =====
+        const clockContainer = document.getElementById('clock');
+
+        function createSep() {
+            const s = document.createElement('div');
+            s.className = 'sep';
+            s.innerHTML = '<div class="dot"></div><div class="dot"></div>';
+            return s;
+        }
+
+        const infoCard = document.createElement('div');
+        infoCard.className = 'card info-card';
+        infoCard.innerHTML =
+            '<div class="half half-top"><div class="weekday" id="weekday">FRI</div><div class="date-line" id="dateLine">06 / 12</div></div><div class="half half-bottom"><div class="ampm" id="ampm">AM</div></div>';
+        clockContainer.appendChild(infoCard);
+
+        const weekdayEl = infoCard.querySelector('#weekday');
+        const dateLineEl = infoCard.querySelector('#dateLine');
+        const ampmEl = infoCard.querySelector('#ampm');
+
+        const timeCards = [];
+        clockContainer.appendChild(createSep());
+
+        for (let i = 0; i < 3; i++) {
+            const card = document.createElement('div');
+            card.className = 'card time-card';
+            card.innerHTML =
+                '<div class="half half-top"><span>00</span></div><div class="half half-bottom"><span>00</span></div>';
+            timeCards.push(card);
+            clockContainer.appendChild(card);
+            if (i < 2) clockContainer.appendChild(createSep());
+        }
+
+        let prevValues = ['--', '--', '--'];
+        let prevInfo = { weekday: '', date: '', ampm: '' };
+
+        function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+        function updateCard(card, oldVal, newVal) {
+            if (oldVal === newVal) return;
+            const existingFlips = card.querySelectorAll('.flip-top,.flip-bottom');
+            existingFlips.forEach(el => el.remove());
+
+            const topSpan = card.querySelector('.half-top span');
+            const bottomSpan = card.querySelector('.half-bottom span');
+
+            const flipTop = document.createElement('div');
+            flipTop.className = 'flip-top';
+            flipTop.innerHTML = '<span>' + oldVal + '</span>';
+
+            const flipBottom = document.createElement('div');
+            flipBottom.className = 'flip-bottom';
+            flipBottom.innerHTML = '<span>' + newVal + '</span>';
+
+            topSpan.textContent = newVal;
+            bottomSpan.textContent = oldVal;
+
+            card.appendChild(flipTop);
+            card.appendChild(flipBottom);
+
+            setTimeout(() => {
+                if (flipTop && flipTop.parentNode) flipTop.remove();
+                if (flipBottom && flipBottom.parentNode) flipBottom.remove();
+                if (bottomSpan) bottomSpan.textContent = newVal;
+            }, 650);
+        }
+
+        function tick() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const timeVals = [pad2(hours), pad2(minutes), pad2(seconds)];
+            for (let i = 0; i < 3; i++) {
+                updateCard(timeCards[i], prevValues[i], timeVals[i]);
+            }
+            prevValues = [...timeVals];
+
+            const weekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const weekday = weekdays[now.getDay()];
+            const dateStr = pad2(now.getMonth() + 1) + ' / ' + pad2(now.getDate());
+            const ampm = hours < 12 ? 'AM' : 'PM';
+
+            if (prevInfo.weekday !== weekday) {
+                weekdayEl.textContent = weekday;
+                prevInfo.weekday = weekday;
+            }
+            if (prevInfo.date !== dateStr) {
+                dateLineEl.textContent = dateStr;
+                prevInfo.date = dateStr;
+            }
+            if (prevInfo.ampm !== ampm) {
+                ampmEl.textContent = ampm;
+                prevInfo.ampm = ampm;
+            }
+        }
+
+        tick();
+        setInterval(tick, 1000);
+
+        // ===== 控制面板元素 =====
+        const sizeSlider = document.getElementById('sizeSlider');
+        const brightSlider = document.getElementById('brightSlider');
+        const themeSlider = document.getElementById('themeSlider');
+        const sizeVal = document.getElementById('sizeVal');
+        const brightVal = document.getElementById('brightVal');
+        const themeVal = document.getElementById('themeVal');
+        const clockElement = document.getElementById('clock');
+        const appElement = document.getElementById('app');
+
+        // ===== 应用主题 =====
+        function applyTheme(index) {
+            const t = themes[index];
+            if (!t) return;
+            const root = document.documentElement;
+            root.style.setProperty('--bg-top', t.bgTop);
+            root.style.setProperty('--bg-bottom', t.bgBottom);
+            root.style.setProperty('--bg-common', t.bgCommon);
+            root.style.setProperty('--text-main', t.textMain);
+            root.style.setProperty('--accent', t.accent);
+            root.style.setProperty('--text-sub', t.textSub);
+            themeVal.textContent = t.name;
+        }
+
+        // ===== 应用所有控制（大小、亮度、主题） =====
+        function applyControls() {
+            const size = parseFloat(sizeSlider.value);
+            const bright = parseFloat(brightSlider.value);
+            const themeIdx = parseInt(themeSlider.value, 10) - 1;
+
+            // 缩放
+            const scale = 0.4 + (size - 1) * (1.6 / 99);
+            clockElement.style.transform = 'scale(' + scale.toFixed(3) + ')';
+            // 亮度
+            const brightnessVal = 0.1 + (bright - 1) * (1.4 / 99);
+            appElement.style.filter = 'brightness(' + brightnessVal.toFixed(3) + ')';
+            // 主题
+            applyTheme(themeIdx);
+
+            // 更新数值显示
+            sizeVal.textContent = Math.round(size);
+            brightVal.textContent = Math.round(bright);
+
+            // 保存到 localStorage
+            saveSettings();
+        }
+
+        // ===== 持久化存储 =====
+        function saveSettings() {
+            try {
+                localStorage.setItem('flip_size', sizeSlider.value);
+                localStorage.setItem('flip_bright', brightSlider.value);
+                localStorage.setItem('flip_theme', themeSlider.value);
+            } catch (e) { /* ignore */ }
+        }
+
+        function loadSettings() {
+            try {
+                const size = localStorage.getItem('flip_size');
+                const bright = localStorage.getItem('flip_bright');
+                const theme = localStorage.getItem('flip_theme');
+                if (size !== null) sizeSlider.value = size;
+                if (bright !== null) brightSlider.value = bright;
+                if (theme !== null) themeSlider.value = theme;
+            } catch (e) { /* ignore */ }
+            applyControls();
+        }
+
+        // ===== 事件监听 =====
+        sizeSlider.addEventListener('input', applyControls);
+        brightSlider.addEventListener('input', applyControls);
+        themeSlider.addEventListener('input', applyControls);
+
+        // ===== 移动端：点击切换控制面板 =====
+        const controlsTrigger = document.getElementById('controlsTrigger');
+        const controls = document.getElementById('controls');
+        let controlsOpen = false;
+
+        controlsTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            controlsOpen = !controlsOpen;
+            controls.classList.toggle('active', controlsOpen);
+        });
+
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            document.addEventListener('click', function(e) {
+                if (controlsOpen) {
+                    const target = e.target;
+                    const isTrigger = controlsTrigger.contains(target);
+                    const isPanel = controls.contains(target);
+                    if (!isTrigger && !isPanel) {
+                        controlsOpen = false;
+                        controls.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        controls.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // ===== 初始化加载 =====
+        loadSettings();
+
+        // ===== 确保所有动态元素不可交互 =====
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && clockContainer.contains(node)) {
+                        node.style.pointerEvents = 'none';
+                        node.style.userSelect = 'none';
+                    }
+                });
+            });
+        });
+        observer.observe(clockContainer, { childList: true, subtree: true });
+    </script>
 </body>
 </html>
