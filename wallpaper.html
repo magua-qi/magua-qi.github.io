@@ -63,8 +63,6 @@
             width: 48px;
             height: 48px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
         }
         .dpad-btn:active {
             transform: scale(0.92);
@@ -126,7 +124,7 @@
             z-index: 10000;
             word-break: break-all;
             pointer-events: auto;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
             transition: opacity 0.2s;
             opacity: 0;
             white-space: pre-line;
@@ -148,14 +146,13 @@
                 padding: 6px;
             }
             .dpad-btn {
-                width: 52px;
-                height: 52px;
-                font-size: 20px;
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
             }
             .center-btn {
-                min-width: 68px;
-                padding: 0 14px;
-                font-size: 20px;
+                min-width: 64px;
+                padding: 0 12px;
             }
             .toast-url {
                 font-size: 10px;
@@ -165,28 +162,7 @@
                 max-width: 85vw;
             }
         }
-        @media (max-width: 400px) {
-            .dpad-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-            }
-            .center-btn {
-                min-width: 56px;
-                padding: 0 10px;
-                font-size: 16px;
-            }
-            .gamepad {
-                bottom: 50px;
-                right: 8px;
-                padding: 5px;
-            }
-            .dpad {
-                gap: 4px;
-            }
-        }
-        img,
-        div {
+        img, div {
             user-select: none;
         }
     </style>
@@ -212,7 +188,7 @@
         let moonTimer;
         let activeMoon;
         let currentMode;
-
+        
         const DEFAULT_OFFSETS = {
             earth_only: { h: "0vw", v: "-12vh" },
             moon_static: { h: "3vw", v: "3vh" },
@@ -223,13 +199,13 @@
         let currentMovableContainer = null;
 
         const STORAGE_MODE_KEY = 'magua_last_mode';
-
+        
         function saveModeToLocal(mode) {
             if (mode) {
                 localStorage.setItem(STORAGE_MODE_KEY, mode);
             }
         }
-
+        
         function loadModeFromLocal() {
             return localStorage.getItem(STORAGE_MODE_KEY);
         }
@@ -243,19 +219,17 @@
             };
             localStorage.setItem('magua_offsets', JSON.stringify(toStore));
         }
-
         function loadOffsetsFromLocal() {
             const saved = localStorage.getItem('magua_offsets');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
                     ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'].forEach(mode => {
-                        if (parsed[mode] && typeof parsed[mode].h === 'string' && typeof parsed[mode].v ===
-                            'string') {
+                        if (parsed[mode] && typeof parsed[mode].h === 'string' && typeof parsed[mode].v === 'string') {
                             offsetStorage[mode] = parsed[mode];
                         }
                     });
-                } catch (e) {}
+                } catch(e) {}
             }
         }
 
@@ -280,17 +254,14 @@
             const el = document.querySelector('.single-earth, .earth-img');
             if (el) el.style.backgroundImage = `url(${EARTH_URL}?t=${Date.now()})`;
         }
-
         function earthTimer(s) {
             clearInterval(refreshTimer);
             refreshTimer = setInterval(refreshEarth, s * 1000);
         }
-
         function stopAll() {
             clearInterval(refreshTimer);
             clearInterval(moonTimer);
         }
-
         function watchMoon(el) {
             clearInterval(moonTimer);
             if (!el) return;
@@ -299,40 +270,26 @@
             upd();
             moonTimer = setInterval(() => {
                 const nowDate = new Date().toDateString();
-                if (nowDate !== lastDate) { lastDate = nowDate;
-                    upd(); }
+                if (nowDate !== lastDate) { lastDate = nowDate; upd(); }
             }, 36e5);
         }
 
         function applyOffset(container, hVal, vVal) {
             if (container) container.style.transform = `translate(${hVal}, ${vVal})`;
         }
-
         function adjustOffset(direction, step = 1) {
             if (currentMode === 'fullscreen' || !currentMovableContainer) return;
             let { h, v } = offsetStorage[currentMode];
-            let hNum = parseFloat(h),
-                hUnit = h.replace(/[\d.-]/g, '') || 'vw';
-            let vNum = parseFloat(v),
-                vUnit = v.replace(/[\d.-]/g, '') || 'vh';
-            switch (direction) {
-                case 'up':
-                    vNum -= step;
-                    break;
-                case 'down':
-                    vNum += step;
-                    break;
-                case 'left':
-                    hNum -= step;
-                    break;
-                case 'right':
-                    hNum += step;
-                    break;
-                default:
-                    return;
+            let hNum = parseFloat(h), hUnit = h.replace(/[\d.-]/g, '') || 'vw';
+            let vNum = parseFloat(v), vUnit = v.replace(/[\d.-]/g, '') || 'vh';
+            switch(direction) {
+                case 'up': vNum -= step; break;
+                case 'down': vNum += step; break;
+                case 'left': hNum -= step; break;
+                case 'right': hNum += step; break;
+                default: return;
             }
-            const newH = hNum + hUnit,
-                newV = vNum + vUnit;
+            const newH = hNum + hUnit, newV = vNum + vUnit;
             offsetStorage[currentMode] = { h: newH, v: newV };
             applyOffset(currentMovableContainer, newH, newV);
             saveOffsetsToLocal();
@@ -348,26 +305,21 @@
             if (currentMode === 'fullscreen') return CHINA_URL;
             return EARTH_URL;
         }
-
         function hasMoonDisplay() {
             return currentMode === 'moon_static' || currentMode === 'moon_orbit';
         }
-
         function showImageUrls() {
             const mainUrl = getCurrentImageUrl();
             const toast = document.getElementById('toastUrl');
             if (!toast) return;
             let content = '';
             if (currentMode === 'fullscreen') {
-                content =
-                    `🛰️ 中国区域云图链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(mainUrl)}</span>`;
+                content = `🛰️ 中国区域云图链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(mainUrl)}</span>`;
             } else {
-                content =
-                    `🌍 地球云图链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(mainUrl)}</span>`;
+                content = `🌍 地球云图链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(mainUrl)}</span>`;
                 if (hasMoonDisplay()) {
                     const moonPhaseUrl = moonUrl();
-                    content +=
-                        `<br><br>🌙 月球相位链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(moonPhaseUrl)}</span>`;
+                    content += `<br><br>🌙 月球相位链接:<br><span style="font-size:11px; word-break:break-all;">${escapeHtml(moonPhaseUrl)}</span>`;
                 }
             }
             toast.innerHTML = content;
@@ -377,7 +329,6 @@
                 toast.classList.remove('show');
             }, 6000);
         }
-
         function escapeHtml(str) {
             return str.replace(/[&<>]/g, function(m) {
                 if (m === '&') return '&amp;';
@@ -392,12 +343,10 @@
             root.innerHTML = '';
             const { h, v } = offsetStorage.earth_only;
             const wrap = document.createElement('div');
-            wrap.style.cssText =
-                `width:100%;height:100vh;position:relative;background:#000;transform: translate(${h}, ${v});`;
+            wrap.style.cssText = `width:100%;height:100vh;position:relative;background:#000;transform: translate(${h}, ${v});`;
             const earth = document.createElement('div');
             earth.className = 'single-earth';
-            earth.style.cssText =
-                `position:absolute;right:5vw;bottom:5vh;width:min(70vmin,700px);height:min(70vmin,700px);border-radius:50%;background:url(${EARTH_URL}) center/cover no-repeat;`;
+            earth.style.cssText = `position:absolute;right:5vw;bottom:5vh;width:700px;height:700px;border-radius:400px;background:url(${EARTH_URL}) center/700px no-repeat;`;
             wrap.appendChild(earth);
             root.appendChild(wrap);
             earth.style.backgroundImage = `url(${EARTH_URL}?t=${Date.now()})`;
@@ -405,25 +354,20 @@
             activeMoon = null;
             return wrap;
         }
-
         function renderMoonStatic() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
             const { h, v } = offsetStorage.moon_static;
             const container = document.createElement('div');
-            container.style.cssText =
-                `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:auto;margin-right:5%;display:flex;align-items:center;transform: translate(${h}, ${v});`;
+            container.style.cssText = `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:auto;margin-right:5%;display:flex;align-items:center;transform: translate(${h}, ${v});`;
             const earth = document.createElement('div');
             earth.className = 'earth-img';
-            earth.style.cssText =
-                `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
+            earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
             const moon = document.createElement('div');
-            moon.style.cssText =
-                'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:5%;right:5%;z-index:2;';
+            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:5%;right:5%;z-index:2;';
             moon.classList.add('moon-static');
             const mq = document.createElement('style');
-            mq.textContent =
-                `@media(max-width:768px){.moon-static{width:21.84%!important;padding-bottom:21.84%!important;}.earth-img{width:100%!important;padding-bottom:100%!important;}}`;
+            mq.textContent = `@media(max-width:768px){.moon-static{width:21.84%!important;padding-bottom:21.84%!important;}.earth-img{width:100%!important;padding-bottom:100%!important;}}`;
             container.append(earth, moon);
             root.append(container, mq);
             activeMoon = moon;
@@ -433,36 +377,32 @@
             earthTimer(1800);
             return container;
         }
-
         function renderMoonOrbit() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
             const { h, v } = offsetStorage.moon_orbit;
             const container = document.createElement('div');
-            container.style.cssText =
-                `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;transform: translate(${h}, ${v});`;
+            container.style.cssText = `position:relative;width:90vw;max-width:1200px;height:90vh;margin-left:40%;margin-right:5%;display:flex;align-items:center;transform: translate(${h}, ${v});`;
             const earth = document.createElement('div');
             earth.className = 'earth-img';
-            earth.style.cssText =
-                `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
+            earth.style.cssText = `width:60%;padding-bottom:60%;border-radius:50%;background:url(${EARTH_URL}) 50% 0%/cover no-repeat;position:relative;left:50%;transform:translateX(-50%);`;
             const moon = document.createElement('div');
-            moon.style.cssText =
-                'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';
+            moon.style.cssText = 'width:10%;padding-bottom:10%;border-radius:50%;background-size:cover;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:orbit 300s linear infinite;';// 月球转速（秒），改为你想要的数值
             moon.classList.add('moon-orbit');
             const anim = document.createElement('style');
             anim.textContent = `
-                        @keyframes orbit {
-                            from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 20vw)) rotate(0deg); }
-                            to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 20vw)) rotate(-360deg); }
-                        }
-                        @media(max-width:768px){
-                            .moon-orbit{width:21.84%!important;padding-bottom:21.84%!important;}
-                            .earth-img{width:100%!important;padding-bottom:100%!important;}
-                            @keyframes orbit {
-                                from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 12vw)) rotate(0deg); }
-                                to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 12vw)) rotate(-360deg); }
-                            }
-                        }`;
+                @keyframes orbit {
+                    from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 20vw)) rotate(0deg); }
+                    to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 20vw)) rotate(-360deg); }
+                }
+                @media(max-width:768px){
+                    .moon-orbit{width:21.84%!important;padding-bottom:21.84%!important;}
+                    .earth-img{width:100%!important;padding-bottom:100%!important;}
+                    @keyframes orbit {
+                        from { transform: translate(-50%,-50%) rotate(0deg) translateX(calc(50% + 12vw)) rotate(0deg); }
+                        to { transform: translate(-50%,-50%) rotate(360deg) translateX(calc(50% + 12vw)) rotate(-360deg); }
+                    }
+                }`;
             container.append(earth, moon);
             root.append(container, anim);
             activeMoon = moon;
@@ -472,18 +412,16 @@
             earthTimer(1800);
             return container;
         }
-
         function renderFullscreen() {
             const root = document.getElementById('appRoot');
             root.innerHTML = '';
             stopAll();
             activeMoon = null;
             const wrap = document.createElement('div');
-            wrap.style.cssText =
-                'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;overflow:hidden;';
+            wrap.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;overflow:hidden;';
             const img = document.createElement('img');
             img.src = CHINA_URL + '?t=' + Date.now();
-            img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+            img.style.cssText = 'width:150%;height:150%;object-fit:cover;flex-shrink:0;';
             wrap.appendChild(img);
             root.appendChild(wrap);
             refreshTimer = setInterval(() => {
@@ -501,44 +439,31 @@
             activeMoon = null;
             let container = null;
             switch (id) {
-                case 'earth_only':
-                    container = renderEarthOnly();
-                    break;
-                case 'moon_static':
-                    container = renderMoonStatic();
-                    break;
-                case 'moon_orbit':
-                    container = renderMoonOrbit();
-                    break;
-                case 'fullscreen':
-                    container = renderFullscreen();
-                    break;
-                default:
-                    container = renderEarthOnly();
-                    currentMode = 'earth_only';
+                case 'earth_only': container = renderEarthOnly(); break;
+                case 'moon_static': container = renderMoonStatic(); break;
+                case 'moon_orbit': container = renderMoonOrbit(); break;
+                case 'fullscreen': container = renderFullscreen(); break;
+                default: container = renderEarthOnly(); currentMode = 'earth_only';
             }
             currentMovableContainer = container;
             updateDirButtonsState();
         }
 
         const MODE_CYCLE = ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'];
-
         function getNextMode(current) { return MODE_CYCLE[(MODE_CYCLE.indexOf(current) + 1) % MODE_CYCLE.length]; }
-
-        function updateUrlMode(mode) {
-            const url = new URL(location);
-            url.searchParams.set('mode', mode);
-            history.replaceState({}, '', url);
+        function updateUrlMode(mode) { 
+            const url = new URL(location); 
+            url.searchParams.set('mode', mode); 
+            history.replaceState({}, '', url); 
         }
 
         function initGamepadVisibility() {
             const gamepad = document.getElementById('gamepad');
             if (!gamepad) return;
 
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            const EDGE_THRESHOLD = isTouchDevice ? 200 : 150;
-            const HOVER_DELAY_MS = 1000;
-
+            const EDGE_THRESHOLD = 150;// 触发区域大小（像素）
+            const HOVER_DELAY_MS = 1000; // 悬停延时（毫秒），改为你想要的数值
+            
             let pendingTimer = null;
             let isVisible = false;
             let isPointerInside = false;
@@ -590,7 +515,7 @@
             function setPointerInside(inside) {
                 const wasInside = isPointerInside;
                 isPointerInside = inside;
-
+                
                 if (inside && !wasInside) {
                     onPointerEnterZone();
                 } else if (!inside && wasInside) {
@@ -606,7 +531,7 @@
                 const inCorner = (mouseX > winW - EDGE_THRESHOLD) && (mouseY > winH - EDGE_THRESHOLD);
                 setPointerInside(inCorner);
             }
-
+            
             function onMouseLeaveDocument(e) {
                 if (!e.relatedTarget || e.relatedTarget === document.documentElement) {
                     setPointerInside(false);
@@ -627,7 +552,7 @@
                 const inCorner = (pos.clientX > winW - EDGE_THRESHOLD) && (pos.clientY > winH - EDGE_THRESHOLD);
                 setPointerInside(inCorner);
             }
-
+            
             function onTouchStart(e) {
                 const pos = getTouchClientPos(e);
                 if (!pos) {
@@ -643,7 +568,7 @@
             function onTouchEnd(e) {
                 setPointerInside(false);
             }
-
+            
             function onTouchCancel(e) {
                 setPointerInside(false);
             }
@@ -654,7 +579,7 @@
             document.addEventListener('touchmove', onTouchMove, { passive: false });
             document.addEventListener('touchend', onTouchEnd);
             document.addEventListener('touchcancel', onTouchCancel);
-
+            
             gamepad.classList.remove('visible');
             isVisible = false;
             isPointerInside = false;
@@ -682,8 +607,7 @@
                 modeSwitchBtn = newBtn;
                 let pressTimer = null;
                 let isLongPress = false;
-                const clearPressTimer = () => { if (pressTimer) { clearTimeout(pressTimer);
-                        pressTimer = null; } };
+                const clearPressTimer = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
                 const onPointerStart = (e) => {
                     isLongPress = false;
                     clearPressTimer();
@@ -702,8 +626,7 @@
                     }
                     isLongPress = false;
                 };
-                const onPointerCancel = () => { clearPressTimer();
-                    isLongPress = false; };
+                const onPointerCancel = () => { clearPressTimer(); isLongPress = false; };
                 modeSwitchBtn.addEventListener('mousedown', onPointerStart);
                 modeSwitchBtn.addEventListener('mouseup', onPointerEnd);
                 modeSwitchBtn.addEventListener('mouseleave', onPointerCancel);
@@ -715,12 +638,12 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             loadOffsetsFromLocal();
-
+            
             let initMode = null;
             const savedMode = loadModeFromLocal();
             const urlMode = new URLSearchParams(location.search).get('mode');
             const validModes = ['earth_only', 'moon_static', 'moon_orbit', 'fullscreen'];
-
+            
             if (savedMode && validModes.includes(savedMode)) {
                 initMode = savedMode;
             } else if (urlMode && validModes.includes(urlMode)) {
@@ -730,7 +653,7 @@
                 initMode = 'earth_only';
                 saveModeToLocal(initMode);
             }
-
+            
             setMode(initMode);
             updateUrlMode(initMode);
             bindGamepadControls();
