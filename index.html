@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MAGUA</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='75' font-family='Arial, sans-serif' font-weight='900' font-size='60' text-anchor='middle' fill='black'%3EMG%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='75' font-family='Arial, sans-serif' font-weight='900' font-size='60' text-anchor='middle' fill='black'%3EMG%3C/text%3E%3C/svg%3E" />
     <style>
+        /* ---------- 全局重置 ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -20,15 +21,17 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.25s ease, color 0.25s ease;
         }
 
         .container {
             max-width: 600px;
             width: 100%;
-            background: white;
+            background: #ffffff;
             border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             padding: 40px 36px;
+            transition: background 0.25s ease, box-shadow 0.25s ease;
         }
 
         h1 {
@@ -37,6 +40,7 @@
             color: #1e293b;
             letter-spacing: -0.3px;
             margin-bottom: 6px;
+            transition: color 0.25s ease;
         }
 
         .subtitle {
@@ -45,6 +49,7 @@
             margin-bottom: 32px;
             border-bottom: 2px solid #f1f5f9;
             padding-bottom: 20px;
+            transition: color 0.25s ease, border-color 0.25s ease;
         }
 
         .nav-list {
@@ -60,25 +65,28 @@
             padding: 16px 20px;
             text-decoration: none;
             color: #1e293b;
-            transition: background 0.2s, transform 0.1s;
             border: 1px solid transparent;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, color 0.25s ease, box-shadow 0.2s ease;
         }
 
         .nav-item:hover {
             background: #f1f5f9;
             border-color: #e2e8f0;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
         .nav-title {
             font-weight: 600;
             font-size: 16px;
             margin-bottom: 2px;
+            transition: color 0.25s ease;
         }
 
         .nav-desc {
             font-size: 14px;
             color: #64748b;
+            transition: color 0.25s ease;
         }
 
         .footer {
@@ -86,8 +94,10 @@
             text-align: center;
             font-size: 13px;
             color: #94a3b8;
+            transition: color 0.25s ease;
         }
 
+        /* ---------- 响应式 ---------- */
         @media (max-width: 480px) {
             .container {
                 padding: 24px 18px;
@@ -95,6 +105,110 @@
             h1 {
                 font-size: 22px;
             }
+        }
+
+        /* ============================================================
+                   深色模式 (自动适配系统)
+                   ============================================================ */
+        @media (prefers-color-scheme: dark) {
+
+            /* 页面背景 */
+            body {
+                background: #0f1117;
+            }
+
+            /* 卡片容器 */
+            .container {
+                background: #1c1f26;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            }
+
+            /* 主标题 */
+            h1 {
+                color: #e8edf5;
+            }
+
+            /* 副标题 & 分割线 */
+            .subtitle {
+                color: #94a3b8;
+                border-bottom-color: #2d313a;
+            }
+
+            /* 导航项 */
+            .nav-item {
+                background: #262a33;
+                color: #e8edf5;
+                border-color: transparent;
+            }
+
+            .nav-item:hover {
+                background: #2f343f;
+                border-color: #3f4552;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            }
+
+            .nav-title {
+                color: #e8edf5;
+            }
+
+            .nav-desc {
+                color: #8e9aaf;
+            }
+
+            /* 页脚 */
+            .footer {
+                color: #5a647a;
+            }
+
+            /* 图标在深色模式下更和谐（不强制反转，保留原样） */
+            /* 若 favicon 是 SVG 文字，可保持黑色；但此处无需额外处理 */
+        }
+
+        /* ============================================================
+                   手动切换支持 (可选) —— 通过 .dark 类
+                   如果你希望用户手动切换，可以在 body 上添加 .dark 类
+                   这里保留但不主动使用，方便未来扩展
+                   ============================================================ */
+        body.dark {
+            background: #0f1117;
+        }
+
+        body.dark .container {
+            background: #1c1f26;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        body.dark h1 {
+            color: #e8edf5;
+        }
+
+        body.dark .subtitle {
+            color: #94a3b8;
+            border-bottom-color: #2d313a;
+        }
+
+        body.dark .nav-item {
+            background: #262a33;
+            color: #e8edf5;
+            border-color: transparent;
+        }
+
+        body.dark .nav-item:hover {
+            background: #2f343f;
+            border-color: #3f4552;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark .nav-title {
+            color: #e8edf5;
+        }
+
+        body.dark .nav-desc {
+            color: #8e9aaf;
+        }
+
+        body.dark .footer {
+            color: #5a647a;
         }
     </style>
 </head>
@@ -105,47 +219,49 @@
         <div class="subtitle">我的小工具集合~不要对麻瓜使用魔法！</div>
 
         <div class="nav-list">
+
+            <!-- GitHub -->
             <a href="https://github.com/" class="nav-item" target="_blank">
                 <div class="nav-title">GitHub</div>
                 <div class="nav-desc">小站的开端~</div>
-         
             </a>
-        <div class="nav-list">
+
+            <!-- 幸运数字 -->
             <a href="https://magua-qi.github.io/luckynumber.html" class="nav-item" target="_blank">
                 <div class="nav-title">娱乐：幸运数字</div>
                 <div class="nav-desc">搏一搏单车变摩托</div>
-         
             </a>
 
+            <!-- 快乐掼蛋 -->
             <a href="https://magua-qi.github.io/guandan.html?mode=moon_static" class="nav-item" target="_blank">
                 <div class="nav-title">娱乐：快乐掼蛋</div>
                 <div class="nav-desc">娱乐计分功能</div>
-           
             </a>
 
+            <!-- 配杆计算器 -->
             <a href="https://magua-qi.github.io/ligan.html?mode=moon_static" class="nav-item" target="_blank">
                 <div class="nav-title">工程：配杆计算器</div>
                 <div class="nav-desc">碗扣盘扣脚手架立杆配杆计算</div>
-      
             </a>
 
+            <!-- 贝雷梁重量计算器 -->
             <a href="https://magua-qi.github.io/beilei.html?mode=moon_static" class="nav-item" target="_blank">
                 <div class="nav-title">工程：贝雷梁重量计算器</div>
                 <div class="nav-desc">根据长度和结构计算重量</div>
-                
             </a>
 
+            <!-- Flip Clock -->
             <a href="https://magua-qi.github.io/Flip%20Clock.html" class="nav-item" target="_blank">
                 <div class="nav-title">壁纸：Flip Clock</div>
                 <div class="nav-desc">极简翻页时钟</div>
-      
             </a>
 
+            <!-- 卫星云图壁纸 -->
             <a href="https://magua-qi.github.io/wallpaper.html?mode=moon_static" class="nav-item" target="_blank">
                 <div class="nav-title">壁纸：卫星云图壁纸</div>
-                <div class="nav-desc">四个模式动态壁纸</div>           
-                           
+                <div class="nav-desc">四个模式动态壁纸</div>
             </a>
+
             <!-- 如需增加新链接，直接复制上面的 <a> 块并修改 href、标题和描述即可 -->
         </div>
 
