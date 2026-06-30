@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <title>Q235/Q355 稳定系数 φ 查询</title>
+    <!-- 白底蓝字 小写 φ 图标 (SVG favicon) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='72' font-size='72' font-family='serif' text-anchor='middle' fill='%231a4b74'%3E%CF%86%3C/text%3E%3C/svg%3E" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: #f5f7fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px 12px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.12);
+            padding: 24px 18px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #0b1e33;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 .phi-icon {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: white;
+            color: #1a4b74;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 36px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            font-family: 'Times New Roman', serif;
+            flex-shrink: 0;
+        }
+        .subtitle {
+            font-size: 13px;
+            font-weight: 400;
+            color: #5a6f88;
+            background: #eef2f7;
+            padding: 4px 14px;
+            border-radius: 30px;
+            margin-left: auto;
+        }
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 13px;
+            color: #3d5670;
+            border-bottom: 1px solid #e8edf4;
+            padding-bottom: 16px;
+            margin-top: 6px;
+        }
+        .meta span {
+            background: #f0f4fa;
+            padding: 2px 14px;
+            border-radius: 30px;
+        }
+        .query-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 16px;
+            margin: 20px 0 16px;
+            align-items: flex-end;
+        }
+        .field {
+            flex: 1 0 140px;
+            min-width: 120px;
+        }
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1d3853;
+            margin-bottom: 4px;
+        }
+        .field select,
+        .field input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #d7e0ea;
+            background: #fafcff;
+            font-size: 16px;
+            color: #0b1e33;
+            outline: none;
+            font-weight: 500;
+            transition: 0.15s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .field select:focus,
+        .field input:focus {
+            border-color: #2b6c9e;
+            box-shadow: 0 0 0 3px rgba(43, 108, 158, 0.15);
+        }
+        .field select option[value=""] {
+            color: #999;
+        }
+        .field input::placeholder {
+            color: #b0bccd;
+            font-weight: 400;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex: 1 0 auto;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.15s;
+            touch-action: manipulation;
+            min-height: 48px;
+        }
+        .btn-primary {
+            background: #1a4b74;
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 75, 116, 0.25);
+        }
+        .btn-primary:hover {
+            background: #0f3a5c;
+            transform: scale(1.01);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #c8d5e5;
+            color: #1d3853;
+        }
+        .btn-outline:hover {
+            background: #eef4fc;
+            border-color: #8aa3c2;
+        }
+        .result-card {
+            background: #f2f6fd;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin: 18px 0 14px;
+            border-left: 5px solid #1a4b74;
+        }
+        .result-card .label {
+            font-size: 13px;
+            color: #3f5b79;
+            font-weight: 500;
+        }
+        .result-card .value {
+            font-size: 38px;
+            font-weight: 700;
+            color: #0b1e33;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .result-card .value small {
+            font-size: 18px;
+            font-weight: 400;
+            color: #3f5b79;
+        }
+        .result-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 28px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #d7e3f0;
+            font-size: 14px;
+            color: #1f3b57;
+        }
+        .result-detail strong {
+            font-weight: 600;
+        }
+        .table-wrap {
+            max-height: 420px;
+            overflow: auto;
+            border-radius: 14px;
+            border: 1px solid #e2eaf3;
+            margin-top: 10px;
+            background: white;
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 200px;
+        }
+        th {
+            background: #e8eff8;
+            color: #1a3450;
+            font-weight: 600;
+            padding: 10px 6px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            text-align: center;
+            border-bottom: 2px solid #c5d4e6;
+        }
+        td {
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 1px solid #e7eef7;
+            color: #1a3450;
+        }
+        tr:hover td {
+            background: #f4f9ff;
+        }
+        .highlight-row td {
+            background: #d4e3fa !important;
+            font-weight: 600;
+        }
+        .footnote {
+            font-size: 13px;
+            color: #53718f;
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #f7faff;
+            border-radius: 14px;
+            border: 1px solid #e5eef9;
+            line-height: 1.6;
+        }
+        .footnote code {
+            background: #e3ebf5;
+            padding: 1px 10px;
+            border-radius: 30px;
+            font-size: 12.5px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px 8px; }
+            .container { padding: 16px 12px; }
+            h1 { font-size: 20px; }
+            h1 .phi-icon { width: 30px; height: 30px; font-size: 26px; line-height: 30px; }
+            .subtitle { font-size: 12px; padding: 2px 12px; }
+            .result-card .value { font-size: 32px; }
+            .btn { padding: 10px 18px; font-size: 15px; min-height: 44px; }
+            .field select,
+            .field input { padding: 10px 12px; font-size: 15px; }
+            .query-section { gap: 10px; }
+            .field { flex: 1 0 100%; }
+            .btn-group { flex: 1 0 100%; }
+            .btn-group .btn { flex: 1; justify-content: center; }
+            .table-wrap { max-height: 320px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 4px; }
+            .result-detail { font-size: 13px; gap: 10px 20px; }
+        }
+        @media (max-width: 400px) {
+            .result-card .value { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        <span class="phi-icon">φ</span>
+        <span>轴心受压稳定系数</span>
+        <span class="subtitle">JGJ/T 231-2021</span>
+    </h1>
+    <div class="meta">
+        <span>📌 数据按您提供的表格核对</span>
+        <span>⚙ 表格随牌号切换</span>
+    </div>
+
+    <div class="query-section">
+        <div class="field">
+            <label for="steelGrade">钢材牌号</label>
+            <select id="steelGrade">
+                <option value="" disabled selected style="color: #999;">选择钢牌号</option>
+                <option value="Q235">Q235</option>
+                <option value="Q355">Q355</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="lambdaInput">长细比 λ</label>
+            <input type="number" id="lambdaInput" placeholder="输入长细比 λ" min="0" max="250" step="0.5" />
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="queryBtn">🔍 查询</button>
+            <button class="btn btn-outline" id="resetBtn">↺ 重置</button>
+        </div>
+    </div>
+
+    <div id="resultArea">
+        <div class="result-card">
+            <div class="label">稳定系数 φ</div>
+            <div class="value" id="phiDisplay">— <small>请选择牌号并输入长细比</small></div>
+            <div class="result-detail">
+                <span><strong>钢材：</strong><span id="detailSteel">—</span></span>
+                <span><strong>长细比 λ：</strong><span id="detailLambda">—</span></span>
+                <span><strong>数据来源：</strong>您提供的表格</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 6px;">
+        <span style="font-weight: 500; color: #1d3853;">📋 稳定系数表（λ 0~250，步长1）</span>
+        <span style="font-size: 12px; color: #5f7d9c;">高亮行为最接近所查 λ 的行</span>
+    </div>
+    <div class="table-wrap" id="tableWrap">
+        <table>
+            <thead id="tableHead">
+                <tr><th>λ</th><th id="phiColHeader">φ (Q355)</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="footnote">
+        <strong>📌 说明</strong> 所有稳定系数数据均来自您提供的表格（Q235 和 Q355 分别按行、列排列）。查询时若 λ 为小数，采用 <strong>线性内插法</strong> 计算；若超出 0~250 范围，则取边界值。
+    </div>
+</div>
+
+<script>
+    // ----- 稳定系数原始数据（λ = 0~250，步长1）-----
+    const q235Rows = [
+        [1.000,0.997,0.995,0.992,0.989,0.987,0.984,0.981,0.979,0.976],
+        [0.974,0.971,0.968,0.966,0.963,0.960,0.958,0.955,0.952,0.949],
+        [0.947,0.944,0.941,0.938,0.936,0.933,0.930,0.927,0.924,0.921],
+        [0.918,0.915,0.912,0.909,0.906,0.903,0.899,0.896,0.893,0.889],
+        [0.886,0.882,0.879,0.875,0.872,0.868,0.864,0.861,0.858,0.855],
+        [0.852,0.849,0.846,0.843,0.839,0.836,0.832,0.829,0.825,0.822],
+        [0.818,0.814,0.810,0.806,0.802,0.797,0.793,0.789,0.784,0.779],
+        [0.775,0.770,0.765,0.760,0.755,0.750,0.744,0.739,0.733,0.728],
+        [0.722,0.716,0.710,0.704,0.698,0.692,0.686,0.680,0.673,0.667],
+        [0.661,0.654,0.648,0.641,0.634,0.626,0.618,0.611,0.603,0.595],
+        [0.588,0.580,0.573,0.566,0.558,0.551,0.544,0.537,0.530,0.523],
+        [0.516,0.509,0.502,0.496,0.489,0.483,0.476,0.470,0.464,0.458],
+        [0.452,0.446,0.440,0.434,0.428,0.423,0.417,0.412,0.406,0.401],
+        [0.396,0.391,0.386,0.381,0.376,0.371,0.367,0.362,0.357,0.353],
+        [0.349,0.344,0.340,0.336,0.332,0.328,0.324,0.320,0.316,0.312],
+        [0.308,0.305,0.301,0.298,0.294,0.291,0.287,0.284,0.281,0.277],
+        [0.274,0.271,0.268,0.265,0.262,0.259,0.256,0.253,0.251,0.248],
+        [0.245,0.243,0.240,0.237,0.235,0.232,0.230,0.227,0.225,0.223],
+        [0.220,0.218,0.216,0.214,0.211,0.209,0.207,0.205,0.203,0.201],
+        [0.199,0.197,0.195,0.193,0.191,0.189,0.188,0.186,0.184,0.182],
+        [0.180,0.179,0.177,0.175,0.174,0.172,0.171,0.169,0.167,0.166],
+        [0.164,0.163,0.161,0.160,0.159,0.157,0.156,0.154,0.153,0.152],
+        [0.150,0.149,0.148,0.146,0.145,0.144,0.143,0.141,0.140,0.139],
+        [0.138,0.137,0.136,0.135,0.133,0.132,0.131,0.130,0.129,0.128],
+        [0.127,0.126,0.125,0.124,0.123,0.122,0.121,0.120,0.119,0.118],
+        [0.117,null,null,null,null,null,null,null,null,null]
+    ];
+
+    const q355Rows = [
+        [1.000,0.997,0.994,0.991,0.988,0.985,0.982,0.979,0.976,0.973],
+        [0.971,0.968,0.965,0.962,0.959,0.956,0.952,0.949,0.946,0.943],
+        [0.940,0.937,0.934,0.930,0.927,0.924,0.920,0.917,0.913,0.909],
+        [0.906,0.902,0.898,0.894,0.890,0.886,0.882,0.878,0.874,0.870],
+        [0.867,0.864,0.860,0.857,0.853,0.843,0.845,0.841,0.837,0.833],
+        [0.829,0.824,0.819,0.815,0.810,0.805,0.800,0.794,0.789,0.783],
+        [0.777,0.771,0.765,0.759,0.752,0.746,0.739,0.732,0.725,0.718],
+        [0.710,0.703,0.695,0.688,0.680,0.672,0.664,0.656,0.648,0.640],
+        [0.632,0.623,0.615,0.607,0.599,0.591,0.583,0.574,0.566,0.558],
+        [0.550,0.542,0.535,0.527,0.519,0.512,0.504,0.497,0.489,0.482],
+        [0.475,0.467,0.460,0.458,0.445,0.438,0.431,0.424,0.418,0.411],
+        [0.405,0.398,0.392,0.386,0.380,0.375,0.369,0.363,0.358,0.352],
+        [0.347,0.342,0.337,0.332,0.327,0.322,0.318,0.313,0.309,0.304],
+        [0.300,0.296,0.292,0.288,0.284,0.280,0.276,0.272,0.269,0.265],
+        [0.261,0.258,0.255,0.251,0.248,0.245,0.242,0.238,0.235,0.232],
+        [0.229,0.227,0.224,0.221,0.218,0.216,0.213,0.210,0.208,0.205],
+        [0.203,0.201,0.198,0.196,0.194,0.191,0.189,0.187,0.185,0.183],
+        [0.181,0.179,0.177,0.175,0.173,0.171,0.169,0.167,0.165,0.163],
+        [0.162,0.160,0.158,0.157,0.155,0.153,0.152,0.150,0.149,0.147],
+        [0.146,0.144,0.143,0.141,0.140,0.138,0.137,0.136,0.134,0.133],
+        [0.132,0.130,0.129,0.128,0.127,0.126,0.124,0.123,0.122,0.121],
+        [0.120,0.119,0.118,0.116,0.115,0.114,0.113,0.112,0.111,0.110],
+        [0.109,0.108,0.107,0.106,0.106,0.105,0.104,0.103,0.101,0.101],
+        [0.100,0.099,0.098,0.098,0.097,0.096,0.095,0.094,0.094,0.093],
+        [0.092,0.091,0.091,0.090,0.089,0.088,0.088,0.087,0.086,0.086],
+        [0.085,null,null,null,null,null,null,null,null,null]
+    ];
+
+    function buildFullData(qRows) {
+        const data = [];
+        for (let rowIdx = 0; rowIdx < qRows.length; rowIdx++) {
+            const baseLambda = rowIdx * 10;
+            const row = qRows[rowIdx];
+            for (let col = 0; col < 10; col++) {
+                const lambda = baseLambda + col;
+                if (lambda > 250) break;
+                const phi = row[col];
+                if (phi !== null && phi !== undefined) {
+                    data.push({ lambda, phi });
+                }
+            }
+        }
+        return data;
+    }
+
+    const PHI_Q235 = buildFullData(q235Rows);
+    const PHI_Q355 = buildFullData(q355Rows);
+
+    function interpolatePhi(data, lambda) {
+        if (lambda < 0) lambda = 0;
+        if (lambda > 250) lambda = 250;
+        for (let i = 0; i < data.length; i++) {
+            if (Math.abs(data[i].lambda - lambda) < 1e-6) return data[i].phi;
+        }
+        if (lambda <= data[0].lambda) return data[0].phi;
+        if (lambda >= data[data.length-1].lambda) return data[data.length-1].phi;
+        for (let i = 0; i < data.length-1; i++) {
+            if (lambda >= data[i].lambda && lambda <= data[i+1].lambda) {
+                const t = (lambda - data[i].lambda) / (data[i+1].lambda - data[i].lambda);
+                return data[i].phi + t * (data[i+1].phi - data[i].phi);
+            }
+        }
+        return data[data.length-1].phi;
+    }
+
+    // DOM 引用
+    const steelSelect = document.getElementById('steelGrade');
+    const lambdaInput = document.getElementById('lambdaInput');
+    const queryBtn = document.getElementById('queryBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const phiDisplay = document.getElementById('phiDisplay');
+    const detailSteel = document.getElementById('detailSteel');
+    const detailLambda = document.getElementById('detailLambda');
+    const tableBody = document.getElementById('tableBody');
+    const phiColHeader = document.getElementById('phiColHeader');
+
+    function renderTable() {
+        const grade = steelSelect.value;
+        if (!grade) {
+            tableBody.innerHTML = '<tr><td colspan="2" style="color:#999; padding:20px;">请选择钢材牌号</td></tr>';
+            phiColHeader.textContent = 'φ (—)';
+            return;
+        }
+        const data = grade === 'Q235' ? PHI_Q235 : PHI_Q355;
+        phiColHeader.textContent = `φ (${grade})`;
+        let html = '';
+        for (let i = 0; i < data.length; i++) {
+            html += `<tr><td>${data[i].lambda}</td><td>${data[i].phi.toFixed(3)}</td></tr>`;
+        }
+        tableBody.innerHTML = html;
+        const currentLambda = parseFloat(lambdaInput.value);
+        if (!isNaN(currentLambda) && currentLambda >= 0) {
+            highlightRow(currentLambda);
+        }
+    }
+
+    // ---------- 核心修改：高亮下取整行和上取整行 ----------
+    function highlightRow(lambda) {
+        const rows = tableBody.querySelectorAll('tr');
+        const floorLambda = Math.floor(lambda);
+        const ceilLambda = Math.ceil(lambda);
+
+        // 先移除所有高亮
+        rows.forEach(r => r.classList.remove('highlight-row'));
+
+        let firstHighlighted = null;
+        rows.forEach(row => {
+            const td = row.querySelector('td:first-child');
+            if (!td) return;
+            const val = parseFloat(td.textContent);
+            if (isNaN(val)) return;
+
+            // 如果当前行的 λ 等于 floor 或 ceil，则高亮
+            if (val === floorLambda || val === ceilLambda) {
+                row.classList.add('highlight-row');
+                if (!firstHighlighted) {
+                    firstHighlighted = row;
+                }
+            }
+        });
+
+        // 如果未找到匹配（边界情况，如 lambda 被限制在 0~250 内，但以防万一），回退到最近行
+        if (!firstHighlighted) {
+            let closestRow = null;
+            let closestDiff = Infinity;
+            rows.forEach(row => {
+                const td = row.querySelector('td:first-child');
+                if (!td) return;
+                const val = parseFloat(td.textContent);
+                if (isNaN(val)) return;
+                const diff = Math.abs(val - lambda);
+                if (diff < closestDiff) {
+                    closestDiff = diff;
+                    closestRow = row;
+                }
+            });
+            if (closestRow) {
+                closestRow.classList.add('highlight-row');
+                firstHighlighted = closestRow;
+            }
+        }
+
+        if (firstHighlighted) {
+            firstHighlighted.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+    }
+
+    function queryPhi() {
+        const grade = steelSelect.value;
+        if (!grade) {
+            phiDisplay.innerHTML = '⚠️ <small>请先选择钢材牌号</small>';
+            detailSteel.textContent = '—';
+            detailLambda.textContent = '—';
+            return;
+        }
+        const rawLambda = parseFloat(lambdaInput.value);
+        if (isNaN(rawLambda) || rawLambda < 0) {
+            phiDisplay.innerHTML = '⚠️ <small>请输入有效长细比 (≥0)</small>';
+            detailLambda.textContent = '—';
+            return;
+        }
+        const lambda = Math.round(rawLambda * 10) / 10;
+        const data = grade === 'Q235' ? PHI_Q235 : PHI_Q355;
+        const phi = interpolatePhi(data, lambda);
+        phiDisplay.innerHTML = `${phi.toFixed(4)} <small>(${grade})</small>`;
+        detailSteel.textContent = grade;
+        detailLambda.textContent = lambda.toFixed(1);
+        highlightRow(lambda);
+    }
+
+    function resetAll() {
+        steelSelect.value = '';
+        lambdaInput.value = '';
+        phiDisplay.innerHTML = '— <small>请选择牌号并输入长细比</small>';
+        detailSteel.textContent = '—';
+        detailLambda.textContent = '—';
+        renderTable();
+        document.querySelector('.table-wrap').scrollTop = 0;
+    }
+
+    // 事件绑定
+    queryBtn.addEventListener('click', queryPhi);
+    resetBtn.addEventListener('click', resetAll);
+    lambdaInput.addEventListener('keydown', e => { if (e.key === 'Enter') queryPhi(); });
+    steelSelect.addEventListener('change', () => {
+        renderTable();
+        if (steelSelect.value && lambdaInput.value) {
+            queryPhi();
+        } else {
+            phiDisplay.innerHTML = '— <small>请输入长细比</small>';
+            detailSteel.textContent = steelSelect.value || '—';
+        }
+    });
+    let timer = null;
+    lambdaInput.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            if (steelSelect.value && lambdaInput.value) {
+                queryPhi();
+            }
+        }, 300);
+    });
+
+    // 初始化
+    resetAll();
+</script>
+</body>
+</html>
