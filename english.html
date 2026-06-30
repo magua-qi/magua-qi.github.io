@@ -627,17 +627,14 @@
     </div>
 
     <!-- ================================================================
-         加载外部词库（方案二）
-    ================================================================ -->
-    <script src="https://magua-qi.github.io/englishwords.html"></script>
-
-    <!-- ================================================================
-         主程序脚本
+         主程序脚本 – 使用 fetch 加载 JSON 词库
     ================================================================ -->
     <script>
         // ============================================================
-        //  主程序 - 使用全局变量 WORDS_DATA（由外部脚本定义）
+        //  全局变量
         // ============================================================
+        let WORDS_DATA = null;          // 词库数据将在 fetch 后填充
+        const DATA_URL = 'https://magua-qi.github.io/englishwords.json'; // 数据文件地址
 
         // ---- 工具函数 ----
         function shuffle(arr) {
@@ -1406,7 +1403,7 @@
         dom.resetCtrlBtn.addEventListener('click', resetProgress);
 
         // ============================================================
-        //  构建下拉框并启动
+        //  数据加载、构建下拉框并启动
         // ============================================================
         function buildGradeSelect() {
             const select = dom.gradeSelect;
@@ -1425,16 +1422,6 @@
         }
 
         function initApp() {
-            // 检查 WORDS_DATA 是否已定义
-            if (typeof WORDS_DATA === 'undefined') {
-                document.querySelector('.app-container').innerHTML = `
-                    <div style="text-align:center;padding:40px;color:#c62828;">
-                        <h2>⚠️ 词库未加载</h2>
-                        <p>请确保 <code>englishwords.html</code> 文件存在且可访问。</p>
-                    </div>
-                `;
-                return;
-            }
             buildGradeSelect();
 
             const cache = loadCache();
@@ -1451,11 +1438,47 @@
             initGame(defaultGrade, false);
             updateControlButtons();
             enableInteraction(false);
-            console.log('单词记忆工具已启动（外部词库 - 方案二）');
+            console.log('单词记忆工具已启动（JSON 数据源）');
+        }
+
+        // ---- 加载 JSON 数据 ----
+        async function loadData() {
+            try {
+                dom.feedback.textContent = '⏳ 加载词库中...';
+                dom.feedback.className = 'feedback info';
+
+                const response = await fetch(DATA_URL + '?t=' + Date.now()); // 添加时间戳防止缓存
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const json = await response.json();
+                WORDS_DATA = json;
+
+                // 验证数据
+                if (typeof WORDS_DATA !== 'object' || Object.keys(WORDS_DATA).length === 0) {
+                    throw new Error('词库数据为空或格式错误');
+                }
+
+                console.log('✅ 词库加载成功，共', Object.keys(WORDS_DATA).length, '个分类');
+                dom.feedback.textContent = '✅ 词库加载成功！';
+                dom.feedback.className = 'feedback success';
+
+                // 启动应用
+                initApp();
+            } catch (err) {
+                console.error('❌ 加载词库失败:', err);
+                document.querySelector('.app-container').innerHTML = `
+                    <div style="text-align:center;padding:40px;color:#c62828;">
+                        <h2>⚠️ 词库加载失败</h2>
+                        <p>无法从 <code>${DATA_URL}</code> 加载词库数据</p>
+                        <p style="font-size:14px;color:#999;">${err.message}</p>
+                        <button onclick="location.reload()" style="margin-top:20px;padding:10px 30px;border:none;border-radius:30px;background:#7b1fa2;color:#fff;font-size:16px;font-weight:700;cursor:pointer;">重新加载</button>
+                    </div>
+                `;
+            }
         }
 
         // ---- 启动 ----
-        initApp();
+        loadData();
     </script>
 </body>
 </html>
