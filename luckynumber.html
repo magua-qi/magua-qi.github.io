@@ -652,18 +652,10 @@
             }
 
             async function fetchRemoteData(type) {
-                const url = type === 'ssq' ? 'https://magua-qi.github.io/ssqdata.html' :
-                    'https://magua-qi.github.io/dltdata.html';
+                const url = type === 'ssq' ? 'https://magua-qi.github.io/lucknumberssq.json' : 'https://magua-qi.github.io/lucknumberddt.json';
                 const resp = await fetch(url);
                 if (!resp.ok) throw new Error('网络请求失败');
-                const html = await resp.text();
-                const varName = type === 'ssq' ? 'SSQ_DATA' : 'DLT_DATA';
-                let match = html.match(new RegExp(`const\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
-                if (!match) { match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`)); }
-                if (!match) throw new Error('数据解析失败');
-                let cleaned = match[1].replace(/\/\/.*$/gm, '');
-                let raw;
-                try { const fn = new Function(`return [${cleaned}];`); raw = fn(); } catch (e) { raw = eval(`[${cleaned}]`); }
+                const raw = await resp.json();
                 if (!Array.isArray(raw) || !raw.length) throw new Error('数据为空');
                 const records = parseBuiltinData(type, raw);
                 setCachedData(type, records);
