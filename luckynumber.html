@@ -652,7 +652,7 @@
             }
 
             async function fetchRemoteData(type) {
-                const url = type === 'ssq' ? 'https://magua-qi.github.io/lucknumberssq.json' : 'https://magua-qi.github.io/lucknumberddt.json';
+                const url = type === 'ssq' ? 'https://magua-qi.github.io/luckynumberssq.json' : 'https://magua-qi.github.io/luckynumberdlt.json';
                 const resp = await fetch(url);
                 if (!resp.ok) throw new Error('网络请求失败');
                 const raw = await resp.json();
