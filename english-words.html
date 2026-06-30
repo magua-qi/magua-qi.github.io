@@ -1,9 +1,5 @@
 <script>
-// ============================================================
-//  词汇数据（人教版 PEP 小学 1-6 年级 + 初中 + 高中）
-//  格式：{ "一级分类": { "二级分类": [ {word, phonetic, meaning}, ... ] } }
-// ============================================================
-window.WORDS_DATA = {
+var WORDS_DATA = {
   "小学": {
     "一年级": [
       { "word": "apple", "phonetic": "/ˈæp.l̩/", "meaning": "苹果" },
@@ -476,5 +472,4 @@ window.WORDS_DATA = {
     ]
   }
 };
-console.log('✅ 词库数据已加载，共 ' + Object.keys(window.WORDS_DATA).length + ' 个一级分类');
 </script>
