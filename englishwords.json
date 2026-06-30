@@ -1,5 +1,4 @@
-<script>
-var WORDS_DATA = {
+{
   "小学": {
     "一年级": [
       { "word": "apple", "phonetic": "/ˈæp.l̩/", "meaning": "苹果" },
@@ -471,5 +470,4 @@ var WORDS_DATA = {
       { "word": "responsibility", "phonetic": "/rɪˌspɒn.səˈbɪl.ə.ti/", "meaning": "责任" }
     ]
   }
-};
-</script>
+}
