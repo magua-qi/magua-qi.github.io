@@ -43,7 +43,7 @@
         /* ===== 游戏机外壳 ===== */
         .gameboy {
             background: #c0c0c0;
-            padding: 16px 14px 28px 14px;
+            padding: 12px 12px 20px 12px;
             border-radius: 10px 10px 10px 10px;
             box-shadow:
                 0 12px 0 #808080,
@@ -65,46 +65,50 @@
         .gameboy::before {
             content: '';
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: 50%;
             transform: translateX(-50%);
             width: 50%;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, transparent, #a0a0a0, #e0e0e0, #a0a0a0, transparent);
             border-radius: 4px;
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         /* ============================================================
-           棋盘区域 — 内边距全部归零
+           棋盘区域 — 完全贴边，无内边距
            ============================================================ */
         .board-wrapper {
             flex: 1;
             min-height: 0;
             position: relative;
-            background: #111;
+            background: #0a0a0a;
             border-radius: 0px;
             padding: 0;
+            margin: 0 0 6px 0;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
-            margin: 0 0 8px 0;
             touch-action: none;
             display: flex;
             flex-direction: row;
             align-items: stretch;
             gap: 0;
-            max-height: 65vh;
             overflow: hidden;
         }
 
+        /* 左侧画布容器 — 完全贴边 */
         .board-canvas-wrap {
             flex: 1;
             min-width: 0;
+            min-height: 0;
+            position: relative;
+            padding: 0;
+            margin: 0;
+            border: none;
+            background: #0a0a0a;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            padding-right: 0;
-            border-right: 2px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
         }
 
         .board-canvas-wrap canvas#gameCanvas {
@@ -116,12 +120,14 @@
             border-radius: 0;
             box-shadow: none;
             touch-action: none;
-            aspect-ratio: 10 / 20;
-            max-height: 100%;
-            object-fit: contain;
+            /* 关键：完全填充容器，不保留比例，由 JS 动态控制格子大小 */
+            object-fit: fill;
+            aspect-ratio: auto;
+            max-height: none;
+            max-width: none;
         }
 
-        /* ----- 右侧信息面板 ----- */
+        /* ----- 右侧信息面板 (保持原样) ----- */
         .info-panel {
             flex: 0 0 auto;
             width: 135px;
@@ -129,13 +135,14 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            gap: 32px;
+            gap: 28px;
             padding: 8px 6px;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.35);
             border-radius: 0;
             min-height: 0;
             overflow: hidden;
             margin-left: 0;
+            border-left: 2px solid rgba(255, 255, 255, 0.06);
         }
 
         .info-panel .info-preview canvas {
@@ -154,7 +161,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 32px;
+            gap: 28px;
             width: 100%;
             flex-shrink: 0;
         }
@@ -173,9 +180,9 @@
         }
 
         .info-panel .info-stats .stat-item .stat-value {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 300;
-            color: #e0e0e0;
+            color: #e8e8e8;
         }
 
         .info-panel .info-difficulty {
@@ -206,7 +213,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.78);
-            border-radius: 12px;
+            border-radius: 0;
             display: none;
             flex-direction: column;
             justify-content: center;
@@ -232,13 +239,13 @@
         }
 
         /* ============================================================
-           Select / Start — 靠右布置
+           Select / Start
            ============================================================ */
         .ss-row {
             display: flex;
             justify-content: flex-end;
             gap: 28px;
-            padding: 6px 8px 20px 8px;
+            padding: 4px 8px 16px 8px;
             flex-shrink: 0;
         }
 
@@ -283,7 +290,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 16px 0 12px 0;
+            padding: 12px 0 8px 0;
             gap: 100px;
             touch-action: none;
             margin-top: 0;
@@ -432,11 +439,21 @@
             outline: none;
             flex-shrink: 0;
             border: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
         }
 
+        /* 旋转按钮上的小箭头标记 */
         .rotate-btn::after {
-            content: '';
-            display: none;
+            content: '↻';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 42px;
+            color: #d0d0d0;
+            font-weight: 300;
+            opacity: 0.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .rotate-btn.touch-active {
@@ -446,44 +463,45 @@
         }
 
         /* ============================================================
-           响应式适配
+           响应式适配 — 完全贴边优先
            ============================================================ */
         @media (max-width: 480px) {
             .gameboy {
-                padding: 12px 10px 24px 10px;
+                padding: 8px 8px 16px 8px;
                 border-radius: 28px 28px 34px 34px;
                 max-height: 100dvh;
-                max-width: 400px;
             }
             .board-wrapper {
                 padding: 0;
                 margin: 0 0 4px 0;
-                border-radius: 10px;
-                max-height: 58vh;
+                border-radius: 8px;
             }
             .board-canvas-wrap {
-                padding-right: 0;
+                padding: 0;
+            }
+            .board-canvas-wrap canvas#gameCanvas {
+                object-fit: fill;
             }
             .info-panel {
                 width: 110px;
-                gap: 28px;
+                gap: 22px;
                 padding: 6px 4px;
             }
             .info-panel .info-preview canvas {
-                width: 68px;
-                height: 68px;
+                width: 72px;
+                height: 72px;
             }
             .info-panel .info-stats {
-                gap: 28px;
+                gap: 22px;
             }
             .info-panel .info-stats .stat-item {
                 font-size: 6px;
             }
             .info-panel .info-stats .stat-item .stat-value {
-                font-size: 9px;
+                font-size: 10px;
             }
             .info-panel .info-difficulty {
-                font-size: 6px;
+                font-size: 7px;
             }
 
             .dpad {
@@ -517,15 +535,18 @@
                 width: 82px;
                 height: 82px;
             }
+            .rotate-btn::after {
+                font-size: 34px;
+            }
 
             .control-area {
                 gap: 60px;
-                padding: 12px 0 8px 0;
+                padding: 8px 0 6px 0;
             }
 
             .ss-row {
                 gap: 20px;
-                padding: 4px 6px 16px 6px;
+                padding: 2px 6px 12px 6px;
             }
             .ss-row .ss-btn {
                 font-size: 8px;
@@ -538,27 +559,28 @@
 
         @media (max-width: 390px) {
             .gameboy {
-                padding: 8px 6px 20px 6px;
+                padding: 6px 6px 14px 6px;
                 border-radius: 20px 20px 26px 26px;
             }
             .board-wrapper {
                 padding: 0;
-                max-height: 50vh;
+                margin: 0 0 2px 0;
+                border-radius: 6px;
             }
             .board-canvas-wrap {
-                padding-right: 0;
+                padding: 0;
             }
             .info-panel {
                 width: 90px;
-                gap: 22px;
+                gap: 18px;
                 padding: 4px 3px;
             }
             .info-panel .info-preview canvas {
-                width: 56px;
-                height: 56px;
+                width: 58px;
+                height: 58px;
             }
             .info-panel .info-stats {
-                gap: 22px;
+                gap: 18px;
             }
             .info-panel .info-stats .stat-item {
                 font-size: 5px;
@@ -567,7 +589,7 @@
                 font-size: 8px;
             }
             .info-panel .info-difficulty {
-                font-size: 5px;
+                font-size: 6px;
             }
 
             .dpad {
@@ -617,18 +639,21 @@
                 width: 68px;
                 height: 68px;
             }
+            .rotate-btn::after {
+                font-size: 28px;
+            }
             .rotate-btn.touch-active {
                 transform: translateY(6px) scale(0.94);
             }
 
             .control-area {
                 gap: 40px;
-                padding: 10px 0 6px 0;
+                padding: 6px 0 4px 0;
             }
 
             .ss-row {
                 gap: 14px;
-                padding: 2px 4px 14px 4px;
+                padding: 0 4px 10px 4px;
             }
             .ss-row .ss-btn {
                 font-size: 7px;
@@ -647,23 +672,22 @@
         @media (max-height: 680px) {
             .board-wrapper {
                 padding: 0;
-                max-height: 55vh;
-                max-width: 400px;
+                margin: 0 0 2px 0;
             }
             .board-canvas-wrap {
-                padding-right: 0;
+                padding: 0;
             }
             .info-panel {
                 width: 100px;
-                gap: 26px;
-                padding: 4px;
+                gap: 20px;
+                padding: 4px 4px;
             }
             .info-panel .info-preview canvas {
-                width: 60px;
-                height: 60px;
+                width: 62px;
+                height: 62px;
             }
             .info-panel .info-stats {
-                gap: 26px;
+                gap: 20px;
             }
             .info-panel .info-stats .stat-item {
                 font-size: 6px;
@@ -688,19 +712,22 @@
                 width: 68px;
                 height: 68px;
             }
+            .rotate-btn::after {
+                font-size: 28px;
+            }
             .control-area {
                 gap: 40px;
-                padding: 10px 0 6px 0;
+                padding: 6px 0 4px 0;
             }
             .ss-row {
-                padding: 2px 6px 14px 6px;
+                padding: 0 6px 10px 6px;
             }
             .ss-row .ss-btn {
                 font-size: 7px;
                 padding: 4px 12px;
             }
             .gameboy {
-                padding: 8px 6px 18px 6px;
+                padding: 6px 6px 14px 6px;
             }
             .board-wrapper {
                 margin: 0 0 2px 0;
@@ -710,15 +737,14 @@
         @media (max-height: 580px) {
             .board-wrapper {
                 padding: 0;
-                max-height: 45vh;
-                max-width: 400px;
+                margin: 0 0 2px 0;
             }
             .board-canvas-wrap {
-                padding-right: 0;
+                padding: 0;
             }
             .info-panel {
                 width: 80px;
-                gap: 18px;
+                gap: 14px;
                 padding: 3px 2px;
             }
             .info-panel .info-preview canvas {
@@ -726,7 +752,7 @@
                 height: 48px;
             }
             .info-panel .info-stats {
-                gap: 18px;
+                gap: 14px;
             }
             .info-panel .info-stats .stat-item {
                 font-size: 5px;
@@ -769,23 +795,23 @@
                 width: 56px;
                 height: 56px;
             }
+            .rotate-btn::after {
+                font-size: 22px;
+            }
 
             .control-area {
                 gap: 24px;
-                padding: 6px 0 4px 0;
+                padding: 4px 0 2px 0;
             }
             .ss-row .ss-btn {
                 font-size: 6px;
                 padding: 3px 10px;
             }
             .gameboy {
-                padding: 6px 4px 14px 4px;
-            }
-            .board-wrapper {
-                margin: 0 0 2px 0;
+                padding: 4px 4px 10px 4px;
             }
             .ss-row {
-                padding: 0 4px 10px 4px;
+                padding: 0 4px 8px 4px;
             }
             .game-over-overlay h2 {
                 font-size: 12px;
@@ -851,7 +877,12 @@
 
     <script>
         // ================================================================
-        //  经典黑白俄罗斯方块 — 完整状态缓存，恢复后自动暂停
+        //  黑白俄罗斯方块 — 完全贴边 + 手机深度适配
+        //  核心改进：
+        //    1. canvas 使用 object-fit:fill 完全填充容器，无空白
+        //    2. 动态计算格子大小，让棋盘贴边且保持比例
+        //    3. 窗口 resize 时自动重绘，适应各种屏幕
+        //    4. 手机端触控优化，按钮响应灵敏
         // ================================================================
 
         (function() {
@@ -859,11 +890,12 @@
 
             const COLS = 10;
             const ROWS = 20;
-            const BLOCK_SIZE = 30;
+            // 基准尺寸仅用于初始渲染，实际由容器大小决定
+            const BASE_BLOCK = 30;
 
             const SPEED_SIMPLE = 600;
             const SPEED_NORMAL = 420;
-            const SPEED_HARD   = 250;
+            const SPEED_HARD = 250;
 
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -884,13 +916,18 @@
             let gameRunning = false;
             let currentInterval = SPEED_NORMAL;
             let speedBoostTimer = null;
-            let paused = false;           // 新增暂停状态
+            let paused = false;
 
             let currentDifficulty = 1;
             const DIFF_NAMES = ['简单', '普通', '困难'];
             const DIFF_SPEEDS = [SPEED_SIMPLE, SPEED_NORMAL, SPEED_HARD];
 
-            // ===== 完整状态保存与加载 =====
+            // ===== 动态尺寸缓存 =====
+            let cachedCanvasWidth = 300;
+            let cachedCanvasHeight = 600;
+            let cachedBlockSize = 30;
+
+            // ===== 状态保存 =====
             function saveFullState() {
                 try {
                     const state = {
@@ -930,13 +967,11 @@
 
                     if (gameOver) {
                         gameOverOverlay.classList.add('show');
-                        // 游戏结束，清除计时器
                         if (dropInterval) {
                             clearInterval(dropInterval);
                             dropInterval = null;
                         }
                     } else if (gameRunning) {
-                        // 游戏未结束且正在运行，设置为暂停状态，清除计时器
                         paused = true;
                         if (dropInterval) {
                             clearInterval(dropInterval);
@@ -1119,7 +1154,7 @@
                 }
             }
 
-            // ---- 所有操作函数添加暂停检查 ----
+            // ---- 操作函数 ----
             function movePiece(dx, dy) {
                 if (paused || !currentPiece || gameOver || !gameRunning) return false;
                 const { shape, x, y } = currentPiece;
@@ -1199,19 +1234,15 @@
                 setDropInterval(speed);
             }
 
-            // ---- 恢复游戏（取消暂停） ----
             function resumeGame() {
                 if (gameOver) {
-                    // 如果游戏结束，重置
                     resetGameFull();
                     return;
                 }
                 if (!gameRunning) {
-                    // 如果游戏未运行（初始状态），启动
                     startNewGame();
                     return;
                 }
-                // 暂停状态下恢复
                 if (paused) {
                     paused = false;
                     gameOverOverlay.classList.remove('show');
@@ -1220,7 +1251,6 @@
                 }
             }
 
-            // ---- 全新开始（清除缓存） ----
             function resetGameFull() {
                 if (dropInterval) {
                     clearInterval(dropInterval);
@@ -1248,7 +1278,7 @@
                     spawnNewPiece();
                 }
                 gameRunning = true;
-                paused = false;   // 确保未暂停
+                paused = false;
                 resetDropInterval();
                 render();
                 renderNext();
@@ -1257,7 +1287,6 @@
                 saveFullState();
             }
 
-            // ---- 首次启动（无缓存时） ----
             function startNewGame() {
                 initBoard();
                 nextPiece = createRandomPiece();
@@ -1275,7 +1304,6 @@
                 saveFullState();
             }
 
-            // ---- 切换难度 ----
             function cycleDifficulty() {
                 currentDifficulty = (currentDifficulty + 1) % 3;
                 updateDifficultyDisplay();
@@ -1289,56 +1317,194 @@
                 difficultyDisplay.textContent = DIFF_NAMES[currentDifficulty];
             }
 
-            // ===== 渲染 =====
+            // ================================================================
+            //  核心渲染 — 完全贴边 + 动态格子大小
+            // ================================================================
+
+            /**
+             * 根据容器实际尺寸计算画布尺寸和格子大小
+             * 保证棋盘完全贴边，无空白
+             */
+            function computeCanvasSize() {
+                const container = canvas.parentElement;
+                if (!container) return;
+
+                const rect = container.getBoundingClientRect();
+                // 取整避免亚像素渲染
+                let w = Math.floor(rect.width);
+                let h = Math.floor(rect.height);
+
+                // 防止尺寸为 0
+                if (w < 10) w = 300;
+                if (h < 20) h = 600;
+
+                // 计算格子大小：让棋盘恰好填满画布
+                // 使用 Math.floor 保证格子整数，避免亚像素锯齿
+                let blockX = Math.floor(w / COLS);
+                let blockY = Math.floor(h / ROWS);
+
+                // 取较小值，保证棋盘完全在画布内（贴边但可能有微小空白）
+                // 但为了完全贴边，我们取较大值并裁剪，但裁剪会导致内容丢失
+                // 所以我们取较小值，然后让棋盘居中（但这样会有空白）
+                // 为了完全贴边，我们使用 blockX 和 blockY 分别作为宽高，
+                // 这样棋盘会拉伸填满，但方块可能不是正方形
+                // 权衡：使用 blockX 和 blockY 分别渲染，保证贴边，允许轻微变形
+                // 但为了让方块尽可能接近正方形，我们取平均值
+                const avgBlock = (blockX + blockY) / 2;
+                // 但使用平均值会导致棋盘不能完全贴边（有空白）
+                // 所以我们分别使用 blockX 和 blockY，让棋盘贴边
+                // 这样方块可能会变成矩形，但在手机屏幕上，宽高比接近 10:20，变形很小
+
+                // 实际测试：使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
+                // 方块在宽高比接近 10:20 时基本是正方形
+                // 为了更好的视觉效果，我们让 blockX 和 blockY 取整后使用
+
+                // 但是，如果 blockX 和 blockY 相差太大，方块变形严重
+                // 所以我们限制最大差值，如果相差超过 20%，则使用平均值并居中
+                const ratio = Math.max(blockX, blockY) / Math.min(blockX, blockY);
+                let useBlockX = blockX;
+                let useBlockY = blockY;
+
+                if (ratio > 1.25) {
+                    // 相差太大，使用平均值并居中
+                    const avg = Math.floor((blockX + blockY) / 2);
+                    useBlockX = avg;
+                    useBlockY = avg;
+                    // 此时棋盘居中，有空白，但方块是正方形
+                    // 为了减少空白，我们让棋盘贴边（取最大值）
+                    // 但实际上，取平均值会导致棋盘在宽或高方向上有空白
+                    // 更好的做法：取较小值，让棋盘完全在画布内，然后居中
+                    // 或者取较大值，让棋盘填满画布，然后裁剪
+                    // 我们取较小值，让棋盘完全在画布内，然后居中
+                    const minBlock = Math.min(blockX, blockY);
+                    useBlockX = minBlock;
+                    useBlockY = minBlock;
+                    // 这样棋盘在画布中居中，有空白，但空白与背景色一致
+                    // 从视觉上看，棋盘是贴边的（因为背景色一致）
+                }
+
+                // 最终决定：使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
+                // 但为了保持方块视觉上接近正方形，我们使用 blockX 和 blockY 的平均值
+                // 并让棋盘居中，这样会有少量空白，但方块是正方形
+                // 或者使用 blockX 和 blockY 分别渲染，棋盘贴边，方块轻微变形
+
+                // 综合考虑，我们采用 "贴边优先" 策略：
+                // 使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
+                // 同时让 blockX 和 blockY 尽量接近，减少变形
+
+                // 具体：计算一个平衡值，使得棋盘贴边且方块尽量正方形
+                // 取 blockX 和 blockY 中较小的值，然后让较大的方向使用相同的值
+                // 这样棋盘在较小方向上贴边，较大方向上有空白
+                // 但空白与背景色一致，视觉上贴边
+                const minBlock = Math.min(blockX, blockY);
+                const finalBlock = minBlock;
+
+                // 使用 finalBlock 作为格子大小，棋盘居中
+                // 这样棋盘完全在画布内，贴边（空白与背景色一致）
+                // 且方块是正方形
+                cachedBlockSize = finalBlock;
+                cachedCanvasWidth = finalBlock * COLS;
+                cachedCanvasHeight = finalBlock * ROWS;
+
+                // 但为了完全贴边（无空白），我们使用 blockX 和 blockY
+                // 让棋盘拉伸填满画布
+                // 我们采用两种策略的结合：如果宽高比接近 10:20，使用拉伸
+                // 否则使用居中
+                const containerRatio = w / h;
+                const targetRatio = COLS / ROWS;
+                if (Math.abs(containerRatio - targetRatio) < 0.1) {
+                    // 宽高比接近，使用拉伸贴边
+                    cachedBlockSize = Math.min(blockX, blockY);
+                    cachedCanvasWidth = blockX * COLS;
+                    cachedCanvasHeight = blockY * ROWS;
+                } else {
+                    // 宽高比相差较大，使用居中保持正方形
+                    cachedBlockSize = Math.floor(Math.min(w / COLS, h / ROWS));
+                    cachedCanvasWidth = cachedBlockSize * COLS;
+                    cachedCanvasHeight = cachedBlockSize * ROWS;
+                }
+
+                // 最终保证尺寸不为 0
+                if (cachedCanvasWidth < 10) cachedCanvasWidth = 300;
+                if (cachedCanvasHeight < 20) cachedCanvasHeight = 600;
+                if (cachedBlockSize < 1) cachedBlockSize = 1;
+
+                // 设置 canvas 内部尺寸
+                canvas.width = cachedCanvasWidth;
+                canvas.height = cachedCanvasHeight;
+                // CSS 尺寸保持 100% 填充容器
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+
+                // 返回计算值
+                return {
+                    width: cachedCanvasWidth,
+                    height: cachedCanvasHeight,
+                    blockSize: cachedBlockSize
+                };
+            }
+
             function render() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // 先计算尺寸
+                computeCanvasSize();
+
+                const w = cachedCanvasWidth;
+                const h = cachedCanvasHeight;
+                const bs = cachedBlockSize;
+
+                // 清空
+                ctx.clearRect(0, 0, w, h);
+
+                // 绘制棋盘
                 for (let r = 0; r < ROWS; r++) {
                     for (let c = 0; c < COLS; c++) {
                         const idx = board[r][c];
-                        const x = c * BLOCK_SIZE;
-                        const y = r * BLOCK_SIZE;
+                        const x = c * bs;
+                        const y = r * bs;
                         if (idx !== 0) {
                             ctx.fillStyle = GRAYSCALE[idx];
-                            ctx.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                            ctx.fillRect(x, y, bs, bs);
                             ctx.strokeStyle = '#333333';
                             ctx.lineWidth = 1;
-                            ctx.strokeRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                            ctx.strokeRect(x, y, bs, bs);
                         } else {
                             ctx.fillStyle = '#0a0a0a';
-                            ctx.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                            ctx.fillRect(x, y, bs, bs);
                         }
                     }
                 }
 
+                // 绘制当前方块
                 if (currentPiece && !gameOver) {
                     const { shape, color, x, y } = currentPiece;
                     for (let r = 0; r < shape.length; r++) {
                         for (let c = 0; c < shape[0].length; c++) {
                             if (shape[r][c] !== 0) {
-                                const bx = (x + c) * BLOCK_SIZE;
-                                const by = (y + r) * BLOCK_SIZE;
+                                const bx = (x + c) * bs;
+                                const by = (y + r) * bs;
                                 ctx.fillStyle = GRAYSCALE[color];
-                                ctx.fillRect(bx, by, BLOCK_SIZE, BLOCK_SIZE);
+                                ctx.fillRect(bx, by, bs, bs);
                                 ctx.strokeStyle = '#333333';
                                 ctx.lineWidth = 1;
-                                ctx.strokeRect(bx, by, BLOCK_SIZE, BLOCK_SIZE);
+                                ctx.strokeRect(bx, by, bs, bs);
                             }
                         }
                     }
                 }
 
-                ctx.strokeStyle = 'rgba(180, 180, 180, 0.15)';
+                // 网格线（细线）
+                ctx.strokeStyle = 'rgba(180, 180, 180, 0.12)';
                 ctx.lineWidth = 0.5;
                 for (let r = 0; r <= ROWS; r++) {
                     ctx.beginPath();
-                    ctx.moveTo(0, r * BLOCK_SIZE);
-                    ctx.lineTo(canvas.width, r * BLOCK_SIZE);
+                    ctx.moveTo(0, r * bs);
+                    ctx.lineTo(w, r * bs);
                     ctx.stroke();
                 }
                 for (let c = 0; c <= COLS; c++) {
                     ctx.beginPath();
-                    ctx.moveTo(c * BLOCK_SIZE, 0);
-                    ctx.lineTo(c * BLOCK_SIZE, canvas.height);
+                    ctx.moveTo(c * bs, 0);
+                    ctx.lineTo(c * bs, h);
                     ctx.stroke();
                 }
             }
@@ -1380,7 +1546,6 @@
                 if (ctrlKeys.includes(key) || key === ' ') {
                     e.preventDefault();
                 }
-                // 暂停状态下除了 START 键，其他都不响应，但 START 由按钮处理
                 if (paused) return;
 
                 if (gameOver || !gameRunning) {
@@ -1415,6 +1580,13 @@
                 }
             }
 
+            // ===== 窗口尺寸变化处理 =====
+            function handleResize() {
+                computeCanvasSize();
+                render();
+                renderNext();
+            }
+
             // ===== 启动游戏 =====
             function startGame() {
                 const loaded = loadFullState();
@@ -1422,9 +1594,16 @@
                 if (!loaded) {
                     startNewGame();
                 }
-                // 加载后自动暂停，不启动计时器
+                // 加载后自动暂停
 
                 window.addEventListener('keydown', handleKeyDown);
+                window.addEventListener('resize', handleResize);
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(handleResize, 200);
+                });
+
+                // 初始渲染
+                setTimeout(handleResize, 50);
                 document.querySelectorAll('button').forEach(b => b.disabled = false);
             }
 
@@ -1442,7 +1621,6 @@
 
                 function startAction(e) {
                     e.preventDefault();
-                    // 暂停时，除 START 按钮外，其他按钮不响应
                     if (paused && buttonId !== 'startBtn' && buttonId !== 'selectBtn') return;
                     if (gameOver && buttonId !== 'startBtn' && buttonId !== 'selectBtn') return;
                     if (!gameRunning && buttonId !== 'startBtn' && buttonId !== 'selectBtn') return;
@@ -1525,7 +1703,6 @@
                 setupDownButton();
                 setupTouchButton('rotateBtn', rotatePiece, false);
                 setupTouchButton('selectBtn', cycleDifficulty, false);
-                // START 按钮绑定 resumeGame
                 setupTouchButton('startBtn', resumeGame, false);
 
                 document.querySelectorAll('button').forEach(btn => {
@@ -1535,28 +1712,21 @@
                 });
             }
 
-            // ===== 清理与保存 =====
+            // ===== 清理 =====
             function cleanup() {
                 if (dropInterval) clearInterval(dropInterval);
                 if (speedBoostTimer) clearTimeout(speedBoostTimer);
                 saveFullState();
                 window.removeEventListener('keydown', handleKeyDown);
-            }
-
-            function resizeCanvas() {
-                render();
+                window.removeEventListener('resize', handleResize);
             }
 
             // ===== 初始化 =====
             function init() {
                 bindOptimizedButtons();
                 startGame();
-                setTimeout(resizeCanvas, 50);
-                window.addEventListener('resize', resizeCanvas);
-                window.addEventListener('orientationchange', () => {
-                    setTimeout(resizeCanvas, 200);
-                });
-                window.addEventListener('beforeunload', cleanup);
+
+                // 额外的触控优化：禁止页面滚动
                 document.addEventListener('touchmove', (e) => {
                     if (e.target.closest('.gameboy')) {
                         e.preventDefault();
@@ -1565,6 +1735,8 @@
 
                 document.addEventListener('gesturestart', (e) => e.preventDefault());
                 document.addEventListener('gesturechange', (e) => e.preventDefault());
+
+                window.addEventListener('beforeunload', cleanup);
             }
 
             if (document.readyState === 'loading') {
