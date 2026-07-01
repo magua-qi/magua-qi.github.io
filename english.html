@@ -3096,7 +3096,7 @@
             state.activeSlotIndex = 0;
 
             applyLibrarySelection();
-            const msg = state.intensiveMode ? `纠错已开 仅练习高频错词 ${getErrorWordCount()}个` : '纠错已关，使用完整词库';
+            const msg = state.intensiveMode ? `纠错模式已开 仅练习高频错词 ${getErrorWordCount()}个` : '纠错模式已关 练习完整词库';
             updateFeedback(msg, 'info');
             saveState();
         }
@@ -3107,8 +3107,7 @@
         }
 
         function updateIntensiveButton() {
-            const errorCount = getErrorWordCount();
-            const label = state.intensiveMode ? `纠错 开 (${errorCount}个)` : '纠错 关';
+            const label = state.intensiveMode ? `纠错 开` : '纠错 关';
             dom.intensiveBtn.textContent = label;
             dom.intensiveBtn.classList.toggle('on', state.intensiveMode);
         }
