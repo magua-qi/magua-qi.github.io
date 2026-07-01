@@ -1514,9 +1514,8 @@
           { "word": "separate", "phonetic": "/ˈsep.ər.ət/", "meaning": "分开" },
           { "word": "wing", "phonetic": "/wɪŋ/", "meaning": "翅膀" }
         ]
-      }
-    }
- "总复习": {
+      },
+     "总复习": {
         "颜色": [
           { "word": "Red", "phonetic": "/red/", "meaning": "红色" },
           { "word": "Blue", "phonetic": "/bluː/", "meaning": "蓝色" },
