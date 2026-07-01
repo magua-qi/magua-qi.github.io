@@ -9,8 +9,14 @@
         /* ================================================================
            全局重置 & 基础布局
            ================================================================ */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html,
+        body {
             height: 100%;
             overflow: hidden;
             font-family: 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
@@ -20,25 +26,33 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 8px; /* 页面外边距，防止内容紧贴屏幕边缘，移动端留出呼吸空间 */
+            padding: 8px;
+            /* ★ 页面外边距，可调整（PX） */
         }
 
         /* ================================================================
-           主容器 – 可调整整体宽度和高度
+           主容器 – 使用 flex 列布局，充分利用空间
            ================================================================ */
         .app-container {
-            max-width: 820px;          /* ★ 限制最大宽度，避免大屏过宽，保持阅读舒适度 */
+            max-width: 820px;
+            /* ★ 最大宽度，可调整（PX） */
             width: 100%;
             height: 100%;
-            max-height: 100vh;          /* ★ 限制最大高度为视口高度的73%，留出上下边距 */
+            max-height: 92vh;
+            /* ★ 最大高度为视口高度的92%，可调整（PX / vh） */
+            min-height: 480px;
+            /* ★ 最小高度，防止过小，可调整（PX） */
             background: #ffffff;
-            border-radius: 10px;       /* 容器外边框圆角，使界面圆润 */
-            padding: 14px 12px 16px;   /* 上14px、左右12px、下16px，内容不贴边 */
-            box-shadow: 0 8px 32px rgba(106, 13, 173, 0.12); /* 阴影偏移 8px垂直、32px模糊，营造浮起感 */
-            border: 1px solid #ede7f6; /* 边框宽度1px，增加视觉边界 */
+            border-radius: 10px;
+            /* ★ 容器圆角，可调整（PX） */
+            padding: 10px 10px 12px;
+            /* ★ 容器内边距 上/左右/下，可调整（PX） */
+            box-shadow: 0 8px 32px rgba(106, 13, 173, 0.12);
+            border: 1px solid #ede7f6;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: padding 0.2s ease;
         }
 
         /* ===== 顶栏 ===== */
@@ -47,22 +61,28 @@
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
-            margin-bottom: 10px; /* 与下方工具栏的间距 */
+            margin-bottom: 6px;
+            /* ★ 顶栏底部间距，可调整（PX） */
         }
         .brand {
             display: flex;
             align-items: center;
             gap: 6px;
+            /* ★ 品牌图标与标题间距，可调整（PX） */
         }
         .brand-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 25px;  /* 品牌图标宽度 */
-            height: 25px; /* 品牌图标高度 */
+            width: 25px;
+            /* ★ 品牌图标宽度，可调整（PX） */
+            height: 25px;
+            /* ★ 品牌图标高度，可调整（PX） */
             background: #7b1fa2;
-            border-radius: 10px; /* 图标圆角 */
-            font-size: 12px;     /* 图标内文字大小 */
+            border-radius: 10px;
+            /* ★ 图标圆角，可调整（PX） */
+            font-size: 12px;
+            /* ★ 图标内文字大小，可调整（PX） */
             font-weight: 800;
             color: #fff;
             letter-spacing: 1px;
@@ -70,7 +90,8 @@
             user-select: none;
         }
         .title {
-            font-size: 20px; /* 标题文字大小 */
+            font-size: 20px;
+            /* ★ 标题文字大小，可调整（PX） */
             font-weight: 800;
             color: #4a148c;
             letter-spacing: 0.3px;
@@ -83,80 +104,103 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 6px;
+            /* ★ 工具栏内部间距，可调整（PX） */
             background: #f3e5f5;
-            border-radius: 10px; /* 工具栏圆角 */
-            padding: 15px 14px 15px 14px; /* 上下15px，右15px，左14px，内部留白 */
-            margin-bottom: 10px; /* 与下方统计栏的间距 */
+            border-radius: 10px;
+            /* ★ 工具栏圆角，可调整（PX） */
+            padding: 10px 12px;
+            /* ★ 工具栏内边距 上下/左右，可调整（PX） */
+            margin-bottom: 6px;
+            /* ★ 工具栏底部间距，可调整（PX） */
             flex-shrink: 0;
-            border: 1px solid #e1bee7; /* 边框宽度1px */
+            border: 1px solid #e1bee7;
         }
         .toolbar-left {
             display: flex;
             align-items: center;
             gap: 5px;
+            /* ★ 左侧元素间距，可调整（PX） */
             flex: 1 1 auto;
             min-width: 0;
         }
         .toolbar-left label {
-            font-size: 13px; /* 标签文字大小 */
+            font-size: 13px;
+            /* ★ 标签文字大小，可调整（PX） */
             font-weight: 600;
             color: #6a1b9a;
             white-space: nowrap;
         }
         .toolbar-left select {
-            padding: 4px 8px;  /* 下拉框内边距上下4px左右8px */
+            padding: 4px 8px;
+            /* ★ 下拉框内边距 上下/左右，可调整（PX） */
             border: none;
-            border-radius: 10px; /* 下拉框圆角 */
-            font-size: 14px;     /* 下拉框文字大小 */
+            border-radius: 10px;
+            /* ★ 下拉框圆角，可调整（PX） */
+            font-size: 14px;
+            /* ★ 下拉框文字大小，可调整（PX） */
             font-weight: 600;
             background: #ffffff;
             color: #4a148c;
             outline: none;
             cursor: pointer;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
             width: 100%;
-            min-width: 100px;  /* 最小宽度，保证显示完整 */
+            min-width: 100px;
+            /* ★ 下拉框最小宽度，可调整（PX） */
             max-width: 300px;
+            /* ★ 下拉框最大宽度，可调整（PX） */
         }
         .toolbar-left select optgroup {
             font-weight: 700;
             color: #6a1b9a;
         }
-
         .toolbar-right {
             display: flex;
             align-items: center;
             gap: 5px;
+            /* ★ 右侧按钮间距，可调整（PX） */
             flex-shrink: 0;
         }
         .ctrl-btn {
-            padding: 5px 14px;  /* 按钮内边距上下5px左右14px */
+            padding: 5px 14px;
+            /* ★ 按钮内边距 上下/左右，可调整（PX） */
             border: none;
-            border-radius: 10px; /* 按钮圆角 */
-            font-size: 14px;     /* 按钮文字大小 */
+            border-radius: 10px;
+            /* ★ 按钮圆角，可调整（PX） */
+            font-size: 14px;
+            /* ★ 按钮文字大小，可调整（PX） */
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #ede7f6;
             color: #4a148c;
-            border: 1px solid #d1c4e9; /* 边框宽度1px */
+            border: 1px solid #d1c4e9;
             white-space: nowrap;
         }
-        .ctrl-btn:hover { background: #d1c4e9; transform: scale(1.02); }
-        .ctrl-btn:active { transform: scale(0.95); }
+        .ctrl-btn:hover {
+            background: #d1c4e9;
+            transform: scale(1.02);
+        }
+        .ctrl-btn:active {
+            transform: scale(0.95);
+        }
         .ctrl-btn.primary {
             background: linear-gradient(135deg, #7b1fa2, #9c27b0);
             color: #fff;
             border: none;
-            box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25); /* 阴影偏移 4px垂直、12px模糊，突出主按钮 */
+            box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25);
         }
-        .ctrl-btn.primary:hover { box-shadow: 0 6px 20px rgba(106, 27, 154, 0.35); } /* 悬停阴影加深 */
+        .ctrl-btn.primary:hover {
+            box-shadow: 0 6px 20px rgba(106, 27, 154, 0.35);
+        }
         .ctrl-btn.secondary {
             background: #fff3e0;
             border-color: #ffcc80;
             color: #e65100;
         }
-        .ctrl-btn.secondary:hover { background: #ffe0b2; }
+        .ctrl-btn.secondary:hover {
+            background: #ffe0b2;
+        }
         .ctrl-btn:disabled {
             opacity: 0.4;
             pointer-events: none;
@@ -169,96 +213,124 @@
             flex-wrap: wrap;
             align-items: center;
             background: #f3e5f5;
-            border-radius: 10px; /* 圆角 */
-            padding: 15px 14px;   /* 上下15px左右14px内边距 */
-            margin-bottom: 20px; /* 与单词卡片的间距 */
+            border-radius: 10px;
+            /* ★ 统计栏圆角，可调整（PX） */
+            padding: 8px 12px;
+            /* ★ 统计栏内边距 上下/左右，可调整（PX） */
+            margin-bottom: 8px;
+            /* ★ 统计栏底部间距，可调整（PX） */
             gap: 4px 10px;
-            border: 1px solid #e1bee7; /* 边框宽度1px */
+            /* ★ 统计项间距，可调整（PX） */
+            border: 1px solid #e1bee7;
             flex-shrink: 0;
+            min-height: 36px;
+            /* ★ 统计栏最小高度，可调整（PX） */
         }
         .stat-item {
-            font-size: 12px; /* 统计文字大小 */
+            font-size: 12px;
+            /* ★ 统计文字大小，可调整（PX） */
             font-weight: 600;
             color: #4a148c;
+            white-space: nowrap;
         }
         .stat-item .value {
-            background: rgba(255,255,255,0.7);
-            padding: 0 6px;          /* 数值左右内边距 */
-            border-radius: 10px;     /* 数值圆角 */
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0 6px;
+            /* ★ 数值左右内边距，可调整（PX） */
+            border-radius: 10px;
+            /* ★ 数值圆角，可调整（PX） */
             font-weight: 700;
             color: #311b92;
             display: inline-block;
-            min-width: 32px;         /* 最小宽度，使数字显示整齐 */
+            min-width: 32px;
+            /* ★ 数值最小宽度，可调整（PX） */
             text-align: center;
         }
-        .stat-item .value.time { min-width: 48px; } /* 时间数字最小宽度，防止跳变（如00:00->59:59） */
+        .stat-item .value.time {
+            min-width: 48px;
+            /* ★ 时间数字最小宽度，可调整（PX） */
+        }
         .progress-wrap {
             flex: 1;
             min-width: 50px;
-            height: 6px;             /* 进度条高度 */
+            /* ★ 进度条最小宽度，可调整（PX） */
+            height: 6px;
+            /* ★ 进度条高度，可调整（PX） */
             background: #d1c4e9;
-            border-radius: 10px;     /* 进度条圆角 */
+            border-radius: 10px;
+            /* ★ 进度条圆角，可调整（PX） */
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #7b1fa2, #ab47bc);
-            border-radius: 10px;     /* 进度填充圆角 */
+            border-radius: 10px;
+            /* ★ 进度填充圆角，可调整（PX） */
             transition: width 0.4s ease;
         }
 
         /* ================================================================
-           单词卡片 – 两行布局：字母格 + 音标/释义（进度仅存在于统计栏）
+           单词卡片 – 两行布局：字母格 + 音标/释义
+           使用 flex:1 自动撑满剩余空间
            ================================================================ */
         .word-card {
             background: #faf5ff;
-            border-radius: 10px;          /* 卡片圆角 */
-            padding: 80px 20px 16px;      /* ★ 顶部80px、左右20px、底部16px，控制卡片内部留白 */
-            box-shadow: inset 0 1px 3px rgba(255,255,255,0.8), 0 4px 16px rgba(106, 27, 154, 0.08);
-            margin-bottom: 20px;           /* 与键盘的间距 */
-            border: 1px solid #ede7f6;    /* 边框宽度1px */
-            flex: 0 1 auto;
+            border-radius: 10px;
+            /* ★ 卡片圆角，可调整（PX） */
+            padding: 24px 16px 12px;
+            /* ★ 卡片内边距 上/左右/下，可调整（PX） */
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 4px 16px rgba(106, 27, 154, 0.08);
+            margin-bottom: 8px;
+            /* ★ 卡片底部间距（与键盘间距），可调整（PX） */
+            border: 1px solid #ede7f6;
+            flex: 1 1 auto;
+            /* 自动撑满剩余空间 */
             display: flex;
-            flex-direction: column;       /* 纵向排列两行 */
-            align-items: center;          /* 水平居中 */
-            justify-content: center;      /* 垂直居中（若内容高度不足） */
-           
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            /* ★ 卡片最小高度，可调整（PX） */
+            overflow: hidden;
+            transition: padding 0.2s ease, min-height 0.2s ease;
         }
-        .word-blanks-wrapper {
-           margin-bottom: 30px;   /* ★ 第一行（字母格）与第二行（音标+释义）的间距 */
-        }       
-        .word-info {
-           margin-bottom: 70px;   /* ★ 第二行与第三行（反馈信息）的间距 */
-        }
-       .feedback {
-           margin-bottom: 0;      /* 最后一项无需底部外边距（可省略） */
-         }
 
         /* ---- 第一行：字母格 ---- */
         .word-blanks-wrapper {
-            width: 100%;                  /* 占满卡片宽度 */
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2px 0;               /* 上下内边距2px */
+            padding: 2px 0;
+            /* ★ 上下内边距，可调整（PX） */
+            flex-shrink: 0;
         }
         .word-blanks {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 3px 2px;                 /* 行间隙3px，列间隙2px，字母格之间的间距 */
-            padding: 2px 0;               /* 上下内边距2px */
+            gap: 4px 3px;
+            /* ★ 字母格之间的行间距/列间距，可调整（PX） */
+            padding: 2px 0;
+            /* ★ 上下内边距，可调整（PX） */
             will-change: transform, opacity;
-            min-height: 50px;             /* 最小高度，占位防止空白 */
+            min-height: 44px;
+            /* ★ 字母格容器最小高度，可调整（PX） */
         }
         .word-blanks.animate-in {
             animation: fadeSlideIn 0.3s ease-out forwards;
         }
         @keyframes fadeSlideIn {
-            0% { opacity: 0; transform: translateY(6px); } /* 入场动画：向下偏移6px */
-            100% { opacity: 1; transform: translateY(0); } /* 最终归位 */
+            0% {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* --- 字母格 --- */
@@ -266,18 +338,24 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;                 /* ★ 字母格宽度 */
-            height: 50px;                /* ★ 字母格高度 */
-            font-size: 40px;             /* ★ 字母格内字体大小 */
+            width: 40px;
+            /* ★ 字母格宽度（基准），可调整（PX） */
+            height: 50px;
+            /* ★ 字母格高度（基准），可调整（PX） */
+            font-size: 34px;
+            /* ★ 字母格内字体大小（基准），可调整（PX） */
             font-weight: 700;
-            border-radius: 10px;         /* 字母格圆角 */
+            border-radius: 10px;
+            /* ★ 字母格圆角，可调整（PX） */
             background: #ffffff;
-            border: 2.5px solid #ce93d8; /* 边框宽度2.5px */
+            border: 2.5px solid #ce93d8;
+            /* ★ 字母格边框宽度，可调整（PX） */
             color: #1a1a2e;
             transition: all 0.2s ease;
             cursor: pointer;
             font-family: 'Courier New', monospace;
             user-select: none;
+            flex-shrink: 0;
         }
         .letter-slot.blank {
             border-color: #9c27b0;
@@ -295,14 +373,18 @@
             background: #e8f5e9;
             color: #1b5e20;
         }
-        .letter-slot.blank.filled::after { content: none; }
+        .letter-slot.blank.filled::after {
+            content: none;
+        }
         .letter-slot.blank.wrong {
             border-color: #c62828;
             background: #ffebee;
             color: #b71c1c;
             animation: shake 0.35s ease;
         }
-        .letter-slot.blank.wrong::after { content: none; }
+        .letter-slot.blank.wrong::after {
+            content: none;
+        }
         .letter-slot.blank.active {
             border-color: #7b1fa2;
             background: #ede7f6;
@@ -313,32 +395,54 @@
             border-color: transparent;
             background: transparent;
             color: #1a1a2e;
-            width: 40px;                 /* 固定字母格宽度（略小） */
-            height: 50px;                /* 固定字母格高度（略高） */
-            font-size:40px;             /* 固定字母格字体大小 */
+            width: 36px;
+            /* ★ 固定字母格宽度，可调整（PX） */
+            height: 46px;
+            /* ★ 固定字母格高度，可调整（PX） */
+            font-size: 34px;
+            /* ★ 固定字母格字体大小，可调整（PX） */
         }
-        .letter-slot.fixed::after { content: none; }
+        .letter-slot.fixed::after {
+            content: none;
+        }
         @keyframes shake {
-            0%,100%{transform:translateX(0)}
-            20%{transform:translateX(-5px)}  /* 向左晃动5px */
-            40%{transform:translateX(5px)}   /* 向右晃动5px */
-            60%{transform:translateX(-3px)}  /* 向左晃动3px */
-            80%{transform:translateX(3px)}   /* 向右晃动3px */
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-5px);
+            }
+            40% {
+                transform: translateX(5px);
+            }
+            60% {
+                transform: translateX(-3px);
+            }
+            80% {
+                transform: translateX(3px);
+            }
         }
 
         /* ---- 第二行：音标+释义 ---- */
         .word-info {
             display: flex;
-            flex-direction: row;          /* 水平排列音标和释义，中间有分隔符 */
+            flex-direction: row;
             align-items: center;
-            justify-content: center;      /* 居中显示 */
-            font-size: 25px;             /* ★ 音标和释义的字体大小 */
+            justify-content: center;
+            font-size: 22px;
+            /* ★ 音标和释义字体大小（基准），可调整（PX） */
             font-weight: 500;
             color: #4a148c;
-            gap: 4px;                     /* 分隔符两侧间距 */
-            flex-wrap: wrap;              /* 窄屏时自动换行 */
+            gap: 4px;
+            /* ★ 分隔符两侧间距，可调整（PX） */
+            flex-wrap: wrap;
             text-align: center;
-            min-height: 30px;             /* 最小高度，保持行高一致 */
+            min-height: 28px;
+            /* ★ 第二行最小高度，可调整（PX） */
+            flex-shrink: 0;
+            padding: 4px 0;
+            /* ★ 上下内边距，可调整（PX） */
         }
         .word-info .phonetic {
             font-family: 'Segoe UI', 'Times New Roman', serif;
@@ -352,36 +456,43 @@
         .word-info .divider {
             color: #ce93d8;
             font-weight: 300;
-            margin: 0 2px;               /* 分隔符左右间距2px */
-        }
-        /* 窄屏时分隔符隐藏，释义另起一行（由flex-wrap实现） */
-        @media (max-width: 640px) {
-            .word-info {
-                font-size: 16px;         /* 窄屏缩小释义字号 */
-                gap: 2px;
-            }
-            .word-info .divider { display: none; }
+            margin: 0 2px;
+            /* ★ 分隔符左右间距，可调整（PX） */
         }
 
         /* ---- 反馈信息 ---- */
         .feedback {
             text-align: center;
-            font-size: 13px;             /* 反馈文字大小 */
+            font-size: 13px;
+            /* ★ 反馈文字大小，可调整（PX） */
             font-weight: 600;
-            min-height: 20px;            /* 最小高度，避免布局跳动 */
-            padding: 2px 0 0;            /* 上内边距2px */
+            min-height: 20px;
+            /* ★ 反馈最小高度，可调整（PX） */
+            padding: 2px 0 0;
+            /* ★ 上内边距，可调整（PX） */
             color: #4a148c;
-            margin-top: 4px;             /* 与上一行的间距 */
+            margin-top: 2px;
+            /* ★ 与上一行的间距，可调整（PX） */
+            flex-shrink: 0;
         }
-        .feedback.success { color: #1b5e20; }
-        .feedback.error { color: #b71c1c; }
-        .feedback.info { color: #e65100; }
+        .feedback.success {
+            color: #1b5e20;
+        }
+        .feedback.error {
+            color: #b71c1c;
+        }
+        .feedback.info {
+            color: #e65100;
+        }
         .error-msg {
             color: #c62828;
             background: #ffebee;
-            padding: 10px;               /* 错误信息内边距 */
-            border-radius: 10px;         /* 错误信息圆角 */
-            margin: 8px 0;               /* 错误信息上下外边距 */
+            padding: 10px;
+            /* ★ 错误信息内边距，可调整（PX） */
+            border-radius: 10px;
+            /* ★ 错误信息圆角，可调整（PX） */
+            margin: 8px 0;
+            /* ★ 错误信息上下外边距，可调整（PX） */
         }
 
         /* ================================================================
@@ -389,58 +500,81 @@
            ================================================================ */
         .keyboard {
             background: #f3e5f5;
-            border-radius: 10px;          /* 键盘容器圆角 */
-            padding: 10px 10px 10px;      /* ★ 键盘内边距上下左右均为10px */
-            border: 1px solid #e1bee7;    /* 边框宽度1px */
+            border-radius: 10px;
+            /* ★ 键盘容器圆角，可调整（PX） */
+            padding: 8px 8px 6px;
+            /* ★ 键盘内边距 上/左右/下，可调整（PX） */
+            border: 1px solid #e1bee7;
             flex-shrink: 0;
-            min-height: 200px;            /* 键盘最小高度，防止内容过少时缩成一团 */
+            min-height: 160px;
+            /* ★ 键盘最小高度，可调整（PX） */
             display: flex;
             flex-direction: column;
             justify-content: center;
+            transition: padding 0.2s ease, min-height 0.2s ease;
         }
         .kb-row {
             display: flex;
             justify-content: center;
-            gap: 7px;                     /* 按键之间的水平间距 */
-            margin-bottom: 6px;           /* 按键行底部外边距 */
+            gap: 6px;
+            /* ★ 按键之间的水平间距，可调整（PX） */
+            margin-bottom: 5px;
+            /* ★ 按键行底部外边距，可调整（PX） */
         }
-        .kb-row:last-child { margin-bottom: 0; }
+        .kb-row:last-child {
+            margin-bottom: 0;
+        }
         .kb-key {
             flex: 1 1 0;
             min-width: 0;
-            height: 70px;                /* ★ 字母键高度 */
+            height: 64px;
+            /* ★ 字母键高度（基准），可调整（PX） */
             border: none;
-            border-radius: 10px;         /* 按键圆角 */
-            font-size: 35px;             /* ★ 字母键字体大小 */
+            border-radius: 10px;
+            /* ★ 按键圆角，可调整（PX） */
+            font-size: 28px;
+            /* ★ 字母键字体大小（基准），可调整（PX） */
             font-weight: 700;
             color: #1a1a2e;
             background: #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04), inset 0 1px 2px rgba(255,255,255,0.8);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.8);
             cursor: pointer;
             transition: all 0.12s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             user-select: none;
-            border: 1px solid #d1c4e9;    /* 边框宽度1px */
+            border: 1px solid #d1c4e9;
             touch-action: manipulation;
         }
-        .kb-key:active { transform: scale(0.92); background: #ede7f6; }
+        .kb-key:active {
+            transform: scale(0.92);
+            background: #ede7f6;
+        }
         .kb-key.special {
             flex: 1.5 1 0;
             background: #ede7f6;
-            font-size: 16px;             /* 特殊键（退格、回车）字体大小 */
+            font-size: 16px;
+            /* ★ 特殊键（退格、回车）字体大小，可调整（PX） */
             color: #4a148c;
         }
-        .kb-key.special:active { background: #d1c4e9; }
+        .kb-key.special:active {
+            background: #d1c4e9;
+        }
         .kb-key.function {
-            height: 45px;                /* ★ 功能按钮高度（上一个、提示、下一个、模式） */
-            font-size: 18px;             /* ★ 功能按钮字体大小 */
+            height: 38px;
+            /* ★ 功能按钮高度（基准），可调整（PX） */
+            font-size: 15px;
+            /* ★ 功能按钮字体大小（基准），可调整（PX） */
             background: #ede7f6;
             border-color: #d1c4e9;
             flex: 1;
+            border-radius: 10px;
+            /* ★ 功能按钮圆角，可调整（PX） */
         }
-        .kb-key.function:active { background: #d1c4e9; }
+        .kb-key.function:active {
+            background: #d1c4e9;
+        }
         .kb-key.function.mode-btn {
             flex: 1.2;
             background: #e1bee7;
@@ -451,71 +585,807 @@
             background: #7b1fa2;
             color: #fff;
             border-color: #7b1fa2;
-            box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3); /* 阴影偏移 2px垂直、8px模糊 */
+            box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
         }
-        .kb-key.correct-highlight { background: #c8e6c9; border-color: #2e7d32; }
-        .kb-key.wrong-highlight { background: #ffcdd2; border-color: #c62828; }
+        .kb-key.correct-highlight {
+            background: #c8e6c9;
+            border-color: #2e7d32;
+        }
+        .kb-key.wrong-highlight {
+            background: #ffcdd2;
+            border-color: #c62828;
+        }
 
         /* ===== 完成界面 ===== */
         .complete-overlay {
             text-align: center;
-            padding: 20px 10px;          /* 上下20px左右10px内边距 */
+            padding: 20px 10px;
+            /* ★ 完成界面内边距 上下/左右，可调整（PX） */
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        .complete-overlay .big-icon { font-size: 0; }
+        .complete-overlay .big-icon {
+            font-size: 0;
+        }
         .complete-overlay h2 {
-            font-size: 22px;             /* 标题字号 */
+            font-size: 22px;
+            /* ★ 标题字号，可调整（PX） */
             color: #4a148c;
-            margin-bottom: 4px;          /* 标题下边距 */
+            margin-bottom: 4px;
+            /* ★ 标题下边距，可调整（PX） */
         }
         .complete-overlay p {
-            font-size: 15px;             /* 正文字号 */
+            font-size: 15px;
+            /* ★ 正文字号，可调整（PX） */
             color: #6a1b9a;
-            margin-bottom: 4px;          /* 段落下边距 */
+            margin-bottom: 4px;
+            /* ★ 段落下边距，可调整（PX） */
         }
         .complete-overlay .final-stats {
             display: flex;
             justify-content: center;
-            gap: 24px;                   /* 统计项之间的间距 */
-            margin: 12px 0 16px;         /* 统计块上下左右外边距 */
+            gap: 24px;
+            /* ★ 统计项之间的间距，可调整（PX） */
+            margin: 12px 0 16px;
+            /* ★ 统计块上下左右外边距，可调整（PX） */
             flex-wrap: wrap;
         }
         .complete-overlay .final-stats .num {
-            font-size: 28px;             /* 统计数字字号（如正确率） */
+            font-size: 28px;
+            /* ★ 统计数字字号，可调整（PX） */
             font-weight: 800;
             color: #7b1fa2;
             display: block;
         }
         .complete-overlay .final-stats .label {
-            font-size: 12px;             /* 统计标签字号 */
+            font-size: 12px;
+            /* ★ 统计标签字号，可调整（PX） */
             color: #6a1b9a;
             opacity: 0.7;
         }
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
 
         /* ================================================================
-           响应式断点 – 自动缩小尺寸
+           ★★★ 响应式适配 – 重写手机端显示 ★★★
+           策略：使用 clamp() + 媒体查询，尺寸随视口平滑变化
            ================================================================ */
-        @media (max-width: 640px) {
-            .app-container { max-height: 150vh; }  /* 窄屏时调高，让内容更舒展 */
-            .word-card { padding: 50px 10px 12px; } /* 窄屏缩小卡片内边距 */
-            .letter-slot { width: 32px; height: 40px; font-size: 30px; } /* 缩小字母格 */
-            .letter-slot.fixed { width: 32px; height: 40px; font-size: 30px; } /* 同步固定格 */
-            .word-info { font-size: 16px; min-height: 26px; margin-bottom: 50px;  }/*第三个数为 同步缩小注释与说明文字间距 */
-            .kb-key { height: 44px; font-size: 18px; } /* 缩小字母键高度和字号 */
-            .kb-key.function { height: 40px; font-size: 15px; } /* 缩小功能按钮高度和字号 */
+
+        /* ---- 针对平板及以下（宽度 < 820px） ---- */
+        @media (max-width: 820px) {
+            .app-container {
+                max-height: 94vh;
+                /* ★ 手机端最大高度，可调整（vh） */
+                padding: 8px 8px 10px;
+                /* ★ 手机端容器内边距，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端容器圆角，可调整（PX） */
+            }
+            .word-card {
+                padding: 18px 12px 10px;
+                /* ★ 手机端卡片内边距，可调整（PX） */
+                min-height: 100px;
+                /* ★ 手机端卡片最小高度，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端卡片圆角，可调整（PX） */
+            }
+            .word-info {
+                font-size: 19px;
+                /* ★ 手机端音标/释义字体，可调整（PX） */
+                min-height: 24px;
+                /* ★ 手机端第二行最小高度，可调整（PX） */
+                gap: 3px;
+                /* ★ 手机端分隔符间距，可调整（PX） */
+            }
+            .word-info .divider {
+                display: none;
+                /* 窄屏时隐藏分隔符，换行显示 */
+            }
+            .feedback {
+                font-size: 12px;
+                /* ★ 手机端反馈文字大小，可调整（PX） */
+                min-height: 18px;
+                /* ★ 手机端反馈最小高度，可调整（PX） */
+            }
+            .keyboard {
+                padding: 6px 6px 4px;
+                /* ★ 手机端键盘内边距，可调整（PX） */
+                min-height: 140px;
+                /* ★ 手机端键盘最小高度，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端键盘圆角，可调整（PX） */
+            }
+            .kb-row {
+                gap: 5px;
+                /* ★ 手机端按键间距，可调整（PX） */
+                margin-bottom: 4px;
+                /* ★ 手机端行间距，可调整（PX） */
+            }
+            .stats {
+                padding: 6px 10px;
+                /* ★ 手机端统计栏内边距，可调整（PX） */
+                margin-bottom: 6px;
+                /* ★ 手机端统计栏底部间距，可调整（PX） */
+                gap: 3px 8px;
+                /* ★ 手机端统计项间距，可调整（PX） */
+                min-height: 32px;
+                /* ★ 手机端统计栏最小高度，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端统计栏圆角，可调整（PX） */
+            }
+            .stat-item {
+                font-size: 11px;
+                /* ★ 手机端统计文字大小，可调整（PX） */
+            }
+            .stat-item .value {
+                min-width: 28px;
+                /* ★ 手机端数值最小宽度，可调整（PX） */
+                padding: 0 4px;
+                /* ★ 手机端数值内边距，可调整（PX） */
+            }
+            .stat-item .value.time {
+                min-width: 42px;
+                /* ★ 手机端时间数字最小宽度，可调整（PX） */
+            }
+            .progress-wrap {
+                height: 5px;
+                /* ★ 手机端进度条高度，可调整（PX） */
+                min-width: 40px;
+                /* ★ 手机端进度条最小宽度，可调整（PX） */
+            }
+            .toolbar {
+                padding: 8px 10px;
+                /* ★ 手机端工具栏内边距，可调整（PX） */
+                margin-bottom: 6px;
+                /* ★ 手机端工具栏底部间距，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端工具栏圆角，可调整（PX） */
+                gap: 4px;
+                /* ★ 手机端工具栏间距，可调整（PX） */
+            }
+            .toolbar-left label {
+                font-size: 12px;
+                /* ★ 手机端标签文字大小，可调整（PX） */
+            }
+            .toolbar-left select {
+                font-size: 13px;
+                /* ★ 手机端下拉框文字大小，可调整（PX） */
+                padding: 3px 6px;
+                /* ★ 手机端下拉框内边距，可调整（PX） */
+                min-width: 80px;
+                /* ★ 手机端下拉框最小宽度，可调整（PX） */
+                max-width: 200px;
+                /* ★ 手机端下拉框最大宽度，可调整（PX） */
+            }
+            .ctrl-btn {
+                font-size: 12px;
+                /* ★ 手机端按钮文字大小，可调整（PX） */
+                padding: 4px 10px;
+                /* ★ 手机端按钮内边距，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端按钮圆角，可调整（PX） */
+            }
+            .header {
+                margin-bottom: 4px;
+                /* ★ 手机端顶栏底部间距，可调整（PX） */
+            }
+            .title {
+                font-size: 17px;
+                /* ★ 手机端标题文字大小，可调整（PX） */
+            }
+            .brand-icon {
+                width: 22px;
+                /* ★ 手机端品牌图标宽度，可调整（PX） */
+                height: 22px;
+                /* ★ 手机端品牌图标高度，可调整（PX） */
+                font-size: 10px;
+                /* ★ 手机端图标内文字大小，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 手机端图标圆角，可调整（PX） */
+            }
         }
+
+        /* ---- 针对手机（宽度 < 640px） ---- */
+        @media (max-width: 640px) {
+            .app-container {
+                max-height: 96vh;
+                /* ★ 小屏手机最大高度，可调整（vh） */
+                padding: 6px 6px 8px;
+                /* ★ 小屏手机容器内边距，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机容器圆角，可调整（PX） */
+                min-height: 400px;
+                /* ★ 小屏手机最小高度，可调整（PX） */
+            }
+            .word-card {
+                padding: 12px 8px 8px;
+                /* ★ 小屏手机卡片内边距，可调整（PX） */
+                min-height: 80px;
+                /* ★ 小屏手机卡片最小高度，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机卡片圆角，可调整（PX） */
+                margin-bottom: 6px;
+                /* ★ 小屏手机卡片底部间距，可调整（PX） */
+            }
+            .word-blanks {
+                gap: 3px 2px;
+                /* ★ 小屏手机字母格间距，可调整（PX） */
+                min-height: 34px;
+                /* ★ 小屏手机字母格容器最小高度，可调整（PX） */
+            }
+            .letter-slot {
+                width: 32px;
+                /* ★ 小屏手机字母格宽度，可调整（PX） */
+                height: 40px;
+                /* ★ 小屏手机字母格高度，可调整（PX） */
+                font-size: 22px;
+                /* ★ 小屏手机字母格字体大小，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 小屏手机字母格圆角，可调整（PX） */
+                border-width: 2px;
+                /* ★ 小屏手机字母格边框宽度，可调整（PX） */
+            }
+            .letter-slot.fixed {
+                width: 28px;
+                /* ★ 小屏手机固定字母格宽度，可调整（PX） */
+                height: 36px;
+                /* ★ 小屏手机固定字母格高度，可调整（PX） */
+                font-size: 22px;
+                /* ★ 小屏手机固定字母格字体大小，可调整（PX） */
+            }
+            .word-info {
+                font-size: 16px;
+                /* ★ 小屏手机音标/释义字体，可调整（PX） */
+                min-height: 20px;
+                /* ★ 小屏手机第二行最小高度，可调整（PX） */
+                gap: 2px;
+                /* ★ 小屏手机分隔符间距，可调整（PX） */
+                padding: 2px 0;
+                /* ★ 小屏手机第二行上下内边距，可调整（PX） */
+            }
+            .word-info .divider {
+                display: none;
+            }
+            .feedback {
+                font-size: 11px;
+                /* ★ 小屏手机反馈文字大小，可调整（PX） */
+                min-height: 16px;
+                /* ★ 小屏手机反馈最小高度，可调整（PX） */
+                margin-top: 0px;
+                /* ★ 小屏手机反馈与上一行间距，可调整（PX） */
+            }
+            .keyboard {
+                padding: 4px 4px 3px;
+                /* ★ 小屏手机键盘内边距，可调整（PX） */
+                min-height: 110px;
+                /* ★ 小屏手机键盘最小高度，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机键盘圆角，可调整（PX） */
+            }
+            .kb-row {
+                gap: 4px;
+                /* ★ 小屏手机按键间距，可调整（PX） */
+                margin-bottom: 3px;
+                /* ★ 小屏手机行间距，可调整（PX） */
+            }
+            .kb-key {
+                height: 46px;
+                /* ★ 小屏手机字母键高度，可调整（PX） */
+                font-size: 18px;
+                /* ★ 小屏手机字母键字体大小，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 小屏手机按键圆角，可调整（PX） */
+                border-width: 1px;
+                /* ★ 小屏手机按键边框宽度，可调整（PX） */
+            }
+            .kb-key.special {
+                font-size: 14px;
+                /* ★ 小屏手机特殊键字体大小，可调整（PX） */
+            }
+            .kb-key.function {
+                height: 32px;
+                /* ★ 小屏手机功能按钮高度，可调整（PX） */
+                font-size: 13px;
+                /* ★ 小屏手机功能按钮字体大小，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 小屏手机功能按钮圆角，可调整（PX） */
+            }
+            .stats {
+                padding: 4px 8px;
+                /* ★ 小屏手机统计栏内边距，可调整（PX） */
+                margin-bottom: 4px;
+                /* ★ 小屏手机统计栏底部间距，可调整（PX） */
+                gap: 2px 6px;
+                /* ★ 小屏手机统计项间距，可调整（PX） */
+                min-height: 28px;
+                /* ★ 小屏手机统计栏最小高度，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机统计栏圆角，可调整（PX） */
+            }
+            .stat-item {
+                font-size: 10px;
+                /* ★ 小屏手机统计文字大小，可调整（PX） */
+            }
+            .stat-item .value {
+                min-width: 24px;
+                /* ★ 小屏手机数值最小宽度，可调整（PX） */
+                padding: 0 3px;
+                /* ★ 小屏手机数值内边距，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机数值圆角，可调整（PX） */
+            }
+            .stat-item .value.time {
+                min-width: 36px;
+                /* ★ 小屏手机时间数字最小宽度，可调整（PX） */
+            }
+            .progress-wrap {
+                height: 4px;
+                /* ★ 小屏手机进度条高度，可调整（PX） */
+                min-width: 30px;
+                /* ★ 小屏手机进度条最小宽度，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机进度条圆角，可调整（PX） */
+            }
+            .progress-fill {
+                border-radius: 6px;
+                /* ★ 小屏手机进度填充圆角，可调整（PX） */
+            }
+            .toolbar {
+                padding: 6px 8px;
+                /* ★ 小屏手机工具栏内边距，可调整（PX） */
+                margin-bottom: 4px;
+                /* ★ 小屏手机工具栏底部间距，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机工具栏圆角，可调整（PX） */
+                gap: 3px;
+                /* ★ 小屏手机工具栏间距，可调整（PX） */
+            }
+            .toolbar-left label {
+                font-size: 11px;
+                /* ★ 小屏手机标签文字大小，可调整（PX） */
+            }
+            .toolbar-left select {
+                font-size: 12px;
+                /* ★ 小屏手机下拉框文字大小，可调整（PX） */
+                padding: 2px 5px;
+                /* ★ 小屏手机下拉框内边距，可调整（PX） */
+                min-width: 60px;
+                /* ★ 小屏手机下拉框最小宽度，可调整（PX） */
+                max-width: 160px;
+                /* ★ 小屏手机下拉框最大宽度，可调整（PX） */
+                border-radius: 8px;
+                /* ★ 小屏手机下拉框圆角，可调整（PX） */
+            }
+            .ctrl-btn {
+                font-size: 11px;
+                /* ★ 小屏手机按钮文字大小，可调整（PX） */
+                padding: 3px 8px;
+                /* ★ 小屏手机按钮内边距，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机按钮圆角，可调整（PX） */
+            }
+            .header {
+                margin-bottom: 3px;
+                /* ★ 小屏手机顶栏底部间距，可调整（PX） */
+            }
+            .title {
+                font-size: 15px;
+                /* ★ 小屏手机标题文字大小，可调整（PX） */
+            }
+            .brand-icon {
+                width: 20px;
+                /* ★ 小屏手机品牌图标宽度，可调整（PX） */
+                height: 20px;
+                /* ★ 小屏手机品牌图标高度，可调整（PX） */
+                font-size: 9px;
+                /* ★ 小屏手机图标内文字大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 小屏手机图标圆角，可调整（PX） */
+            }
+            .complete-overlay {
+                padding: 16px 8px;
+                /* ★ 小屏手机完成界面内边距，可调整（PX） */
+            }
+            .complete-overlay h2 {
+                font-size: 18px;
+                /* ★ 小屏手机完成标题字号，可调整（PX） */
+            }
+            .complete-overlay p {
+                font-size: 13px;
+                /* ★ 小屏手机完成正文字号，可调整（PX） */
+            }
+            .complete-overlay .final-stats {
+                gap: 16px;
+                /* ★ 小屏手机完成统计间距，可调整（PX） */
+                margin: 8px 0 12px;
+                /* ★ 小屏手机完成统计外边距，可调整（PX） */
+            }
+            .complete-overlay .final-stats .num {
+                font-size: 22px;
+                /* ★ 小屏手机完成统计数字字号，可调整（PX） */
+            }
+            .complete-overlay .final-stats .label {
+                font-size: 10px;
+                /* ★ 小屏手机完成统计标签字号，可调整（PX） */
+            }
+        }
+
+        /* ---- 针对超小屏手机（宽度 < 420px） ---- */
         @media (max-width: 420px) {
-            .app-container { max-height: 100vh; }  /* 窄屏时调高，让内容更舒展 */
-            .word-card { padding: 20px 6px 10px; } /* 进一步缩小卡片内边距 */
-            .letter-slot { width: 26px; height: 34px; font-size: 25px; } /* 进一步缩小字母格 */
-            .letter-slot.fixed { width: 26px; height: 34px; font-size: 25px; } /* 同步 */
-            .word-info { font-size: 14px; min-height: 22px;  margin-bottom: 20px;}/*第三个数为 同步缩小注释与说明文字间距 */
-            .kb-key { height: 38px; font-size: 15px; } /* 进一步缩小字母键 */
-            .kb-key.function { height: 34px; font-size: 13px; } /* 进一步缩小功能按钮 */
+            .app-container {
+                max-height: 98vh;
+                /* ★ 超小屏最大高度，可调整（vh） */
+                padding: 4px 4px 6px;
+                /* ★ 超小屏容器内边距，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏容器圆角，可调整（PX） */
+                min-height: 340px;
+                /* ★ 超小屏最小高度，可调整（PX） */
+            }
+            .word-card {
+                padding: 8px 5px 6px;
+                /* ★ 超小屏卡片内边距，可调整（PX） */
+                min-height: 60px;
+                /* ★ 超小屏卡片最小高度，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏卡片圆角，可调整（PX） */
+                margin-bottom: 4px;
+                /* ★ 超小屏卡片底部间距，可调整（PX） */
+            }
+            .word-blanks {
+                gap: 2px 1.5px;
+                /* ★ 超小屏字母格间距，可调整（PX） */
+                min-height: 28px;
+                /* ★ 超小屏字母格容器最小高度，可调整（PX） */
+            }
+            .letter-slot {
+                width: 26px;
+                /* ★ 超小屏字母格宽度，可调整（PX） */
+                height: 32px;
+                /* ★ 超小屏字母格高度，可调整（PX） */
+                font-size: 17px;
+                /* ★ 超小屏字母格字体大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 超小屏字母格圆角，可调整（PX） */
+                border-width: 1.5px;
+                /* ★ 超小屏字母格边框宽度，可调整（PX） */
+            }
+            .letter-slot.fixed {
+                width: 22px;
+                /* ★ 超小屏固定字母格宽度，可调整（PX） */
+                height: 28px;
+                /* ★ 超小屏固定字母格高度，可调整（PX） */
+                font-size: 17px;
+                /* ★ 超小屏固定字母格字体大小，可调整（PX） */
+            }
+            .word-info {
+                font-size: 14px;
+                /* ★ 超小屏音标/释义字体，可调整（PX） */
+                min-height: 18px;
+                /* ★ 超小屏第二行最小高度，可调整（PX） */
+                gap: 1px;
+                /* ★ 超小屏分隔符间距，可调整（PX） */
+                padding: 1px 0;
+                /* ★ 超小屏第二行上下内边距，可调整（PX） */
+            }
+            .word-info .divider {
+                display: none;
+            }
+            .feedback {
+                font-size: 10px;
+                /* ★ 超小屏反馈文字大小，可调整（PX） */
+                min-height: 14px;
+                /* ★ 超小屏反馈最小高度，可调整（PX） */
+                padding: 1px 0 0;
+                /* ★ 超小屏反馈上内边距，可调整（PX） */
+                margin-top: 0px;
+                /* ★ 超小屏反馈与上一行间距，可调整（PX） */
+            }
+            .keyboard {
+                padding: 3px 3px 2px;
+                /* ★ 超小屏键盘内边距，可调整（PX） */
+                min-height: 90px;
+                /* ★ 超小屏键盘最小高度，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏键盘圆角，可调整（PX） */
+            }
+            .kb-row {
+                gap: 3px;
+                /* ★ 超小屏按键间距，可调整（PX） */
+                margin-bottom: 2px;
+                /* ★ 超小屏行间距，可调整（PX） */
+            }
+            .kb-key {
+                height: 36px;
+                /* ★ 超小屏字母键高度，可调整（PX） */
+                font-size: 14px;
+                /* ★ 超小屏字母键字体大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 超小屏按键圆角，可调整（PX） */
+                border-width: 1px;
+                /* ★ 超小屏按键边框宽度，可调整（PX） */
+            }
+            .kb-key.special {
+                font-size: 12px;
+                /* ★ 超小屏特殊键字体大小，可调整（PX） */
+            }
+            .kb-key.function {
+                height: 26px;
+                /* ★ 超小屏功能按钮高度，可调整（PX） */
+                font-size: 11px;
+                /* ★ 超小屏功能按钮字体大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 超小屏功能按钮圆角，可调整（PX） */
+            }
+            .stats {
+                padding: 3px 6px;
+                /* ★ 超小屏统计栏内边距，可调整（PX） */
+                margin-bottom: 3px;
+                /* ★ 超小屏统计栏底部间距，可调整（PX） */
+                gap: 1px 4px;
+                /* ★ 超小屏统计项间距，可调整（PX） */
+                min-height: 24px;
+                /* ★ 超小屏统计栏最小高度，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏统计栏圆角，可调整（PX） */
+            }
+            .stat-item {
+                font-size: 9px;
+                /* ★ 超小屏统计文字大小，可调整（PX） */
+            }
+            .stat-item .value {
+                min-width: 20px;
+                /* ★ 超小屏数值最小宽度，可调整（PX） */
+                padding: 0 2px;
+                /* ★ 超小屏数值内边距，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏数值圆角，可调整（PX） */
+            }
+            .stat-item .value.time {
+                min-width: 30px;
+                /* ★ 超小屏时间数字最小宽度，可调整（PX） */
+            }
+            .progress-wrap {
+                height: 3px;
+                /* ★ 超小屏进度条高度，可调整（PX） */
+                min-width: 20px;
+                /* ★ 超小屏进度条最小宽度，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏进度条圆角，可调整（PX） */
+            }
+            .progress-fill {
+                border-radius: 4px;
+                /* ★ 超小屏进度填充圆角，可调整（PX） */
+            }
+            .toolbar {
+                padding: 4px 6px;
+                /* ★ 超小屏工具栏内边距，可调整（PX） */
+                margin-bottom: 3px;
+                /* ★ 超小屏工具栏底部间距，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏工具栏圆角，可调整（PX） */
+                gap: 2px;
+                /* ★ 超小屏工具栏间距，可调整（PX） */
+            }
+            .toolbar-left label {
+                font-size: 10px;
+                /* ★ 超小屏标签文字大小，可调整（PX） */
+            }
+            .toolbar-left select {
+                font-size: 10px;
+                /* ★ 超小屏下拉框文字大小，可调整（PX） */
+                padding: 2px 4px;
+                /* ★ 超小屏下拉框内边距，可调整（PX） */
+                min-width: 50px;
+                /* ★ 超小屏下拉框最小宽度，可调整（PX） */
+                max-width: 130px;
+                /* ★ 超小屏下拉框最大宽度，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 超小屏下拉框圆角，可调整（PX） */
+            }
+            .ctrl-btn {
+                font-size: 10px;
+                /* ★ 超小屏按钮文字大小，可调整（PX） */
+                padding: 2px 6px;
+                /* ★ 超小屏按钮内边距，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏按钮圆角，可调整（PX） */
+            }
+            .header {
+                margin-bottom: 2px;
+                /* ★ 超小屏顶栏底部间距，可调整（PX） */
+            }
+            .title {
+                font-size: 13px;
+                /* ★ 超小屏标题文字大小，可调整（PX） */
+            }
+            .brand-icon {
+                width: 18px;
+                /* ★ 超小屏品牌图标宽度，可调整（PX） */
+                height: 18px;
+                /* ★ 超小屏品牌图标高度，可调整（PX） */
+                font-size: 8px;
+                /* ★ 超小屏图标内文字大小，可调整（PX） */
+                border-radius: 4px;
+                /* ★ 超小屏图标圆角，可调整（PX） */
+            }
+            .complete-overlay {
+                padding: 12px 6px;
+                /* ★ 超小屏完成界面内边距，可调整（PX） */
+            }
+            .complete-overlay h2 {
+                font-size: 16px;
+                /* ★ 超小屏完成标题字号，可调整（PX） */
+            }
+            .complete-overlay p {
+                font-size: 12px;
+                /* ★ 超小屏完成正文字号，可调整（PX） */
+            }
+            .complete-overlay .final-stats {
+                gap: 12px;
+                /* ★ 超小屏完成统计间距，可调整（PX） */
+                margin: 6px 0 10px;
+                /* ★ 超小屏完成统计外边距，可调整（PX） */
+            }
+            .complete-overlay .final-stats .num {
+                font-size: 18px;
+                /* ★ 超小屏完成统计数字字号，可调整（PX） */
+            }
+            .complete-overlay .final-stats .label {
+                font-size: 9px;
+                /* ★ 超小屏完成统计标签字号，可调整（PX） */
+            }
+        }
+
+        /* ---- 针对横屏手机的特殊优化 ---- */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .app-container {
+                max-height: 98vh;
+                /* ★ 横屏时最大高度，可调整（vh） */
+                padding: 4px 8px 6px;
+                /* ★ 横屏时容器内边距，可调整（PX） */
+                min-height: 300px;
+                /* ★ 横屏时最小高度，可调整（PX） */
+            }
+            .word-card {
+                padding: 8px 12px 6px;
+                /* ★ 横屏时卡片内边距，可调整（PX） */
+                min-height: 50px;
+                /* ★ 横屏时卡片最小高度，可调整（PX） */
+                margin-bottom: 4px;
+                /* ★ 横屏时卡片底部间距，可调整（PX） */
+            }
+            .letter-slot {
+                width: 28px;
+                /* ★ 横屏时字母格宽度，可调整（PX） */
+                height: 34px;
+                /* ★ 横屏时字母格高度，可调整（PX） */
+                font-size: 18px;
+                /* ★ 横屏时字母格字体大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 横屏时字母格圆角，可调整（PX） */
+            }
+            .letter-slot.fixed {
+                width: 24px;
+                /* ★ 横屏时固定字母格宽度，可调整（PX） */
+                height: 30px;
+                /* ★ 横屏时固定字母格高度，可调整（PX） */
+                font-size: 18px;
+                /* ★ 横屏时固定字母格字体大小，可调整（PX） */
+            }
+            .word-info {
+                font-size: 14px;
+                /* ★ 横屏时音标/释义字体，可调整（PX） */
+                min-height: 18px;
+                /* ★ 横屏时第二行最小高度，可调整（PX） */
+            }
+            .keyboard {
+                padding: 4px 6px 3px;
+                /* ★ 横屏时键盘内边距，可调整（PX） */
+                min-height: 80px;
+                /* ★ 横屏时键盘最小高度，可调整（PX） */
+            }
+            .kb-key {
+                height: 36px;
+                /* ★ 横屏时字母键高度，可调整（PX） */
+                font-size: 14px;
+                /* ★ 横屏时字母键字体大小，可调整（PX） */
+                border-radius: 6px;
+                /* ★ 横屏时按键圆角，可调整（PX） */
+            }
+            .kb-key.function {
+                height: 26px;
+                /* ★ 横屏时功能按钮高度，可调整（PX） */
+                font-size: 11px;
+                /* ★ 横屏时功能按钮字体大小，可调整（PX） */
+            }
+            .kb-row {
+                gap: 4px;
+                /* ★ 横屏时按键间距，可调整（PX） */
+                margin-bottom: 2px;
+                /* ★ 横屏时行间距，可调整（PX） */
+            }
+            .stats {
+                padding: 3px 8px;
+                /* ★ 横屏时统计栏内边距，可调整（PX） */
+                min-height: 22px;
+                /* ★ 横屏时统计栏最小高度，可调整（PX） */
+                margin-bottom: 3px;
+                /* ★ 横屏时统计栏底部间距，可调整（PX） */
+                gap: 2px 6px;
+                /* ★ 横屏时统计项间距，可调整（PX） */
+            }
+            .stat-item {
+                font-size: 9px;
+                /* ★ 横屏时统计文字大小，可调整（PX） */
+            }
+            .stat-item .value {
+                min-width: 20px;
+                /* ★ 横屏时数值最小宽度，可调整（PX） */
+                padding: 0 3px;
+                /* ★ 横屏时数值内边距，可调整（PX） */
+            }
+            .stat-item .value.time {
+                min-width: 30px;
+                /* ★ 横屏时时间数字最小宽度，可调整（PX） */
+            }
+            .progress-wrap {
+                height: 3px;
+                /* ★ 横屏时进度条高度，可调整（PX） */
+                min-width: 30px;
+                /* ★ 横屏时进度条最小宽度，可调整（PX） */
+            }
+            .toolbar {
+                padding: 4px 8px;
+                /* ★ 横屏时工具栏内边距，可调整（PX） */
+                margin-bottom: 3px;
+                /* ★ 横屏时工具栏底部间距，可调整（PX） */
+                gap: 3px;
+                /* ★ 横屏时工具栏间距，可调整（PX） */
+            }
+            .toolbar-left select {
+                font-size: 11px;
+                /* ★ 横屏时下拉框文字大小，可调整（PX） */
+                padding: 2px 5px;
+                /* ★ 横屏时下拉框内边距，可调整（PX） */
+                min-width: 60px;
+                /* ★ 横屏时下拉框最小宽度，可调整（PX） */
+                max-width: 140px;
+                /* ★ 横屏时下拉框最大宽度，可调整（PX） */
+            }
+            .ctrl-btn {
+                font-size: 10px;
+                /* ★ 横屏时按钮文字大小，可调整（PX） */
+                padding: 2px 8px;
+                /* ★ 横屏时按钮内边距，可调整（PX） */
+            }
+            .title {
+                font-size: 14px;
+                /* ★ 横屏时标题文字大小，可调整（PX） */
+            }
+            .brand-icon {
+                width: 18px;
+                /* ★ 横屏时品牌图标宽度，可调整（PX） */
+                height: 18px;
+                /* ★ 横屏时品牌图标高度，可调整（PX） */
+                font-size: 8px;
+                /* ★ 横屏时图标内文字大小，可调整（PX） */
+            }
+            .feedback {
+                font-size: 10px;
+                /* ★ 横屏时反馈文字大小，可调整（PX） */
+                min-height: 14px;
+                /* ★ 横屏时反馈最小高度，可调整（PX） */
+            }
+            .word-blanks {
+                gap: 2px 2px;
+                /* ★ 横屏时字母格间距，可调整（PX） */
+                min-height: 28px;
+                /* ★ 横屏时字母格容器最小高度，可调整（PX） */
+            }
         }
     </style>
 </head>
@@ -617,7 +1487,7 @@
     </div>
 
     <!-- ================================================================
-         主程序脚本（已移除对独立进度元素的引用）
+         主程序脚本（功能未改变，仅移除序号提示）
     ================================================================ -->
     <script>
         // ============================================================
@@ -634,6 +1504,7 @@
             }
             return arr;
         }
+
         function formatTime(sec) {
             const m = String(Math.floor(sec / 60)).padStart(2, '0');
             const s = String(sec % 60).padStart(2, '0');
@@ -642,6 +1513,7 @@
 
         // ---- 缓存操作（完整状态） ----
         const STORAGE_KEY = 'wordGameFullData';
+
         function saveCache() {
             try {
                 const data = {
@@ -690,7 +1562,6 @@
             accuracyDisplay: $('accuracyDisplay'),
             progressDisplay: $('progressDisplay'),
             progressFill: $('progressFill'),
-            // wordProgress 已移除，不再引用
             wordBlanks: $('wordBlanks'),
             wordPhonetic: $('wordPhonetic'),
             wordMeaning: $('wordMeaning'),
@@ -753,9 +1624,8 @@
             const total = state.totalWords;
             const done = state.completedWords;
             const progress = total > 0 ? Math.round((done / total) * 100) : 0;
-            dom.progressDisplay.textContent = `${done}/${total}`;  // 统计栏进度更新
+            dom.progressDisplay.textContent = `${done}/${total}`;
             dom.progressFill.style.width = `${progress}%`;
-            // 不再更新独立的 wordProgress
             const accuracy = state.totalAttempts > 0 ? Math.round((state.correctAttempts / state.totalAttempts) * 100) : 0;
             dom.accuracyDisplay.textContent = accuracy + '%';
             updateTimerDisplay();
@@ -895,7 +1765,6 @@
                 }
                 state.grade = gradeLabel;
 
-                // 尝试从缓存恢复完整状态
                 let cache = null;
                 if (resume) {
                     cache = loadCache();
@@ -908,7 +1777,6 @@
                         state.activeSlotIndex = cache.activeSlotIndex || 0;
                         state.mode = cache.mode || 'practice';
                         state.isStarted = cache.isStarted || false;
-                        // ★ 强制暂停：无论缓存中是什么，刷新后均为暂停状态
                         state.isPaused = true;
                         state.totalAttempts = cache.totalAttempts || 0;
                         state.correctAttempts = cache.correctAttempts || 0;
@@ -916,9 +1784,8 @@
                         state.totalWords = state.words.length;
                         state.isFinished = (state.completedWords >= state.totalWords);
                         state.usedKeys = new Set();
-                        state.startTime = null;  // 清除开始时间，避免计时器意外启动
+                        state.startTime = null;
 
-                        // 更新UI
                         dom.gradeSelect.value = gradeLabel;
                         dom.completeOverlay.classList.add('hidden');
                         dom.wordCard.classList.remove('hidden');
@@ -937,7 +1804,8 @@
                                     const chars = wordObj.word.split('');
                                     let blankIndices;
                                     if (state.mode === 'practice') {
-                                        const blankCount = Math.max(1, Math.min(chars.length - 1, Math.floor(chars.length * 0.4)));
+                                        const blankCount = Math.max(1, Math.min(chars.length - 1, Math.floor(chars.length *
+                                        0.4)));
                                         const indices = shuffle([...Array(chars.length).keys()]).slice(0, blankCount);
                                         blankIndices = new Set(indices);
                                     } else {
@@ -960,11 +1828,8 @@
                             renderWord();
                         }
                         updateStats();
-                        // 更新按钮文字：由于 isPaused = true，会显示“继续”
                         updateControlButtons();
-                        // 强制禁用交互（暂停状态）
                         enableInteraction(false);
-                        // 反馈信息提示暂停
                         if (state.isStarted) {
                             updateFeedback('已暂停，点击「继续」恢复', 'info');
                         } else {
@@ -976,7 +1841,6 @@
                     }
                 }
 
-                // 没有有效缓存或 resume=false，执行全新初始化
                 let vocab = null;
                 for (const group of Object.values(WORDS_DATA)) {
                     if (group[gradeLabel]) {
@@ -1062,6 +1926,7 @@
                     value: char,
                 }));
                 state.activeSlotIndex = -1;
+                updateFeedback('已完成的单词', 'success');
             } else {
                 let blankIndices;
                 if (state.mode === 'practice') {
@@ -1083,16 +1948,16 @@
                     state.slots[0].isBlank = true;
                 }
                 state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
+                // ★ 移除序号提示，只在非暂停且已开始时显示默认提示
+                if (state.isStarted && !state.isPaused) {
+                    updateFeedback('点击键盘字母填入空位', 'info');
+                }
+                // 若暂停或未开始，不改变反馈（保留暂停等信息）
             }
             state.usedKeys = new Set();
             dom.kbKeys.forEach(k => k.className = 'kb-key');
             renderWord();
             updateStats();
-            if (isCompleted) {
-                updateFeedback('已完成的单词', 'success');
-            } else {
-                updateFeedback(`第 ${state.currentIndex + 1}/${state.totalWords} 个单词`, 'info');
-            }
             if (state.isStarted && !state.isPaused && !state.isFinished) {
                 enableInteraction(true);
             } else {
@@ -1371,7 +2236,8 @@
             dom.modeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.mode === mode);
             });
-            if (state.words.length > 0 && state.currentIndex < state.totalWords && state.currentIndex >= state.completedWords) {
+            if (state.words.length > 0 && state.currentIndex < state.totalWords && state.currentIndex >= state
+                .completedWords) {
                 const wordObj = state.words[state.currentIndex];
                 const word = wordObj.word;
                 const chars = word.split('');
@@ -1591,13 +2457,13 @@
             } catch (err) {
                 console.error('加载词库失败:', err);
                 document.querySelector('.app-container').innerHTML = `
-                    <div style="text-align:center;padding:40px;color:#c62828;">
-                        <h2>词库加载失败</h2>
-                        <p>无法从 <code>${DATA_URL}</code> 加载词库数据</p>
-                        <p style="font-size:14px;color:#999;">${err.message}</p>
-                        <button onclick="location.reload()" style="margin-top:20px;padding:10px 30px;border:none;border-radius:30px;background:#7b1fa2;color:#fff;font-size:16px;font-weight:700;cursor:pointer;">重新加载</button>
-                    </div>
-                `;
+                        <div style="text-align:center;padding:40px;color:#c62828;">
+                            <h2>词库加载失败</h2>
+                            <p>无法从 <code>${DATA_URL}</code> 加载词库数据</p>
+                            <p style="font-size:14px;color:#999;">${err.message}</p>
+                            <button onclick="location.reload()" style="margin-top:20px;padding:10px 30px;border:none;border-radius:30px;background:#7b1fa2;color:#fff;font-size:16px;font-weight:700;cursor:pointer;">重新加载</button>
+                        </div>
+                    `;
             }
         }
 
