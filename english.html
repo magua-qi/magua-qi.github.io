@@ -21,38 +21,33 @@
             overflow: hidden;
             font-family: 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
             background: #f5f0f8;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 8px;
-            /* ★ 页面外边距，可调整（PX） */
         }
 
         /* ================================================================
-           主容器 – 使用 flex 列布局，充分利用空间
+           主容器
            ================================================================ */
         .app-container {
             max-width: 820px;
-            /* ★ 最大宽度，可调整（PX） */
             width: 100%;
             height: 100%;
             max-height: 92vh;
-            /* ★ 最大高度为视口高度的92%，可调整（PX / vh） */
             min-height: 480px;
-            /* ★ 最小高度，防止过小，可调整（PX） */
             background: #ffffff;
             border-radius: 10px;
-            /* ★ 容器圆角，可调整（PX） */
             padding: 10px 10px 12px;
-            /* ★ 容器内边距 上/左右/下，可调整（PX） */
             box-shadow: 0 8px 32px rgba(106, 13, 173, 0.12);
             border: 1px solid #ede7f6;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: padding 0.2s ease;
+            transition: padding 0.2s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         /* ===== 顶栏 ===== */
@@ -62,39 +57,34 @@
             justify-content: space-between;
             flex-shrink: 0;
             margin-bottom: 6px;
-            /* ★ 顶栏底部间距，可调整（PX） */
         }
         .brand {
             display: flex;
             align-items: center;
             gap: 6px;
-            /* ★ 品牌图标与标题间距，可调整（PX） */
         }
         .brand-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 25px;
-            /* ★ 品牌图标宽度，可调整（PX） */
             height: 25px;
-            /* ★ 品牌图标高度，可调整（PX） */
             background: #7b1fa2;
             border-radius: 10px;
-            /* ★ 图标圆角，可调整（PX） */
             font-size: 12px;
-            /* ★ 图标内文字大小，可调整（PX） */
             font-weight: 800;
             color: #fff;
             letter-spacing: 1px;
             flex-shrink: 0;
             user-select: none;
+            transition: background 0.3s ease;
         }
         .title {
             font-size: 20px;
-            /* ★ 标题文字大小，可调整（PX） */
             font-weight: 800;
             color: #4a148c;
             letter-spacing: 0.3px;
+            transition: color 0.3s ease;
         }
 
         /* ===== 工具栏 ===== */
@@ -104,40 +94,34 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 6px;
-            /* ★ 工具栏内部间距，可调整（PX） */
             background: #f3e5f5;
             border-radius: 10px;
-            /* ★ 工具栏圆角，可调整（PX） */
             padding: 10px 12px;
-            /* ★ 工具栏内边距 上下/左右，可调整（PX） */
             margin-bottom: 6px;
-            /* ★ 工具栏底部间距，可调整（PX） */
             flex-shrink: 0;
             border: 1px solid #e1bee7;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            min-height: 52px;
         }
         .toolbar-left {
             display: flex;
             align-items: center;
             gap: 5px;
-            /* ★ 左侧元素间距，可调整（PX） */
             flex: 1 1 auto;
             min-width: 0;
         }
         .toolbar-left label {
             font-size: 13px;
-            /* ★ 标签文字大小，可调整（PX） */
             font-weight: 600;
             color: #6a1b9a;
             white-space: nowrap;
+            transition: color 0.3s ease;
         }
         .toolbar-left select {
-            padding: 4px 8px;
-            /* ★ 下拉框内边距 上下/左右，可调整（PX） */
+            padding: 6px 10px;
             border: none;
             border-radius: 10px;
-            /* ★ 下拉框圆角，可调整（PX） */
             font-size: 14px;
-            /* ★ 下拉框文字大小，可调整（PX） */
             font-weight: 600;
             background: #ffffff;
             color: #4a148c;
@@ -145,10 +129,10 @@
             cursor: pointer;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
             width: 100%;
-            min-width: 100px;
-            /* ★ 下拉框最小宽度，可调整（PX） */
-            max-width: 300px;
-            /* ★ 下拉框最大宽度，可调整（PX） */
+            min-width: 120px;
+            max-width: 320px;
+            transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            height: 36px;
         }
         .toolbar-left select optgroup {
             font-weight: 700;
@@ -158,17 +142,13 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            /* ★ 右侧按钮间距，可调整（PX） */
             flex-shrink: 0;
         }
         .ctrl-btn {
             padding: 5px 14px;
-            /* ★ 按钮内边距 上下/左右，可调整（PX） */
             border: none;
             border-radius: 10px;
-            /* ★ 按钮圆角，可调整（PX） */
             font-size: 14px;
-            /* ★ 按钮文字大小，可调整（PX） */
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -176,6 +156,7 @@
             color: #4a148c;
             border: 1px solid #d1c4e9;
             white-space: nowrap;
+            height: 36px;
         }
         .ctrl-btn:hover {
             background: #d1c4e9;
@@ -214,86 +195,70 @@
             align-items: center;
             background: #f3e5f5;
             border-radius: 10px;
-            /* ★ 统计栏圆角，可调整（PX） */
-            padding: 8px 12px;
-            /* ★ 统计栏内边距 上下/左右，可调整（PX） */
+            padding: 10px 14px;
             margin-bottom: 8px;
-            /* ★ 统计栏底部间距，可调整（PX） */
-            gap: 4px 10px;
-            /* ★ 统计项间距，可调整（PX） */
+            gap: 4px 12px;
             border: 1px solid #e1bee7;
             flex-shrink: 0;
-            min-height: 36px;
-            /* ★ 统计栏最小高度，可调整（PX） */
+            min-height: 44px;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .stat-item {
-            font-size: 12px;
-            /* ★ 统计文字大小，可调整（PX） */
+            font-size: 13px;
             font-weight: 600;
             color: #4a148c;
             white-space: nowrap;
+            transition: color 0.3s ease;
         }
         .stat-item .value {
             background: rgba(255, 255, 255, 0.7);
-            padding: 0 6px;
-            /* ★ 数值左右内边距，可调整（PX） */
+            padding: 0 8px;
             border-radius: 10px;
-            /* ★ 数值圆角，可调整（PX） */
             font-weight: 700;
             color: #311b92;
             display: inline-block;
-            min-width: 32px;
-            /* ★ 数值最小宽度，可调整（PX） */
+            min-width: 36px;
             text-align: center;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         .stat-item .value.time {
-            min-width: 48px;
-            /* ★ 时间数字最小宽度，可调整（PX） */
+            min-width: 52px;
         }
         .progress-wrap {
             flex: 1;
-            min-width: 50px;
-            /* ★ 进度条最小宽度，可调整（PX） */
-            height: 6px;
-            /* ★ 进度条高度，可调整（PX） */
+            min-width: 60px;
+            height: 7px;
             background: #d1c4e9;
             border-radius: 10px;
-            /* ★ 进度条圆角，可调整（PX） */
             overflow: hidden;
+            transition: background 0.3s ease;
         }
         .progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #7b1fa2, #ab47bc);
             border-radius: 10px;
-            /* ★ 进度填充圆角，可调整（PX） */
             transition: width 0.4s ease;
         }
 
         /* ================================================================
-           单词卡片 – 两行布局：字母格 + 音标/释义
-           使用 flex:1 自动撑满剩余空间
+           单词卡片
            ================================================================ */
         .word-card {
             background: #faf5ff;
             border-radius: 10px;
-            /* ★ 卡片圆角，可调整（PX） */
             padding: 24px 16px 12px;
-            /* ★ 卡片内边距 上/左右/下，可调整（PX） */
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 4px 16px rgba(106, 27, 154, 0.08);
             margin-bottom: 8px;
-            /* ★ 卡片底部间距（与键盘间距），可调整（PX） */
             border: 1px solid #ede7f6;
             flex: 1 1 auto;
-            /* 自动撑满剩余空间 */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 120px;
-            /* ★ 卡片最小高度，可调整（PX） */
             overflow: hidden;
-            transition: padding 0.2s ease, min-height 0.2s ease;
+            transition: padding 0.2s ease, min-height 0.2s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
         /* ---- 第一行：字母格 ---- */
@@ -303,7 +268,6 @@
             justify-content: center;
             align-items: center;
             padding: 2px 0;
-            /* ★ 上下内边距，可调整（PX） */
             flex-shrink: 0;
         }
         .word-blanks {
@@ -312,12 +276,9 @@
             justify-content: center;
             align-items: center;
             gap: 4px 3px;
-            /* ★ 字母格之间的行间距/列间距，可调整（PX） */
             padding: 2px 0;
-            /* ★ 上下内边距，可调整（PX） */
             will-change: transform, opacity;
             min-height: 44px;
-            /* ★ 字母格容器最小高度，可调整（PX） */
         }
         .word-blanks.animate-in {
             animation: fadeSlideIn 0.3s ease-out forwards;
@@ -333,23 +294,17 @@
             }
         }
 
-        /* --- 字母格 --- */
         .letter-slot {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 40px;
-            /* ★ 字母格宽度（基准），可调整（PX） */
             height: 50px;
-            /* ★ 字母格高度（基准），可调整（PX） */
             font-size: 34px;
-            /* ★ 字母格内字体大小（基准），可调整（PX） */
             font-weight: 700;
             border-radius: 10px;
-            /* ★ 字母格圆角，可调整（PX） */
             background: #ffffff;
             border: 2.5px solid #ce93d8;
-            /* ★ 字母格边框宽度，可调整（PX） */
             color: #1a1a2e;
             transition: all 0.2s ease;
             cursor: pointer;
@@ -396,14 +351,17 @@
             background: transparent;
             color: #1a1a2e;
             width: 36px;
-            /* ★ 固定字母格宽度，可调整（PX） */
             height: 46px;
-            /* ★ 固定字母格高度，可调整（PX） */
             font-size: 34px;
-            /* ★ 固定字母格字体大小，可调整（PX） */
         }
         .letter-slot.fixed::after {
             content: none;
+        }
+        .letter-slot.fixed.space {
+            /* 空格占位，保持宽度 */
+            opacity: 0.3;
+            background: transparent;
+            border-color: transparent;
         }
         @keyframes shake {
             0%,
@@ -431,49 +389,45 @@
             align-items: center;
             justify-content: center;
             font-size: 22px;
-            /* ★ 音标和释义字体大小（基准），可调整（PX） */
             font-weight: 500;
             color: #4a148c;
             gap: 4px;
-            /* ★ 分隔符两侧间距，可调整（PX） */
             flex-wrap: wrap;
             text-align: center;
             min-height: 28px;
-            /* ★ 第二行最小高度，可调整（PX） */
             flex-shrink: 0;
-            padding: 4px 0;
-            /* ★ 上下内边距，可调整（PX） */
+            padding: 18px 0 12px;
+            transition: color 0.3s ease, padding 0.2s ease;
         }
         .word-info .phonetic {
             font-family: 'Segoe UI', 'Times New Roman', serif;
             color: #6a1b9a;
             font-weight: 400;
+            transition: color 0.3s ease;
         }
         .word-info .meaning {
             font-weight: 600;
             color: #4a148c;
+            transition: color 0.3s ease;
         }
         .word-info .divider {
             color: #ce93d8;
             font-weight: 300;
             margin: 0 2px;
-            /* ★ 分隔符左右间距，可调整（PX） */
+            transition: color 0.3s ease;
         }
 
         /* ---- 反馈信息 ---- */
         .feedback {
             text-align: center;
             font-size: 13px;
-            /* ★ 反馈文字大小，可调整（PX） */
             font-weight: 600;
-            min-height: 20px;
-            /* ★ 反馈最小高度，可调整（PX） */
-            padding: 2px 0 0;
-            /* ★ 上内边距，可调整（PX） */
+            min-height: 24px;
+            padding: 4px 0 0;
             color: #4a148c;
-            margin-top: 2px;
-            /* ★ 与上一行的间距，可调整（PX） */
+            margin-top: 18px;
             flex-shrink: 0;
+            transition: color 0.3s ease, margin-top 0.2s ease;
         }
         .feedback.success {
             color: #1b5e20;
@@ -488,38 +442,31 @@
             color: #c62828;
             background: #ffebee;
             padding: 10px;
-            /* ★ 错误信息内边距，可调整（PX） */
             border-radius: 10px;
-            /* ★ 错误信息圆角，可调整（PX） */
             margin: 8px 0;
-            /* ★ 错误信息上下外边距，可调整（PX） */
         }
 
         /* ================================================================
-           键盘区域 – 可调整按键大小、内边距、间距
+           键盘区域
            ================================================================ */
         .keyboard {
             background: #f3e5f5;
             border-radius: 10px;
-            /* ★ 键盘容器圆角，可调整（PX） */
             padding: 8px 8px 6px;
-            /* ★ 键盘内边距 上/左右/下，可调整（PX） */
             border: 1px solid #e1bee7;
             flex-shrink: 0;
             min-height: 160px;
-            /* ★ 键盘最小高度，可调整（PX） */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transition: padding 0.2s ease, min-height 0.2s ease;
+            transition: padding 0.2s ease, min-height 0.2s ease, background 0.3s ease, border-color 0.3s ease;
         }
         .kb-row {
             display: flex;
             justify-content: center;
             gap: 6px;
-            /* ★ 按键之间的水平间距，可调整（PX） */
             margin-bottom: 5px;
-            /* ★ 按键行底部外边距，可调整（PX） */
+            flex-wrap: wrap;
         }
         .kb-row:last-child {
             margin-bottom: 0;
@@ -528,12 +475,9 @@
             flex: 1 1 0;
             min-width: 0;
             height: 64px;
-            /* ★ 字母键高度（基准），可调整（PX） */
             border: none;
             border-radius: 10px;
-            /* ★ 按键圆角，可调整（PX） */
             font-size: 28px;
-            /* ★ 字母键字体大小（基准），可调整（PX） */
             font-weight: 700;
             color: #1a1a2e;
             background: #ffffff;
@@ -555,7 +499,6 @@
             flex: 1.5 1 0;
             background: #ede7f6;
             font-size: 16px;
-            /* ★ 特殊键（退格、回车）字体大小，可调整（PX） */
             color: #4a148c;
         }
         .kb-key.special:active {
@@ -563,14 +506,12 @@
         }
         .kb-key.function {
             height: 38px;
-            /* ★ 功能按钮高度（基准），可调整（PX） */
             font-size: 15px;
-            /* ★ 功能按钮字体大小（基准），可调整（PX） */
             background: #ede7f6;
             border-color: #d1c4e9;
             flex: 1;
             border-radius: 10px;
-            /* ★ 功能按钮圆角，可调整（PX） */
+            color: #4a148c;
         }
         .kb-key.function:active {
             background: #d1c4e9;
@@ -580,12 +521,33 @@
             background: #e1bee7;
             border-color: #ce93d8;
             font-weight: 600;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
         }
         .kb-key.function.mode-btn.active {
             background: #7b1fa2;
             color: #fff;
             border-color: #7b1fa2;
             box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
+        }
+        .kb-key.function.mode-btn.locked,
+        .kb-key.function.locked {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        .kb-key.function.start-btn {
+            flex: 1.3;
+            background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+            color: #fff;
+            border: none;
+            box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
+        }
+        .kb-key.function.start-btn:active {
+            transform: scale(0.92);
+        }
+        .kb-key.function.start-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
         }
         .kb-key.correct-highlight {
             background: #c8e6c9;
@@ -600,7 +562,6 @@
         .complete-overlay {
             text-align: center;
             padding: 20px 10px;
-            /* ★ 完成界面内边距 上下/左右，可调整（PX） */
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -611,780 +572,759 @@
         }
         .complete-overlay h2 {
             font-size: 22px;
-            /* ★ 标题字号，可调整（PX） */
             color: #4a148c;
             margin-bottom: 4px;
-            /* ★ 标题下边距，可调整（PX） */
+            transition: color 0.3s ease;
         }
         .complete-overlay p {
             font-size: 15px;
-            /* ★ 正文字号，可调整（PX） */
             color: #6a1b9a;
             margin-bottom: 4px;
-            /* ★ 段落下边距，可调整（PX） */
+            transition: color 0.3s ease;
         }
         .complete-overlay .final-stats {
             display: flex;
             justify-content: center;
             gap: 24px;
-            /* ★ 统计项之间的间距，可调整（PX） */
             margin: 12px 0 16px;
-            /* ★ 统计块上下左右外边距，可调整（PX） */
             flex-wrap: wrap;
         }
         .complete-overlay .final-stats .num {
             font-size: 28px;
-            /* ★ 统计数字字号，可调整（PX） */
             font-weight: 800;
             color: #7b1fa2;
             display: block;
+            transition: color 0.3s ease;
         }
         .complete-overlay .final-stats .label {
             font-size: 12px;
-            /* ★ 统计标签字号，可调整（PX） */
             color: #6a1b9a;
             opacity: 0.7;
+            transition: color 0.3s ease;
         }
         .hidden {
             display: none !important;
         }
 
         /* ================================================================
-           ★★★ 响应式适配 – 重写手机端显示 ★★★
-           策略：使用 clamp() + 媒体查询，尺寸随视口平滑变化
+           ★★★ 深色模式 ★★★
            ================================================================ */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #12121e;
+            }
+            .app-container {
+                background: #1e1e32;
+                border-color: #3d3d5c;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            }
+            .title {
+                color: #c9a8e6;
+            }
+            .brand-icon {
+                background: #9c4dcc;
+            }
+            .toolbar {
+                background: #2a2a44;
+                border-color: #3d3d5c;
+            }
+            .toolbar-left label {
+                color: #c9a8e6;
+            }
+            .toolbar-left select {
+                background: #2d2d4a;
+                color: #e0d0f0;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            }
+            .toolbar-left select optgroup {
+                color: #c9a8e6;
+            }
+            .toolbar-left select option {
+                background: #2d2d4a;
+                color: #e0d0f0;
+            }
+            .ctrl-btn {
+                background: #2d2d4a;
+                color: #c9a8e6;
+                border-color: #4d4d6a;
+            }
+            .ctrl-btn:hover {
+                background: #3d3d5c;
+            }
+            .ctrl-btn.primary {
+                background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+                color: #fff;
+            }
+            .ctrl-btn.secondary {
+                background: #3d2a1a;
+                border-color: #8a6a3a;
+                color: #f0c8a0;
+            }
+            .ctrl-btn.secondary:hover {
+                background: #4d3a2a;
+            }
+            .stats {
+                background: #2a2a44;
+                border-color: #3d3d5c;
+            }
+            .stat-item {
+                color: #c9a8e6;
+            }
+            .stat-item .value {
+                background: rgba(255, 255, 255, 0.08);
+                color: #e0d0f0;
+            }
+            .progress-wrap {
+                background: #3d3d5c;
+            }
+            .progress-fill {
+                background: linear-gradient(90deg, #9c4dcc, #ce93d8);
+            }
+            .word-card {
+                background: #24243e;
+                border-color: #3d3d5c;
+                box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.04), 0 4px 16px rgba(0, 0, 0, 0.3);
+            }
+            .letter-slot {
+                background: #1e1e32;
+                border-color: #6d4d8a;
+                color: #e8e0f0;
+            }
+            .letter-slot.fixed {
+                background: transparent;
+                color: #e8e0f0;
+            }
+            .letter-slot.fixed.space {
+                opacity: 0.2;
+            }
+            .letter-slot.blank {
+                border-color: #8d4dba;
+                background: #2a2a4a;
+                color: #c9a8e6;
+            }
+            .letter-slot.blank.filled {
+                border-color: #4caf50;
+                background: #1a3a1a;
+                color: #81c784;
+            }
+            .letter-slot.blank.wrong {
+                border-color: #e53935;
+                background: #3a1a1a;
+                color: #ef9a9a;
+            }
+            .letter-slot.blank.active {
+                border-color: #9c4dcc;
+                background: #2a2a4a;
+                box-shadow: 0 0 0 3px rgba(156, 77, 204, 0.25);
+            }
+            .word-info {
+                color: #c9a8e6;
+            }
+            .word-info .phonetic {
+                color: #b39ddb;
+            }
+            .word-info .meaning {
+                color: #c9a8e6;
+            }
+            .word-info .divider {
+                color: #6d4d8a;
+            }
+            .feedback {
+                color: #c9a8e6;
+            }
+            .feedback.success {
+                color: #81c784;
+            }
+            .feedback.error {
+                color: #ef9a9a;
+            }
+            .feedback.info {
+                color: #ffb74d;
+            }
+            .error-msg {
+                color: #ef9a9a;
+                background: #3a1a1a;
+            }
+            .keyboard {
+                background: #2a2a44;
+                border-color: #3d3d5c;
+            }
+            .kb-key {
+                background: #1e1e32;
+                color: #e8e0f0;
+                border-color: #3d3d5c;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.04);
+            }
+            .kb-key:active {
+                background: #2d2d4a;
+            }
+            .kb-key.special {
+                background: #2d2d4a;
+                color: #c9a8e6;
+            }
+            .kb-key.special:active {
+                background: #3d3d5c;
+            }
+            .kb-key.function {
+                background: #2d2d4a;
+                border-color: #3d3d5c;
+                color: #c9a8e6;
+            }
+            .kb-key.function:active {
+                background: #3d3d5c;
+            }
+            .kb-key.function.mode-btn {
+                background: #3d2d5a;
+                border-color: #5d3d7a;
+                color: #c9a8e6;
+            }
+            .kb-key.function.mode-btn.active {
+                background: #7b1fa2;
+                color: #fff;
+                border-color: #7b1fa2;
+                box-shadow: 0 2px 8px rgba(106, 27, 154, 0.4);
+            }
+            .kb-key.function.mode-btn.locked,
+            .kb-key.function.locked {
+                opacity: 0.3;
+            }
+            .kb-key.function.start-btn {
+                background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+                color: #fff;
+            }
+            .kb-key.correct-highlight {
+                background: #1a3a1a;
+                border-color: #4caf50;
+            }
+            .kb-key.wrong-highlight {
+                background: #3a1a1a;
+                border-color: #e53935;
+            }
+            .complete-overlay h2 {
+                color: #c9a8e6;
+            }
+            .complete-overlay p {
+                color: #b39ddb;
+            }
+            .complete-overlay .final-stats .num {
+                color: #ce93d8;
+            }
+            .complete-overlay .final-stats .label {
+                color: #b39ddb;
+            }
+        }
 
-        /* ---- 针对平板及以下（宽度 < 820px） ---- */
+        /* ================================================================
+           ★★★ 响应式适配 – 手机端 ★★★
+           ================================================================ */
         @media (max-width: 820px) {
             .app-container {
                 max-height: 94vh;
-                /* ★ 手机端最大高度，可调整（vh） */
                 padding: 8px 8px 10px;
-                /* ★ 手机端容器内边距，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端容器圆角，可调整（PX） */
             }
             .word-card {
                 padding: 18px 12px 10px;
-                /* ★ 手机端卡片内边距，可调整（PX） */
                 min-height: 100px;
-                /* ★ 手机端卡片最小高度，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端卡片圆角，可调整（PX） */
             }
             .word-info {
                 font-size: 19px;
-                /* ★ 手机端音标/释义字体，可调整（PX） */
                 min-height: 24px;
-                /* ★ 手机端第二行最小高度，可调整（PX） */
                 gap: 3px;
-                /* ★ 手机端分隔符间距，可调整（PX） */
+                padding: 16px 0 10px;
             }
             .word-info .divider {
                 display: none;
-                /* 窄屏时隐藏分隔符，换行显示 */
             }
             .feedback {
                 font-size: 12px;
-                /* ★ 手机端反馈文字大小，可调整（PX） */
-                min-height: 18px;
-                /* ★ 手机端反馈最小高度，可调整（PX） */
+                min-height: 22px;
+                margin-top: 16px;
             }
             .keyboard {
                 padding: 6px 6px 4px;
-                /* ★ 手机端键盘内边距，可调整（PX） */
                 min-height: 300px;
-                /* ★ 手机端键盘最小高度，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端键盘圆角，可调整（PX） */
             }
             .kb-row {
                 gap: 5px;
-                /* ★ 手机端按键间距，可调整（PX） */
                 margin-bottom: 15px;
-                /* ★ 手机端行间距，可调整（PX） */
             }
             .stats {
-                padding: 6px 10px;
-                /* ★ 手机端统计栏内边距，可调整（PX） */
+                padding: 8px 12px;
                 margin-bottom: 6px;
-                /* ★ 手机端统计栏底部间距，可调整（PX） */
-                gap: 3px 8px;
-                /* ★ 手机端统计项间距，可调整（PX） */
-                min-height: 32px;
-                /* ★ 手机端统计栏最小高度，可调整（PX） */
+                gap: 4px 10px;
+                min-height: 40px;
                 border-radius: 8px;
-                /* ★ 手机端统计栏圆角，可调整（PX） */
             }
             .stat-item {
-                font-size: 11px;
-                /* ★ 手机端统计文字大小，可调整（PX） */
+                font-size: 12px;
             }
             .stat-item .value {
-                min-width: 28px;
-                /* ★ 手机端数值最小宽度，可调整（PX） */
-                padding: 0 4px;
-                /* ★ 手机端数值内边距，可调整（PX） */
+                min-width: 32px;
+                padding: 0 6px;
             }
             .stat-item .value.time {
-                min-width: 42px;
-                /* ★ 手机端时间数字最小宽度，可调整（PX） */
+                min-width: 46px;
             }
             .progress-wrap {
-                height: 5px;
-                /* ★ 手机端进度条高度，可调整（PX） */
-                min-width: 40px;
-                /* ★ 手机端进度条最小宽度，可调整（PX） */
+                height: 6px;
+                min-width: 44px;
             }
             .toolbar {
-                padding: 8px 10px;
-                /* ★ 手机端工具栏内边距，可调整（PX） */
+                padding: 8px 12px;
                 margin-bottom: 6px;
-                /* ★ 手机端工具栏底部间距，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端工具栏圆角，可调整（PX） */
                 gap: 4px;
-                /* ★ 手机端工具栏间距，可调整（PX） */
+                min-height: 48px;
             }
             .toolbar-left label {
                 font-size: 12px;
-                /* ★ 手机端标签文字大小，可调整（PX） */
             }
             .toolbar-left select {
                 font-size: 13px;
-                /* ★ 手机端下拉框文字大小，可调整（PX） */
-                padding: 3px 6px;
-                /* ★ 手机端下拉框内边距，可调整（PX） */
-                min-width: 80px;
-                /* ★ 手机端下拉框最小宽度，可调整（PX） */
-                max-width: 200px;
-                /* ★ 手机端下拉框最大宽度，可调整（PX） */
+                padding: 4px 8px;
+                min-width: 90px;
+                max-width: 220px;
+                height: 34px;
             }
             .ctrl-btn {
                 font-size: 12px;
-                /* ★ 手机端按钮文字大小，可调整（PX） */
                 padding: 4px 10px;
-                /* ★ 手机端按钮内边距，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端按钮圆角，可调整（PX） */
+                height: 34px;
             }
             .header {
                 margin-bottom: 4px;
-                /* ★ 手机端顶栏底部间距，可调整（PX） */
             }
             .title {
                 font-size: 17px;
-                /* ★ 手机端标题文字大小，可调整（PX） */
             }
             .brand-icon {
                 width: 22px;
-                /* ★ 手机端品牌图标宽度，可调整（PX） */
                 height: 22px;
-                /* ★ 手机端品牌图标高度，可调整（PX） */
                 font-size: 10px;
-                /* ★ 手机端图标内文字大小，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 手机端图标圆角，可调整（PX） */
+            }
+            .kb-key.function {
+                font-size: 13px;
+                height: 34px;
+            }
+            .kb-key.function.start-btn {
+                font-size: 13px;
             }
         }
 
-        /* ---- 针对手机（宽度 < 640px） ---- */
         @media (max-width: 640px) {
             .app-container {
                 max-height: 96vh;
-                /* ★ 小屏手机最大高度，可调整（vh） */
                 padding: 6px 6px 8px;
-                /* ★ 小屏手机容器内边距，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机容器圆角，可调整（PX） */
                 min-height: 400px;
-                /* ★ 小屏手机最小高度，可调整（PX） */
             }
             .word-card {
                 padding: 12px 8px 8px;
-                /* ★ 小屏手机卡片内边距，可调整（PX） */
                 min-height: 80px;
-                /* ★ 小屏手机卡片最小高度，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机卡片圆角，可调整（PX） */
                 margin-bottom: 6px;
-                /* ★ 小屏手机卡片底部间距，可调整（PX） */
             }
             .word-blanks {
                 gap: 3px 2px;
-                /* ★ 小屏手机字母格间距，可调整（PX） */
                 min-height: 34px;
-                /* ★ 小屏手机字母格容器最小高度，可调整（PX） */
             }
             .letter-slot {
                 width: 32px;
-                /* ★ 小屏手机字母格宽度，可调整（PX） */
                 height: 40px;
-                /* ★ 小屏手机字母格高度，可调整（PX） */
                 font-size: 22px;
-                /* ★ 小屏手机字母格字体大小，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 小屏手机字母格圆角，可调整（PX） */
                 border-width: 2px;
-                /* ★ 小屏手机字母格边框宽度，可调整（PX） */
             }
             .letter-slot.fixed {
                 width: 28px;
-                /* ★ 小屏手机固定字母格宽度，可调整（PX） */
                 height: 36px;
-                /* ★ 小屏手机固定字母格高度，可调整（PX） */
                 font-size: 22px;
-                /* ★ 小屏手机固定字母格字体大小，可调整（PX） */
             }
             .word-info {
                 font-size: 16px;
-                /* ★ 小屏手机音标/释义字体，可调整（PX） */
                 min-height: 20px;
-                /* ★ 小屏手机第二行最小高度，可调整（PX） */
                 gap: 2px;
-                /* ★ 小屏手机分隔符间距，可调整（PX） */
-                padding: 2px 0;
-                /* ★ 小屏手机第二行上下内边距，可调整（PX） */
+                padding: 14px 0 8px;
             }
             .word-info .divider {
                 display: none;
             }
             .feedback {
                 font-size: 11px;
-                /* ★ 小屏手机反馈文字大小，可调整（PX） */
-                min-height: 16px;
-                /* ★ 小屏手机反馈最小高度，可调整（PX） */
-                margin-top: 0px;
-                /* ★ 小屏手机反馈与上一行间距，可调整（PX） */
+                min-height: 20px;
+                margin-top: 14px;
             }
             .keyboard {
                 padding: 4px 4px 3px;
-                /* ★ 小屏手机键盘内边距，可调整（PX） */
                 min-height: 250px;
-                /* ★ 小屏手机键盘最小高度，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机键盘圆角，可调整（PX） */
             }
             .kb-row {
                 gap: 4px;
-                /* ★ 小屏手机按键间距，可调整（PX） */
-                margin-bottom: 15px;
-                /* ★ 小屏手机行间距，可调整（PX） */
+                margin-bottom: 12px;
             }
             .kb-key {
                 height: 50px;
-                /* ★ 小屏手机字母键高度，可调整（PX） */
                 font-size: 20px;
-                /* ★ 小屏手机字母键字体大小，可调整（PX） */
                 border-radius: 8px;
-                /* ★ 小屏手机按键圆角，可调整（PX） */
                 border-width: 1px;
-                /* ★ 小屏手机按键边框宽度，可调整（PX） */
             }
             .kb-key.special {
                 font-size: 14px;
-                /* ★ 小屏手机特殊键字体大小，可调整（PX） */
             }
             .kb-key.function {
-                height: 32px;
-                /* ★ 小屏手机功能按钮高度，可调整（PX） */
-                font-size: 13px;
-                /* ★ 小屏手机功能按钮字体大小，可调整（PX） */
+                height: 30px;
+                font-size: 12px;
                 border-radius: 8px;
-                /* ★ 小屏手机功能按钮圆角，可调整（PX） */
+            }
+            .kb-key.function.start-btn {
+                font-size: 12px;
+                height: 30px;
             }
             .stats {
-                padding: 4px 8px;
-                /* ★ 小屏手机统计栏内边距，可调整（PX） */
+                padding: 6px 10px;
                 margin-bottom: 4px;
-                /* ★ 小屏手机统计栏底部间距，可调整（PX） */
-                gap: 2px 6px;
-                /* ★ 小屏手机统计项间距，可调整（PX） */
-                min-height: 28px;
-                /* ★ 小屏手机统计栏最小高度，可调整（PX） */
+                gap: 3px 8px;
+                min-height: 36px;
                 border-radius: 6px;
-                /* ★ 小屏手机统计栏圆角，可调整（PX） */
             }
             .stat-item {
-                font-size: 10px;
-                /* ★ 小屏手机统计文字大小，可调整（PX） */
+                font-size: 11px;
             }
             .stat-item .value {
-                min-width: 24px;
-                /* ★ 小屏手机数值最小宽度，可调整（PX） */
-                padding: 0 3px;
-                /* ★ 小屏手机数值内边距，可调整（PX） */
+                min-width: 28px;
+                padding: 0 5px;
                 border-radius: 6px;
-                /* ★ 小屏手机数值圆角，可调整（PX） */
             }
             .stat-item .value.time {
-                min-width: 36px;
-                /* ★ 小屏手机时间数字最小宽度，可调整（PX） */
+                min-width: 40px;
             }
             .progress-wrap {
-                height: 4px;
-                /* ★ 小屏手机进度条高度，可调整（PX） */
-                min-width: 30px;
-                /* ★ 小屏手机进度条最小宽度，可调整（PX） */
+                height: 5px;
+                min-width: 34px;
                 border-radius: 6px;
-                /* ★ 小屏手机进度条圆角，可调整（PX） */
             }
             .progress-fill {
                 border-radius: 6px;
-                /* ★ 小屏手机进度填充圆角，可调整（PX） */
             }
             .toolbar {
-                padding: 6px 8px;
-                /* ★ 小屏手机工具栏内边距，可调整（PX） */
+                padding: 6px 10px;
                 margin-bottom: 4px;
-                /* ★ 小屏手机工具栏底部间距，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机工具栏圆角，可调整（PX） */
                 gap: 3px;
-                /* ★ 小屏手机工具栏间距，可调整（PX） */
+                min-height: 44px;
             }
             .toolbar-left label {
                 font-size: 11px;
-                /* ★ 小屏手机标签文字大小，可调整（PX） */
             }
             .toolbar-left select {
                 font-size: 12px;
-                /* ★ 小屏手机下拉框文字大小，可调整（PX） */
-                padding: 2px 5px;
-                /* ★ 小屏手机下拉框内边距，可调整（PX） */
-                min-width: 60px;
-                /* ★ 小屏手机下拉框最小宽度，可调整（PX） */
-                max-width: 160px;
-                /* ★ 小屏手机下拉框最大宽度，可调整（PX） */
+                padding: 3px 6px;
+                min-width: 70px;
+                max-width: 180px;
                 border-radius: 8px;
-                /* ★ 小屏手机下拉框圆角，可调整（PX） */
+                height: 32px;
             }
             .ctrl-btn {
                 font-size: 11px;
-                /* ★ 小屏手机按钮文字大小，可调整（PX） */
                 padding: 3px 8px;
-                /* ★ 小屏手机按钮内边距，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机按钮圆角，可调整（PX） */
+                height: 32px;
             }
             .header {
                 margin-bottom: 3px;
-                /* ★ 小屏手机顶栏底部间距，可调整（PX） */
             }
             .title {
                 font-size: 15px;
-                /* ★ 小屏手机标题文字大小，可调整（PX） */
             }
             .brand-icon {
                 width: 20px;
-                /* ★ 小屏手机品牌图标宽度，可调整（PX） */
                 height: 20px;
-                /* ★ 小屏手机品牌图标高度，可调整（PX） */
                 font-size: 9px;
-                /* ★ 小屏手机图标内文字大小，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 小屏手机图标圆角，可调整（PX） */
             }
             .complete-overlay {
                 padding: 16px 8px;
-                /* ★ 小屏手机完成界面内边距，可调整（PX） */
             }
             .complete-overlay h2 {
                 font-size: 18px;
-                /* ★ 小屏手机完成标题字号，可调整（PX） */
             }
             .complete-overlay p {
                 font-size: 13px;
-                /* ★ 小屏手机完成正文字号，可调整（PX） */
             }
             .complete-overlay .final-stats {
                 gap: 16px;
-                /* ★ 小屏手机完成统计间距，可调整（PX） */
                 margin: 8px 0 12px;
-                /* ★ 小屏手机完成统计外边距，可调整（PX） */
             }
             .complete-overlay .final-stats .num {
                 font-size: 22px;
-                /* ★ 小屏手机完成统计数字字号，可调整（PX） */
             }
             .complete-overlay .final-stats .label {
                 font-size: 10px;
-                /* ★ 小屏手机完成统计标签字号，可调整（PX） */
             }
         }
 
-        /* ---- 针对超小屏手机（宽度 < 420px） ---- */
         @media (max-width: 420px) {
             .app-container {
                 max-height: 98vh;
-                /* ★ 超小屏最大高度，可调整（vh） */
                 padding: 4px 4px 6px;
-                /* ★ 超小屏容器内边距，可调整（PX） */
                 border-radius: 4px;
-                /* ★ 超小屏容器圆角，可调整（PX） */
                 min-height: 340px;
-                /* ★ 超小屏最小高度，可调整（PX） */
             }
             .word-card {
                 padding: 8px 5px 6px;
-                /* ★ 超小屏卡片内边距，可调整（PX） */
                 min-height: 60px;
-                /* ★ 超小屏卡片最小高度，可调整（PX） */
                 border-radius: 4px;
-                /* ★ 超小屏卡片圆角，可调整（PX） */
                 margin-bottom: 4px;
-                /* ★ 超小屏卡片底部间距，可调整（PX） */
             }
             .word-blanks {
                 gap: 2px 1.5px;
-                /* ★ 超小屏字母格间距，可调整（PX） */
                 min-height: 28px;
-                /* ★ 超小屏字母格容器最小高度，可调整（PX） */
             }
             .letter-slot {
                 width: 26px;
-                /* ★ 超小屏字母格宽度，可调整（PX） */
                 height: 32px;
-                /* ★ 超小屏字母格高度，可调整（PX） */
                 font-size: 17px;
-                /* ★ 超小屏字母格字体大小，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 超小屏字母格圆角，可调整（PX） */
                 border-width: 1.5px;
-                /* ★ 超小屏字母格边框宽度，可调整（PX） */
             }
             .letter-slot.fixed {
                 width: 22px;
-                /* ★ 超小屏固定字母格宽度，可调整（PX） */
                 height: 28px;
-                /* ★ 超小屏固定字母格高度，可调整（PX） */
                 font-size: 17px;
-                /* ★ 超小屏固定字母格字体大小，可调整（PX） */
             }
             .word-info {
                 font-size: 14px;
-                /* ★ 超小屏音标/释义字体，可调整（PX） */
                 min-height: 18px;
-                /* ★ 超小屏第二行最小高度，可调整（PX） */
                 gap: 1px;
-                /* ★ 超小屏分隔符间距，可调整（PX） */
-                padding: 1px 0;
-                /* ★ 超小屏第二行上下内边距，可调整（PX） */
+                padding: 10px 0 6px;
             }
             .word-info .divider {
                 display: none;
             }
             .feedback {
                 font-size: 10px;
-                /* ★ 超小屏反馈文字大小，可调整（PX） */
-                min-height: 14px;
-                /* ★ 超小屏反馈最小高度，可调整（PX） */
-                padding: 1px 0 0;
-                /* ★ 超小屏反馈上内边距，可调整（PX） */
-                margin-top: 0px;
-                /* ★ 超小屏反馈与上一行间距，可调整（PX） */
+                min-height: 18px;
+                padding: 2px 0 0;
+                margin-top: 12px;
             }
             .keyboard {
                 padding: 3px 3px 2px;
-                /* ★ 超小屏键盘内边距，可调整（PX） */
                 min-height: 200px;
-                /* ★ 超小屏键盘最小高度，可调整（PX） */
                 border-radius: 4px;
-                /* ★ 超小屏键盘圆角，可调整（PX） */
             }
             .kb-row {
                 gap: 3px;
-                /* ★ 超小屏按键间距，可调整（PX） */
                 margin-bottom: 8px;
-                /* ★ 超小屏行间距，可调整（PX） */
             }
             .kb-key {
                 height: 50px;
-                /* ★ 超小屏字母键高度，可调整（PX） */
                 font-size: 18px;
-                /* ★ 超小屏字母键字体大小，可调整（PX） */
                 border-radius: 6px;
-                /* ★ 超小屏按键圆角，可调整（PX） */
                 border-width: 1px;
-                /* ★ 超小屏按键边框宽度，可调整（PX） */
             }
             .kb-key.special {
                 font-size: 12px;
-                /* ★ 超小屏特殊键字体大小，可调整（PX） */
             }
             .kb-key.function {
                 height: 26px;
-                /* ★ 超小屏功能按钮高度，可调整（PX） */
-                font-size: 11px;
-                /* ★ 超小屏功能按钮字体大小，可调整（PX） */
+                font-size: 10px;
                 border-radius: 6px;
-                /* ★ 超小屏功能按钮圆角，可调整（PX） */
+            }
+            .kb-key.function.start-btn {
+                font-size: 10px;
+                height: 26px;
             }
             .stats {
-                padding: 3px 6px;
-                /* ★ 超小屏统计栏内边距，可调整（PX） */
+                padding: 4px 8px;
                 margin-bottom: 3px;
-                /* ★ 超小屏统计栏底部间距，可调整（PX） */
-                gap: 1px 4px;
-                /* ★ 超小屏统计项间距，可调整（PX） */
-                min-height: 24px;
-                /* ★ 超小屏统计栏最小高度，可调整（PX） */
+                gap: 2px 6px;
+                min-height: 32px;
                 border-radius: 4px;
-                /* ★ 超小屏统计栏圆角，可调整（PX） */
             }
             .stat-item {
-                font-size: 9px;
-                /* ★ 超小屏统计文字大小，可调整（PX） */
+                font-size: 10px;
             }
             .stat-item .value {
-                min-width: 20px;
-                /* ★ 超小屏数值最小宽度，可调整（PX） */
-                padding: 0 2px;
-                /* ★ 超小屏数值内边距，可调整（PX） */
+                min-width: 24px;
+                padding: 0 4px;
                 border-radius: 4px;
-                /* ★ 超小屏数值圆角，可调整（PX） */
             }
             .stat-item .value.time {
-                min-width: 30px;
-                /* ★ 超小屏时间数字最小宽度，可调整（PX） */
+                min-width: 34px;
             }
             .progress-wrap {
-                height: 3px;
-                /* ★ 超小屏进度条高度，可调整（PX） */
-                min-width: 20px;
-                /* ★ 超小屏进度条最小宽度，可调整（PX） */
+                height: 4px;
+                min-width: 24px;
                 border-radius: 4px;
-                /* ★ 超小屏进度条圆角，可调整（PX） */
             }
             .progress-fill {
                 border-radius: 4px;
-                /* ★ 超小屏进度填充圆角，可调整（PX） */
-            }
-            .toolbar {
-                padding: 4px 6px;
-                /* ★ 超小屏工具栏内边距，可调整（PX） */
-                margin-bottom: 3px;
-                /* ★ 超小屏工具栏底部间距，可调整（PX） */
-                border-radius: 4px;
-                /* ★ 超小屏工具栏圆角，可调整（PX） */
-                gap: 2px;
-                /* ★ 超小屏工具栏间距，可调整（PX） */
-            }
-            .toolbar-left label {
-                font-size: 10px;
-                /* ★ 超小屏标签文字大小，可调整（PX） */
-            }
-            .toolbar-left select {
-                font-size: 10px;
-                /* ★ 超小屏下拉框文字大小，可调整（PX） */
-                padding: 2px 4px;
-                /* ★ 超小屏下拉框内边距，可调整（PX） */
-                min-width: 50px;
-                /* ★ 超小屏下拉框最小宽度，可调整（PX） */
-                max-width: 130px;
-                /* ★ 超小屏下拉框最大宽度，可调整（PX） */
-                border-radius: 6px;
-                /* ★ 超小屏下拉框圆角，可调整（PX） */
-            }
-            .ctrl-btn {
-                font-size: 10px;
-                /* ★ 超小屏按钮文字大小，可调整（PX） */
-                padding: 2px 6px;
-                /* ★ 超小屏按钮内边距，可调整（PX） */
-                border-radius: 4px;
-                /* ★ 超小屏按钮圆角，可调整（PX） */
-            }
-            .header {
-                margin-bottom: 2px;
-                /* ★ 超小屏顶栏底部间距，可调整（PX） */
-            }
-            .title {
-                font-size: 13px;
-                /* ★ 超小屏标题文字大小，可调整（PX） */
-            }
-            .brand-icon {
-                width: 18px;
-                /* ★ 超小屏品牌图标宽度，可调整（PX） */
-                height: 18px;
-                /* ★ 超小屏品牌图标高度，可调整（PX） */
-                font-size: 8px;
-                /* ★ 超小屏图标内文字大小，可调整（PX） */
-                border-radius: 4px;
-                /* ★ 超小屏图标圆角，可调整（PX） */
-            }
-            .complete-overlay {
-                padding: 12px 6px;
-                /* ★ 超小屏完成界面内边距，可调整（PX） */
-            }
-            .complete-overlay h2 {
-                font-size: 16px;
-                /* ★ 超小屏完成标题字号，可调整（PX） */
-            }
-            .complete-overlay p {
-                font-size: 12px;
-                /* ★ 超小屏完成正文字号，可调整（PX） */
-            }
-            .complete-overlay .final-stats {
-                gap: 12px;
-                /* ★ 超小屏完成统计间距，可调整（PX） */
-                margin: 6px 0 10px;
-                /* ★ 超小屏完成统计外边距，可调整（PX） */
-            }
-            .complete-overlay .final-stats .num {
-                font-size: 18px;
-                /* ★ 超小屏完成统计数字字号，可调整（PX） */
-            }
-            .complete-overlay .final-stats .label {
-                font-size: 9px;
-                /* ★ 超小屏完成统计标签字号，可调整（PX） */
-            }
-        }
-
-        /* ---- 针对横屏手机的特殊优化 ---- */
-        @media (max-height: 600px) and (orientation: landscape) {
-            .app-container {
-                max-height: 98vh;
-                /* ★ 横屏时最大高度，可调整（vh） */
-                padding: 4px 8px 6px;
-                /* ★ 横屏时容器内边距，可调整（PX） */
-                min-height: 300px;
-                /* ★ 横屏时最小高度，可调整（PX） */
-            }
-            .word-card {
-                padding: 8px 12px 6px;
-                /* ★ 横屏时卡片内边距，可调整（PX） */
-                min-height: 50px;
-                /* ★ 横屏时卡片最小高度，可调整（PX） */
-                margin-bottom: 4px;
-                /* ★ 横屏时卡片底部间距，可调整（PX） */
-            }
-            .letter-slot {
-                width: 28px;
-                /* ★ 横屏时字母格宽度，可调整（PX） */
-                height: 34px;
-                /* ★ 横屏时字母格高度，可调整（PX） */
-                font-size: 18px;
-                /* ★ 横屏时字母格字体大小，可调整（PX） */
-                border-radius: 6px;
-                /* ★ 横屏时字母格圆角，可调整（PX） */
-            }
-            .letter-slot.fixed {
-                width: 24px;
-                /* ★ 横屏时固定字母格宽度，可调整（PX） */
-                height: 30px;
-                /* ★ 横屏时固定字母格高度，可调整（PX） */
-                font-size: 18px;
-                /* ★ 横屏时固定字母格字体大小，可调整（PX） */
-            }
-            .word-info {
-                font-size: 14px;
-                /* ★ 横屏时音标/释义字体，可调整（PX） */
-                min-height: 18px;
-                /* ★ 横屏时第二行最小高度，可调整（PX） */
-            }
-            .keyboard {
-                padding: 4px 6px 3px;
-                /* ★ 横屏时键盘内边距，可调整（PX） */
-                min-height: 80px;
-                /* ★ 横屏时键盘最小高度，可调整（PX） */
-            }
-            .kb-key {
-                height: 36px;
-                /* ★ 横屏时字母键高度，可调整（PX） */
-                font-size: 14px;
-                /* ★ 横屏时字母键字体大小，可调整（PX） */
-                border-radius: 6px;
-                /* ★ 横屏时按键圆角，可调整（PX） */
-            }
-            .kb-key.function {
-                height: 26px;
-                /* ★ 横屏时功能按钮高度，可调整（PX） */
-                font-size: 11px;
-                /* ★ 横屏时功能按钮字体大小，可调整（PX） */
-            }
-            .kb-row {
-                gap: 4px;
-                /* ★ 横屏时按键间距，可调整（PX） */
-                margin-bottom: 2px;
-                /* ★ 横屏时行间距，可调整（PX） */
-            }
-            .stats {
-                padding: 3px 8px;
-                /* ★ 横屏时统计栏内边距，可调整（PX） */
-                min-height: 22px;
-                /* ★ 横屏时统计栏最小高度，可调整（PX） */
-                margin-bottom: 3px;
-                /* ★ 横屏时统计栏底部间距，可调整（PX） */
-                gap: 2px 6px;
-                /* ★ 横屏时统计项间距，可调整（PX） */
-            }
-            .stat-item {
-                font-size: 9px;
-                /* ★ 横屏时统计文字大小，可调整（PX） */
-            }
-            .stat-item .value {
-                min-width: 20px;
-                /* ★ 横屏时数值最小宽度，可调整（PX） */
-                padding: 0 3px;
-                /* ★ 横屏时数值内边距，可调整（PX） */
-            }
-            .stat-item .value.time {
-                min-width: 30px;
-                /* ★ 横屏时时间数字最小宽度，可调整（PX） */
-            }
-            .progress-wrap {
-                height: 3px;
-                /* ★ 横屏时进度条高度，可调整（PX） */
-                min-width: 30px;
-                /* ★ 横屏时进度条最小宽度，可调整（PX） */
             }
             .toolbar {
                 padding: 4px 8px;
-                /* ★ 横屏时工具栏内边距，可调整（PX） */
                 margin-bottom: 3px;
-                /* ★ 横屏时工具栏底部间距，可调整（PX） */
-                gap: 3px;
-                /* ★ 横屏时工具栏间距，可调整（PX） */
+                border-radius: 4px;
+                gap: 2px;
+                min-height: 38px;
+            }
+            .toolbar-left label {
+                font-size: 10px;
             }
             .toolbar-left select {
-                font-size: 11px;
-                /* ★ 横屏时下拉框文字大小，可调整（PX） */
-                padding: 2px 5px;
-                /* ★ 横屏时下拉框内边距，可调整（PX） */
-                min-width: 60px;
-                /* ★ 横屏时下拉框最小宽度，可调整（PX） */
+                font-size: 10px;
+                padding: 2px 4px;
+                min-width: 55px;
                 max-width: 140px;
-                /* ★ 横屏时下拉框最大宽度，可调整（PX） */
+                border-radius: 6px;
+                height: 28px;
             }
             .ctrl-btn {
                 font-size: 10px;
-                /* ★ 横屏时按钮文字大小，可调整（PX） */
-                padding: 2px 8px;
-                /* ★ 横屏时按钮内边距，可调整（PX） */
+                padding: 2px 6px;
+                border-radius: 4px;
+                height: 28px;
+            }
+            .header {
+                margin-bottom: 2px;
             }
             .title {
-                font-size: 14px;
-                /* ★ 横屏时标题文字大小，可调整（PX） */
+                font-size: 13px;
             }
             .brand-icon {
                 width: 18px;
-                /* ★ 横屏时品牌图标宽度，可调整（PX） */
                 height: 18px;
-                /* ★ 横屏时品牌图标高度，可调整（PX） */
                 font-size: 8px;
-                /* ★ 横屏时图标内文字大小，可调整（PX） */
+                border-radius: 4px;
+            }
+            .complete-overlay {
+                padding: 12px 6px;
+            }
+            .complete-overlay h2 {
+                font-size: 16px;
+            }
+            .complete-overlay p {
+                font-size: 12px;
+            }
+            .complete-overlay .final-stats {
+                gap: 12px;
+                margin: 6px 0 10px;
+            }
+            .complete-overlay .final-stats .num {
+                font-size: 18px;
+            }
+            .complete-overlay .final-stats .label {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .app-container {
+                max-height: 98vh;
+                padding: 4px 8px 6px;
+                min-height: 300px;
+            }
+            .word-card {
+                padding: 8px 12px 6px;
+                min-height: 50px;
+                margin-bottom: 4px;
+            }
+            .letter-slot {
+                width: 28px;
+                height: 34px;
+                font-size: 18px;
+                border-radius: 6px;
+            }
+            .letter-slot.fixed {
+                width: 24px;
+                height: 30px;
+                font-size: 18px;
+            }
+            .word-info {
+                font-size: 14px;
+                min-height: 18px;
+                padding: 10px 0 6px;
             }
             .feedback {
                 font-size: 10px;
-                /* ★ 横屏时反馈文字大小，可调整（PX） */
-                min-height: 14px;
-                /* ★ 横屏时反馈最小高度，可调整（PX） */
+                min-height: 16px;
+                margin-top: 10px;
+            }
+            .keyboard {
+                padding: 4px 6px 3px;
+                min-height: 80px;
+            }
+            .kb-key {
+                height: 36px;
+                font-size: 14px;
+                border-radius: 6px;
+            }
+            .kb-key.function {
+                height: 26px;
+                font-size: 11px;
+            }
+            .kb-key.function.start-btn {
+                font-size: 11px;
+                height: 26px;
+            }
+            .kb-row {
+                gap: 4px;
+                margin-bottom: 2px;
+            }
+            .stats {
+                padding: 4px 10px;
+                min-height: 30px;
+                margin-bottom: 3px;
+                gap: 2px 8px;
+            }
+            .stat-item {
+                font-size: 10px;
+            }
+            .stat-item .value {
+                min-width: 24px;
+                padding: 0 4px;
+            }
+            .stat-item .value.time {
+                min-width: 34px;
+            }
+            .progress-wrap {
+                height: 4px;
+                min-width: 30px;
+            }
+            .toolbar {
+                padding: 4px 10px;
+                margin-bottom: 3px;
+                gap: 3px;
+                min-height: 38px;
+            }
+            .toolbar-left select {
+                font-size: 11px;
+                padding: 2px 6px;
+                min-width: 65px;
+                max-width: 150px;
+                height: 30px;
+            }
+            .ctrl-btn {
+                font-size: 10px;
+                padding: 2px 8px;
+                height: 30px;
+            }
+            .title {
+                font-size: 14px;
+            }
+            .brand-icon {
+                width: 18px;
+                height: 18px;
+                font-size: 8px;
             }
             .word-blanks {
                 gap: 2px 2px;
-                /* ★ 横屏时字母格间距，可调整（PX） */
                 min-height: 28px;
-                /* ★ 横屏时字母格容器最小高度，可调整（PX） */
             }
         }
     </style>
@@ -1399,7 +1339,7 @@
             </div>
         </div>
 
-        <!-- 工具栏 -->
+        <!-- 工具栏（只有“重新开始”按钮） -->
         <div class="toolbar">
             <div class="toolbar-left">
                 <label for="gradeSelect">词库</label>
@@ -1408,66 +1348,62 @@
                 </select>
             </div>
             <div class="toolbar-right">
-                <button class="ctrl-btn primary" id="mainCtrlBtn">开始</button>
-                <button class="ctrl-btn secondary" id="resetCtrlBtn" disabled>重来</button>
+                <button class="ctrl-btn secondary" id="resetCtrlBtn" disabled>重新开始</button>
             </div>
         </div>
 
-        <!-- 统计栏（唯一进度显示） -->
+        <!-- 统计栏 -->
         <div class="stats">
             <span class="stat-item">用时 <span class="value time" id="timerDisplay">00:00</span></span>
-            <span class="stat-item">正确率 <span class="value" id="accuracyDisplay">0%</span></span>
+            <span class="stat-item">正确 <span class="value" id="accuracyDisplay">0/0</span></span>
             <span class="stat-item">进度 <span class="value" id="progressDisplay">0/0</span></span>
             <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
         </div>
 
-        <!-- 单词卡片（无独立进度） -->
+        <!-- 单词卡片 -->
         <div class="word-card" id="wordCard">
-            <!-- 第一行：字母格 -->
             <div class="word-blanks-wrapper">
                 <div class="word-blanks" id="wordBlanks"></div>
             </div>
-            <!-- 第二行：音标 + 释义 -->
             <div class="word-info" id="wordInfo">
                 <span class="phonetic" id="wordPhonetic"></span>
                 <span class="divider">|</span>
                 <span class="meaning" id="wordMeaning"></span>
             </div>
-            <!-- 反馈信息 -->
             <div class="feedback" id="feedback">点击「开始」按钮开始练习</div>
         </div>
 
         <!-- 键盘区域 -->
         <div class="keyboard" id="keyboard">
-            <!-- 功能按钮行 -->
             <div class="kb-row">
                 <button class="kb-key function" data-action="prev">上一个</button>
                 <button class="kb-key function" data-action="hint">提示</button>
                 <button class="kb-key function" data-action="next">下一个</button>
                 <button class="kb-key function mode-btn active" data-mode="practice">练习</button>
+                <button class="kb-key function" id="intensiveBtn">加强</button>
                 <button class="kb-key function mode-btn" data-mode="dictation">听写</button>
-            </div>
-            <!-- 字母键盘 -->
-            <div class="kb-row">
-                <button class="kb-key" data-letter="Q">Q</button><button class="kb-key" data-letter="W">W</button>
-                <button class="kb-key" data-letter="E">E</button><button class="kb-key" data-letter="R">R</button>
-                <button class="kb-key" data-letter="T">T</button><button class="kb-key" data-letter="Y">Y</button>
-                <button class="kb-key" data-letter="U">U</button><button class="kb-key" data-letter="I">I</button>
-                <button class="kb-key" data-letter="O">O</button><button class="kb-key" data-letter="P">P</button>
+                <button class="kb-key function start-btn" id="mainCtrlBtn">开始</button>
             </div>
             <div class="kb-row">
-                <button class="kb-key" data-letter="A">A</button><button class="kb-key" data-letter="S">S</button>
-                <button class="kb-key" data-letter="D">D</button><button class="kb-key" data-letter="F">F</button>
-                <button class="kb-key" data-letter="G">G</button><button class="kb-key" data-letter="H">H</button>
-                <button class="kb-key" data-letter="J">J</button><button class="kb-key" data-letter="K">K</button>
-                <button class="kb-key" data-letter="L">L</button>
+                <button class="kb-key" data-letter="q">q</button><button class="kb-key" data-letter="w">w</button>
+                <button class="kb-key" data-letter="e">e</button><button class="kb-key" data-letter="r">r</button>
+                <button class="kb-key" data-letter="t">t</button><button class="kb-key" data-letter="y">y</button>
+                <button class="kb-key" data-letter="u">u</button><button class="kb-key" data-letter="i">i</button>
+                <button class="kb-key" data-letter="o">o</button><button class="kb-key" data-letter="p">p</button>
+            </div>
+            <div class="kb-row">
+                <button class="kb-key" data-letter="a">a</button><button class="kb-key" data-letter="s">s</button>
+                <button class="kb-key" data-letter="d">d</button><button class="kb-key" data-letter="f">f</button>
+                <button class="kb-key" data-letter="g">g</button><button class="kb-key" data-letter="h">h</button>
+                <button class="kb-key" data-letter="j">j</button><button class="kb-key" data-letter="k">k</button>
+                <button class="kb-key" data-letter="l">l</button>
             </div>
             <div class="kb-row">
                 <button class="kb-key special" data-letter="⌫">⬅️</button>
-                <button class="kb-key" data-letter="Z">Z</button><button class="kb-key" data-letter="X">X</button>
-                <button class="kb-key" data-letter="C">C</button><button class="kb-key" data-letter="V">V</button>
-                <button class="kb-key" data-letter="B">B</button><button class="kb-key" data-letter="N">N</button>
-                <button class="kb-key" data-letter="M">M</button>
+                <button class="kb-key" data-letter="z">z</button><button class="kb-key" data-letter="x">x</button>
+                <button class="kb-key" data-letter="c">c</button><button class="kb-key" data-letter="v">v</button>
+                <button class="kb-key" data-letter="b">b</button><button class="kb-key" data-letter="n">n</button>
+                <button class="kb-key" data-letter="m">m</button>
                 <button class="kb-key special" data-letter="ENT"> ✅</button>
             </div>
         </div>
@@ -1478,7 +1414,7 @@
             <h2>全部完成！</h2>
             <p>你真是单词小达人！</p>
             <div class="final-stats">
-                <div><span class="num" id="finalAccuracy">0%</span><span class="label">正确率</span></div>
+                <div><span class="num" id="finalAccuracy">0/0</span><span class="label">正确单词数</span></div>
                 <div><span class="num" id="finalTime">00:00</span><span class="label">用时</span></div>
                 <div><span class="num" id="finalTotal">0</span><span class="label">完成单词</span></div>
             </div>
@@ -1487,8 +1423,8 @@
     </div>
 
     <!-- ================================================================
-         主程序脚本（功能未改变，仅移除序号提示）
-    ================================================================ -->
+         主程序脚本（空格不填空 + 完整词库路径）
+         ================================================================ -->
     <script>
         // ============================================================
         //  全局变量
@@ -1511,24 +1447,24 @@
             return `${m}:${s}`;
         }
 
-        // ---- 缓存操作（完整状态） ----
-        const STORAGE_KEY = 'wordGameFullData';
+        // ---- 缓存操作 ----
+        const STORAGE_KEY = 'wordGameFullData_v6';
 
         function saveCache() {
             try {
                 const data = {
-                    grade: state.grade,
+                    gradePath: state.gradePath,
                     words: state.words,
                     currentIndex: state.currentIndex,
                     completedWords: state.completedWords,
+                    correctWords: state.correctWords,
                     slots: state.slots,
                     activeSlotIndex: state.activeSlotIndex,
                     mode: state.mode,
                     isStarted: state.isStarted,
                     isPaused: state.isPaused,
-                    totalAttempts: state.totalAttempts,
-                    correctAttempts: state.correctAttempts,
                     elapsedSeconds: state.elapsedSeconds,
+                    wordErrorMap: state.wordErrorMap,
                     timestamp: Date.now()
                 };
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1540,7 +1476,8 @@
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const data = JSON.parse(raw);
-                    if (data && typeof data === 'object' && data.grade && Array.isArray(data.words) && data.words.length > 0) {
+                    if (data && typeof data === 'object' && data.gradePath && Array.isArray(data.words) && data.words
+                        .length > 0) {
                         return data;
                     }
                 }
@@ -1575,6 +1512,7 @@
             restartBtn: $('restartFromCompleteBtn'),
             mainCtrlBtn: $('mainCtrlBtn'),
             resetCtrlBtn: $('resetCtrlBtn'),
+            intensiveBtn: $('intensiveBtn'),
             kbKeys: document.querySelectorAll('.kb-key[data-letter]'),
             functionKeys: document.querySelectorAll('.kb-key[data-action]'),
             modeButtons: document.querySelectorAll('.mode-btn'),
@@ -1582,15 +1520,14 @@
 
         // ---- 状态 ----
         const state = {
-            grade: '',
+            gradePath: [],
             words: [],
             currentIndex: 0,
             slots: [],
             activeSlotIndex: 0,
             totalWords: 0,
             completedWords: 0,
-            totalAttempts: 0,
-            correctAttempts: 0,
+            correctWords: 0,
             startTime: null,
             timerInterval: null,
             elapsedSeconds: 0,
@@ -1599,6 +1536,7 @@
             isStarted: false,
             usedKeys: new Set(),
             mode: 'practice',
+            wordErrorMap: {},
         };
 
         // ---- UI 更新 ----
@@ -1610,7 +1548,7 @@
                 dom.feedback._timeout = setTimeout(() => {
                     if (!state.isFinished && state.isStarted && !state.isPaused) {
                         dom.feedback.className = 'feedback info';
-                        dom.feedback.textContent = '点击键盘字母填入空位';
+                        dom.feedback.textContent = '点击键盘填入字母，填完后按 ✅ 确认';
                     }
                 }, 2500);
             }
@@ -1626,8 +1564,7 @@
             const progress = total > 0 ? Math.round((done / total) * 100) : 0;
             dom.progressDisplay.textContent = `${done}/${total}`;
             dom.progressFill.style.width = `${progress}%`;
-            const accuracy = state.totalAttempts > 0 ? Math.round((state.correctAttempts / state.totalAttempts) * 100) : 0;
-            dom.accuracyDisplay.textContent = accuracy + '%';
+            dom.accuracyDisplay.textContent = `${state.correctWords}/${total}`;
             updateTimerDisplay();
             if (state.isStarted || state.completedWords > 0) {
                 saveCache();
@@ -1641,27 +1578,42 @@
                 dom.mainCtrlBtn.textContent = '开始';
                 dom.mainCtrlBtn.disabled = !hasValidWords;
                 dom.resetCtrlBtn.disabled = true;
+                dom.intensiveBtn.classList.remove('locked');
             } else if (state.isPaused) {
                 dom.mainCtrlBtn.textContent = '继续';
                 dom.mainCtrlBtn.disabled = false;
                 dom.resetCtrlBtn.disabled = false;
-                dom.resetCtrlBtn.textContent = '重来';
+                dom.resetCtrlBtn.textContent = '重新开始';
+                dom.intensiveBtn.classList.add('locked');
             } else {
                 dom.mainCtrlBtn.textContent = '暂停';
                 dom.mainCtrlBtn.disabled = false;
                 dom.resetCtrlBtn.disabled = false;
-                dom.resetCtrlBtn.textContent = '重来';
+                dom.resetCtrlBtn.textContent = '重新开始';
+                dom.intensiveBtn.classList.add('locked');
             }
             if (state.isFinished) {
                 dom.mainCtrlBtn.disabled = true;
                 dom.resetCtrlBtn.disabled = true;
+                dom.intensiveBtn.classList.remove('locked');
             }
             if (!hasValidWords && !state.isStarted) {
                 dom.mainCtrlBtn.disabled = true;
             }
+            const modeLocked = state.isStarted && !state.isFinished;
+            dom.modeButtons.forEach(btn => {
+                if (modeLocked) {
+                    btn.classList.add('locked');
+                } else {
+                    btn.classList.remove('locked');
+                }
+            });
+            if (!state.isStarted && state.totalWords > 0) {
+                dom.resetCtrlBtn.disabled = false;
+            }
         }
 
-        // ---- 重置进度（清除缓存） ----
+        // ---- 重置进度（保留错词记录） ----
         function resetProgress() {
             if (state.timerInterval) {
                 clearInterval(state.timerInterval);
@@ -1671,21 +1623,29 @@
             state.isPaused = false;
             state.isFinished = false;
             state.completedWords = 0;
-            state.totalAttempts = 0;
-            state.correctAttempts = 0;
+            state.correctWords = 0;
             state.elapsedSeconds = 0;
             state.currentIndex = 0;
             state.startTime = null;
-            clearCache();
-            initGame(state.grade, false);
+            const words = getWordsByPath(state.gradePath);
+            if (words && words.length > 0) {
+                state.words = shuffle([...words]);
+                state.totalWords = state.words.length;
+            }
+            state.slots = [];
+            state.activeSlotIndex = 0;
+            renderWord();
+            updateStats();
             updateControlButtons();
-            updateFeedback('已重置', 'info');
+            enableInteraction(false);
+            updateFeedback('已重置，请选择模式后点击「开始」', 'info');
+            saveCache();
         }
 
         // ---- 开始/暂停/继续 ----
         function toggleMainControl() {
             if (!state.isStarted) {
-                if (!state.grade || state.totalWords === 0) {
+                if (!state.gradePath || state.totalWords === 0) {
                     updateFeedback('请先选择有效词库', 'error');
                     return;
                 }
@@ -1741,13 +1701,28 @@
                 k.style.opacity = enabled ? '1' : '0.5';
             });
             dom.functionKeys.forEach(k => {
+                if (k.dataset.mode) return;
+                if (k.id === 'intensiveBtn') return;
                 k.style.pointerEvents = enabled ? 'auto' : 'none';
                 k.style.opacity = enabled ? '1' : '0.5';
             });
             dom.modeButtons.forEach(k => {
-                k.style.pointerEvents = 'auto';
-                k.style.opacity = '1';
+                if (k.classList.contains('locked')) {
+                    k.style.pointerEvents = 'none';
+                    k.style.opacity = '0.5';
+                } else {
+                    k.style.pointerEvents = 'auto';
+                    k.style.opacity = '1';
+                }
             });
+            const intensive = dom.intensiveBtn;
+            if (intensive.classList.contains('locked')) {
+                intensive.style.pointerEvents = 'none';
+                intensive.style.opacity = '0.5';
+            } else {
+                intensive.style.pointerEvents = 'auto';
+                intensive.style.opacity = '1';
+            }
             const slots = dom.wordBlanks.querySelectorAll('.letter-slot');
             slots.forEach(el => {
                 el.style.pointerEvents = enabled ? 'auto' : 'none';
@@ -1755,106 +1730,217 @@
             });
         }
 
+        // ================================================================
+        //  多层目录支持（深度优先遍历，保留JSON顺序）
+        // ================================================================
+        function getAllLeafNodes(data, path = []) {
+            let leaves = [];
+            if (Array.isArray(data)) {
+                leaves.push({ path: [...path], words: data });
+            } else if (data && typeof data === 'object') {
+                for (const [key, value] of Object.entries(data)) {
+                    const newPath = [...path, key];
+                    const childLeaves = getAllLeafNodes(value, newPath);
+                    leaves = leaves.concat(childLeaves);
+                }
+            }
+            return leaves;
+        }
+
+        function getWordsByPath(pathArray) {
+            if (!WORDS_DATA) return null;
+            let data = WORDS_DATA;
+            for (const key of pathArray) {
+                if (data && typeof data === 'object' && key in data) {
+                    data = data[key];
+                } else {
+                    return null;
+                }
+            }
+            return Array.isArray(data) ? data : null;
+        }
+
+        // ---- 词库下拉菜单：按JSON顺序分级，显示完整路径 ----
+        function buildGradeSelect() {
+            const select = dom.gradeSelect;
+            select.innerHTML = '';
+            if (!WORDS_DATA) {
+                const opt = document.createElement('option');
+                opt.textContent = '加载中...';
+                select.appendChild(opt);
+                return;
+            }
+
+            const topKeys = Object.keys(WORDS_DATA);
+            if (topKeys.length === 0) {
+                const opt = document.createElement('option');
+                opt.textContent = '无可用词库';
+                select.appendChild(opt);
+                return;
+            }
+
+            for (const topKey of topKeys) {
+                const leaves = getAllLeafNodes(WORDS_DATA[topKey], [topKey]);
+                if (leaves.length === 0) continue;
+
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = topKey;
+                for (const leaf of leaves) {
+                    const option = document.createElement('option');
+                    option.value = leaf.path.join('|||');
+                    // 显示完整路径
+                    option.textContent = leaf.path.join(' > ');
+                    optgroup.appendChild(option);
+                }
+                select.appendChild(optgroup);
+            }
+        }
+
+        // ---- 生成 slots（空格自动固定） ----
+        function generateSlots(wordObj, mode) {
+            const word = wordObj.word;
+            const chars = word.split('');
+            // 空格位置不参与填空
+            const nonSpaceIndices = [];
+            const fixedIndices = new Set();
+            for (let i = 0; i < chars.length; i++) {
+                if (chars[i] === ' ') {
+                    fixedIndices.add(i);
+                } else {
+                    nonSpaceIndices.push(i);
+                }
+            }
+
+            let blankIndices = new Set();
+            if (nonSpaceIndices.length > 0) {
+                if (mode === 'practice') {
+                    // 练习模式：抽取约 40% 的字母作为填空（至少1个）
+                    const blankCount = Math.max(1, Math.min(nonSpaceIndices.length - 1, Math.floor(nonSpaceIndices.length *
+                    0.4)));
+                    const shuffled = shuffle([...nonSpaceIndices]);
+                    const selected = shuffled.slice(0, blankCount);
+                    blankIndices = new Set(selected);
+                } else {
+                    // 听写模式：所有非空格字母都填空
+                    blankIndices = new Set(nonSpaceIndices);
+                }
+            }
+
+            // 如果填空数为0（例如只有空格或长度为1），强制至少一个字母填空
+            if (blankIndices.size === 0 && nonSpaceIndices.length > 0) {
+                blankIndices.add(nonSpaceIndices[0]);
+            }
+
+            const slots = chars.map((char, idx) => {
+                const isBlank = blankIndices.has(idx);
+                // 空格永远是固定
+                const isFixed = !isBlank || char === ' ';
+                return {
+                    char: char,
+                    isBlank: isBlank && char !== ' ',
+                    filled: false,
+                    correct: false,
+                    wrong: false,
+                    value: '',
+                    isSpace: char === ' ',
+                };
+            });
+            return slots;
+        }
+
         // ---- 核心逻辑 ----
-        function initGame(gradeLabel, resume = false) {
+        function initGame(gradePath, resume = false) {
             try {
-                console.log(`初始化词库 ${gradeLabel}，恢复模式: ${resume}`);
+                console.log('初始化词库路径:', gradePath, '恢复模式:', resume);
                 if (state.timerInterval) {
                     clearInterval(state.timerInterval);
                     state.timerInterval = null;
                 }
-                state.grade = gradeLabel;
+
+                let pathArray;
+                if (typeof gradePath === 'string') {
+                    pathArray = gradePath.split('|||');
+                } else if (Array.isArray(gradePath)) {
+                    pathArray = gradePath;
+                } else {
+                    pathArray = [];
+                }
+                state.gradePath = pathArray;
 
                 let cache = null;
                 if (resume) {
                     cache = loadCache();
-                    if (cache && cache.grade === gradeLabel) {
-                        console.log('找到有效缓存，正在恢复...');
-                        state.words = cache.words || [];
-                        state.currentIndex = cache.currentIndex || 0;
-                        state.completedWords = cache.completedWords || 0;
-                        state.slots = cache.slots || [];
-                        state.activeSlotIndex = cache.activeSlotIndex || 0;
-                        state.mode = cache.mode || 'practice';
-                        state.isStarted = cache.isStarted || false;
-                        state.isPaused = true;
-                        state.totalAttempts = cache.totalAttempts || 0;
-                        state.correctAttempts = cache.correctAttempts || 0;
-                        state.elapsedSeconds = cache.elapsedSeconds || 0;
-                        state.totalWords = state.words.length;
-                        state.isFinished = (state.completedWords >= state.totalWords);
-                        state.usedKeys = new Set();
-                        state.startTime = null;
+                    if (cache && cache.gradePath && Array.isArray(cache.gradePath)) {
+                        const cachePathStr = cache.gradePath.join('|||');
+                        const currentPathStr = pathArray.join('|||');
+                        if (cachePathStr === currentPathStr) {
+                            console.log('找到有效缓存，正在恢复...');
+                            state.words = cache.words || [];
+                            state.currentIndex = cache.currentIndex || 0;
+                            state.completedWords = cache.completedWords || 0;
+                            state.correctWords = cache.correctWords || 0;
+                            state.slots = cache.slots || [];
+                            state.activeSlotIndex = cache.activeSlotIndex || 0;
+                            state.mode = cache.mode || 'practice';
+                            state.isStarted = cache.isStarted || false;
+                            state.isPaused = true;
+                            state.elapsedSeconds = cache.elapsedSeconds || 0;
+                            state.wordErrorMap = cache.wordErrorMap || {};
+                            state.totalWords = state.words.length;
+                            state.isFinished = (state.completedWords >= state.totalWords && state.totalWords > 0);
+                            state.usedKeys = new Set();
+                            state.startTime = null;
 
-                        dom.gradeSelect.value = gradeLabel;
-                        dom.completeOverlay.classList.add('hidden');
-                        dom.wordCard.classList.remove('hidden');
-                        dom.keyboard.classList.remove('hidden');
-                        dom.kbKeys.forEach(k => k.className = 'kb-key');
-                        dom.modeButtons.forEach(btn => {
-                            btn.classList.toggle('active', btn.dataset.mode === state.mode);
-                        });
+                            dom.gradeSelect.value = pathArray.join('|||');
+                            dom.completeOverlay.classList.add('hidden');
+                            dom.wordCard.classList.remove('hidden');
+                            dom.keyboard.classList.remove('hidden');
+                            dom.kbKeys.forEach(k => k.className = 'kb-key');
+                            dom.modeButtons.forEach(btn => {
+                                btn.classList.toggle('active', btn.dataset.mode === state.mode);
+                            });
 
-                        if (state.isFinished) {
-                            finishGame();
-                        } else {
-                            if (!state.slots || state.slots.length === 0) {
-                                const wordObj = state.words[state.currentIndex];
-                                if (wordObj) {
-                                    const chars = wordObj.word.split('');
-                                    let blankIndices;
-                                    if (state.mode === 'practice') {
-                                        const blankCount = Math.max(1, Math.min(chars.length - 1, Math.floor(chars.length *
-                                        0.4)));
-                                        const indices = shuffle([...Array(chars.length).keys()]).slice(0, blankCount);
-                                        blankIndices = new Set(indices);
-                                    } else {
-                                        blankIndices = new Set([...Array(chars.length).keys()]);
+                            if (state.isFinished) {
+                                finishGame();
+                            } else {
+                                if (!state.slots || state.slots.length === 0) {
+                                    const wordObj = state.words[state.currentIndex];
+                                    if (wordObj) {
+                                        state.slots = generateSlots(wordObj, state.mode);
+                                        state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
                                     }
-                                    state.slots = chars.map((char, idx) => ({
-                                        char,
-                                        isBlank: blankIndices.has(idx),
-                                        filled: false,
-                                        correct: false,
-                                        wrong: false,
-                                        value: '',
-                                    }));
-                                    if (!state.slots.some(s => s.isBlank) && state.slots.length > 0) {
-                                        state.slots[0].isBlank = true;
-                                    }
-                                    state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
                                 }
+                                renderWord();
                             }
-                            renderWord();
-                        }
-                        updateStats();
-                        updateControlButtons();
-                        enableInteraction(false);
-                        if (state.isStarted) {
-                            updateFeedback('已暂停，点击「继续」恢复', 'info');
+                            updateStats();
+                            updateControlButtons();
+                            enableInteraction(false);
+                            if (state.isStarted) {
+                                updateFeedback('已暂停，点击「继续」恢复', 'info');
+                            } else {
+                                updateFeedback('点击「开始」按钮开始练习', 'info');
+                            }
+                            dom.resetCtrlBtn.disabled = false;
+                            console.log('缓存恢复完成（强制暂停）');
+                            return;
                         } else {
-                            updateFeedback('点击「开始」按钮开始练习', 'info');
+                            console.log('缓存路径不匹配，忽略缓存');
+                            clearCache();
                         }
-                        dom.resetCtrlBtn.disabled = false;
-                        console.log('缓存恢复完成（强制暂停）');
-                        return;
+                    } else {
+                        console.log('缓存无效或路径不匹配');
+                        clearCache();
                     }
                 }
 
-                let vocab = null;
-                for (const group of Object.values(WORDS_DATA)) {
-                    if (group[gradeLabel]) {
-                        vocab = group[gradeLabel];
-                        break;
-                    }
-                }
-                if (!vocab || vocab.length === 0) {
+                const words = getWordsByPath(pathArray);
+                if (!words || words.length === 0) {
                     dom.wordBlanks.innerHTML = '<span style="color:#999;">该词库暂无词汇</span>';
                     dom.wordPhonetic.textContent = '';
                     dom.wordMeaning.textContent = '';
                     dom.progressDisplay.textContent = '0/0';
                     dom.progressFill.style.width = '0%';
-                    dom.accuracyDisplay.textContent = '0%';
+                    dom.accuracyDisplay.textContent = '0/0';
                     dom.timerDisplay.textContent = '00:00';
                     dom.feedback.textContent = '请选择有效词库';
                     dom.feedback.className = 'feedback info';
@@ -1862,17 +1948,19 @@
                     state.totalWords = 0;
                     state.isStarted = false;
                     state.isPaused = false;
+                    state.words = [];
+                    state.gradePath = pathArray;
+                    state.wordErrorMap = {};
                     enableInteraction(false);
                     updateControlButtons();
                     clearCache();
                     return;
                 }
 
-                state.words = shuffle([...vocab]);
+                state.words = shuffle([...words]);
                 state.totalWords = state.words.length;
                 state.completedWords = 0;
-                state.totalAttempts = 0;
-                state.correctAttempts = 0;
+                state.correctWords = 0;
                 state.elapsedSeconds = 0;
                 state.currentIndex = 0;
                 state.isFinished = false;
@@ -1888,7 +1976,7 @@
                 dom.wordCard.classList.remove('hidden');
                 dom.keyboard.classList.remove('hidden');
                 dom.kbKeys.forEach(k => k.className = 'kb-key');
-                dom.gradeSelect.value = gradeLabel;
+                dom.gradeSelect.value = pathArray.join('|||');
                 dom.modeButtons.forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.mode === 'practice');
                 });
@@ -1898,7 +1986,7 @@
                 updateFeedback('点击「开始」按钮开始练习', 'info');
                 enableInteraction(false);
                 updateControlButtons();
-                dom.resetCtrlBtn.disabled = true;
+                dom.resetCtrlBtn.disabled = false;
                 clearCache();
             } catch (err) {
                 console.error(err);
@@ -1924,35 +2012,16 @@
                     correct: true,
                     wrong: false,
                     value: char,
+                    isSpace: char === ' ',
                 }));
                 state.activeSlotIndex = -1;
                 updateFeedback('已完成的单词', 'success');
             } else {
-                let blankIndices;
-                if (state.mode === 'practice') {
-                    const blankCount = Math.max(1, Math.min(chars.length - 1, Math.floor(chars.length * 0.4)));
-                    const indices = shuffle([...Array(chars.length).keys()]).slice(0, blankCount);
-                    blankIndices = new Set(indices);
-                } else {
-                    blankIndices = new Set([...Array(chars.length).keys()]);
-                }
-                state.slots = chars.map((char, idx) => ({
-                    char,
-                    isBlank: blankIndices.has(idx),
-                    filled: false,
-                    correct: false,
-                    wrong: false,
-                    value: '',
-                }));
-                if (!state.slots.some(s => s.isBlank) && state.slots.length > 0) {
-                    state.slots[0].isBlank = true;
-                }
+                state.slots = generateSlots(wordObj, state.mode);
                 state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
-                // ★ 移除序号提示，只在非暂停且已开始时显示默认提示
                 if (state.isStarted && !state.isPaused) {
-                    updateFeedback('点击键盘字母填入空位', 'info');
+                    updateFeedback('点击键盘填入字母，填完后按 ✅ 确认', 'info');
                 }
-                // 若暂停或未开始，不改变反馈（保留暂停等信息）
             }
             state.usedKeys = new Set();
             dom.kbKeys.forEach(k => k.className = 'kb-key');
@@ -2012,13 +2081,20 @@
                     const el = document.createElement('span');
                     el.className = 'letter-slot';
                     el.dataset.index = idx;
-                    if (slot.isBlank) {
+                    if (slot.isSpace) {
+                        // 空格固定，透明占位
+                        el.classList.add('fixed', 'space');
+                        el.textContent = '\u00A0';
+                    } else if (slot.isBlank) {
                         el.classList.add('blank');
                         if (slot.filled && slot.correct) {
                             el.classList.add('filled');
                             el.textContent = slot.value;
                         } else if (slot.filled && slot.wrong) {
                             el.classList.add('wrong');
+                            el.textContent = slot.value;
+                        } else if (slot.filled) {
+                            el.classList.add('filled');
                             el.textContent = slot.value;
                         } else {
                             el.textContent = '';
@@ -2030,38 +2106,24 @@
                         el.classList.add('fixed');
                         el.textContent = slot.char;
                     }
-                    el.addEventListener('click', () => {
-                        if (state.isFinished) return;
-                        if (!state.isStarted || state.isPaused) {
-                            updateFeedback('请先开始练习', 'info');
-                            return;
-                        }
-                        if (slot.isBlank && !slot.filled) {
-                            setActiveSlot(idx);
-                        }
-                    });
+                    if (!slot.isSpace) {
+                        el.addEventListener('click', () => {
+                            if (state.isFinished) return;
+                            if (!state.isStarted || state.isPaused) {
+                                updateFeedback('请先开始练习', 'info');
+                                return;
+                            }
+                            if (slot.isBlank && !slot.filled) {
+                                setActiveSlot(idx);
+                            }
+                        });
+                    }
                     container.appendChild(el);
                 });
 
                 void container.offsetWidth;
                 container.classList.add('animate-in');
 
-                const blanks = state.slots.filter(s => s.isBlank);
-                if (blanks.length > 0 && blanks.every(s => s.filled && s.correct)) {
-                    if (state.isStarted && !state.isPaused) {
-                        setTimeout(() => {
-                            if (state.currentIndex < state.totalWords) {
-                                state.completedWords++;
-                                const nextIndex = state.currentIndex + 1;
-                                if (nextIndex < state.totalWords) {
-                                    goToWord(nextIndex);
-                                } else {
-                                    finishGame();
-                                }
-                            }
-                        }, 300);
-                    }
-                }
             } catch (err) {
                 console.error(err);
                 dom.wordBlanks.innerHTML = `<span class="error-msg">渲染错误</span>`;
@@ -2087,6 +2149,87 @@
             saveCache();
         }
 
+        // ---- 验证函数 ----
+        function validateWord() {
+            const blanks = state.slots.filter(s => s.isBlank);
+            if (blanks.some(s => !s.filled)) {
+                updateFeedback('还有空位未填，请继续输入', 'info');
+                return false;
+            }
+            let correctCount = 0;
+            let wrongCount = 0;
+            const currentWord = state.words[state.currentIndex].word;
+            for (const slot of blanks) {
+                if (slot.value.toLowerCase() === slot.char.toLowerCase()) {
+                    slot.correct = true;
+                    slot.wrong = false;
+                    correctCount++;
+                } else {
+                    slot.correct = false;
+                    slot.wrong = true;
+                    wrongCount++;
+                    if (!state.wordErrorMap[currentWord]) {
+                        state.wordErrorMap[currentWord] = 0;
+                    }
+                    state.wordErrorMap[currentWord]++;
+                }
+            }
+
+            const isAllCorrect = (wrongCount === 0);
+            state.completedWords++;
+
+            if (isAllCorrect) {
+                state.correctWords++;
+                updateFeedback('全部正确！', 'success');
+            } else {
+                updateFeedback(`有 ${wrongCount} 个错误`, 'error');
+            }
+
+            if (state.mode === 'dictation') {
+                const nextIndex = state.currentIndex + 1;
+                if (nextIndex < state.totalWords) {
+                    goToWord(nextIndex);
+                } else {
+                    finishGame();
+                }
+                updateStats();
+                saveCache();
+                return true;
+            } else {
+                if (isAllCorrect) {
+                    const nextIndex = state.currentIndex + 1;
+                    if (nextIndex < state.totalWords) {
+                        setTimeout(() => {
+                            goToWord(nextIndex);
+                        }, 400);
+                    } else {
+                        setTimeout(() => {
+                            finishGame();
+                        }, 400);
+                    }
+                    updateStats();
+                    saveCache();
+                    return true;
+                } else {
+                    updateFeedback('有错误，请重新输入', 'error');
+                    for (const slot of state.slots) {
+                        if (slot.isBlank) {
+                            slot.filled = false;
+                            slot.correct = false;
+                            slot.wrong = false;
+                            slot.value = '';
+                        }
+                    }
+                    state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
+                    state.completedWords--;
+                    renderWord();
+                    updateStats();
+                    saveCache();
+                    return false;
+                }
+            }
+        }
+
         // ---- 键盘输入 ----
         function handleKeyInput(letter) {
             if (state.isFinished) return;
@@ -2109,7 +2252,7 @@
                             s.value = '';
                             state.activeSlotIndex = i;
                             renderWord();
-                            updateFeedback('已清除', 'info');
+                            updateFeedback('已退格', 'info');
                             saveCache();
                             return;
                         }
@@ -2118,32 +2261,15 @@
                     return;
                 }
                 if (letter === 'ENT') {
-                    const blanks = state.slots.filter(s => s.isBlank);
-                    if (blanks.every(s => s.filled)) {
-                        if (blanks.every(s => s.correct)) {
-                            state.completedWords++;
-                            state.currentIndex++;
-                            if (state.currentIndex < state.totalWords) {
-                                goToWord(state.currentIndex);
-                            } else {
-                                finishGame();
-                            }
-                        } else {
-                            updateFeedback('存在错误，请修正', 'error');
-                        }
-                    } else {
-                        updateFeedback('请先填完所有空位', 'info');
-                    }
+                    validateWord();
                     return;
                 }
-                if (!/^[A-Z]$/.test(letter)) return;
-
                 let activeIdx = state.activeSlotIndex;
                 let slot = state.slots[activeIdx];
                 if (!slot || !slot.isBlank || slot.filled) {
                     const first = state.slots.findIndex(s => s.isBlank && !s.filled);
                     if (first === -1) {
-                        updateFeedback('所有空位已填', 'success');
+                        updateFeedback('所有空位已填，请按 ✅ 确认', 'success');
                         return;
                     }
                     activeIdx = first;
@@ -2153,51 +2279,21 @@
                 }
                 if (!slot.isBlank || slot.filled) return;
 
-                state.totalAttempts++;
-                const isCorrect = letter.toLowerCase() === slot.char.toLowerCase();
-                if (isCorrect) {
-                    state.correctAttempts++;
-                    slot.filled = true;
-                    slot.correct = true;
-                    slot.value = slot.char;
-                    state.usedKeys.add(letter);
-                    dom.kbKeys.forEach(k => {
-                        if (k.dataset.letter === letter) k.classList.add('correct-highlight');
-                    });
-                    updateFeedback('正确！', 'success');
-                    const next = state.slots.findIndex((s, idx) => s.isBlank && !s.filled && idx > activeIdx);
-                    if (next !== -1) {
-                        state.activeSlotIndex = next;
-                    }
-                    renderWord();
-                    updateStats();
-                    saveCache();
+                slot.filled = true;
+                slot.value = letter;
+                slot.correct = false;
+                slot.wrong = false;
+
+                const next = state.slots.findIndex((s, idx) => s.isBlank && !s.filled && idx > activeIdx);
+                if (next !== -1) {
+                    state.activeSlotIndex = next;
                 } else {
-                    slot.filled = true;
-                    slot.wrong = true;
-                    slot.value = letter;
-                    state.usedKeys.add(letter);
-                    dom.kbKeys.forEach(k => {
-                        if (k.dataset.letter === letter) {
-                            k.classList.add('wrong-highlight');
-                            setTimeout(() => k.classList.remove('wrong-highlight'), 500);
-                        }
-                    });
-                    updateFeedback('错误！', 'error');
-                    setTimeout(() => {
-                        slot.filled = false;
-                        slot.wrong = false;
-                        slot.value = '';
-                        state.activeSlotIndex = activeIdx;
-                        renderWord();
-                        const slots = dom.wordBlanks.querySelectorAll('.letter-slot');
-                        slots.forEach((el, i) => {
-                            if (i === activeIdx) el.classList.add('active');
-                        });
-                        saveCache();
-                    }, 600);
-                    updateStats();
+                    updateFeedback('所有空位已填，请按 ✅ 确认', 'success');
+                    state.activeSlotIndex = -1;
                 }
+                renderWord();
+                updateStats();
+                saveCache();
             } catch (err) {
                 console.error(err);
                 updateFeedback('输入处理出错', 'error');
@@ -2218,7 +2314,7 @@
             try {
                 const blankIdx = state.slots.findIndex(s => s.isBlank && !s.filled);
                 if (blankIdx === -1) {
-                    updateFeedback('所有空位已填', 'success');
+                    updateFeedback('所有空位已填，请按 ✅ 确认', 'success');
                     return;
                 }
                 const slot = state.slots[blankIdx];
@@ -2231,6 +2327,10 @@
 
         // ---- 模式切换 ----
         function switchMode(mode) {
+            if (state.isStarted) {
+                updateFeedback('练习进行中，模式已锁定', 'error');
+                return;
+            }
             if (state.mode === mode) return;
             state.mode = mode;
             dom.modeButtons.forEach(btn => {
@@ -2239,33 +2339,53 @@
             if (state.words.length > 0 && state.currentIndex < state.totalWords && state.currentIndex >= state
                 .completedWords) {
                 const wordObj = state.words[state.currentIndex];
-                const word = wordObj.word;
-                const chars = word.split('');
-                let blankIndices;
-                if (mode === 'practice') {
-                    const blankCount = Math.max(1, Math.min(chars.length - 1, Math.floor(chars.length * 0.4)));
-                    const indices = shuffle([...Array(chars.length).keys()]).slice(0, blankCount);
-                    blankIndices = new Set(indices);
-                } else {
-                    blankIndices = new Set([...Array(chars.length).keys()]);
-                }
-                state.slots = chars.map((char, idx) => ({
-                    char,
-                    isBlank: blankIndices.has(idx),
-                    filled: false,
-                    correct: false,
-                    wrong: false,
-                    value: '',
-                }));
-                if (!state.slots.some(s => s.isBlank) && state.slots.length > 0) {
-                    state.slots[0].isBlank = true;
-                }
+                state.slots = generateSlots(wordObj, mode);
                 state.activeSlotIndex = state.slots.findIndex(s => s.isBlank);
                 dom.kbKeys.forEach(k => k.className = 'kb-key');
                 renderWord();
                 updateFeedback(`已切换至 ${mode === 'practice' ? '练习' : '听写'} 模式`, 'info');
                 saveCache();
             }
+        }
+
+        // ---- 加强模式 ----
+        function startIntensiveMode() {
+            if (state.isStarted && !state.isPaused) {
+                updateFeedback('请先暂停或结束当前练习', 'error');
+                return;
+            }
+            const errorWords = state.words.filter(w => state.wordErrorMap[w.word] && state.wordErrorMap[w.word] > 0);
+            if (errorWords.length === 0) {
+                updateFeedback('当前词库暂无高频错词，继续练习吧', 'info');
+                return;
+            }
+            errorWords.sort((a, b) => (state.wordErrorMap[b.word] || 0) - (state.wordErrorMap[a.word] || 0));
+            const count = Math.max(5, Math.ceil(errorWords.length * 0.3));
+            const selected = errorWords.slice(0, count);
+            state.words = shuffle([...selected]);
+            state.totalWords = state.words.length;
+            state.completedWords = 0;
+            state.correctWords = 0;
+            state.elapsedSeconds = 0;
+            state.currentIndex = 0;
+            state.isFinished = false;
+            state.isStarted = false;
+            state.isPaused = false;
+            state.slots = [];
+            state.activeSlotIndex = 0;
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
+            dom.completeOverlay.classList.add('hidden');
+            dom.wordCard.classList.remove('hidden');
+            dom.keyboard.classList.remove('hidden');
+            renderWord();
+            updateStats();
+            updateControlButtons();
+            enableInteraction(false);
+            updateFeedback(`已切换至「加强」模式，共 ${state.totalWords} 个高频错词，点击「开始」练习`, 'success');
+            saveCache();
         }
 
         function finishGame() {
@@ -2280,12 +2400,11 @@
                 dom.wordCard.classList.add('hidden');
                 dom.keyboard.classList.add('hidden');
                 dom.completeOverlay.classList.remove('hidden');
-                const accuracy = state.totalAttempts > 0 ? Math.round((state.correctAttempts / state.totalAttempts) * 100) : 0;
-                dom.finalAccuracy.textContent = accuracy + '%';
+                dom.finalAccuracy.textContent = `${state.correctWords}/${state.totalWords}`;
                 dom.finalTime.textContent = formatTime(state.elapsedSeconds);
                 dom.finalTotal.textContent = state.completedWords;
                 dom.progressFill.style.width = '100%';
-                dom.progressDisplay.textContent = `${state.totalWords}/${state.totalWords}`;
+                dom.progressDisplay.textContent = `${state.completedWords}/${state.totalWords}`;
                 enableInteraction(false);
                 updateControlButtons();
                 clearCache();
@@ -2312,8 +2431,10 @@
 
         // ---- 事件绑定 ----
         dom.gradeSelect.addEventListener('change', function() {
-            const grade = this.value;
-            if (grade !== state.grade) {
+            const value = this.value;
+            if (!value) return;
+            const pathArray = value.split('|||');
+            if (pathArray.join('|||') !== state.gradePath.join('|||')) {
                 clearCache();
                 state.isStarted = false;
                 state.isPaused = false;
@@ -2321,7 +2442,7 @@
                     clearInterval(state.timerInterval);
                     state.timerInterval = null;
                 }
-                initGame(grade, false);
+                initGame(pathArray, false);
                 updateControlButtons();
                 enableInteraction(false);
             }
@@ -2353,6 +2474,8 @@
             });
         });
 
+        dom.intensiveBtn.addEventListener('click', startIntensiveMode);
+
         document.addEventListener('keydown', function(e) {
             if (state.isFinished) return;
             if (!state.isStarted || state.isPaused) return;
@@ -2367,9 +2490,10 @@
                 handleKeyInput('ENT');
                 return;
             }
-            if (/^[A-Z]$/.test(key)) {
+            const lowerKey = e.key.toLowerCase();
+            if (/^[a-z]$/.test(lowerKey)) {
                 e.preventDefault();
-                handleKeyInput(key);
+                handleKeyInput(lowerKey);
             }
         });
 
@@ -2381,56 +2505,68 @@
                 clearInterval(state.timerInterval);
                 state.timerInterval = null;
             }
-            initGame(state.grade, false);
+            const words = getWordsByPath(state.gradePath);
+            if (words && words.length > 0) {
+                state.words = shuffle([...words]);
+                state.totalWords = state.words.length;
+            }
+            state.completedWords = 0;
+            state.correctWords = 0;
+            state.elapsedSeconds = 0;
+            state.currentIndex = 0;
+            state.isFinished = false;
+            state.slots = [];
+            state.activeSlotIndex = 0;
+            dom.completeOverlay.classList.add('hidden');
+            dom.wordCard.classList.remove('hidden');
+            dom.keyboard.classList.remove('hidden');
+            renderWord();
+            updateStats();
             updateControlButtons();
             enableInteraction(false);
+            updateFeedback('已重置，请选择模式后点击「开始」', 'info');
+            saveCache();
         });
 
         dom.mainCtrlBtn.addEventListener('click', toggleMainControl);
-        dom.resetCtrlBtn.addEventListener('click', resetProgress);
+        dom.resetCtrlBtn.addEventListener('click', function() {
+            dom.restartBtn.click();
+        });
 
         // ============================================================
         //  数据加载、构建下拉框并启动
         // ============================================================
-        function buildGradeSelect() {
-            const select = dom.gradeSelect;
-            select.innerHTML = '';
-            for (const [groupLabel, grades] of Object.entries(WORDS_DATA)) {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = groupLabel;
-                for (const [gradeLabel, words] of Object.entries(grades)) {
-                    const option = document.createElement('option');
-                    option.value = gradeLabel;
-                    option.textContent = gradeLabel;
-                    optgroup.appendChild(option);
-                }
-                select.appendChild(optgroup);
-            }
-        }
-
         function initApp() {
             buildGradeSelect();
 
-            let defaultGrade = null;
+            let defaultPath = null;
             const cache = loadCache();
-            if (cache && cache.grade && WORDS_DATA && Object.values(WORDS_DATA).some(g => g[cache.grade])) {
-                defaultGrade = cache.grade;
-            } else {
-                const firstGroup = Object.values(WORDS_DATA)[0];
-                if (firstGroup) {
-                    defaultGrade = Object.keys(firstGroup)[0] || '';
+            if (cache && cache.gradePath && Array.isArray(cache.gradePath)) {
+                const words = getWordsByPath(cache.gradePath);
+                if (words && words.length > 0) {
+                    defaultPath = cache.gradePath;
                 }
             }
-            if (defaultGrade) {
-                dom.gradeSelect.value = defaultGrade;
+            if (!defaultPath) {
+                const topKeys = Object.keys(WORDS_DATA);
+                if (topKeys.length > 0) {
+                    const firstTop = topKeys[0];
+                    const leaves = getAllLeafNodes(WORDS_DATA[firstTop], [firstTop]);
+                    if (leaves.length > 0) {
+                        defaultPath = leaves[0].path;
+                    }
+                }
+            }
+            if (defaultPath) {
+                dom.gradeSelect.value = defaultPath.join('|||');
             }
             dom.modeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.mode === state.mode);
             });
-            initGame(defaultGrade, true);
+            initGame(defaultPath || [], true);
             updateControlButtons();
             enableInteraction(false);
-            console.log('单词记忆工具已启动（JSON + 完整缓存 + 强制暂停）');
+            console.log('单词记忆工具已启动（空格固定 + 完整词库路径）');
         }
 
         // ---- 加载 JSON 数据 ----
