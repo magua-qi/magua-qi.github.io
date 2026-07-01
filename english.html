@@ -2205,7 +2205,7 @@
                 const label = document.createElement('span');
                 label.className = 'node-label';
                 const count = allPaths.length;
-                label.textContent = `${node.name || '根'} (${count}词)`;
+                label.textContent = `${node.name || '根'}`;
                 if (node.children.length === 0 && count > 0) {
                     const firstPath = allPaths[0];
                     if (firstPath) {
