@@ -20,22 +20,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 8px;
+            padding: 8px; /* 页面外边距，防止内容紧贴屏幕边缘，移动端留出呼吸空间 */
         }
 
         /* ================================================================
            主容器 – 可调整整体宽度和高度
            ================================================================ */
         .app-container {
-            max-width: 820px;          /* ★ 修改此值可调整整体宽度 */
+            max-width: 820px;          /* ★ 限制最大宽度，避免大屏过宽，保持阅读舒适度 */
             width: 100%;
             height: 100%;
-            max-height: 73vh;        /* ★ 修改此值可调整整体高度 */
+            max-height: 58vh;          /* ★ 限制最大高度为视口高度的73%，留出上下边距 */
             background: #ffffff;
-            border-radius: 28px;
-            padding: 14px 12px 16px;
-            box-shadow: 0 8px 32px rgba(106, 13, 173, 0.12);
-            border: 1px solid #ede7f6;
+            border-radius: 10px;       /* 容器外边框圆角，使界面圆润 */
+            padding: 14px 12px 16px;   /* 上14px、左右12px、下16px，内容不贴边 */
+            box-shadow: 0 8px 32px rgba(106, 13, 173, 0.12); /* 阴影偏移 8px垂直、32px模糊，营造浮起感 */
+            border: 1px solid #ede7f6; /* 边框宽度1px，增加视觉边界 */
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -47,7 +47,7 @@
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* 与下方工具栏的间距 */
         }
         .brand {
             display: flex;
@@ -58,11 +58,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            width: 25px;  /* 品牌图标宽度 */
+            height: 25px; /* 品牌图标高度 */
             background: #7b1fa2;
-            border-radius: 10px;
-            font-size: 17px;
+            border-radius: 10px; /* 图标圆角 */
+            font-size: 12px;     /* 图标内文字大小 */
             font-weight: 800;
             color: #fff;
             letter-spacing: 1px;
@@ -70,7 +70,7 @@
             user-select: none;
         }
         .title {
-            font-size: 17px;
+            font-size: 20px; /* 标题文字大小 */
             font-weight: 800;
             color: #4a148c;
             letter-spacing: 0.3px;
@@ -84,11 +84,11 @@
             flex-wrap: wrap;
             gap: 6px;
             background: #f3e5f5;
-            border-radius: 30px;
-            padding: 5px 10px 5px 14px;
-            margin-bottom: 10px;
+            border-radius: 10px; /* 工具栏圆角 */
+            padding: 15px 14px 15px 14px; /* 上下15px，右15px，左14px，内部留白 */
+            margin-bottom: 10px; /* 与下方统计栏的间距 */
             flex-shrink: 0;
-            border: 1px solid #e1bee7;
+            border: 1px solid #e1bee7; /* 边框宽度1px */
         }
         .toolbar-left {
             display: flex;
@@ -98,16 +98,16 @@
             min-width: 0;
         }
         .toolbar-left label {
-            font-size: 13px;
+            font-size: 13px; /* 标签文字大小 */
             font-weight: 600;
             color: #6a1b9a;
             white-space: nowrap;
         }
         .toolbar-left select {
-            padding: 4px 8px;
+            padding: 4px 8px;  /* 下拉框内边距上下4px左右8px */
             border: none;
-            border-radius: 20px;
-            font-size: 14px;
+            border-radius: 10px; /* 下拉框圆角 */
+            font-size: 14px;     /* 下拉框文字大小 */
             font-weight: 600;
             background: #ffffff;
             color: #4a148c;
@@ -115,8 +115,8 @@
             cursor: pointer;
             box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             width: 100%;
-            min-width: 80px;
-            max-width: 220px;
+            min-width: 100px;  /* 最小宽度，保证显示完整 */
+            max-width: 300px;
         }
         .toolbar-left select optgroup {
             font-weight: 700;
@@ -130,16 +130,16 @@
             flex-shrink: 0;
         }
         .ctrl-btn {
-            padding: 5px 14px;
+            padding: 5px 14px;  /* 按钮内边距上下5px左右14px */
             border: none;
-            border-radius: 30px;
-            font-size: 14px;
+            border-radius: 10px; /* 按钮圆角 */
+            font-size: 14px;     /* 按钮文字大小 */
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #ede7f6;
             color: #4a148c;
-            border: 1px solid #d1c4e9;
+            border: 1px solid #d1c4e9; /* 边框宽度1px */
             white-space: nowrap;
         }
         .ctrl-btn:hover { background: #d1c4e9; transform: scale(1.02); }
@@ -148,9 +148,9 @@
             background: linear-gradient(135deg, #7b1fa2, #9c27b0);
             color: #fff;
             border: none;
-            box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25);
+            box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25); /* 阴影偏移 4px垂直、12px模糊，突出主按钮 */
         }
-        .ctrl-btn.primary:hover { box-shadow: 0 6px 20px rgba(106, 27, 154, 0.35); }
+        .ctrl-btn.primary:hover { box-shadow: 0 6px 20px rgba(106, 27, 154, 0.35); } /* 悬停阴影加深 */
         .ctrl-btn.secondary {
             background: #fff3e0;
             border-color: #ffcc80;
@@ -169,103 +169,96 @@
             flex-wrap: wrap;
             align-items: center;
             background: #f3e5f5;
-            border-radius: 18px;
-            padding: 4px 12px;
-            margin-bottom: 10px;
+            border-radius: 10px; /* 圆角 */
+            padding: 15px 14px;   /* 上下15px左右14px内边距 */
+            margin-bottom: 20px; /* 与单词卡片的间距 */
             gap: 4px 10px;
-            border: 1px solid #e1bee7;
+            border: 1px solid #e1bee7; /* 边框宽度1px */
             flex-shrink: 0;
         }
         .stat-item {
-            font-size: 12px;
+            font-size: 12px; /* 统计文字大小 */
             font-weight: 600;
             color: #4a148c;
         }
         .stat-item .value {
             background: rgba(255,255,255,0.7);
-            padding: 0 6px;
-            border-radius: 14px;
+            padding: 0 6px;          /* 数值左右内边距 */
+            border-radius: 10px;     /* 数值圆角 */
             font-weight: 700;
             color: #311b92;
             display: inline-block;
-            min-width: 32px;
+            min-width: 32px;         /* 最小宽度，使数字显示整齐 */
             text-align: center;
         }
-        .stat-item .value.time { min-width: 48px; }
+        .stat-item .value.time { min-width: 48px; } /* 时间数字最小宽度，防止跳变（如00:00->59:59） */
         .progress-wrap {
             flex: 1;
             min-width: 50px;
-            height: 6px;
+            height: 6px;             /* 进度条高度 */
             background: #d1c4e9;
-            border-radius: 10px;
+            border-radius: 10px;     /* 进度条圆角 */
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #7b1fa2, #ab47bc);
-            border-radius: 10px;
+            border-radius: 10px;     /* 进度填充圆角 */
             transition: width 0.4s ease;
         }
 
         /* ================================================================
-           单词卡片区域 – 可调整内边距、间距、字母格大小等
+           单词卡片 – 两行布局：字母格 + 音标/释义（进度仅存在于统计栏）
            ================================================================ */
         .word-card {
             background: #faf5ff;
-            border-radius: 24px;
-            padding: 250px 20px 250px;      /* ★ 修改此值可调整单词卡片的上、左右、下内边距 */
+            border-radius: 10px;          /* 卡片圆角 */
+            padding: 80px 20px 16px;      /* ★ 顶部80px、左右20px、底部16px，控制卡片内部留白 */
             box-shadow: inset 0 1px 3px rgba(255,255,255,0.8), 0 4px 16px rgba(106, 27, 154, 0.08);
-            margin-bottom: 8px;
-            border: 1px solid #ede7f6;
+            margin-bottom: 20px;           /* 与键盘的间距 */
+            border: 1px solid #ede7f6;    /* 边框宽度1px */
             flex: 0 1 auto;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .word-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .word-progress {
-            font-size: 13px;
-            font-weight: 700;
-            color: #7b1fa2;
-            background: #ede7f6;
-            padding: 2px 10px;
-            border-radius: 30px;
-            white-space: nowrap;
-            min-width: 44px;
-            text-align: center;
-            flex-shrink: 0;
+            flex-direction: column;       /* 纵向排列两行 */
+            align-items: center;          /* 水平居中 */
+            justify-content: center;      /* 垂直居中（若内容高度不足） */
+           
         }
         .word-blanks-wrapper {
-            flex: 1 1 auto;
+           margin-bottom: 30px;   /* ★ 第一行（字母格）与第二行（音标+释义）的间距 */
+        }       
+        .word-info {
+           margin-bottom: 70px;   /* ★ 第二行与第三行（反馈信息）的间距 */
+        }
+       .feedback {
+           margin-bottom: 0;      /* 最后一项无需底部外边距（可省略） */
+         }
+
+        /* ---- 第一行：字母格 ---- */
+        .word-blanks-wrapper {
+            width: 100%;                  /* 占满卡片宽度 */
             display: flex;
             justify-content: center;
             align-items: center;
-            min-width: 80px;
-            padding: 2px 0;
+            padding: 2px 0;               /* 上下内边距2px */
         }
         .word-blanks {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 3px 2px;
-            padding: 2px 0;
+            gap: 3px 2px;                 /* 行间隙3px，列间隙2px，字母格之间的间距 */
+            padding: 2px 0;               /* 上下内边距2px */
             will-change: transform, opacity;
-            min-height: 50px;
+            min-height: 50px;             /* 最小高度，占位防止空白 */
         }
         .word-blanks.animate-in {
             animation: fadeSlideIn 0.3s ease-out forwards;
         }
         @keyframes fadeSlideIn {
-            0% { opacity: 0; transform: translateY(6px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(6px); } /* 入场动画：向下偏移6px */
+            100% { opacity: 1; transform: translateY(0); } /* 最终归位 */
         }
 
         /* --- 字母格 --- */
@@ -273,13 +266,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;                 /* ★ 修改此值可调整字母格宽度 */
-            height: 40px;                /* ★ 修改此值可调整字母格高度 */
-            font-size: 35px;             /* ★ 修改此值可调整字母格内字体大小 */
+            width: 40px;                 /* ★ 字母格宽度 */
+            height: 50px;                /* ★ 字母格高度 */
+            font-size: 40px;             /* ★ 字母格内字体大小 */
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 10px;         /* 字母格圆角 */
             background: #ffffff;
-            border: 2.5px solid #ce93d8;
+            border: 2.5px solid #ce93d8; /* 边框宽度2.5px */
             color: #1a1a2e;
             transition: all 0.2s ease;
             cursor: pointer;
@@ -320,32 +313,32 @@
             border-color: transparent;
             background: transparent;
             color: #1a1a2e;
-            width: 38px;                 /* 与 .letter-slot 保持比例 */
-            height: 46px;
-            font-size: 26px;
+            width: 40px;                 /* 固定字母格宽度（略小） */
+            height: 50px;                /* 固定字母格高度（略高） */
+            font-size:40px;             /* 固定字母格字体大小 */
         }
         .letter-slot.fixed::after { content: none; }
         @keyframes shake {
             0%,100%{transform:translateX(0)}
-            20%{transform:translateX(-5px)}
-            40%{transform:translateX(5px)}
-            60%{transform:translateX(-3px)}
-            80%{transform:translateX(3px)}
+            20%{transform:translateX(-5px)}  /* 向左晃动5px */
+            40%{transform:translateX(5px)}   /* 向右晃动5px */
+            60%{transform:translateX(-3px)}  /* 向左晃动3px */
+            80%{transform:translateX(3px)}   /* 向右晃动3px */
         }
 
-        /* --- 音标和释义 --- */
+        /* ---- 第二行：音标+释义 ---- */
         .word-info {
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            font-size: 18px;             /* ★ 修改此值可调整音标和释义的字体大小 */
+            flex-direction: row;          /* 水平排列音标和释义，中间有分隔符 */
+            align-items: center;
+            justify-content: center;      /* 居中显示 */
+            font-size: 25px;             /* ★ 音标和释义的字体大小 */
             font-weight: 500;
             color: #4a148c;
-            white-space: nowrap;
-            min-width: 60px;
-            flex-shrink: 0;
-            line-height: 1.3;
+            gap: 4px;                     /* 分隔符两侧间距 */
+            flex-wrap: wrap;              /* 窄屏时自动换行 */
+            text-align: center;
+            min-height: 30px;             /* 最小高度，保持行高一致 */
         }
         .word-info .phonetic {
             font-family: 'Segoe UI', 'Times New Roman', serif;
@@ -359,41 +352,48 @@
         .word-info .divider {
             color: #ce93d8;
             font-weight: 300;
-            margin: 0 2px;
+            margin: 0 2px;               /* 分隔符左右间距2px */
         }
+        /* 窄屏时分隔符隐藏，释义另起一行（由flex-wrap实现） */
         @media (max-width: 640px) {
             .word-info {
-                white-space: normal;
-                font-size: 16px;
-                min-width: 45px;
-                align-items: flex-end;
+                font-size: 16px;         /* 窄屏缩小释义字号 */
+                gap: 2px;
             }
             .word-info .divider { display: none; }
-            .word-info .meaning { display: block; }
         }
 
+        /* ---- 反馈信息 ---- */
         .feedback {
             text-align: center;
-            font-size: 13px;
+            font-size: 13px;             /* 反馈文字大小 */
             font-weight: 600;
-            min-height: 20px;
-            padding: 2px 0 0;
+            min-height: 20px;            /* 最小高度，避免布局跳动 */
+            padding: 2px 0 0;            /* 上内边距2px */
             color: #4a148c;
+            margin-top: 4px;             /* 与上一行的间距 */
         }
         .feedback.success { color: #1b5e20; }
         .feedback.error { color: #b71c1c; }
         .feedback.info { color: #e65100; }
+        .error-msg {
+            color: #c62828;
+            background: #ffebee;
+            padding: 10px;               /* 错误信息内边距 */
+            border-radius: 10px;         /* 错误信息圆角 */
+            margin: 8px 0;               /* 错误信息上下外边距 */
+        }
 
         /* ================================================================
            键盘区域 – 可调整按键大小、内边距、间距
            ================================================================ */
         .keyboard {
             background: #f3e5f5;
-            border-radius: 24px;
-            padding: 10px 10px 10px;      /* ★ 修改此值可调整键盘内边距 */
-            border: 1px solid #e1bee7;
+            border-radius: 10px;          /* 键盘容器圆角 */
+            padding: 10px 10px 10px;      /* ★ 键盘内边距上下左右均为10px */
+            border: 1px solid #e1bee7;    /* 边框宽度1px */
             flex-shrink: 0;
-            min-height: 160px;
+            min-height: 200px;            /* 键盘最小高度，防止内容过少时缩成一团 */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -401,17 +401,17 @@
         .kb-row {
             display: flex;
             justify-content: center;
-            gap: 5px;
-            margin-bottom: 6px;
+            gap: 7px;                     /* 按键之间的水平间距 */
+            margin-bottom: 6px;           /* 按键行底部外边距 */
         }
         .kb-row:last-child { margin-bottom: 0; }
         .kb-key {
             flex: 1 1 0;
             min-width: 0;
-            height: 70px;                /* ★ 修改此值可调整字母键高度 */
+            height: 70px;                /* ★ 字母键高度 */
             border: none;
-            border-radius: 14px;
-            font-size: 30px;             /* ★ 修改此值可调整字母键字体大小 */
+            border-radius: 10px;         /* 按键圆角 */
+            font-size: 35px;             /* ★ 字母键字体大小 */
             font-weight: 700;
             color: #1a1a2e;
             background: #ffffff;
@@ -422,20 +422,20 @@
             align-items: center;
             justify-content: center;
             user-select: none;
-            border: 1px solid #d1c4e9;
+            border: 1px solid #d1c4e9;    /* 边框宽度1px */
             touch-action: manipulation;
         }
         .kb-key:active { transform: scale(0.92); background: #ede7f6; }
         .kb-key.special {
             flex: 1.5 1 0;
             background: #ede7f6;
-            font-size: 16px;
+            font-size: 16px;             /* 特殊键（退格、回车）字体大小 */
             color: #4a148c;
         }
         .kb-key.special:active { background: #d1c4e9; }
         .kb-key.function {
-            height: 50px;                /* ★ 修改此值可调整功能键高度 */
-            font-size: 18px;             /* ★ 修改此值可调整功能键字体大小 */
+            height: 45px;                /* ★ 功能按钮高度（上一个、提示、下一个、模式） */
+            font-size: 18px;             /* ★ 功能按钮字体大小 */
             background: #ede7f6;
             border-color: #d1c4e9;
             flex: 1;
@@ -451,7 +451,7 @@
             background: #7b1fa2;
             color: #fff;
             border-color: #7b1fa2;
-            box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
+            box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3); /* 阴影偏移 2px垂直、8px模糊 */
         }
         .kb-key.correct-highlight { background: #c8e6c9; border-color: #2e7d32; }
         .kb-key.wrong-highlight { background: #ffcdd2; border-color: #c62828; }
@@ -459,7 +459,7 @@
         /* ===== 完成界面 ===== */
         .complete-overlay {
             text-align: center;
-            padding: 20px 10px;
+            padding: 20px 10px;          /* 上下20px左右10px内边距 */
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -467,54 +467,53 @@
         }
         .complete-overlay .big-icon { font-size: 0; }
         .complete-overlay h2 {
-            font-size: 22px;
+            font-size: 22px;             /* 标题字号 */
             color: #4a148c;
-            margin-bottom: 4px;
+            margin-bottom: 4px;          /* 标题下边距 */
         }
         .complete-overlay p {
-            font-size: 15px;
+            font-size: 15px;             /* 正文字号 */
             color: #6a1b9a;
-            margin-bottom: 4px;
+            margin-bottom: 4px;          /* 段落下边距 */
         }
         .complete-overlay .final-stats {
             display: flex;
             justify-content: center;
-            gap: 24px;
-            margin: 12px 0 16px;
+            gap: 24px;                   /* 统计项之间的间距 */
+            margin: 12px 0 16px;         /* 统计块上下左右外边距 */
             flex-wrap: wrap;
         }
         .complete-overlay .final-stats .num {
-            font-size: 28px;
+            font-size: 28px;             /* 统计数字字号（如正确率） */
             font-weight: 800;
             color: #7b1fa2;
             display: block;
         }
         .complete-overlay .final-stats .label {
-            font-size: 12px;
+            font-size: 12px;             /* 统计标签字号 */
             color: #6a1b9a;
             opacity: 0.7;
         }
         .hidden { display: none !important; }
-        .error-msg { color: #c62828; background: #ffebee; padding: 10px; border-radius: 10px; margin: 8px 0; }
 
         /* ================================================================
            响应式断点 – 自动缩小尺寸
            ================================================================ */
         @media (max-width: 640px) {
-            .word-card { padding: 30px 10px 30px; }
-            .letter-slot { width: 32px; height: 40px; font-size: 35px; }
-            .letter-slot.fixed { width: 32px; height: 40px; font-size: 20px; }
-            .word-info { font-size: 16px; min-width: 50px; }
-            .kb-key { height: 44px; font-size: 18px; }
-            .kb-key.function { height: 40px; font-size: 15px; }
+            .word-card { padding: 130px 10px 12px; } /* 窄屏缩小卡片内边距 */
+            .letter-slot { width: 32px; height: 40px; font-size: 20px; } /* 缩小字母格 */
+            .letter-slot.fixed { width: 32px; height: 40px; font-size: 20px; } /* 同步固定格 */
+            .word-info { font-size: 16px; min-height: 26px; margin-bottom: 120px;  }/*第三个数为 同步缩小注释与说明文字间距 */
+            .kb-key { height: 44px; font-size: 18px; } /* 缩小字母键高度和字号 */
+            .kb-key.function { height: 40px; font-size: 15px; } /* 缩小功能按钮高度和字号 */
         }
         @media (max-width: 420px) {
-            .word-card { padding: 30px 10px 30px; }
-            .letter-slot { width: 26px; height: 34px; font-size: 30px; }
-            .letter-slot.fixed { width: 26px; height: 34px; font-size: 17px; }
-            .word-info { font-size: 14px; min-width: 40px; }
-            .kb-key { height: 38px; font-size: 15px; }
-            .kb-key.function { height: 34px; font-size: 13px; }
+            .word-card { padding: 50px 6px 10px; } /* 进一步缩小卡片内边距 */
+            .letter-slot { width: 26px; height: 34px; font-size: 17px; } /* 进一步缩小字母格 */
+            .letter-slot.fixed { width: 26px; height: 34px; font-size: 17px; } /* 同步 */
+            .word-info { font-size: 14px; min-height: 22px;  margin-bottom: 50px;}/*第三个数为 同步缩小注释与说明文字间距 */
+            .kb-key { height: 38px; font-size: 15px; } /* 进一步缩小字母键 */
+            .kb-key.function { height: 34px; font-size: 13px; } /* 进一步缩小功能按钮 */
         }
     </style>
 </head>
@@ -542,7 +541,7 @@
             </div>
         </div>
 
-        <!-- 统计栏 -->
+        <!-- 统计栏（唯一进度显示） -->
         <div class="stats">
             <span class="stat-item">用时 <span class="value time" id="timerDisplay">00:00</span></span>
             <span class="stat-item">正确率 <span class="value" id="accuracyDisplay">0%</span></span>
@@ -550,23 +549,23 @@
             <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
         </div>
 
-        <!-- 单词卡片 -->
+        <!-- 单词卡片（无独立进度） -->
         <div class="word-card" id="wordCard">
-            <div class="word-row">
-                <div class="word-progress" id="wordProgress">0/0</div>
-                <div class="word-blanks-wrapper">
-                    <div class="word-blanks" id="wordBlanks"></div>
-                </div>
-                <div class="word-info" id="wordInfo">
-                    <span class="phonetic" id="wordPhonetic"></span>
-                    <span class="divider">|</span>
-                    <span class="meaning" id="wordMeaning"></span>
-                </div>
+            <!-- 第一行：字母格 -->
+            <div class="word-blanks-wrapper">
+                <div class="word-blanks" id="wordBlanks"></div>
             </div>
+            <!-- 第二行：音标 + 释义 -->
+            <div class="word-info" id="wordInfo">
+                <span class="phonetic" id="wordPhonetic"></span>
+                <span class="divider">|</span>
+                <span class="meaning" id="wordMeaning"></span>
+            </div>
+            <!-- 反馈信息 -->
             <div class="feedback" id="feedback">点击「开始」按钮开始练习</div>
         </div>
 
-        <!-- 键盘区域（含功能按钮） -->
+        <!-- 键盘区域 -->
         <div class="keyboard" id="keyboard">
             <!-- 功能按钮行 -->
             <div class="kb-row">
@@ -592,12 +591,12 @@
                 <button class="kb-key" data-letter="L">L</button>
             </div>
             <div class="kb-row">
-                <button class="kb-key special" data-letter="⌫">⌫</button>
+                <button class="kb-key special" data-letter="⌫">⬅️</button>
                 <button class="kb-key" data-letter="Z">Z</button><button class="kb-key" data-letter="X">X</button>
                 <button class="kb-key" data-letter="C">C</button><button class="kb-key" data-letter="V">V</button>
                 <button class="kb-key" data-letter="B">B</button><button class="kb-key" data-letter="N">N</button>
                 <button class="kb-key" data-letter="M">M</button>
-                <button class="kb-key special" data-letter="ENT">ENT</button>
+                <button class="kb-key special" data-letter="ENT"> ✅</button>
             </div>
         </div>
 
@@ -616,8 +615,7 @@
     </div>
 
     <!-- ================================================================
-         主程序脚本 – 使用 fetch 加载 JSON 词库 + 完整缓存恢复
-         ★ 刷新/重新打开时强制进入暂停状态
+         主程序脚本（已移除对独立进度元素的引用）
     ================================================================ -->
     <script>
         // ============================================================
@@ -690,7 +688,7 @@
             accuracyDisplay: $('accuracyDisplay'),
             progressDisplay: $('progressDisplay'),
             progressFill: $('progressFill'),
-            wordProgress: $('wordProgress'),
+            // wordProgress 已移除，不再引用
             wordBlanks: $('wordBlanks'),
             wordPhonetic: $('wordPhonetic'),
             wordMeaning: $('wordMeaning'),
@@ -753,9 +751,9 @@
             const total = state.totalWords;
             const done = state.completedWords;
             const progress = total > 0 ? Math.round((done / total) * 100) : 0;
-            dom.progressDisplay.textContent = `${done}/${total}`;
+            dom.progressDisplay.textContent = `${done}/${total}`;  // 统计栏进度更新
             dom.progressFill.style.width = `${progress}%`;
-            dom.wordProgress.textContent = `${done}/${total}`;
+            // 不再更新独立的 wordProgress
             const accuracy = state.totalAttempts > 0 ? Math.round((state.correctAttempts / state.totalAttempts) * 100) : 0;
             dom.accuracyDisplay.textContent = accuracy + '%';
             updateTimerDisplay();
@@ -988,7 +986,6 @@
                     dom.wordBlanks.innerHTML = '<span style="color:#999;">该词库暂无词汇</span>';
                     dom.wordPhonetic.textContent = '';
                     dom.wordMeaning.textContent = '';
-                    dom.wordProgress.textContent = '0/0';
                     dom.progressDisplay.textContent = '0/0';
                     dom.progressFill.style.width = '0%';
                     dom.accuracyDisplay.textContent = '0%';
@@ -1122,7 +1119,6 @@
                     dom.wordPhonetic.textContent = '';
                     dom.wordMeaning.textContent = '';
                     dom.wordBlanks.innerHTML = '<span style="color:#999; font-size:18px;">点击「开始」按钮开始练习</span>';
-                    dom.wordProgress.textContent = '0/0';
                     return;
                 }
 
@@ -1422,7 +1418,6 @@
                 dom.finalTotal.textContent = state.completedWords;
                 dom.progressFill.style.width = '100%';
                 dom.progressDisplay.textContent = `${state.totalWords}/${state.totalWords}`;
-                dom.wordProgress.textContent = `${state.totalWords}/${state.totalWords}`;
                 enableInteraction(false);
                 updateControlButtons();
                 clearCache();
