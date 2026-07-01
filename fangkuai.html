@@ -76,7 +76,7 @@
         }
 
         /* ============================================================
-           棋盘区域 — 完全贴边，无内边距
+           棋盘区域 — 完全贴边
            ============================================================ */
         .board-wrapper {
             flex: 1;
@@ -95,7 +95,6 @@
             overflow: hidden;
         }
 
-        /* 左侧画布容器 — 完全贴边 */
         .board-canvas-wrap {
             flex: 1;
             min-width: 0;
@@ -120,14 +119,13 @@
             border-radius: 0;
             box-shadow: none;
             touch-action: none;
-            /* 关键：完全填充容器，不保留比例，由 JS 动态控制格子大小 */
-            object-fit: fill;
+            object-fit: fill;  /* 拉伸填满，无空白 */
             aspect-ratio: auto;
             max-height: none;
             max-width: none;
         }
 
-        /* ----- 右侧信息面板 (保持原样) ----- */
+        /* ----- 右侧信息面板 ----- */
         .info-panel {
             flex: 0 0 auto;
             width: 135px;
@@ -239,7 +237,7 @@
         }
 
         /* ============================================================
-           Select / Start
+           Select / Start — 按钮文字已改为 MODE
            ============================================================ */
         .ss-row {
             display: flex;
@@ -442,18 +440,9 @@
             position: relative;
         }
 
-        /* 旋转按钮上的小箭头标记 */
+        /* 旋转按钮上的符号已删除（content: none） */
         .rotate-btn::after {
-            content: 'GO';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 42px;
-            color: #d0d0d0;
-            font-weight: 300;
-            opacity: 0.7;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            content: none;
         }
 
         .rotate-btn.touch-active {
@@ -463,7 +452,7 @@
         }
 
         /* ============================================================
-           响应式适配 — 完全贴边优先
+           响应式适配
            ============================================================ */
         @media (max-width: 480px) {
             .gameboy {
@@ -536,7 +525,7 @@
                 height: 82px;
             }
             .rotate-btn::after {
-                font-size: 34px;
+                content: none;
             }
 
             .control-area {
@@ -640,7 +629,7 @@
                 height: 68px;
             }
             .rotate-btn::after {
-                font-size: 28px;
+                content: none;
             }
             .rotate-btn.touch-active {
                 transform: translateY(6px) scale(0.94);
@@ -713,7 +702,7 @@
                 height: 68px;
             }
             .rotate-btn::after {
-                font-size: 28px;
+                content: none;
             }
             .control-area {
                 gap: 40px;
@@ -796,7 +785,7 @@
                 height: 56px;
             }
             .rotate-btn::after {
-                font-size: 22px;
+                content: none;
             }
 
             .control-area {
@@ -854,9 +843,9 @@
             </div>
         </div>
 
-        <!-- ===== Select / Start ===== -->
+        <!-- ===== Select / Start — SELECT 已改为 MODE ===== -->
         <div class="ss-row">
-            <button class="ss-btn" id="selectBtn">SELECT</button>
+            <button class="ss-btn" id="selectBtn">MODE</button>
             <button class="ss-btn start-btn" id="startBtn">START</button>
         </div>
 
@@ -877,12 +866,7 @@
 
     <script>
         // ================================================================
-        //  黑白俄罗斯方块 — 完全贴边 + 手机深度适配
-        //  核心改进：
-        //    1. canvas 使用 object-fit:fill 完全填充容器，无空白
-        //    2. 动态计算格子大小，让棋盘贴边且保持比例
-        //    3. 窗口 resize 时自动重绘，适应各种屏幕
-        //    4. 手机端触控优化，按钮响应灵敏
+        //  黑白俄罗斯方块 — 动态尺寸优化 + 按钮文字修改
         // ================================================================
 
         (function() {
@@ -890,7 +874,6 @@
 
             const COLS = 10;
             const ROWS = 20;
-            // 基准尺寸仅用于初始渲染，实际由容器大小决定
             const BASE_BLOCK = 30;
 
             const SPEED_SIMPLE = 600;
@@ -923,8 +906,6 @@
             const DIFF_SPEEDS = [SPEED_SIMPLE, SPEED_NORMAL, SPEED_HARD];
 
             // ===== 动态尺寸缓存 =====
-            let cachedCanvasWidth = 300;
-            let cachedCanvasHeight = 600;
             let cachedBlockSize = 30;
 
             // ===== 状态保存 =====
@@ -1318,141 +1299,46 @@
             }
 
             // ================================================================
-            //  核心渲染 — 完全贴边 + 动态格子大小
+            //  核心渲染 — 动态计算，拉伸填满，无空行
             // ================================================================
 
-            /**
-             * 根据容器实际尺寸计算画布尺寸和格子大小
-             * 保证棋盘完全贴边，无空白
-             */
             function computeCanvasSize() {
                 const container = canvas.parentElement;
                 if (!container) return;
 
                 const rect = container.getBoundingClientRect();
-                // 取整避免亚像素渲染
                 let w = Math.floor(rect.width);
                 let h = Math.floor(rect.height);
 
-                // 防止尺寸为 0
                 if (w < 10) w = 300;
                 if (h < 20) h = 600;
 
-                // 计算格子大小：让棋盘恰好填满画布
-                // 使用 Math.floor 保证格子整数，避免亚像素锯齿
-                let blockX = Math.floor(w / COLS);
-                let blockY = Math.floor(h / ROWS);
+                // 分别计算横向和纵向能容纳的最大整数格子
+                const blockX = Math.floor(w / COLS);
+                const blockY = Math.floor(h / ROWS);
+                // 取较小值，保证格子是正方形（但画布会被拉伸填满容器）
+                const block = Math.max(1, Math.min(blockX, blockY));
 
-                // 取较小值，保证棋盘完全在画布内（贴边但可能有微小空白）
-                // 但为了完全贴边，我们取较大值并裁剪，但裁剪会导致内容丢失
-                // 所以我们取较小值，然后让棋盘居中（但这样会有空白）
-                // 为了完全贴边，我们使用 blockX 和 blockY 分别作为宽高，
-                // 这样棋盘会拉伸填满，但方块可能不是正方形
-                // 权衡：使用 blockX 和 blockY 分别渲染，保证贴边，允许轻微变形
-                // 但为了让方块尽可能接近正方形，我们取平均值
-                const avgBlock = (blockX + blockY) / 2;
-                // 但使用平均值会导致棋盘不能完全贴边（有空白）
-                // 所以我们分别使用 blockX 和 blockY，让棋盘贴边
-                // 这样方块可能会变成矩形，但在手机屏幕上，宽高比接近 10:20，变形很小
+                cachedBlockSize = block;
+                const canvasWidth = block * COLS;
+                const canvasHeight = block * ROWS;
 
-                // 实际测试：使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
-                // 方块在宽高比接近 10:20 时基本是正方形
-                // 为了更好的视觉效果，我们让 blockX 和 blockY 取整后使用
-
-                // 但是，如果 blockX 和 blockY 相差太大，方块变形严重
-                // 所以我们限制最大差值，如果相差超过 20%，则使用平均值并居中
-                const ratio = Math.max(blockX, blockY) / Math.min(blockX, blockY);
-                let useBlockX = blockX;
-                let useBlockY = blockY;
-
-                if (ratio > 1.25) {
-                    // 相差太大，使用平均值并居中
-                    const avg = Math.floor((blockX + blockY) / 2);
-                    useBlockX = avg;
-                    useBlockY = avg;
-                    // 此时棋盘居中，有空白，但方块是正方形
-                    // 为了减少空白，我们让棋盘贴边（取最大值）
-                    // 但实际上，取平均值会导致棋盘在宽或高方向上有空白
-                    // 更好的做法：取较小值，让棋盘完全在画布内，然后居中
-                    // 或者取较大值，让棋盘填满画布，然后裁剪
-                    // 我们取较小值，让棋盘完全在画布内，然后居中
-                    const minBlock = Math.min(blockX, blockY);
-                    useBlockX = minBlock;
-                    useBlockY = minBlock;
-                    // 这样棋盘在画布中居中，有空白，但空白与背景色一致
-                    // 从视觉上看，棋盘是贴边的（因为背景色一致）
-                }
-
-                // 最终决定：使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
-                // 但为了保持方块视觉上接近正方形，我们使用 blockX 和 blockY 的平均值
-                // 并让棋盘居中，这样会有少量空白，但方块是正方形
-                // 或者使用 blockX 和 blockY 分别渲染，棋盘贴边，方块轻微变形
-
-                // 综合考虑，我们采用 "贴边优先" 策略：
-                // 使用 blockX 和 blockY 分别作为宽高，棋盘完全贴边
-                // 同时让 blockX 和 blockY 尽量接近，减少变形
-
-                // 具体：计算一个平衡值，使得棋盘贴边且方块尽量正方形
-                // 取 blockX 和 blockY 中较小的值，然后让较大的方向使用相同的值
-                // 这样棋盘在较小方向上贴边，较大方向上有空白
-                // 但空白与背景色一致，视觉上贴边
-                const minBlock = Math.min(blockX, blockY);
-                const finalBlock = minBlock;
-
-                // 使用 finalBlock 作为格子大小，棋盘居中
-                // 这样棋盘完全在画布内，贴边（空白与背景色一致）
-                // 且方块是正方形
-                cachedBlockSize = finalBlock;
-                cachedCanvasWidth = finalBlock * COLS;
-                cachedCanvasHeight = finalBlock * ROWS;
-
-                // 但为了完全贴边（无空白），我们使用 blockX 和 blockY
-                // 让棋盘拉伸填满画布
-                // 我们采用两种策略的结合：如果宽高比接近 10:20，使用拉伸
-                // 否则使用居中
-                const containerRatio = w / h;
-                const targetRatio = COLS / ROWS;
-                if (Math.abs(containerRatio - targetRatio) < 0.1) {
-                    // 宽高比接近，使用拉伸贴边
-                    cachedBlockSize = Math.min(blockX, blockY);
-                    cachedCanvasWidth = blockX * COLS;
-                    cachedCanvasHeight = blockY * ROWS;
-                } else {
-                    // 宽高比相差较大，使用居中保持正方形
-                    cachedBlockSize = Math.floor(Math.min(w / COLS, h / ROWS));
-                    cachedCanvasWidth = cachedBlockSize * COLS;
-                    cachedCanvasHeight = cachedBlockSize * ROWS;
-                }
-
-                // 最终保证尺寸不为 0
-                if (cachedCanvasWidth < 10) cachedCanvasWidth = 300;
-                if (cachedCanvasHeight < 20) cachedCanvasHeight = 600;
-                if (cachedBlockSize < 1) cachedBlockSize = 1;
-
-                // 设置 canvas 内部尺寸
-                canvas.width = cachedCanvasWidth;
-                canvas.height = cachedCanvasHeight;
-                // CSS 尺寸保持 100% 填充容器
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+                // CSS 宽高 100% 配合 object-fit:fill 拉伸填满，无空行
                 canvas.style.width = '100%';
                 canvas.style.height = '100%';
 
-                // 返回计算值
-                return {
-                    width: cachedCanvasWidth,
-                    height: cachedCanvasHeight,
-                    blockSize: cachedBlockSize
-                };
+                return { width: canvasWidth, height: canvasHeight, blockSize: block };
             }
 
             function render() {
-                // 先计算尺寸
                 computeCanvasSize();
 
-                const w = cachedCanvasWidth;
-                const h = cachedCanvasHeight;
+                const w = canvas.width;
+                const h = canvas.height;
                 const bs = cachedBlockSize;
 
-                // 清空
                 ctx.clearRect(0, 0, w, h);
 
                 // 绘制棋盘
@@ -1474,7 +1360,7 @@
                     }
                 }
 
-                // 绘制当前方块
+                // 当前方块
                 if (currentPiece && !gameOver) {
                     const { shape, color, x, y } = currentPiece;
                     for (let r = 0; r < shape.length; r++) {
@@ -1492,7 +1378,7 @@
                     }
                 }
 
-                // 网格线（细线）
+                // 网格线
                 ctx.strokeStyle = 'rgba(180, 180, 180, 0.12)';
                 ctx.lineWidth = 0.5;
                 for (let r = 0; r <= ROWS; r++) {
@@ -1580,7 +1466,7 @@
                 }
             }
 
-            // ===== 窗口尺寸变化处理 =====
+            // ===== 窗口尺寸变化 =====
             function handleResize() {
                 computeCanvasSize();
                 render();
@@ -1594,7 +1480,6 @@
                 if (!loaded) {
                     startNewGame();
                 }
-                // 加载后自动暂停
 
                 window.addEventListener('keydown', handleKeyDown);
                 window.addEventListener('resize', handleResize);
@@ -1602,7 +1487,6 @@
                     setTimeout(handleResize, 200);
                 });
 
-                // 初始渲染
                 setTimeout(handleResize, 50);
                 document.querySelectorAll('button').forEach(b => b.disabled = false);
             }
@@ -1726,7 +1610,6 @@
                 bindOptimizedButtons();
                 startGame();
 
-                // 额外的触控优化：禁止页面滚动
                 document.addEventListener('touchmove', (e) => {
                     if (e.target.closest('.gameboy')) {
                         e.preventDefault();
