@@ -9,270 +9,835 @@
 
     <style>
         /* ===== 全局 ===== */
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', 'Segoe UI', sans-serif;
-            min-height: 100vh; min-height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             background: linear-gradient(145deg, #fdf6e3 0%, #e8f0fe 100%);
-            display: flex; justify-content: center; align-items: center;
-            padding: 12px; margin: 0; touch-action: manipulation;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            margin: 0;
+            touch-action: manipulation;
         }
         .container {
-            max-width: 460px; width: 100%;
-            background: rgba(255,255,255,0.88); backdrop-filter: blur(12px);
+            max-width: 460px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 44px 44px 36px 36px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.10), 0 8px 28px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10), 0 8px 28px rgba(0, 0, 0, 0.05);
             padding: 14px 12px 18px;
-            border: 2px solid rgba(255,255,255,0.7);
+            border: 2px solid rgba(255, 255, 255, 0.7);
         }
-        .header { display: flex; justify-content: center; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 4px; }
-        .title { font-size: 20px; font-weight: 700; color: #ff6b6b; text-shadow: 0 2px 8px rgba(255,107,107,0.18); }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff6b6b;
+            text-shadow: 0 2px 8px rgba(255, 107, 107, 0.18);
+        }
         .settings {
-            background: rgba(255,255,255,0.5); border-radius: 20px;
-            padding: 8px 10px; margin-bottom: 8px;
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.02);
         }
         .setting-row {
-            display: flex; flex-wrap: wrap; align-items: center;
-            gap: 4px 8px; margin-bottom: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 8px;
+            margin-bottom: 4px;
         }
-        .setting-row:last-child { margin-bottom: 0; }
-        .setting-label { font-size: 13px; font-weight: 600; color: #2d3436; min-width: 36px; }
-        .setting-group { display: flex; flex-wrap: wrap; gap: 4px; }
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+        .setting-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d3436;
+            min-width: 36px;
+        }
+        .setting-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
         .setting-btn {
-            padding: 3px 10px; border: 2px solid #dfe6e9; border-radius: 16px;
-            background: #fff; color: #2d3436;
-            font-size: 13px; font-weight: 600;
-            cursor: pointer; transition: all 0.2s;
-            touch-action: manipulation; font-family: inherit;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            min-height: 28px; display: inline-flex; align-items: center; justify-content: center;
+            padding: 3px 10px;
+            border: 2px solid #dfe6e9;
+            border-radius: 16px;
+            background: #fff;
+            color: #2d3436;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+            font-family: inherit;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            min-height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .setting-btn:active { transform: scale(0.92); }
+        .setting-btn:active {
+            transform: scale(0.92);
+        }
         .setting-btn.active {
-            border-color: #74b9ff; background: #f0f7ff; color: #0984e3;
-            box-shadow: 0 0 0 2px rgba(116,185,255,0.2);
+            border-color: #74b9ff;
+            background: #f0f7ff;
+            color: #0984e3;
+            box-shadow: 0 0 0 2px rgba(116, 185, 255, 0.2);
         }
-        .setting-btn.active-mode-timed { border-color: #ff6b6b; background: #ffe8e8; color: #d63031; }
-        .setting-btn.active-mode-quantity { border-color: #6c5ce7; background: #f0edff; color: #6c5ce7; }
-        .setting-btn.active-time { border-color: #ff6b6b; background: #ffe8e8; color: #d63031; }
-        .setting-btn.active-quantity { border-color: #6c5ce7; background: #f0edff; color: #6c5ce7; }
-        .setting-btn.active-op { border-color: #00b894; background: #e0f7f1; color: #00b894; }
-        .setting-btn.active-diff { border-color: #fdcb6e; background: #fff8e1; color: #e17055; }
-        .setting-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: scale(0.96); }
+        .setting-btn.active-mode-timed {
+            border-color: #ff6b6b;
+            background: #ffe8e8;
+            color: #d63031;
+        }
+        .setting-btn.active-mode-quantity {
+            border-color: #6c5ce7;
+            background: #f0edff;
+            color: #6c5ce7;
+        }
+        .setting-btn.active-time {
+            border-color: #ff6b6b;
+            background: #ffe8e8;
+            color: #d63031;
+        }
+        .setting-btn.active-quantity {
+            border-color: #6c5ce7;
+            background: #f0edff;
+            color: #6c5ce7;
+        }
+        .setting-btn.active-op {
+            border-color: #00b894;
+            background: #e0f7f1;
+            color: #00b894;
+        }
+        .setting-btn.active-diff {
+            border-color: #fdcb6e;
+            background: #fff8e1;
+            color: #e17055;
+        }
+        .setting-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: scale(0.96);
+        }
 
         .info-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.6); border-radius: 24px;
-            padding: 4px 12px; margin-bottom: 6px;
-            flex-wrap: wrap; gap: 4px; min-height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 4px 12px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
+            min-height: 40px;
         }
-        .info-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .info-right { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
-        .info-right span { display: flex; align-items: center; gap: 3px; }
-        .info-right .num { color: #2d3436; min-width: 16px; text-align: center; }
+        .info-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .info-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .info-right span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .info-right .num {
+            color: #2d3436;
+            min-width: 16px;
+            text-align: center;
+        }
         .timer-display {
-            font-size: 24px; font-weight: 800; min-width: 48px; text-align: center;
-            font-variant-numeric: tabular-nums; transition: color 0.3s; line-height: 1.2;
+            font-size: 24px;
+            font-weight: 800;
+            min-width: 48px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            transition: color 0.3s;
+            line-height: 1.2;
         }
-        .timer-display.warning { color: #fdcb6e; }
-        .timer-display.danger { color: #ff7675; animation: pulse-danger 1s infinite; }
-        @keyframes pulse-danger { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+        .timer-display.warning {
+            color: #fdcb6e;
+        }
+        .timer-display.danger {
+            color: #ff7675;
+            animation: pulse-danger 1s infinite;
+        }
+        @keyframes pulse-danger {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
         .info-status {
-            font-size: 12px; font-weight: 600; color: #b2bec3;
-            background: #f1f2f6; padding: 1px 10px; border-radius: 16px; white-space: nowrap;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b2bec3;
+            background: #f1f2f6;
+            padding: 1px 10px;
+            border-radius: 16px;
+            white-space: nowrap;
         }
-        .info-status.running { color: #00b894; background: #e0f7f1; }
-        .info-status.ended { color: #ff7675; background: #ffe8e8; }
-        .progress-text { font-size: 16px; font-weight: 700; color: #2d3436; white-space: nowrap; }
-        .progress-text .highlight { color: #6c5ce7; }
+        .info-status.running {
+            color: #00b894;
+            background: #e0f7f1;
+        }
+        .info-status.ended {
+            color: #ff7675;
+            background: #ffe8e8;
+        }
+        .info-status.correction {
+            color: #6c5ce7;
+            background: #f0edff;
+        }
+        .progress-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2d3436;
+            white-space: nowrap;
+        }
+        .progress-text .highlight {
+            color: #6c5ce7;
+        }
 
-        .start-area { text-align: center; margin: 4px 0 10px; }
-        .btn-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .btn-start, .btn-continue, .btn-reset {
-            padding: 10px 20px; border: none; border-radius: 32px;
-            font-size: 20px; font-weight: 700; font-family: inherit;
-            cursor: pointer; transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        .start-area {
+            text-align: center;
+            margin: 4px 0 10px;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-start,
+        .btn-continue,
+        .btn-reset,
+        .btn-error-correct {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 32px;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             touch-action: manipulation;
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            flex: 1 1 auto; min-width: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            flex: 1 1 auto;
+            min-width: 100px;
         }
-        .btn-start:active, .btn-continue:active, .btn-reset:active { transform: scale(0.92); }
-        .btn-start:disabled, .btn-continue:disabled, .btn-reset:disabled {
-            opacity: 0.6; cursor: not-allowed; transform: scale(0.96);
+        .btn-start:active,
+        .btn-continue:active,
+        .btn-reset:active,
+        .btn-error-correct:active {
+            transform: scale(0.92);
         }
-        .btn-start.hidden, .btn-continue.hidden, .btn-reset.hidden { display: none; }
-        .btn-start { background: #00b894; color: #fff; }
-        .btn-start.running { background: #fdcb6e; color: #2d3436; box-shadow: 0 4px 14px rgba(253,203,110,0.3); }
-        .btn-continue { background: #6c5ce7; color: #fff; box-shadow: 0 4px 16px rgba(108,92,231,0.25); }
+        .btn-start:disabled,
+        .btn-continue:disabled,
+        .btn-reset:disabled,
+        .btn-error-correct:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: scale(0.96);
+        }
+        .btn-start.hidden,
+        .btn-continue.hidden,
+        .btn-reset.hidden,
+        .btn-error-correct.hidden {
+            display: none;
+        }
+        .btn-start {
+            background: #00b894;
+            color: #fff;
+        }
+        .btn-start.running {
+            background: #fdcb6e;
+            color: #2d3436;
+            box-shadow: 0 4px 14px rgba(253, 203, 110, 0.3);
+        }
+        .btn-continue {
+            background: #6c5ce7;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.25);
+        }
         .btn-reset {
-            background: #dfe6e9; color: #636e72;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            flex: 0.6 1 auto; min-width: 70px;
+            background: #dfe6e9;
+            color: #636e72;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            flex: 0.6 1 auto;
+            min-width: 70px;
         }
-        .btn-reset.danger { background: #ff6b6b; color: #fff; box-shadow: 0 4px 16px rgba(255,107,107,0.25); }
+        .btn-reset.danger {
+            background: #ff6b6b;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.25);
+        }
+        /* ---- 改错题按钮 ---- */
+        .btn-error-correct {
+            background: #74b9ff;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(116, 185, 255, 0.25);
+            flex: 0.7 1 auto;
+            min-width: 80px;
+        }
+        .btn-error-correct:hover:not(:disabled) {
+            background: #5aa9e6;
+        }
+        .btn-error-correct.active-correction {
+            background: #ff6b6b;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.25);
+        }
+        .btn-error-correct.active-correction:hover:not(:disabled) {
+            background: #e55a5a;
+        }
+        .btn-error-correct:disabled {
+            opacity: 0.5;
+        }
+        .btn-error-correct .badge {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0 8px;
+            font-size: 14px;
+            margin-left: 4px;
+        }
 
         .btn-pause {
-            padding: 10px 18px; border: none; border-radius: 32px;
-            font-size: 18px; font-weight: 700; font-family: inherit;
-            cursor: pointer; transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            padding: 10px 18px;
+            border: none;
+            border-radius: 32px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             touch-action: manipulation;
-            display: inline-flex; align-items: center; justify-content: center; gap: 4px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            background: #ff6b6b; color: #fff;
-            min-width: 70px; flex: 0 1 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            background: #ff6b6b;
+            color: #fff;
+            min-width: 70px;
+            flex: 0 1 auto;
         }
-        .btn-pause:active { transform: scale(0.92); }
-        .btn-pause.hidden { display: none; }
-        .btn-pause:disabled { opacity: 0.5; cursor: not-allowed; transform: scale(0.96); }
+        .btn-pause:active {
+            transform: scale(0.92);
+        }
+        .btn-pause.hidden {
+            display: none;
+        }
+        .btn-pause:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.96);
+        }
 
         .question-card {
-            background: #ffffff; border-radius: 28px;
-            padding: 20px 16px 16px; margin: 4px 0 8px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255,255,255,0.6);
-            text-align: center; position: relative;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 20px 16px 16px;
+            margin: 4px 0 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            position: relative;
             min-height: 120px;
-            display: flex; flex-direction: column; justify-content: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             transition: opacity 0.3s;
         }
-        .question-card.disabled { opacity: 0.5; }
+        .question-card.disabled {
+            opacity: 0.5;
+        }
         .question-text {
-            font-size: 44px; font-weight: 700; color: #2d3436;
-            letter-spacing: 4px; line-height: 1.3;
+            font-size: 44px;
+            font-weight: 700;
+            color: #2d3436;
+            letter-spacing: 4px;
+            line-height: 1.3;
         }
         .question-text .highlight-op {
-            display: inline-block; padding: 0 10px; border-radius: 14px;
-            background: rgba(255,107,107,0.12); min-width: 40px;
+            display: inline-block;
+            padding: 0 10px;
+            border-radius: 14px;
+            background: rgba(255, 107, 107, 0.12);
+            min-width: 40px;
         }
-        .question-text .q-mark { color: #ff6b6b; font-weight: 800; margin-left: 4px; }
+        .question-text .q-mark {
+            color: #ff6b6b;
+            font-weight: 800;
+            margin-left: 4px;
+        }
         .input-display {
-            margin: 8px auto 4px; padding: 4px 20px;
-            background: #f8f9fa; border-radius: 60px;
-            display: inline-block; min-width: 90px; min-height: 48px;
-            font-size: 34px; font-weight: 700; color: #2d3436;
-            border: 2px dashed #dfe6e9; transition: all 0.2s;
-            line-height: 48px; letter-spacing: 2px;
+            margin: 8px auto 4px;
+            padding: 4px 20px;
+            background: #f8f9fa;
+            border-radius: 60px;
+            display: inline-block;
+            min-width: 90px;
+            min-height: 48px;
+            font-size: 34px;
+            font-weight: 700;
+            color: #2d3436;
+            border: 2px dashed #dfe6e9;
+            transition: all 0.2s;
+            line-height: 48px;
+            letter-spacing: 2px;
         }
-        .input-display.has-value { border-color: #74b9ff; background: #f0f7ff; }
-        .input-display .placeholder { color: #b2bec3; font-weight: 400; font-size: 18px; }
+        .input-display.has-value {
+            border-color: #74b9ff;
+            background: #f0f7ff;
+        }
+        .input-display .placeholder {
+            color: #b2bec3;
+            font-weight: 400;
+            font-size: 18px;
+        }
 
         .feedback-area {
-            min-height: 40px; display: flex; align-items: center; justify-content: center;
-            margin: 2px 0 4px; font-size: 20px; font-weight: 600;
-            border-radius: 20px; padding: 4px 12px; transition: all 0.3s ease;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px 0 4px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 4px 12px;
+            transition: all 0.3s ease;
         }
-        .feedback-area.correct { color: #00b894; background: rgba(0,184,148,0.12); }
-        .feedback-area.wrong { color: #ff7675; background: rgba(255,118,117,0.12); }
-        .feedback-area.empty { color: #b2bec3; background: transparent; font-weight: 400; font-size: 17px; }
-        .feedback-area .fb-symbol { font-size: 26px; margin-right: 8px; font-weight: 700; }
-        @keyframes pop-correct { 0%{transform:scale(0.9);opacity:0.6} 50%{transform:scale(1.06)} 100%{transform:scale(1);opacity:1} }
-        @keyframes shake-wrong { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
-        .feedback-area.pop-correct { animation: pop-correct 0.4s ease; }
-        .feedback-area.shake-wrong { animation: shake-wrong 0.4s ease; }
+        .feedback-area.correct {
+            color: #00b894;
+            background: rgba(0, 184, 148, 0.12);
+        }
+        .feedback-area.wrong {
+            color: #ff7675;
+            background: rgba(255, 118, 117, 0.12);
+        }
+        .feedback-area.empty {
+            color: #b2bec3;
+            background: transparent;
+            font-weight: 400;
+            font-size: 17px;
+        }
+        .feedback-area .fb-symbol {
+            font-size: 26px;
+            margin-right: 8px;
+            font-weight: 700;
+        }
+        @keyframes pop-correct {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.06);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes shake-wrong {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-5px);
+            }
+            80% {
+                transform: translateX(5px);
+            }
+        }
+        .feedback-area.pop-correct {
+            animation: pop-correct 0.4s ease;
+        }
+        .feedback-area.shake-wrong {
+            animation: shake-wrong 0.4s ease;
+        }
 
         .keypad {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 9px; margin: 8px 0 6px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 9px;
+            margin: 8px 0 6px;
         }
         .key-btn {
-            padding: 14px 0; border: none; border-radius: 22px;
-            font-size: 32px; font-weight: 700;
-            background: #ffffff; color: #2d3436;
-            cursor: pointer; transition: all 0.15s cubic-bezier(0.34,1.56,0.64,1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            touch-action: manipulation; font-family: inherit;
+            padding: 14px 0;
+            border: none;
+            border-radius: 22px;
+            font-size: 32px;
+            font-weight: 700;
+            background: #ffffff;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            touch-action: manipulation;
+            font-family: inherit;
             min-height: 64px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
-        .key-btn:active:not(:disabled) { transform: scale(0.90); }
-        .key-btn:disabled { opacity: 0.35; transform: scale(0.96); cursor: not-allowed; box-shadow: none; }
-        .key-btn.key-number { background: #f0f7ff; border-color: rgba(116,185,255,0.12); }
-        .key-btn.key-number:active:not(:disabled) { background: #d6e9ff; }
-        .key-btn.key-back { background: #fff3e0; color: #e17055; font-size: 28px; border-color: rgba(225,112,85,0.12); }
-        .key-btn.key-back:active:not(:disabled) { background: #ffe0cc; }
-        .key-btn.key-clear { background: #ffe8e8; color: #d63031; font-size: 26px; border-color: rgba(214,48,49,0.10); }
-        .key-btn.key-clear:active:not(:disabled) { background: #ffd4d4; }
-        .key-btn.key-submit { background: #00b894; color: #fff; font-size: 28px; border: none; box-shadow: 0 4px 14px rgba(0,184,148,0.30); }
-        .key-btn.key-submit:active:not(:disabled) { transform: scale(0.90); }
-        .key-btn.key-submit:disabled { opacity: 0.4; box-shadow: none; }
-        .key-btn .icon-small { font-size: 20px; margin-right: 4px; }
+        .key-btn:active:not(:disabled) {
+            transform: scale(0.90);
+        }
+        .key-btn:disabled {
+            opacity: 0.35;
+            transform: scale(0.96);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .key-btn.key-number {
+            background: #f0f7ff;
+            border-color: rgba(116, 185, 255, 0.12);
+        }
+        .key-btn.key-number:active:not(:disabled) {
+            background: #d6e9ff;
+        }
+        .key-btn.key-back {
+            background: #fff3e0;
+            color: #e17055;
+            font-size: 28px;
+            border-color: rgba(225, 112, 85, 0.12);
+        }
+        .key-btn.key-back:active:not(:disabled) {
+            background: #ffe0cc;
+        }
+        .key-btn.key-clear {
+            background: #ffe8e8;
+            color: #d63031;
+            font-size: 26px;
+            border-color: rgba(214, 48, 49, 0.10);
+        }
+        .key-btn.key-clear:active:not(:disabled) {
+            background: #ffd4d4;
+        }
+        .key-btn.key-submit {
+            background: #00b894;
+            color: #fff;
+            font-size: 28px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 184, 148, 0.30);
+        }
+        .key-btn.key-submit:active:not(:disabled) {
+            transform: scale(0.90);
+        }
+        .key-btn.key-submit:disabled {
+            opacity: 0.4;
+            box-shadow: none;
+        }
+        .key-btn .icon-small {
+            font-size: 20px;
+            margin-right: 4px;
+        }
 
         .result-panel {
-            margin-top: 8px; padding: 12px 14px;
-            background: rgba(255,255,255,0.7); border-radius: 20px;
+            margin-top: 8px;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
             border: 2px solid #dfe6e9;
-            display: none; flex-direction: column; align-items: center; gap: 4px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
-        .result-panel.show { display: flex; }
+        .result-panel.show {
+            display: flex;
+        }
         .result-stats {
-            font-size: 20px; font-weight: 600; text-align: center; line-height: 1.6;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.6;
         }
-        .result-stats .highlight { color: #6c5ce7; }
-        .result-stats .correct-num { color: #00b894; }
-        .result-stats .wrong-num { color: #ff7675; }
-        .result-stats .time-used { color: #fdcb6e; }
+        .result-stats .highlight {
+            color: #6c5ce7;
+        }
+        .result-stats .correct-num {
+            color: #00b894;
+        }
+        .result-stats .wrong-num {
+            color: #ff7675;
+        }
+        .result-stats .time-used {
+            color: #fdcb6e;
+        }
+        .result-stats .correction-label {
+            color: #6c5ce7;
+            font-weight: 700;
+        }
 
         @media (max-width:460px) {
-            .container { padding: 12px 8px 14px; border-radius: 32px; }
-            .title { font-size: 18px; }
-            .setting-btn { font-size: 12px; padding: 2px 8px; min-height: 24px; border-radius: 14px; }
-            .setting-label { font-size: 12px; min-width: 30px; }
-            .settings { padding: 6px 8px; border-radius: 16px; }
-            .setting-row { gap: 3px 6px; margin-bottom: 3px; }
-            .timer-display { font-size: 22px; min-width: 40px; }
-            .info-status { font-size: 11px; padding: 1px 8px; }
-            .info-right { font-size: 13px; gap: 6px; }
-            .progress-text { font-size: 14px; }
-            .btn-start, .btn-continue { font-size: 18px; padding: 8px 16px; min-width: 80px; }
-            .btn-reset { font-size: 16px; padding: 8px 12px; min-width: 60px; }
-            .btn-pause { font-size: 16px; padding: 8px 12px; min-width: 60px; }
-            .question-text { font-size: 36px; }
-            .input-display { font-size: 30px; min-height: 42px; line-height: 42px; min-width: 70px; padding: 2px 14px; }
-            .input-display .placeholder { font-size: 16px; }
-            .key-btn { font-size: 28px; min-height: 56px; padding: 12px 0; border-radius: 18px; }
-            .key-btn.key-submit { font-size: 24px; }
-            .key-btn.key-back, .key-btn.key-clear { font-size: 24px; }
-            .feedback-area { font-size: 17px; min-height: 36px; }
-            .feedback-area .fb-symbol { font-size: 22px; }
-            .result-stats { font-size: 17px; }
-            .question-card { padding: 16px 12px 12px; min-height: 100px; }
-            .btn-row { gap: 6px; }
+            .container {
+                padding: 12px 8px 14px;
+                border-radius: 32px;
+            }
+            .title {
+                font-size: 18px;
+            }
+            .setting-btn {
+                font-size: 12px;
+                padding: 2px 8px;
+                min-height: 24px;
+                border-radius: 14px;
+            }
+            .setting-label {
+                font-size: 12px;
+                min-width: 30px;
+            }
+            .settings {
+                padding: 6px 8px;
+                border-radius: 16px;
+            }
+            .setting-row {
+                gap: 3px 6px;
+                margin-bottom: 3px;
+            }
+            .timer-display {
+                font-size: 22px;
+                min-width: 40px;
+            }
+            .info-status {
+                font-size: 11px;
+                padding: 1px 8px;
+            }
+            .info-right {
+                font-size: 13px;
+                gap: 6px;
+            }
+            .progress-text {
+                font-size: 14px;
+            }
+            .btn-start,
+            .btn-continue {
+                font-size: 18px;
+                padding: 8px 16px;
+                min-width: 80px;
+            }
+            .btn-reset {
+                font-size: 16px;
+                padding: 8px 12px;
+                min-width: 60px;
+            }
+            .btn-error-correct {
+                font-size: 16px;
+                padding: 8px 12px;
+                min-width: 70px;
+            }
+            .btn-pause {
+                font-size: 16px;
+                padding: 8px 12px;
+                min-width: 60px;
+            }
+            .question-text {
+                font-size: 36px;
+            }
+            .input-display {
+                font-size: 30px;
+                min-height: 42px;
+                line-height: 42px;
+                min-width: 70px;
+                padding: 2px 14px;
+            }
+            .input-display .placeholder {
+                font-size: 16px;
+            }
+            .key-btn {
+                font-size: 28px;
+                min-height: 56px;
+                padding: 12px 0;
+                border-radius: 18px;
+            }
+            .key-btn.key-submit {
+                font-size: 24px;
+            }
+            .key-btn.key-back,
+            .key-btn.key-clear {
+                font-size: 24px;
+            }
+            .feedback-area {
+                font-size: 17px;
+                min-height: 36px;
+            }
+            .feedback-area .fb-symbol {
+                font-size: 22px;
+            }
+            .result-stats {
+                font-size: 17px;
+            }
+            .question-card {
+                padding: 16px 12px 12px;
+                min-height: 100px;
+            }
+            .btn-row {
+                gap: 6px;
+            }
         }
         @media (max-width:380px) {
-            .container { padding: 8px 4px 10px; border-radius: 24px; }
-            .title { font-size: 16px; }
-            .setting-btn { font-size: 11px; padding: 2px 6px; min-height: 22px; }
-            .setting-label { font-size: 11px; min-width: 26px; }
-            .timer-display { font-size: 20px; min-width: 36px; }
-            .question-text { font-size: 30px; }
-            .key-btn { font-size: 24px; min-height: 48px; }
-            .input-display { font-size: 26px; min-height: 36px; line-height: 36px; min-width: 60px; }
-            .btn-start, .btn-continue { font-size: 16px; padding: 6px 12px; min-width: 70px; }
-            .btn-reset { font-size: 14px; padding: 6px 10px; min-width: 50px; }
-            .btn-pause { font-size: 14px; padding: 6px 10px; min-width: 50px; }
-            .progress-text { font-size: 13px; }
-            .info-right { font-size: 12px; gap: 4px; }
+            .container {
+                padding: 8px 4px 10px;
+                border-radius: 24px;
+            }
+            .title {
+                font-size: 16px;
+            }
+            .setting-btn {
+                font-size: 11px;
+                padding: 2px 6px;
+                min-height: 22px;
+            }
+            .setting-label {
+                font-size: 11px;
+                min-width: 26px;
+            }
+            .timer-display {
+                font-size: 20px;
+                min-width: 36px;
+            }
+            .question-text {
+                font-size: 30px;
+            }
+            .key-btn {
+                font-size: 24px;
+                min-height: 48px;
+            }
+            .input-display {
+                font-size: 26px;
+                min-height: 36px;
+                line-height: 36px;
+                min-width: 60px;
+            }
+            .btn-start,
+            .btn-continue {
+                font-size: 16px;
+                padding: 6px 12px;
+                min-width: 70px;
+            }
+            .btn-reset {
+                font-size: 14px;
+                padding: 6px 10px;
+                min-width: 50px;
+            }
+            .btn-error-correct {
+                font-size: 14px;
+                padding: 6px 10px;
+                min-width: 60px;
+            }
+            .btn-pause {
+                font-size: 14px;
+                padding: 6px 10px;
+                min-width: 50px;
+            }
+            .progress-text {
+                font-size: 13px;
+            }
+            .info-right {
+                font-size: 12px;
+                gap: 4px;
+            }
         }
 
         .stars-bg {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none; z-index: -1; overflow: hidden; opacity: 0.12;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.12;
         }
         .stars-bg span {
-            position: absolute; display: block; font-size: 18px;
-            animation: floatStar 22s infinite linear; color: #b2bec3;
+            position: absolute;
+            display: block;
+            font-size: 18px;
+            animation: floatStar 22s infinite linear;
+            color: #b2bec3;
         }
         @keyframes floatStar {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
         }
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
+        /* 改错完成特殊样式 */
+        .correction-done-badge {
+            background: #6c5ce7;
+            color: #fff;
+            border-radius: 20px;
+            padding: 2px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -327,6 +892,7 @@
                 <span class="timer-display" id="timerDisplay">00:00</span>
                 <span class="info-status" id="infoStatus">待开始</span>
                 <span class="progress-text hidden" id="progressText">第 <span class="highlight" id="progressCurrent">0</span> / <span id="progressTotal">0</span> 题</span>
+                <span class="progress-text hidden" id="correctionProgressText">剩余 <span class="highlight" id="correctionRemain">0</span> 题</span>
             </div>
             <div class="info-right">
                 <span>正确 <span class="num" id="miniCorrect">0</span></span>
@@ -339,6 +905,7 @@
             <div class="btn-row">
                 <button class="btn-start hidden" id="btnStart">开始练习</button>
                 <button class="btn-continue hidden" id="btnContinue">继续答题</button>
+                <button class="btn-error-correct hidden" id="btnErrorCorrect">改错题</button>
                 <button class="btn-reset hidden" id="btnReset">重新开始</button>
                 <button class="btn-pause hidden" id="btnPause">暂停</button>
             </div>
@@ -386,6 +953,10 @@
                 错误 <span class="wrong-num" id="resWrong">0</span> 题，
                 正确率 <span class="highlight" id="resRate">0%</span>
                 <span id="resTimeWrapper" style="display:none;">，用时 <span class="time-used" id="resTime">00:00</span></span>
+                <div id="correctionResultExtra" style="display:none; margin-top:6px; border-top:1px dashed #dfe6e9; padding-top:6px;">
+                    <span class="correction-label">改错完成！</span>
+                    全部错题已改正！
+                </div>
             </div>
         </div>
     </div>
@@ -409,6 +980,8 @@
             const progressText = document.getElementById('progressText');
             const progressCurrent = document.getElementById('progressCurrent');
             const progressTotal = document.getElementById('progressTotal');
+            const correctionProgressText = document.getElementById('correctionProgressText');
+            const correctionRemain = document.getElementById('correctionRemain');
             const miniCorrect = document.getElementById('miniCorrect');
             const miniWrong = document.getElementById('miniWrong');
             const miniTotal = document.getElementById('miniTotal');
@@ -418,6 +991,7 @@
             const btnContinue = document.getElementById('btnContinue');
             const btnReset = document.getElementById('btnReset');
             const btnPause = document.getElementById('btnPause');
+            const btnErrorCorrect = document.getElementById('btnErrorCorrect');
             const resultPanel = document.getElementById('resultPanel');
             const resTotal = document.getElementById('resTotal');
             const resCorrect = document.getElementById('resCorrect');
@@ -425,6 +999,7 @@
             const resRate = document.getElementById('resRate');
             const resTime = document.getElementById('resTime');
             const resTimeWrapper = document.getElementById('resTimeWrapper');
+            const correctionResultExtra = document.getElementById('correctionResultExtra');
             const questionCard = document.getElementById('questionCard');
             const modeGroup = document.getElementById('modeGroup');
             const paramGroup = document.getElementById('paramGroup');
@@ -433,7 +1008,7 @@
             const diffGroup = document.getElementById('diffGroup');
             const numberBtns = document.querySelectorAll('.key-number');
 
-            // 状态
+            // ===== 状态 =====
             const state = {
                 mode: null,
                 selectedTime: null,
@@ -459,168 +1034,275 @@
                 clockInterval: null,
                 hasCache: false,
                 isPaused: false,
+
+                // ---- 改错模式状态 ----
+                correctionMode: false,
+                correctionQuestions: [],
+                correctionCorrectCount: 0,
+                correctionWrongCount: 0,
+                correctionAnsweredCount: 0,
+                correctionFinished: false,
             };
 
             const STORAGE_KEY = 'mathPracticeState';
             const SETTINGS_KEY = 'mathPracticeSettings';
 
-            // 工具
+            // ===== 工具 =====
             function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-            function formatTime(sec) { const m=Math.floor(sec/60); const s=sec%60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
 
-            // 生成题目
+            function formatTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+
+            // ===== 生成题目 =====
             function generateQuestion(ops, diff) {
-                if (!ops || ops.length===0) return null;
-                const op = ops[getRandomInt(0, ops.length-1)];
-                let num1, num2, answer; const max=diff;
-                switch(op) {
+                if (!ops || ops.length === 0) return null;
+                const op = ops[getRandomInt(0, ops.length - 1)];
+                let num1, num2, answer;
+                const max = diff;
+                switch (op) {
                     case 'add':
-                        num1 = getRandomInt(1, Math.min(max-1, 30));
-                        num2 = getRandomInt(1, Math.min(max-num1, 30));
-                        answer = num1+num2; break;
+                        num1 = getRandomInt(1, Math.min(max - 1, 30));
+                        num2 = getRandomInt(1, Math.min(max - num1, 30));
+                        answer = num1 + num2;
+                        break;
                     case 'sub':
                         num1 = getRandomInt(1, Math.min(max, 30));
                         num2 = getRandomInt(0, num1);
-                        answer = num1-num2; break;
+                        answer = num1 - num2;
+                        break;
                     case 'mul':
-                        const maxF = Math.min(9, Math.floor(max/2)+1);
+                        const maxF = Math.min(9, Math.floor(max / 2) + 1);
                         num1 = getRandomInt(1, maxF);
                         num2 = getRandomInt(1, maxF);
-                        answer = num1*num2; break;
+                        answer = num1 * num2;
+                        break;
                     case 'div':
                         num2 = getRandomInt(1, Math.min(9, max));
                         answer = getRandomInt(1, Math.min(9, max));
-                        num1 = num2*answer; break;
-                    default: return null;
+                        num1 = num2 * answer;
+                        break;
+                    default:
+                        return null;
                 }
                 return { num1, num2, operator: op, answer };
             }
 
-            // UI 渲染
+            // ===== UI 渲染 =====
             function renderQuestion() {
                 if (!state.currentQuestion) {
-                    num1Display.textContent='?'; opDisplay.textContent='?'; num2Display.textContent='?'; return;
+                    num1Display.textContent = '?';
+                    opDisplay.textContent = '?';
+                    num2Display.textContent = '?';
+                    return;
                 }
-                const q=state.currentQuestion; const sym={add:'+', sub:'−', mul:'×', div:'÷'};
-                num1Display.textContent=q.num1; opDisplay.textContent=sym[q.operator]||'+'; num2Display.textContent=q.num2;
+                const q = state.currentQuestion;
+                const sym = { add: '+', sub: '−', mul: '×', div: '÷' };
+                num1Display.textContent = q.num1;
+                opDisplay.textContent = sym[q.operator] || '+';
+                num2Display.textContent = q.num2;
             }
+
             function renderInput() {
-                if (state.input==='') {
-                    inputPlaceholder.style.display='inline'; inputValue.style.display='none'; inputDisplay.classList.remove('has-value');
+                if (state.input === '') {
+                    inputPlaceholder.style.display = 'inline';
+                    inputValue.style.display = 'none';
+                    inputDisplay.classList.remove('has-value');
                 } else {
-                    inputPlaceholder.style.display='none'; inputValue.style.display='inline'; inputValue.textContent=state.input; inputDisplay.classList.add('has-value');
+                    inputPlaceholder.style.display = 'none';
+                    inputValue.style.display = 'inline';
+                    inputValue.textContent = state.input;
+                    inputDisplay.classList.add('has-value');
                 }
             }
 
-            // ===== 关键修改：updateInfoBar =====
+            // ===== 更新信息栏 =====
             function updateInfoBar() {
-                // 更新统计数字
-                miniCorrect.textContent=state.correctCount;
-                miniWrong.textContent=state.wrongCount;
-                miniTotal.textContent=state.totalCount;
+                miniCorrect.textContent = state.correctCount;
+                miniWrong.textContent = state.wrongCount;
+                miniTotal.textContent = state.totalCount;
 
-                // 待开始状态（未开始且未结束且未暂停）显示 00:00
+                if (state.correctionMode) {
+                    timerDisplay.textContent = '改错';
+                    timerDisplay.classList.remove('warning', 'danger');
+                    infoStatus.textContent = '改错模式';
+                    infoStatus.className = 'info-status correction';
+                    progressText.classList.add('hidden');
+                    correctionProgressText.classList.remove('hidden');
+                    const remain = state.correctionQuestions.length;
+                    correctionRemain.textContent = remain;
+                    correctionProgressText.innerHTML = '剩余 <span class="highlight">' + remain + '</span> 题';
+                    if (state.correctionFinished) {
+                        infoStatus.textContent = '改错完成';
+                        infoStatus.className = 'info-status ended';
+                        correctionProgressText.classList.add('hidden');
+                    }
+                    return;
+                }
+
+                correctionProgressText.classList.add('hidden');
+
                 if (!state.isRunning && !state.isFinished && !state.isPaused) {
                     timerDisplay.textContent = '00:00';
                     timerDisplay.classList.remove('warning', 'danger');
-                    infoStatus.textContent='待开始';
-                    infoStatus.className='info-status';
+                    infoStatus.textContent = '待开始';
+                    infoStatus.className = 'info-status';
                     progressText.classList.add('hidden');
                     return;
                 }
 
-                // 运行或结束状态
-                if (state.mode==='timed') {
-                    const mins=Math.floor(state.remainingSeconds/60), secs=state.remainingSeconds%60;
-                    timerDisplay.textContent=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-                    timerDisplay.classList.remove('warning','danger');
-                    if (state.remainingSeconds<=10) timerDisplay.classList.add('danger');
-                    else if (state.remainingSeconds<=20) timerDisplay.classList.add('warning');
+                if (state.mode === 'timed') {
+                    const mins = Math.floor(state.remainingSeconds / 60),
+                        secs = state.remainingSeconds % 60;
+                    timerDisplay.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+                    timerDisplay.classList.remove('warning', 'danger');
+                    if (state.remainingSeconds <= 10) timerDisplay.classList.add('danger');
+                    else if (state.remainingSeconds <= 20) timerDisplay.classList.add('warning');
                     progressText.classList.add('hidden');
-                    if (state.isFinished) { infoStatus.textContent='已结束'; infoStatus.className='info-status ended'; }
-                    else if (state.isRunning) { infoStatus.textContent='进行中'; infoStatus.className='info-status running'; }
-                    else { infoStatus.textContent='暂停'; infoStatus.className='info-status'; }
+                    if (state.isFinished) { infoStatus.textContent = '已结束';
+                        infoStatus.className = 'info-status ended'; } else if (state.isRunning) { infoStatus.textContent =
+                            '进行中';
+                        infoStatus.className = 'info-status running'; } else { infoStatus.textContent = '暂停';
+                        infoStatus.className = 'info-status'; }
                 } else {
-                    // 题量模式
-                    timerDisplay.textContent=formatTime(state.elapsedSeconds);
-                    timerDisplay.classList.remove('warning','danger');
+                    timerDisplay.textContent = formatTime(state.elapsedSeconds);
+                    timerDisplay.classList.remove('warning', 'danger');
                     progressText.classList.remove('hidden');
-                    progressCurrent.textContent=state.answeredQuestions;
-                    progressTotal.textContent=state.totalQuestions;
-                    progressText.innerHTML='第 <span class="highlight">'+state.answeredQuestions+'</span> / '+state.totalQuestions+' 题';
-                    if (state.isFinished) { infoStatus.textContent='已完成'; infoStatus.className='info-status ended'; }
-                    else if (state.isRunning) { infoStatus.textContent='进行中'; infoStatus.className='info-status running'; }
-                    else { infoStatus.textContent='暂停'; infoStatus.className='info-status'; }
+                    progressCurrent.textContent = state.answeredQuestions;
+                    progressTotal.textContent = state.totalQuestions;
+                    progressText.innerHTML = '第 <span class="highlight">' + state.answeredQuestions + '</span> / ' + state
+                        .totalQuestions + ' 题';
+                    if (state.isFinished) { infoStatus.textContent = '已完成';
+                        infoStatus.className = 'info-status ended'; } else if (state.isRunning) { infoStatus.textContent =
+                            '进行中';
+                        infoStatus.className = 'info-status running'; } else { infoStatus.textContent = '暂停';
+                        infoStatus.className = 'info-status'; }
                 }
             }
 
-            // 反馈
+            // ===== 反馈 =====
             function setFeedback(type, message, symbol) {
-                feedbackArea.className='feedback-area';
-                if (type==='correct') {
-                    feedbackArea.classList.add('correct','pop-correct'); feedbackArea.classList.remove('empty','wrong');
-                    setTimeout(()=>feedbackArea.classList.remove('pop-correct'),500);
-                    fbSymbol.textContent='✓';
-                } else if (type==='wrong') {
-                    feedbackArea.classList.add('wrong','shake-wrong'); feedbackArea.classList.remove('empty','correct');
-                    setTimeout(()=>feedbackArea.classList.remove('shake-wrong'),500);
-                    fbSymbol.textContent='✗';
+                feedbackArea.className = 'feedback-area';
+                if (type === 'correct') {
+                    feedbackArea.classList.add('correct', 'pop-correct');
+                    feedbackArea.classList.remove('empty', 'wrong');
+                    setTimeout(() => feedbackArea.classList.remove('pop-correct'), 500);
+                    fbSymbol.textContent = '✓';
+                } else if (type === 'wrong') {
+                    feedbackArea.classList.add('wrong', 'shake-wrong');
+                    feedbackArea.classList.remove('empty', 'correct');
+                    setTimeout(() => feedbackArea.classList.remove('shake-wrong'), 500);
+                    fbSymbol.textContent = '✗';
                 } else {
-                    feedbackArea.classList.add('empty'); feedbackArea.classList.remove('correct','wrong');
-                    fbSymbol.textContent=symbol||'·';
+                    feedbackArea.classList.add('empty');
+                    feedbackArea.classList.remove('correct', 'wrong');
+                    fbSymbol.textContent = symbol || '·';
                 }
-                feedbackText.textContent=message||'';
+                feedbackText.textContent = message || '';
             }
-            function setFeedbackEmpty(msg, symbol) { setFeedback('empty', msg||'输入答案后点击确认', symbol||'·'); }
 
-            // 控件启用
+            function setFeedbackEmpty(msg, symbol) { setFeedback('empty', msg || '输入答案后点击确认', symbol || '·'); }
+
+            // ===== 控件启用 =====
             function setControlsEnabled(enabled) {
-                numberBtns.forEach(btn=>btn.disabled=!enabled);
-                clearBtn.disabled=!enabled;
-                submitBtn.disabled=!enabled || state.isAnswered;
+                numberBtns.forEach(btn => btn.disabled = !enabled);
+                clearBtn.disabled = !enabled;
+                submitBtn.disabled = !enabled || state.isAnswered;
                 questionCard.classList.toggle('disabled', !enabled);
             }
+
             function disableAllControls() {
-                numberBtns.forEach(btn=>btn.disabled=true);
-                clearBtn.disabled=true; submitBtn.disabled=true;
+                numberBtns.forEach(btn => btn.disabled = true);
+                clearBtn.disabled = true;
+                submitBtn.disabled = true;
                 questionCard.classList.add('disabled');
             }
+
             function setSettingsEnabled(enabled) {
-                document.querySelectorAll('.setting-btn').forEach(btn=>btn.disabled=!enabled);
+                document.querySelectorAll('.setting-btn').forEach(btn => btn.disabled = !enabled);
             }
 
-            // 按钮显示
+            // ===== 按钮显示 =====
             function showButtons(stateType) {
                 btnStart.classList.add('hidden');
                 btnContinue.classList.add('hidden');
                 btnReset.classList.add('hidden');
                 btnPause.classList.add('hidden');
+                btnErrorCorrect.classList.add('hidden');
 
-                if (stateType==='idle') {
+                if (state.correctionMode) {
+                    btnErrorCorrect.classList.remove('hidden');
+                    btnErrorCorrect.textContent = '退出改错';
+                    btnErrorCorrect.className = 'btn-error-correct active-correction';
+                    btnErrorCorrect.disabled = false;
+
+                    btnReset.classList.remove('hidden');
+                    btnReset.disabled = false;
+                    btnReset.className = 'btn-reset';
+                    btnReset.textContent = '重新开始';
+                    return;
+                }
+
+                if (stateType === 'idle') {
                     btnStart.classList.remove('hidden');
                     btnStart.disabled = !canStart();
-                    btnStart.textContent='开始练习';
-                    btnStart.className='btn-start';
-                } else if (stateType==='idle_with_cache') {
+                    btnStart.textContent = '开始练习';
+                    btnStart.className = 'btn-start';
+
+                    btnErrorCorrect.classList.remove('hidden');
+                    updateErrorCorrectBtn();
+
+                    btnReset.classList.remove('hidden');
+                    btnReset.disabled = false;
+                    btnReset.className = 'btn-reset';
+                    btnReset.textContent = '重新开始';
+                } else if (stateType === 'idle_with_cache') {
                     btnContinue.classList.remove('hidden');
-                    btnContinue.disabled=false;
+                    btnContinue.disabled = false;
+
+                    btnErrorCorrect.classList.remove('hidden');
+                    updateErrorCorrectBtn();
+
                     btnReset.classList.remove('hidden');
-                    btnReset.disabled=false;
-                    btnReset.className='btn-reset';
-                    btnReset.textContent='重新开始';
-                } else if (stateType==='running') {
+                    btnReset.disabled = false;
+                    btnReset.className = 'btn-reset';
+                    btnReset.textContent = '重新开始';
+                } else if (stateType === 'running') {
                     btnStart.classList.remove('hidden');
-                    btnStart.disabled=true;
-                    btnStart.textContent='练习中...';
-                    btnStart.className='btn-start running';
+                    btnStart.disabled = true;
+                    btnStart.textContent = '练习中...';
+                    btnStart.className = 'btn-start running';
                     btnPause.classList.remove('hidden');
-                    btnPause.disabled=false;
-                } else if (stateType==='finished') {
+                    btnPause.disabled = false;
+
+                    btnErrorCorrect.classList.remove('hidden');
+                    btnErrorCorrect.disabled = true;
+                    btnErrorCorrect.textContent = '改错题';
+                    btnErrorCorrect.className = 'btn-error-correct';
+                } else if (stateType === 'finished') {
+                    btnErrorCorrect.classList.remove('hidden');
+                    updateErrorCorrectBtn();
+
                     btnReset.classList.remove('hidden');
-                    btnReset.disabled=false;
-                    btnReset.className='btn-reset danger';
-                    btnReset.textContent='重新开始';
+                    btnReset.disabled = false;
+                    btnReset.className = 'btn-reset danger';
+                    btnReset.textContent = '重新开始';
                 }
+            }
+
+            function updateErrorCorrectBtn() {
+                const wrongCount = getWrongCount();
+                if (wrongCount > 0) {
+                    btnErrorCorrect.disabled = false;
+                    btnErrorCorrect.textContent = '改错题 (' + wrongCount + ')';
+                    btnErrorCorrect.className = 'btn-error-correct';
+                } else {
+                    btnErrorCorrect.disabled = true;
+                    btnErrorCorrect.textContent = '改错题';
+                    btnErrorCorrect.className = 'btn-error-correct';
+                }
+            }
+
+            function getWrongCount() {
+                return state.records.filter(r => !r.correct).length;
             }
 
             function canStart() {
@@ -632,137 +1314,288 @@
                 return true;
             }
 
-            // 重置题目状态
             function resetQuestionState() {
-                state.isAnswered=false; state.input=''; renderInput();
+                if (state.correctionMode) {
+                    resetCorrectionQuestion();
+                    return;
+                }
+
+                state.isAnswered = false;
+                state.input = '';
+                renderInput();
                 setFeedbackEmpty('输入答案后点击确认', '·');
                 if (state.isRunning && !state.isFinished) setControlsEnabled(true);
                 else setControlsEnabled(false);
-                if (state.selectedOps.length===0) { setFeedback('empty', '请至少选择一种运算', '⚠'); return; }
-                const q=generateQuestion(state.selectedOps, state.selectedDiff);
-                if (!q) { setFeedback('empty', '无法生成题目，请检查设置', '⚠'); return; }
-                state.currentQuestion=q; renderQuestion();
+                if (state.selectedOps.length === 0) { setFeedback('empty', '请至少选择一种运算', '!'); return; }
+                const q = generateQuestion(state.selectedOps, state.selectedDiff);
+                if (!q) { setFeedback('empty', '无法生成题目，请检查设置', '!'); return; }
+                state.currentQuestion = q;
+                renderQuestion();
             }
 
-            // 提交答案
+            function resetCorrectionQuestion() {
+                if (state.correctionQuestions.length === 0) {
+                    finishCorrection();
+                    return;
+                }
+                state.isAnswered = false;
+                state.input = '';
+                renderInput();
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
+                const idx = getRandomInt(0, state.correctionQuestions.length - 1);
+                const q = state.correctionQuestions[idx];
+                state.currentQuestion = q;
+                renderQuestion();
+                setFeedbackEmpty('改错中... 输入答案后确认', '*');
+                updateInfoBar();
+            }
+
+            // ===== 提交答案 =====
             function handleSubmit() {
+                if (state.correctionMode) {
+                    handleCorrectionSubmit();
+                    return;
+                }
+
                 if (state.isAnswered || !state.isRunning || state.isFinished) return;
-                if (state.input==='') { setFeedback('empty', '先输入答案再确认哦～', '✏️'); return; }
-                const userAnswer=parseInt(state.input,10);
-                if (isNaN(userAnswer)) { setFeedback('empty', '请输入有效数字', '✏️'); return; }
-                const q=state.currentQuestion;
-                const correct=(userAnswer===q.answer);
-                state.isAnswered=true;
-                state.records.push({ num1:q.num1, num2:q.num2, operator:q.operator, answer:q.answer, userAnswer, correct });
+                if (state.input === '') { setFeedback('empty', '先输入答案再确认哦～', '*'); return; }
+                const userAnswer = parseInt(state.input, 10);
+                if (isNaN(userAnswer)) { setFeedback('empty', '请输入有效数字', '*'); return; }
+                const q = state.currentQuestion;
+                const correct = (userAnswer === q.answer);
+                state.isAnswered = true;
+                state.records.push({ num1: q.num1, num2: q.num2, operator: q.operator, answer: q.answer, userAnswer,
+                    correct });
                 state.totalCount++;
                 if (correct) {
                     state.correctCount++;
-                    feedbackArea.className='feedback-area correct pop-correct'; fbSymbol.textContent='✓';
-                    const praises=['太棒了！','真聪明！','好厉害！','继续加油！','完美！','你真棒！'];
-                    feedbackText.textContent=praises[Math.floor(Math.random()*praises.length)];
-                    setTimeout(()=>feedbackArea.classList.remove('pop-correct'),500);
+                    feedbackArea.className = 'feedback-area correct pop-correct';
+                    fbSymbol.textContent = '✓';
+                    const praises = ['太棒了！', '真聪明！', '好厉害！', '继续加油！', '完美！', '你真棒！'];
+                    feedbackText.textContent = praises[Math.floor(Math.random() * praises.length)];
+                    setTimeout(() => feedbackArea.classList.remove('pop-correct'), 500);
                 } else {
                     state.wrongCount++;
-                    feedbackArea.className='feedback-area wrong shake-wrong'; fbSymbol.textContent='✗';
-                    feedbackText.textContent='答案是 '+q.answer+'，再试试！';
-                    setTimeout(()=>feedbackArea.classList.remove('shake-wrong'),500);
+                    feedbackArea.className = 'feedback-area wrong shake-wrong';
+                    fbSymbol.textContent = '✗';
+                    feedbackText.textContent = '答案是 ' + q.answer + '，再试试！';
+                    setTimeout(() => feedbackArea.classList.remove('shake-wrong'), 500);
                 }
-                updateInfoBar(); saveState();
-                setControlsEnabled(false); submitBtn.disabled=true;
+                updateInfoBar();
+                saveState();
+                setControlsEnabled(false);
+                submitBtn.disabled = true;
 
-                let shouldFinish=false;
-                if (state.mode==='quantity') {
+                let shouldFinish = false;
+                if (state.mode === 'quantity') {
                     state.answeredQuestions++;
-                    if (state.answeredQuestions>=state.totalQuestions) shouldFinish=true;
+                    if (state.answeredQuestions >= state.totalQuestions) shouldFinish = true;
                 }
                 if (shouldFinish) {
-                    setTimeout(()=>{ finishPractice(); }, 600);
+                    setTimeout(() => { finishPractice(); }, 600);
                 } else {
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         if (state.isRunning) {
                             resetQuestionState();
-                            if (state.isRunning) { setControlsEnabled(true); submitBtn.disabled=false; }
+                            if (state.isRunning) { setControlsEnabled(true);
+                                submitBtn.disabled = false; }
                         }
                     }, 600);
                 }
             }
 
-            // 开始练习
+            function handleCorrectionSubmit() {
+                if (state.isAnswered || state.correctionFinished) return;
+                if (state.input === '') { setFeedback('empty', '先输入答案再确认哦～', '*'); return; }
+                const userAnswer = parseInt(state.input, 10);
+                if (isNaN(userAnswer)) { setFeedback('empty', '请输入有效数字', '*'); return; }
+                const q = state.currentQuestion;
+                const correct = (userAnswer === q.answer);
+                state.isAnswered = true;
+                state.correctionAnsweredCount++;
+
+                if (correct) {
+                    state.correctionCorrectCount++;
+                    const idx = state.correctionQuestions.findIndex(item =>
+                        item.num1 === q.num1 && item.num2 === q.num2 &&
+                        item.operator === q.operator && item.answer === q.answer
+                    );
+                    if (idx !== -1) {
+                        state.correctionQuestions.splice(idx, 1);
+                    }
+                    feedbackArea.className = 'feedback-area correct pop-correct';
+                    fbSymbol.textContent = '✓';
+                    const praises = ['改对了！', '真棒！', '继续加油！', '完美！'];
+                    feedbackText.textContent = praises[Math.floor(Math.random() * praises.length)];
+                    setTimeout(() => feedbackArea.classList.remove('pop-correct'), 500);
+                } else {
+                    state.correctionWrongCount++;
+                    const idx = state.correctionQuestions.findIndex(item =>
+                        item.num1 === q.num1 && item.num2 === q.num2 &&
+                        item.operator === q.operator && item.answer === q.answer
+                    );
+                    if (idx !== -1) {
+                        const moved = state.correctionQuestions.splice(idx, 1)[0];
+                        state.correctionQuestions.push(moved);
+                    }
+                    feedbackArea.className = 'feedback-area wrong shake-wrong';
+                    fbSymbol.textContent = '✗';
+                    feedbackText.textContent = '答案是 ' + q.answer + '，再想想！';
+                    setTimeout(() => feedbackArea.classList.remove('shake-wrong'), 500);
+                }
+                updateInfoBar();
+                saveState();
+                setControlsEnabled(false);
+                submitBtn.disabled = true;
+
+                if (state.correctionQuestions.length === 0) {
+                    setTimeout(() => { finishCorrection(); }, 600);
+                } else {
+                    setTimeout(() => {
+                        if (state.correctionMode && !state.correctionFinished) {
+                            resetCorrectionQuestion();
+                            if (state.correctionMode) { setControlsEnabled(true);
+                                submitBtn.disabled = false; }
+                        }
+                    }, 600);
+                }
+            }
+
+            function finishCorrection() {
+                if (state.correctionFinished) return;
+                state.correctionFinished = true;
+                state.isRunning = false;
+                state.currentQuestion = null;
+                renderQuestion();
+                disableAllControls();
+                setSettingsEnabled(true);
+                updateInfoBar();
+                showCorrectionResult();
+                saveState();
+                showButtons('idle');
+                setFeedback('correct', '太棒了！所有错题都改正了！', '*');
+            }
+
+            function showCorrectionResult() {
+                const total = state.correctionCorrectCount + state.correctionWrongCount;
+                const correct = state.correctionCorrectCount;
+                const wrong = state.correctionWrongCount;
+                const rate = total > 0 ? Math.round((correct / total) * 100) : 100;
+                resTotal.textContent = total;
+                resCorrect.textContent = correct;
+                resWrong.textContent = wrong;
+                resRate.textContent = rate + '%';
+                resTimeWrapper.style.display = 'none';
+                correctionResultExtra.style.display = 'block';
+                correctionResultExtra.innerHTML =
+                    '<span class="correction-label">改错完成！</span> 共改正 ' + total + ' 题，正确 ' + correct + ' 题，错误 ' +
+                    wrong + ' 题，正确率 ' + rate + '%';
+                resultPanel.classList.add('show');
+            }
+
             function startPractice() {
                 if (state.isRunning) return;
+                if (state.correctionMode) {
+                    exitCorrectionMode();
+                }
                 if (!canStart()) {
-                    let msg='请选择';
-                    if (state.mode===null) msg+=' 模式';
-                    if (state.selectedOps.length===0) msg+=' 运算';
-                    if (state.mode==='timed' && state.selectedTime===null) msg+=' 时长';
-                    if (state.mode==='quantity' && state.selectedQuantity===null) msg+=' 题量';
-                    if (state.selectedDiff===null) msg+=' 难度';
-                    setFeedback('empty', msg+' 再开始', '⚠');
+                    let msg = '请选择';
+                    if (state.mode === null) msg += ' 模式';
+                    if (state.selectedOps.length === 0) msg += ' 运算';
+                    if (state.mode === 'timed' && state.selectedTime === null) msg += ' 时长';
+                    if (state.mode === 'quantity' && state.selectedQuantity === null) msg += ' 题量';
+                    if (state.selectedDiff === null) msg += ' 难度';
+                    setFeedback('empty', msg + ' 再开始', '!');
                     return;
                 }
                 if (state.timerInterval) clearInterval(state.timerInterval);
                 if (state.clockInterval) clearInterval(state.clockInterval);
-                state.timerInterval=null; state.clockInterval=null;
+                state.timerInterval = null;
+                state.clockInterval = null;
 
-                state.records=[]; state.correctCount=0; state.wrongCount=0; state.totalCount=0;
-                state.answeredQuestions=0; state.isFinished=false; state.isRunning=true;
-                state.elapsedSeconds=0; state.input=''; state.isAnswered=false; state.isPaused=false;
+                state.records = [];
+                state.correctCount = 0;
+                state.wrongCount = 0;
+                state.totalCount = 0;
+                state.answeredQuestions = 0;
+                state.isFinished = false;
+                state.isRunning = true;
+                state.elapsedSeconds = 0;
+                state.input = '';
+                state.isAnswered = false;
+                state.isPaused = false;
 
-                if (state.mode==='timed') {
+                state.correctionMode = false;
+                state.correctionQuestions = [];
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                correctionResultExtra.style.display = 'none';
+                resultPanel.classList.remove('show');
+
+                if (state.mode === 'timed') {
                     state.totalSeconds = state.selectedTime * 60;
                     state.remainingSeconds = state.totalSeconds;
-                    state.timerInterval=setInterval(()=>{
+                    state.timerInterval = setInterval(() => {
                         state.remainingSeconds--;
                         updateInfoBar();
-                        if (state.remainingSeconds<=0) {
-                            clearInterval(state.timerInterval); state.timerInterval=null;
+                        if (state.remainingSeconds <= 0) {
+                            clearInterval(state.timerInterval);
+                            state.timerInterval = null;
                             finishPractice();
                         }
-                    },1000);
+                    }, 1000);
                 } else {
                     state.totalQuestions = state.selectedQuantity;
-                    state.startTimestamp=Date.now();
-                    state.clockInterval=setInterval(()=>{
+                    state.startTimestamp = Date.now();
+                    state.clockInterval = setInterval(() => {
                         if (state.startTimestamp) {
-                            state.elapsedSeconds=Math.floor((Date.now()-state.startTimestamp)/1000);
+                            state.elapsedSeconds = Math.floor((Date.now() - state.startTimestamp) / 1000);
                             updateInfoBar();
                         }
-                    },200);
+                    }, 200);
                 }
                 setSettingsEnabled(false);
                 resultPanel.classList.remove('show');
                 showButtons('running');
                 resetQuestionState();
-                setControlsEnabled(true); submitBtn.disabled=false;
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
                 updateInfoBar();
-                setFeedback('empty', '加油，开始答题吧！', '💪');
+                setFeedback('empty', '加油，开始答题吧！', '!');
                 saveState();
             }
 
-            // 暂停
             function pausePractice() {
-                if (!state.isRunning || state.isFinished) return;
-                if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval=null; }
-                if (state.clockInterval) { clearInterval(state.clockInterval); state.clockInterval=null; }
-                state.isRunning=false;
-                state.isPaused=true;
+                if (!state.isRunning || state.isFinished || state.correctionMode) return;
+                if (state.timerInterval) { clearInterval(state.timerInterval);
+                    state.timerInterval = null; }
+                if (state.clockInterval) { clearInterval(state.clockInterval);
+                    state.clockInterval = null; }
+                state.isRunning = false;
+                state.isPaused = true;
                 saveState();
                 disableAllControls();
                 setSettingsEnabled(true);
                 showButtons('idle_with_cache');
-                setFeedback('empty', '已暂停，点击"继续答题"恢复', '⏸');
+                setFeedback('empty', '已暂停，点击"继续答题"恢复', '||');
                 updateInfoBar();
             }
 
-            // 自然结束
             function finishPractice() {
                 if (state.isFinished) return;
-                state.isRunning=false; state.isFinished=true; state.isPaused=false;
-                if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval=null; }
-                if (state.clockInterval) { clearInterval(state.clockInterval); state.clockInterval=null; }
-                if (state.mode==='timed') state.remainingSeconds=Math.max(0, state.remainingSeconds);
-                if (state.mode==='quantity' && state.startTimestamp) {
-                    state.elapsedSeconds=Math.floor((Date.now()-state.startTimestamp)/1000);
+                state.isRunning = false;
+                state.isFinished = true;
+                state.isPaused = false;
+                if (state.timerInterval) { clearInterval(state.timerInterval);
+                    state.timerInterval = null; }
+                if (state.clockInterval) { clearInterval(state.clockInterval);
+                    state.clockInterval = null; }
+                if (state.mode === 'timed') state.remainingSeconds = Math.max(0, state.remainingSeconds);
+                if (state.mode === 'quantity' && state.startTimestamp) {
+                    state.elapsedSeconds = Math.floor((Date.now() - state.startTimestamp) / 1000);
                 }
                 disableAllControls();
                 setSettingsEnabled(true);
@@ -770,25 +1603,113 @@
                 showResultPanel();
                 saveState();
                 showButtons('finished');
-                if (state.mode==='timed') setFeedback('empty', '时间到！查看下方统计', '⏰');
-                else setFeedback('empty', '全部完成！查看下方统计', '🎉');
+                if (state.mode === 'timed') setFeedback('empty', '时间到！查看下方统计', 'T');
+                else setFeedback('empty', '全部完成！查看下方统计', '*');
             }
 
             function showResultPanel() {
-                const total=state.totalCount, correct=state.correctCount, wrong=state.wrongCount;
-                const rate=total>0?Math.round((correct/total)*100):0;
-                resTotal.textContent=total; resCorrect.textContent=correct; resWrong.textContent=wrong; resRate.textContent=rate+'%';
-                if (state.mode==='quantity') { resTimeWrapper.style.display='inline'; resTime.textContent=formatTime(state.elapsedSeconds); }
-                else { resTimeWrapper.style.display='none'; }
+                const total = state.totalCount,
+                    correct = state.correctCount,
+                    wrong = state.wrongCount;
+                const rate = total > 0 ? Math.round((correct / total) * 100) : 0;
+                resTotal.textContent = total;
+                resCorrect.textContent = correct;
+                resWrong.textContent = wrong;
+                resRate.textContent = rate + '%';
+                correctionResultExtra.style.display = 'none';
+                if (state.mode === 'quantity') { resTimeWrapper.style.display = 'inline';
+                    resTime.textContent = formatTime(state.elapsedSeconds); } else { resTimeWrapper.style.display =
+                    'none'; }
                 resultPanel.classList.add('show');
             }
 
-            // 重置全部
+            function exitCorrectionMode() {
+                state.correctionMode = false;
+                state.correctionQuestions = [];
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                state.isRunning = false;
+                state.isFinished = false;
+                state.isPaused = false;
+                state.isAnswered = false;
+                state.input = '';
+                state.currentQuestion = null;
+                correctionResultExtra.style.display = 'none';
+                resultPanel.classList.remove('show');
+                disableAllControls();
+                setSettingsEnabled(true);
+                const q = generateQuestion(['add'], 10);
+                if (q) state.currentQuestion = q;
+                renderQuestion();
+                renderInput();
+                updateInfoBar();
+                setFeedback('empty', '已退出改错模式', '·');
+                showButtons('idle');
+                btnStart.disabled = !canStart();
+                updateErrorCorrectBtn();
+                saveState();
+            }
+
+            function startCorrection() {
+                if (state.correctionMode) {
+                    exitCorrectionMode();
+                    return;
+                }
+                if (state.isRunning) {
+                    setFeedback('empty', '请先完成当前练习或暂停后再改错', '!');
+                    return;
+                }
+                const wrongs = state.records.filter(r => !r.correct);
+                if (wrongs.length === 0) {
+                    setFeedback('correct', '没有错题，继续加油！', '*');
+                    return;
+                }
+                const questionList = wrongs.map(r => ({
+                    num1: r.num1,
+                    num2: r.num2,
+                    operator: r.operator,
+                    answer: r.answer
+                }));
+                for (let i = questionList.length - 1; i > 0; i--) {
+                    const j = getRandomInt(0, i);
+                    [questionList[i], questionList[j]] = [questionList[j], questionList[i]];
+                }
+
+                state.correctionMode = true;
+                state.correctionQuestions = questionList;
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                state.isRunning = false;
+                state.isFinished = false;
+                state.isPaused = false;
+                state.isAnswered = false;
+                state.input = '';
+                state.currentQuestion = null;
+
+                resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
+                setSettingsEnabled(false);
+                disableAllControls();
+
+                showButtons('idle');
+                resetCorrectionQuestion();
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
+                updateInfoBar();
+                setFeedback('empty', '改错模式：共 ' + questionList.length + ' 道错题，加油！', '#');
+                saveState();
+            }
+
             function resetAll() {
                 if (state.timerInterval) clearInterval(state.timerInterval);
                 if (state.clockInterval) clearInterval(state.clockInterval);
-                try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
-                try { localStorage.removeItem(SETTINGS_KEY); } catch(e){}
+                try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+                try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
+
                 state.mode = null;
                 state.selectedTime = null;
                 state.selectedQuantity = null;
@@ -812,94 +1733,115 @@
                 state.isPaused = false;
                 state.hasCache = false;
 
+                state.correctionMode = false;
+                state.correctionQuestions = [];
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+
                 resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
                 disableAllControls();
                 setSettingsEnabled(true);
                 syncSettingsUI();
-                updateInfoBar();
                 const q = generateQuestion(['add'], 10);
                 if (q) state.currentQuestion = q;
                 renderQuestion();
                 renderInput();
-                timerDisplay.textContent = '00:00';  // 重置时设置为00:00
+                timerDisplay.textContent = '00:00';
                 progressText.classList.add('hidden');
-                infoStatus.textContent='待开始'; infoStatus.className='info-status';
+                correctionProgressText.classList.add('hidden');
+                infoStatus.textContent = '待开始';
+                infoStatus.className = 'info-status';
                 setFeedback('empty', '请选择模式、运算、参数和难度后开始', '·');
                 showButtons('idle');
                 btnStart.disabled = !canStart();
+                updateErrorCorrectBtn();
+                saveState();
             }
 
-            // 继续答题
             function continuePractice() {
+                if (state.correctionMode) return;
                 const loaded = loadState();
                 if (!loaded) {
                     setFeedback('empty', '没有可继续的练习', '·');
                     return;
                 }
                 if (state.isFinished) {
-                    disableAllControls(); setSettingsEnabled(true);
+                    disableAllControls();
+                    setSettingsEnabled(true);
                     showResultPanel();
                     showButtons('finished');
-                    if (state.mode==='timed') setFeedback('empty', '已结束，查看下方统计', '⏰');
-                    else setFeedback('empty', '已完成，查看下方统计', '🎉');
+                    if (state.mode === 'timed') setFeedback('empty', '已结束，查看下方统计', 'T');
+                    else setFeedback('empty', '已完成，查看下方统计', '*');
                     return;
                 }
-                state.isRunning=true;
-                state.isPaused=false;
-                if (state.mode==='timed') {
+                state.isRunning = true;
+                state.isPaused = false;
+                if (state.mode === 'timed') {
                     if (state.timerInterval) clearInterval(state.timerInterval);
-                    state.timerInterval=setInterval(()=>{
+                    state.timerInterval = setInterval(() => {
                         state.remainingSeconds--;
                         updateInfoBar();
-                        if (state.remainingSeconds<=0) {
-                            clearInterval(state.timerInterval); state.timerInterval=null;
+                        if (state.remainingSeconds <= 0) {
+                            clearInterval(state.timerInterval);
+                            state.timerInterval = null;
                             finishPractice();
                         }
-                    },1000);
+                    }, 1000);
                 } else {
                     if (state.clockInterval) clearInterval(state.clockInterval);
-                    state.clockInterval=setInterval(()=>{
+                    state.clockInterval = setInterval(() => {
                         if (state.startTimestamp) {
-                            state.elapsedSeconds=Math.floor((Date.now()-state.startTimestamp)/1000);
+                            state.elapsedSeconds = Math.floor((Date.now() - state.startTimestamp) / 1000);
                             updateInfoBar();
                         }
-                    },200);
+                    }, 200);
                 }
                 setSettingsEnabled(false);
                 resultPanel.classList.remove('show');
                 showButtons('running');
-                state.isAnswered=false;
-                state.input='';
+                state.isAnswered = false;
+                state.input = '';
                 renderInput();
                 if (!state.currentQuestion) {
-                    if (state.selectedOps.length===0) { setFeedback('empty', '请至少选择一种运算', '⚠'); return; }
-                    const q=generateQuestion(state.selectedOps, state.selectedDiff);
-                    if (!q) { setFeedback('empty', '无法生成题目', '⚠'); return; }
-                    state.currentQuestion=q;
+                    if (state.selectedOps.length === 0) { setFeedback('empty', '请至少选择一种运算', '!'); return; }
+                    const q = generateQuestion(state.selectedOps, state.selectedDiff);
+                    if (!q) { setFeedback('empty', '无法生成题目', '!'); return; }
+                    state.currentQuestion = q;
                 }
                 renderQuestion();
                 setControlsEnabled(true);
-                submitBtn.disabled=false;
+                submitBtn.disabled = false;
                 updateInfoBar();
-                setFeedback('empty', '继续答题，加油！', '💪');
+                setFeedback('empty', '继续答题，加油！', '!');
                 saveState();
             }
 
-            // 清空/输入
             function clearInput() {
-                if (state.isAnswered || !state.isRunning || state.isFinished) return;
-                state.input=''; renderInput(); setFeedback('empty', '输入答案后点击确认', '·');
+                if (state.isAnswered) return;
+                if (state.correctionMode && state.correctionFinished) return;
+                if (!state.correctionMode && !state.isRunning) return;
+                if (state.isFinished) return;
+                state.input = '';
+                renderInput();
+                setFeedback('empty', '输入答案后点击确认', '·');
             }
+
             function inputDigit(digit) {
-                if (state.isAnswered || !state.isRunning || state.isFinished) return;
-                if (state.input.length>=6) return;
-                state.input+=digit; renderInput();
+                if (state.isAnswered) return;
+                if (state.correctionMode && state.correctionFinished) return;
+                if (!state.correctionMode && !state.isRunning) return;
+                if (state.isFinished) return;
+                if (state.input.length >= 6) return;
+                state.input += digit;
+                renderInput();
                 if (!feedbackArea.classList.contains('empty')) setFeedback('empty', '输入答案后点击确认', '·');
             }
 
-            // 模式选择
             function selectMode(mode) {
-                if (state.isRunning) return;
+                if (state.isRunning || state.correctionMode) return;
                 if (state.mode === mode) {
                     state.mode = null;
                 } else {
@@ -908,10 +1850,10 @@
                 modeGroup.querySelectorAll('.setting-btn').forEach(b => {
                     b.classList.remove('active-mode-timed', 'active-mode-quantity');
                     if (b.dataset.mode === state.mode) {
-                        b.classList.add(state.mode==='timed' ? 'active-mode-timed' : 'active-mode-quantity');
+                        b.classList.add(state.mode === 'timed' ? 'active-mode-timed' : 'active-mode-quantity');
                     }
                 });
-                const isTimed = (state.mode==='timed');
+                const isTimed = (state.mode === 'timed');
                 paramLabel.textContent = isTimed ? '时长' : '题数';
                 paramGroup.querySelectorAll('.setting-btn').forEach(b => {
                     if (b.dataset.time !== undefined) {
@@ -927,11 +1869,10 @@
                 state.selectedQuantity = null;
                 btnStart.disabled = !canStart();
                 saveSettings();
-                setFeedback('empty', '模式已'+(state.mode?'选择':'取消')+'，请重新选择参数', '·');
-                updateInfoBar(); // 确保显示00:00
+                setFeedback('empty', '模式已' + (state.mode ? '选择' : '取消') + '，请重新选择参数', '·');
+                updateInfoBar();
             }
 
-            // 设置缓存
             function saveSettings() {
                 try {
                     const data = {
@@ -942,13 +1883,14 @@
                         selectedDiff: state.selectedDiff,
                     };
                     localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
-                } catch(e){}
+                } catch (e) {}
             }
+
             function loadSettings() {
                 try {
                     const raw = localStorage.getItem(SETTINGS_KEY);
                     if (!raw) return false;
-                    const data=JSON.parse(raw);
+                    const data = JSON.parse(raw);
                     if (data.mode !== undefined) state.mode = data.mode;
                     if (data.selectedTime !== undefined) state.selectedTime = data.selectedTime;
                     if (data.selectedQuantity !== undefined) state.selectedQuantity = data.selectedQuantity;
@@ -956,16 +1898,17 @@
                     if (data.selectedDiff !== undefined) state.selectedDiff = data.selectedDiff;
                     syncSettingsUI();
                     return true;
-                } catch(e){ return false; }
+                } catch (e) { return false; }
             }
+
             function syncSettingsUI() {
                 modeGroup.querySelectorAll('.setting-btn').forEach(b => {
                     b.classList.remove('active-mode-timed', 'active-mode-quantity');
                     if (b.dataset.mode === state.mode) {
-                        b.classList.add(state.mode==='timed' ? 'active-mode-timed' : 'active-mode-quantity');
+                        b.classList.add(state.mode === 'timed' ? 'active-mode-timed' : 'active-mode-quantity');
                     }
                 });
-                const isTimed = (state.mode==='timed');
+                const isTimed = (state.mode === 'timed');
                 paramLabel.textContent = isTimed ? '时长' : '题数';
                 paramGroup.querySelectorAll('.setting-btn').forEach(b => {
                     if (b.dataset.time !== undefined) {
@@ -989,12 +1932,12 @@
                 });
                 diffGroup.querySelectorAll('.setting-btn').forEach(b => {
                     b.classList.remove('active-diff');
-                    if (parseInt(b.dataset.diff,10) === state.selectedDiff) b.classList.add('active-diff');
+                    if (parseInt(b.dataset.diff, 10) === state.selectedDiff) b.classList.add('active-diff');
                 });
                 if (btnStart) btnStart.disabled = !canStart();
+                updateErrorCorrectBtn();
             }
 
-            // 练习缓存
             function saveState() {
                 try {
                     const data = {
@@ -1017,17 +1960,23 @@
                         isPaused: state.isPaused,
                         currentQuestion: state.currentQuestion,
                         timestamp: Date.now(),
+                        correctionMode: state.correctionMode,
+                        correctionQuestions: state.correctionQuestions,
+                        correctionCorrectCount: state.correctionCorrectCount,
+                        correctionWrongCount: state.correctionWrongCount,
+                        correctionAnsweredCount: state.correctionAnsweredCount,
+                        correctionFinished: state.correctionFinished,
                     };
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                     state.hasCache = true;
-                } catch(e){}
+                } catch (e) {}
             }
 
             function loadState() {
                 try {
                     const raw = localStorage.getItem(STORAGE_KEY);
                     if (!raw) return false;
-                    const data=JSON.parse(raw);
+                    const data = JSON.parse(raw);
                     if (data.mode !== undefined) state.mode = data.mode;
                     if (data.selectedTime !== undefined) state.selectedTime = data.selectedTime;
                     if (data.selectedQuantity !== undefined) state.selectedQuantity = data.selectedQuantity;
@@ -1047,16 +1996,27 @@
                     if (data.isPaused !== undefined) state.isPaused = data.isPaused;
                     if (data.currentQuestion) state.currentQuestion = data.currentQuestion;
 
-                    if (data.timestamp && state.mode==='timed' && !state.isFinished && state.isRunning) {
-                        const elapsed = Math.floor((Date.now()-data.timestamp)/1000);
+                    if (data.correctionMode !== undefined) state.correctionMode = data.correctionMode;
+                    if (data.correctionQuestions) state.correctionQuestions = data.correctionQuestions.slice();
+                    if (data.correctionCorrectCount !== undefined) state.correctionCorrectCount = data
+                    .correctionCorrectCount;
+                    if (data.correctionWrongCount !== undefined) state.correctionWrongCount = data.correctionWrongCount;
+                    if (data.correctionAnsweredCount !== undefined) state.correctionAnsweredCount = data
+                        .correctionAnsweredCount;
+                    if (data.correctionFinished !== undefined) state.correctionFinished = data.correctionFinished;
+
+                    if (data.timestamp && state.mode === 'timed' && !state.isFinished && state.isRunning) {
+                        const elapsed = Math.floor((Date.now() - data.timestamp) / 1000);
                         state.remainingSeconds = Math.max(0, state.remainingSeconds - elapsed);
-                        if (state.remainingSeconds<=0) { state.isFinished=true; state.isRunning=false; }
+                        if (state.remainingSeconds <= 0) { state.isFinished = true;
+                            state.isRunning = false; }
                     }
 
-                    state.hasCache = (state.totalCount>0 || state.records.length>0 || state.currentQuestion!==null || state.isPaused || state.isRunning);
+                    state.hasCache = (state.totalCount > 0 || state.records.length > 0 || state.currentQuestion !== null ||
+                        state.isPaused || state.isRunning || state.correctionMode);
 
                     if (!state.hasCache) {
-                        try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+                        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
                         return false;
                     }
 
@@ -1065,22 +2025,46 @@
                     renderInput();
                     syncSettingsUI();
 
+                    if (state.correctionMode) {
+                        if (state.correctionFinished) {
+                            disableAllControls();
+                            setSettingsEnabled(true);
+                            showCorrectionResult();
+                            showButtons('idle');
+                            setFeedback('correct', '改错已完成！', '*');
+                        } else {
+                            setSettingsEnabled(false);
+                            showButtons('idle');
+                            if (state.correctionQuestions.length > 0) {
+                                resetCorrectionQuestion();
+                                setControlsEnabled(true);
+                                submitBtn.disabled = false;
+                            } else {
+                                finishCorrection();
+                            }
+                            updateInfoBar();
+                            setFeedback('empty', '改错模式进行中...', '#');
+                        }
+                        return true;
+                    }
+
                     if (state.isFinished) {
-                        disableAllControls(); setSettingsEnabled(true);
+                        disableAllControls();
+                        setSettingsEnabled(true);
                         showResultPanel();
                         showButtons('finished');
-                        if (state.mode==='timed') setFeedback('empty', '已结束，查看下方统计', '⏰');
-                        else setFeedback('empty', '已完成，查看下方统计', '🎉');
+                        if (state.mode === 'timed') setFeedback('empty', '已结束，查看下方统计', 'T');
+                        else setFeedback('empty', '已完成，查看下方统计', '*');
                     } else if (state.isRunning) {
                         state.isRunning = false;
                         state.isPaused = true;
                         disableAllControls();
                         setSettingsEnabled(true);
                         showButtons('idle_with_cache');
-                        setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', '💾');
-                    } else if (state.totalCount>0 || state.currentQuestion!==null) {
+                        setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', 'S');
+                    } else if (state.totalCount > 0 || state.currentQuestion !== null) {
                         showButtons('idle_with_cache');
-                        setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', '💾');
+                        setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', 'S');
                         disableAllControls();
                         setSettingsEnabled(true);
                     } else {
@@ -1088,10 +2072,10 @@
                         return false;
                     }
                     return true;
-                } catch(e){ return false; }
+                } catch (e) { return false; }
             }
 
-            // 事件绑定
+            // ===== 事件绑定 =====
             modeGroup.addEventListener('click', function(e) {
                 const btn = e.target.closest('.setting-btn');
                 if (!btn || btn.disabled) return;
@@ -1101,24 +2085,26 @@
             paramGroup.addEventListener('click', function(e) {
                 const btn = e.target.closest('.setting-btn');
                 if (!btn || btn.disabled || btn.classList.contains('hidden')) return;
-                if (state.mode==='timed') {
-                    const time = parseInt(btn.dataset.time,10);
+                if (state.mode === 'timed') {
+                    const time = parseInt(btn.dataset.time, 10);
                     if (!isNaN(time)) {
                         state.selectedTime = time;
-                        paramGroup.querySelectorAll('.setting-btn[data-time]').forEach(b=>b.classList.remove('active-time'));
+                        paramGroup.querySelectorAll('.setting-btn[data-time]').forEach(b => b.classList.remove(
+                        'active-time'));
                         btn.classList.add('active-time');
-                        setFeedback('empty', '已选 '+time+' 分钟', '·');
+                        setFeedback('empty', '已选 ' + time + ' 分钟', '·');
                         btnStart.disabled = !canStart();
                         saveSettings();
-                        updateInfoBar(); // 仍显示00:00
+                        updateInfoBar();
                     }
-                } else if (state.mode==='quantity') {
-                    const qty = parseInt(btn.dataset.quantity,10);
+                } else if (state.mode === 'quantity') {
+                    const qty = parseInt(btn.dataset.quantity, 10);
                     if (!isNaN(qty)) {
                         state.selectedQuantity = qty;
-                        paramGroup.querySelectorAll('.setting-btn[data-quantity]').forEach(b=>b.classList.remove('active-quantity'));
+                        paramGroup.querySelectorAll('.setting-btn[data-quantity]').forEach(b => b.classList.remove(
+                            'active-quantity'));
                         btn.classList.add('active-quantity');
-                        setFeedback('empty', '已选 '+qty+' 题', '·');
+                        setFeedback('empty', '已选 ' + qty + ' 题', '·');
                         btnStart.disabled = !canStart();
                         saveSettings();
                         updateInfoBar();
@@ -1130,9 +2116,10 @@
                 const btn = e.target.closest('.setting-btn');
                 if (!btn || btn.disabled) return;
                 btn.classList.toggle('active-op');
-                const ops=[]; opGroup.querySelectorAll('.setting-btn.active-op').forEach(b=>ops.push(b.dataset.op));
-                state.selectedOps=ops;
-                if (state.selectedOps.length===0) setFeedback('empty', '请至少选择一种运算', '⚠');
+                const ops = [];
+                opGroup.querySelectorAll('.setting-btn.active-op').forEach(b => ops.push(b.dataset.op));
+                state.selectedOps = ops;
+                if (state.selectedOps.length === 0) setFeedback('empty', '请至少选择一种运算', '!');
                 else setFeedback('empty', '运算已更新', '·');
                 btnStart.disabled = !canStart();
                 saveSettings();
@@ -1142,12 +2129,12 @@
             diffGroup.addEventListener('click', function(e) {
                 const btn = e.target.closest('.setting-btn');
                 if (!btn || btn.disabled) return;
-                const diff=parseInt(btn.dataset.diff,10);
+                const diff = parseInt(btn.dataset.diff, 10);
                 if (isNaN(diff)) return;
-                state.selectedDiff=diff;
-                diffGroup.querySelectorAll('.setting-btn').forEach(b=>b.classList.remove('active-diff'));
+                state.selectedDiff = diff;
+                diffGroup.querySelectorAll('.setting-btn').forEach(b => b.classList.remove('active-diff'));
                 btn.classList.add('active-diff');
-                setFeedback('empty', '难度已选 '+diff, '·');
+                setFeedback('empty', '难度已选 ' + diff, '·');
                 btnStart.disabled = !canStart();
                 saveSettings();
                 updateInfoBar();
@@ -1156,8 +2143,8 @@
             btnStart.addEventListener('click', function() {
                 if (state.isRunning) return;
                 if (state.hasCache) {
-                    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
-                    state.hasCache=false;
+                    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+                    state.hasCache = false;
                 }
                 startPractice();
             });
@@ -1174,15 +2161,19 @@
             });
 
             btnPause.addEventListener('click', function() {
-                if (state.isRunning && !state.isFinished) {
+                if (state.isRunning && !state.isFinished && !state.correctionMode) {
                     pausePractice();
                 }
             });
 
-            numberBtns.forEach(btn=>{
-                btn.addEventListener('click', function(){
-                    const digit=this.dataset.digit;
-                    if (digit!==undefined) inputDigit(digit);
+            btnErrorCorrect.addEventListener('click', function() {
+                startCorrection();
+            });
+
+            numberBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const digit = this.dataset.digit;
+                    if (digit !== undefined) inputDigit(digit);
                 });
             });
 
@@ -1190,30 +2181,29 @@
             submitBtn.addEventListener('click', handleSubmit);
 
             document.addEventListener('keydown', function(e) {
-                if (e.target.tagName==='INPUT') return;
-                const key=e.key;
-                if (key>='0' && key<='9') { e.preventDefault(); inputDigit(key); }
-                else if (key==='Enter') { e.preventDefault(); if (!submitBtn.disabled) submitBtn.click(); }
-                else if (key==='Backspace' || key==='Delete') { e.preventDefault(); clearInput(); }
+                if (e.target.tagName === 'INPUT') return;
+                const key = e.key;
+                if (key >= '0' && key <= '9') { e.preventDefault();
+                    inputDigit(key); } else if (key === 'Enter') { e.preventDefault(); if (!submitBtn.disabled)
+                        submitBtn.click(); } else if (key === 'Backspace' || key === 'Delete') { e.preventDefault();
+                    clearInput(); }
             });
 
-            // 背景星星
             function initStars() {
-                const container=document.getElementById('starsBg');
-                const chars=['*','·','✧','✦','•'];
-                for (let i=0; i<16; i++) {
-                    const span=document.createElement('span');
-                    span.textContent=chars[i%chars.length];
-                    span.style.left=Math.random()*100+'%';
-                    span.style.fontSize=(14+Math.random()*22)+'px';
-                    span.style.animationDuration=(18+Math.random()*28)+'s';
-                    span.style.animationDelay=(Math.random()*22)+'s';
+                const container = document.getElementById('starsBg');
+                const chars = ['*', '·', '✧', '✦', '•'];
+                for (let i = 0; i < 16; i++) {
+                    const span = document.createElement('span');
+                    span.textContent = chars[i % chars.length];
+                    span.style.left = Math.random() * 100 + '%';
+                    span.style.fontSize = (14 + Math.random() * 22) + 'px';
+                    span.style.animationDuration = (18 + Math.random() * 28) + 's';
+                    span.style.animationDelay = (Math.random() * 22) + 's';
                     container.appendChild(span);
                 }
             }
             initStars();
 
-            // 初始化
             function init() {
                 loadSettings();
                 if (!localStorage.getItem(SETTINGS_KEY)) {
@@ -1224,24 +2214,24 @@
                     state.selectedDiff = null;
                     syncSettingsUI();
                 }
-                const q=generateQuestion(['add'], 10);
-                if (q) { state.currentQuestion=q; renderQuestion(); }
-                else renderQuestion();
+                const q = generateQuestion(['add'], 10);
+                if (q) { state.currentQuestion = q;
+                    renderQuestion(); } else renderQuestion();
                 renderInput();
-                updateInfoBar();  // 会显示00:00
+                updateInfoBar();
                 const loaded = loadState();
                 if (!loaded) {
-                    state.hasCache=false;
+                    state.hasCache = false;
                     setFeedback('empty', '请选择模式、运算、参数和难度后开始', '·');
                     disableAllControls();
                     progressText.classList.add('hidden');
+                    correctionProgressText.classList.add('hidden');
                     timerDisplay.textContent = '00:00';
                     progressTotal.textContent = state.totalQuestions;
                     resultPanel.classList.remove('show');
                     showButtons('idle');
                     btnStart.disabled = !canStart();
-                } else {
-                    // 有缓存，按钮状态已在loadState中设置
+                    updateErrorCorrectBtn();
                 }
             }
             init();
