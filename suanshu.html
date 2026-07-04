@@ -53,6 +53,8 @@
             color: #ff6b6b;
             text-shadow: 0 2px 8px rgba(255, 107, 107, 0.18);
         }
+
+        /* ===== 设置区域 ===== */
         .settings {
             background: rgba(255, 255, 255, 0.5);
             border-radius: 20px;
@@ -64,7 +66,7 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 4px 8px;
+            gap: 4px 6px;
             margin-bottom: 4px;
         }
         .setting-row:last-child {
@@ -74,15 +76,21 @@
             font-size: 13px;
             font-weight: 600;
             color: #2d3436;
-            min-width: 36px;
+            min-width: 32px;
+            flex-shrink: 0;
         }
         .setting-group {
             display: flex;
+            flex: 1 1 auto;
             flex-wrap: wrap;
             gap: 4px;
+            min-width: 0;
         }
-        .setting-btn {
-            padding: 3px 10px;
+        .setting-group .setting-btn {
+            flex: 1 1 0;
+            min-width: 36px;
+            max-width: 100%;
+            padding: 3px 4px;
             border: 2px solid #dfe6e9;
             border-radius: 16px;
             background: #fff;
@@ -98,15 +106,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            text-align: center;
+            white-space: nowrap;
         }
-        .setting-btn:active {
+        .setting-group .setting-btn:active {
             transform: scale(0.92);
-        }
-        .setting-btn.active {
-            border-color: #74b9ff;
-            background: #f0f7ff;
-            color: #0984e3;
-            box-shadow: 0 0 0 2px rgba(116, 185, 255, 0.2);
         }
         .setting-btn.active-mode-timed {
             border-color: #ff6b6b;
@@ -143,7 +147,11 @@
             cursor: not-allowed;
             transform: scale(0.96);
         }
+        .setting-btn.hidden {
+            display: none !important;
+        }
 
+        /* ===== 信息栏 ===== */
         .info-bar {
             display: flex;
             justify-content: space-between;
@@ -222,8 +230,8 @@
             background: #ffe8e8;
         }
         .info-status.correction {
-            color: #6c5ce7;
-            background: #f0edff;
+            color: #e17055;
+            background: #fff8e1;
         }
         .progress-text {
             font-size: 16px;
@@ -234,7 +242,22 @@
         .progress-text .highlight {
             color: #6c5ce7;
         }
+        .wrong-hint {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e17055;
+            background: #fff8e1;
+            padding: 0 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .wrong-hint .num {
+            font-weight: 800;
+        }
 
+        /* ===== 按钮行 ===== */
         .start-area {
             text-align: center;
             margin: 4px 0 10px;
@@ -248,6 +271,7 @@
         .btn-start,
         .btn-continue,
         .btn-reset,
+        .btn-pause,
         .btn-error-correct {
             padding: 10px 20px;
             border: none;
@@ -269,12 +293,14 @@
         .btn-start:active,
         .btn-continue:active,
         .btn-reset:active,
+        .btn-pause:active,
         .btn-error-correct:active {
             transform: scale(0.92);
         }
         .btn-start:disabled,
         .btn-continue:disabled,
         .btn-reset:disabled,
+        .btn-pause:disabled,
         .btn-error-correct:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -283,6 +309,7 @@
         .btn-start.hidden,
         .btn-continue.hidden,
         .btn-reset.hidden,
+        .btn-pause.hidden,
         .btn-error-correct.hidden {
             display: none;
         }
@@ -294,6 +321,15 @@
             background: #fdcb6e;
             color: #2d3436;
             box-shadow: 0 4px 14px rgba(253, 203, 110, 0.3);
+        }
+        .btn-start.correction-mode {
+            background: #e17055;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(225, 112, 85, 0.25);
+        }
+        .btn-start.correction-mode.running {
+            background: #fdcb6e;
+            color: #2d3436;
         }
         .btn-continue {
             background: #6c5ce7;
@@ -312,55 +348,12 @@
             color: #fff;
             box-shadow: 0 4px 16px rgba(255, 107, 107, 0.25);
         }
-        /* ---- 改错题按钮 ---- */
-        .btn-error-correct {
-            background: #74b9ff;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(116, 185, 255, 0.25);
-            flex: 0.7 1 auto;
-            min-width: 80px;
-        }
-        .btn-error-correct:hover:not(:disabled) {
-            background: #5aa9e6;
-        }
-        .btn-error-correct.active-correction {
-            background: #ff6b6b;
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.25);
-        }
-        .btn-error-correct.active-correction:hover:not(:disabled) {
-            background: #e55a5a;
-        }
-        .btn-error-correct:disabled {
-            opacity: 0.5;
-        }
-        .btn-error-correct .badge {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            padding: 0 8px;
-            font-size: 14px;
-            margin-left: 4px;
-        }
-
         .btn-pause {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 32px;
-            font-size: 18px;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-            touch-action: manipulation;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             background: #ff6b6b;
             color: #fff;
             min-width: 70px;
             flex: 0 1 auto;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.15);
         }
         .btn-pause:active {
             transform: scale(0.92);
@@ -373,7 +366,25 @@
             cursor: not-allowed;
             transform: scale(0.96);
         }
+        .btn-error-correct {
+            background: #74b9ff;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(116, 185, 255, 0.25);
+            flex: 0.7 1 auto;
+            min-width: 80px;
+        }
+        .btn-error-correct:hover:not(:disabled) {
+            background: #5aa9e6;
+        }
+        .btn-error-correct .badge {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0 8px;
+            font-size: 14px;
+            margin-left: 4px;
+        }
 
+        /* ===== 题目卡片 ===== */
         .question-card {
             background: #ffffff;
             border-radius: 28px;
@@ -411,21 +422,31 @@
             font-weight: 800;
             margin-left: 4px;
         }
+
+        /* ===== 输入框 - 固定宽度 ===== */
         .input-display {
             margin: 8px auto 4px;
-            padding: 4px 20px;
+            padding: 4px 8px;
             background: #f8f9fa;
             border-radius: 60px;
-            display: inline-block;
-            min-width: 90px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 160px;
+            min-width: 160px;
+            max-width: 160px;
             min-height: 48px;
             font-size: 34px;
             font-weight: 700;
             color: #2d3436;
             border: 2px dashed #dfe6e9;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
             line-height: 48px;
             letter-spacing: 2px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
         }
         .input-display.has-value {
             border-color: #74b9ff;
@@ -435,8 +456,21 @@
             color: #b2bec3;
             font-weight: 400;
             font-size: 18px;
+            display: inline;
+        }
+        .input-display #inputValue {
+            display: none;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+        .input-display.has-value #inputValue {
+            display: inline;
+        }
+        .input-display.has-value .placeholder {
+            display: none;
         }
 
+        /* ===== 反馈 ===== */
         .feedback-area {
             min-height: 40px;
             display: flex;
@@ -506,6 +540,7 @@
             animation: shake-wrong 0.4s ease;
         }
 
+        /* ===== 键盘 ===== */
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -584,6 +619,7 @@
             margin-right: 4px;
         }
 
+        /* ===== 结果面板 ===== */
         .result-panel {
             margin-top: 8px;
             padding: 12px 14px;
@@ -617,178 +653,72 @@
             color: #fdcb6e;
         }
         .result-stats .correction-label {
-            color: #6c5ce7;
+            color: #e17055;
             font-weight: 700;
         }
 
+        /* ===== 响应式 ===== */
         @media (max-width:460px) {
-            .container {
-                padding: 12px 8px 14px;
-                border-radius: 32px;
-            }
-            .title {
-                font-size: 18px;
-            }
-            .setting-btn {
-                font-size: 12px;
-                padding: 2px 8px;
-                min-height: 24px;
-                border-radius: 14px;
-            }
-            .setting-label {
-                font-size: 12px;
-                min-width: 30px;
-            }
-            .settings {
-                padding: 6px 8px;
-                border-radius: 16px;
-            }
-            .setting-row {
-                gap: 3px 6px;
-                margin-bottom: 3px;
-            }
-            .timer-display {
-                font-size: 22px;
-                min-width: 40px;
-            }
-            .info-status {
-                font-size: 11px;
-                padding: 1px 8px;
-            }
-            .info-right {
-                font-size: 13px;
-                gap: 6px;
-            }
-            .progress-text {
-                font-size: 14px;
-            }
-            .btn-start,
-            .btn-continue {
-                font-size: 18px;
-                padding: 8px 16px;
-                min-width: 80px;
-            }
-            .btn-reset {
-                font-size: 16px;
-                padding: 8px 12px;
-                min-width: 60px;
-            }
-            .btn-error-correct {
-                font-size: 16px;
-                padding: 8px 12px;
-                min-width: 70px;
-            }
-            .btn-pause {
-                font-size: 16px;
-                padding: 8px 12px;
-                min-width: 60px;
-            }
-            .question-text {
-                font-size: 36px;
-            }
+            .container { padding: 12px 8px 14px; border-radius: 32px; }
+            .title { font-size: 18px; }
+            .setting-btn { font-size: 12px; padding: 2px 4px; min-height: 24px; border-radius: 14px; }
+            .setting-label { font-size: 12px; min-width: 28px; }
+            .settings { padding: 6px 8px; border-radius: 16px; }
+            .setting-row { gap: 3px 4px; margin-bottom: 3px; }
+            .timer-display { font-size: 22px; min-width: 40px; }
+            .info-status { font-size: 11px; padding: 1px 8px; }
+            .info-right { font-size: 13px; gap: 6px; }
+            .progress-text { font-size: 14px; }
+            .btn-start, .btn-continue { font-size: 18px; padding: 8px 16px; min-width: 80px; }
+            .btn-reset { font-size: 16px; padding: 8px 12px; min-width: 60px; }
+            .btn-pause { font-size: 16px; padding: 8px 12px; min-width: 60px; }
+            .btn-error-correct { font-size: 16px; padding: 8px 12px; min-width: 70px; }
+            .question-text { font-size: 36px; }
             .input-display {
-                font-size: 30px;
+                width: 130px;
+                min-width: 130px;
+                max-width: 130px;
+                font-size: 28px;
                 min-height: 42px;
                 line-height: 42px;
-                min-width: 70px;
-                padding: 2px 14px;
+                padding: 2px 6px;
             }
-            .input-display .placeholder {
-                font-size: 16px;
-            }
-            .key-btn {
-                font-size: 28px;
-                min-height: 56px;
-                padding: 12px 0;
-                border-radius: 18px;
-            }
-            .key-btn.key-submit {
-                font-size: 24px;
-            }
-            .key-btn.key-back,
-            .key-btn.key-clear {
-                font-size: 24px;
-            }
-            .feedback-area {
-                font-size: 17px;
-                min-height: 36px;
-            }
-            .feedback-area .fb-symbol {
-                font-size: 22px;
-            }
-            .result-stats {
-                font-size: 17px;
-            }
-            .question-card {
-                padding: 16px 12px 12px;
-                min-height: 100px;
-            }
-            .btn-row {
-                gap: 6px;
-            }
+            .input-display .placeholder { font-size: 16px; }
+            .key-btn { font-size: 28px; min-height: 56px; padding: 12px 0; border-radius: 18px; }
+            .key-btn.key-submit { font-size: 24px; }
+            .key-btn.key-back, .key-btn.key-clear { font-size: 24px; }
+            .feedback-area { font-size: 17px; min-height: 36px; }
+            .feedback-area .fb-symbol { font-size: 22px; }
+            .result-stats { font-size: 17px; }
+            .question-card { padding: 16px 12px 12px; min-height: 100px; }
+            .btn-row { gap: 6px; }
+            .setting-group .setting-btn { font-size: 11px; padding: 2px 3px; min-height: 22px; min-width: 28px; }
         }
         @media (max-width:380px) {
-            .container {
-                padding: 8px 4px 10px;
-                border-radius: 24px;
-            }
-            .title {
-                font-size: 16px;
-            }
-            .setting-btn {
-                font-size: 11px;
-                padding: 2px 6px;
-                min-height: 22px;
-            }
-            .setting-label {
-                font-size: 11px;
-                min-width: 26px;
-            }
-            .timer-display {
-                font-size: 20px;
-                min-width: 36px;
-            }
-            .question-text {
-                font-size: 30px;
-            }
-            .key-btn {
-                font-size: 24px;
-                min-height: 48px;
-            }
+            .container { padding: 8px 4px 10px; border-radius: 24px; }
+            .title { font-size: 16px; }
+            .setting-btn { font-size: 10px; padding: 2px 3px; min-height: 20px; }
+            .setting-label { font-size: 10px; min-width: 24px; }
+            .timer-display { font-size: 20px; min-width: 36px; }
+            .question-text { font-size: 30px; }
+            .key-btn { font-size: 24px; min-height: 48px; }
             .input-display {
-                font-size: 26px;
+                width: 110px;
+                min-width: 110px;
+                max-width: 110px;
+                font-size: 24px;
                 min-height: 36px;
                 line-height: 36px;
-                min-width: 60px;
+                padding: 2px 4px;
             }
-            .btn-start,
-            .btn-continue {
-                font-size: 16px;
-                padding: 6px 12px;
-                min-width: 70px;
-            }
-            .btn-reset {
-                font-size: 14px;
-                padding: 6px 10px;
-                min-width: 50px;
-            }
-            .btn-error-correct {
-                font-size: 14px;
-                padding: 6px 10px;
-                min-width: 60px;
-            }
-            .btn-pause {
-                font-size: 14px;
-                padding: 6px 10px;
-                min-width: 50px;
-            }
-            .progress-text {
-                font-size: 13px;
-            }
-            .info-right {
-                font-size: 12px;
-                gap: 4px;
-            }
+            .input-display .placeholder { font-size: 14px; }
+            .btn-start, .btn-continue { font-size: 16px; padding: 6px 12px; min-width: 70px; }
+            .btn-reset { font-size: 14px; padding: 6px 10px; min-width: 50px; }
+            .btn-pause { font-size: 14px; padding: 6px 10px; min-width: 50px; }
+            .btn-error-correct { font-size: 14px; padding: 6px 10px; min-width: 60px; }
+            .progress-text { font-size: 13px; }
+            .info-right { font-size: 12px; gap: 4px; }
+            .setting-group .setting-btn { font-size: 10px; padding: 2px 2px; min-height: 20px; min-width: 24px; }
         }
 
         .stars-bg {
@@ -810,25 +740,12 @@
             color: #b2bec3;
         }
         @keyframes floatStar {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
         }
-        .hidden {
-            display: none !important;
-        }
-        /* 改错完成特殊样式 */
+        .hidden { display: none !important; }
         .correction-done-badge {
             background: #6c5ce7;
             color: #fff;
@@ -846,6 +763,7 @@
     <div class="container" role="main">
         <div class="header"><div class="title">数学小练习</div></div>
 
+        <!-- 设置区域 -->
         <div class="settings" id="settingsArea">
             <div class="setting-row">
                 <span class="setting-label">模式</span>
@@ -893,6 +811,7 @@
                 <span class="info-status" id="infoStatus">待开始</span>
                 <span class="progress-text hidden" id="progressText">第 <span class="highlight" id="progressCurrent">0</span> / <span id="progressTotal">0</span> 题</span>
                 <span class="progress-text hidden" id="correctionProgressText">剩余 <span class="highlight" id="correctionRemain">0</span> 题</span>
+                <span class="wrong-hint hidden" id="wrongHint">错题 <span class="num" id="wrongHintCount">0</span></span>
             </div>
             <div class="info-right">
                 <span>正确 <span class="num" id="miniCorrect">0</span></span>
@@ -905,7 +824,7 @@
             <div class="btn-row">
                 <button class="btn-start hidden" id="btnStart">开始练习</button>
                 <button class="btn-continue hidden" id="btnContinue">继续答题</button>
-                <button class="btn-error-correct hidden" id="btnErrorCorrect">改错题</button>
+                <button class="btn-error-correct hidden" id="btnErrorCorrect">改错</button>
                 <button class="btn-reset hidden" id="btnReset">重新开始</button>
                 <button class="btn-pause hidden" id="btnPause">暂停</button>
             </div>
@@ -920,7 +839,7 @@
             </div>
             <div class="input-display" id="inputDisplay">
                 <span class="placeholder" id="inputPlaceholder">输入答案</span>
-                <span id="inputValue" style="display:none;"></span>
+                <span id="inputValue"></span>
             </div>
         </div>
 
@@ -1007,10 +926,12 @@
             const opGroup = document.getElementById('opGroup');
             const diffGroup = document.getElementById('diffGroup');
             const numberBtns = document.querySelectorAll('.key-number');
+            const wrongHint = document.getElementById('wrongHint');
+            const wrongHintCount = document.getElementById('wrongHintCount');
 
             // ===== 状态 =====
             const state = {
-                mode: null,
+                mode: null, // 'timed' | 'quantity'
                 selectedTime: null,
                 selectedQuantity: null,
                 selectedOps: [],
@@ -1035,13 +956,17 @@
                 hasCache: false,
                 isPaused: false,
 
-                // ---- 改错模式状态 ----
+                // ---- 改错状态（独立于模式） ----
                 correctionMode: false,
                 correctionQuestions: [],
                 correctionCorrectCount: 0,
                 correctionWrongCount: 0,
                 correctionAnsweredCount: 0,
                 correctionFinished: false,
+                correctionPaused: false,
+                // 新增：一轮改错的跟踪
+                correctionTotalAttempts: 0,   // 本轮需要尝试的总题数（初始列表长度）
+                correctionAttemptedCount: 0,  // 本轮已尝试的题数
             };
 
             const STORAGE_KEY = 'mathPracticeState';
@@ -1120,10 +1045,20 @@
                 miniWrong.textContent = state.wrongCount;
                 miniTotal.textContent = state.totalCount;
 
+                // 错题提示（非按钮）
+                const wrongCount = getWrongCount();
+                if (wrongCount > 0 && !state.correctionMode && state.isFinished) {
+                    wrongHint.classList.remove('hidden');
+                    wrongHintCount.textContent = wrongCount;
+                } else {
+                    wrongHint.classList.add('hidden');
+                }
+
+                // 改错模式信息
                 if (state.correctionMode) {
                     timerDisplay.textContent = '改错';
                     timerDisplay.classList.remove('warning', 'danger');
-                    infoStatus.textContent = '改错模式';
+                    infoStatus.textContent = state.correctionFinished ? '改错完成' : '改错中';
                     infoStatus.className = 'info-status correction';
                     progressText.classList.add('hidden');
                     correctionProgressText.classList.remove('hidden');
@@ -1162,7 +1097,7 @@
                             '进行中';
                         infoStatus.className = 'info-status running'; } else { infoStatus.textContent = '暂停';
                         infoStatus.className = 'info-status'; }
-                } else {
+                } else if (state.mode === 'quantity') {
                     timerDisplay.textContent = formatTime(state.elapsedSeconds);
                     timerDisplay.classList.remove('warning', 'danger');
                     progressText.classList.remove('hidden');
@@ -1228,28 +1163,73 @@
                 btnPause.classList.add('hidden');
                 btnErrorCorrect.classList.add('hidden');
 
+                // 改错模式特殊处理
                 if (state.correctionMode) {
-                    btnErrorCorrect.classList.remove('hidden');
-                    btnErrorCorrect.textContent = '退出改错';
-                    btnErrorCorrect.className = 'btn-error-correct active-correction';
-                    btnErrorCorrect.disabled = false;
-
-                    btnReset.classList.remove('hidden');
-                    btnReset.disabled = false;
-                    btnReset.className = 'btn-reset';
-                    btnReset.textContent = '重新开始';
+                    if (state.correctionFinished) {
+                        // 改错完成（一轮结束或全部正确）
+                        const remain = state.correctionQuestions.length;
+                        if (remain > 0) {
+                            btnErrorCorrect.classList.remove('hidden');
+                            btnErrorCorrect.textContent = '改错 (' + remain + ')';
+                            btnErrorCorrect.disabled = false;
+                            btnErrorCorrect.className = 'btn-error-correct';
+                        } else {
+                            btnErrorCorrect.classList.remove('hidden');
+                            btnErrorCorrect.textContent = '改错完成 ✓';
+                            btnErrorCorrect.disabled = true;
+                            btnErrorCorrect.className = 'btn-error-correct';
+                        }
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset danger';
+                        btnReset.textContent = '重新开始';
+                        // 没有暂停
+                    } else if (state.isRunning) {
+                        // 改错进行中
+                        btnStart.classList.remove('hidden');
+                        btnStart.disabled = true;
+                        btnStart.textContent = '改错中...';
+                        btnStart.className = 'btn-start correction-mode running';
+                        btnPause.classList.remove('hidden');
+                        btnPause.disabled = false;
+                        btnPause.textContent = '暂停';
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset';
+                        btnReset.textContent = '重新开始';
+                    } else if (state.isPaused || state.correctionPaused) {
+                        // 改错暂停
+                        btnStart.classList.remove('hidden');
+                        btnStart.disabled = false;
+                        btnStart.textContent = '继续改错';
+                        btnStart.className = 'btn-start correction-mode';
+                        btnPause.classList.remove('hidden');
+                        btnPause.disabled = true;
+                        btnPause.textContent = '暂停';
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset';
+                        btnReset.textContent = '重新开始';
+                    } else {
+                        // 改错待开始（初始化时）
+                        btnStart.classList.remove('hidden');
+                        btnStart.disabled = (state.correctionQuestions.length === 0);
+                        btnStart.textContent = '开始改错';
+                        btnStart.className = 'btn-start correction-mode';
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset';
+                        btnReset.textContent = '重新开始';
+                    }
                     return;
                 }
 
+                // 普通模式
                 if (stateType === 'idle') {
                     btnStart.classList.remove('hidden');
                     btnStart.disabled = !canStart();
                     btnStart.textContent = '开始练习';
                     btnStart.className = 'btn-start';
-
-                    btnErrorCorrect.classList.remove('hidden');
-                    updateErrorCorrectBtn();
-
                     btnReset.classList.remove('hidden');
                     btnReset.disabled = false;
                     btnReset.className = 'btn-reset';
@@ -1257,10 +1237,6 @@
                 } else if (stateType === 'idle_with_cache') {
                     btnContinue.classList.remove('hidden');
                     btnContinue.disabled = false;
-
-                    btnErrorCorrect.classList.remove('hidden');
-                    updateErrorCorrectBtn();
-
                     btnReset.classList.remove('hidden');
                     btnReset.disabled = false;
                     btnReset.className = 'btn-reset';
@@ -1272,32 +1248,33 @@
                     btnStart.className = 'btn-start running';
                     btnPause.classList.remove('hidden');
                     btnPause.disabled = false;
-
-                    btnErrorCorrect.classList.remove('hidden');
-                    btnErrorCorrect.disabled = true;
-                    btnErrorCorrect.textContent = '改错题';
-                    btnErrorCorrect.className = 'btn-error-correct';
-                } else if (stateType === 'finished') {
-                    btnErrorCorrect.classList.remove('hidden');
-                    updateErrorCorrectBtn();
-
+                    btnPause.textContent = '暂停';
                     btnReset.classList.remove('hidden');
                     btnReset.disabled = false;
-                    btnReset.className = 'btn-reset danger';
+                    btnReset.className = 'btn-reset';
                     btnReset.textContent = '重新开始';
-                }
-            }
-
-            function updateErrorCorrectBtn() {
-                const wrongCount = getWrongCount();
-                if (wrongCount > 0) {
-                    btnErrorCorrect.disabled = false;
-                    btnErrorCorrect.textContent = '改错题 (' + wrongCount + ')';
-                    btnErrorCorrect.className = 'btn-error-correct';
-                } else {
-                    btnErrorCorrect.disabled = true;
-                    btnErrorCorrect.textContent = '改错题';
-                    btnErrorCorrect.className = 'btn-error-correct';
+                } else if (stateType === 'finished') {
+                    // 练习结束，判断是否有错题
+                    const wrong = getWrongCount();
+                    if (wrong > 0) {
+                        btnErrorCorrect.classList.remove('hidden');
+                        btnErrorCorrect.textContent = '改错 (' + wrong + ')';
+                        btnErrorCorrect.disabled = false;
+                        btnErrorCorrect.className = 'btn-error-correct';
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset danger';
+                        btnReset.textContent = '重新开始';
+                    } else {
+                        btnReset.classList.remove('hidden');
+                        btnReset.disabled = false;
+                        btnReset.className = 'btn-reset danger';
+                        btnReset.textContent = '重新开始';
+                        btnStart.classList.remove('hidden');
+                        btnStart.disabled = true;
+                        btnStart.textContent = '已完成';
+                        btnStart.className = 'btn-start running';
+                    }
                 }
             }
 
@@ -1314,6 +1291,7 @@
                 return true;
             }
 
+            // ===== 重置题目状态 =====
             function resetQuestionState() {
                 if (state.correctionMode) {
                     resetCorrectionQuestion();
@@ -1333,6 +1311,7 @@
                 renderQuestion();
             }
 
+            // ===== 改错题目重置 =====
             function resetCorrectionQuestion() {
                 if (state.correctionQuestions.length === 0) {
                     finishCorrection();
@@ -1379,7 +1358,7 @@
                     state.wrongCount++;
                     feedbackArea.className = 'feedback-area wrong shake-wrong';
                     fbSymbol.textContent = '✗';
-                    feedbackText.textContent = '答案是 ' + q.answer + '，再试试！';
+                    feedbackText.textContent = '再想想！';
                     setTimeout(() => feedbackArea.classList.remove('shake-wrong'), 500);
                 }
                 updateInfoBar();
@@ -1405,6 +1384,7 @@
                 }
             }
 
+            // ===== 改错提交（不提示答案） =====
             function handleCorrectionSubmit() {
                 if (state.isAnswered || state.correctionFinished) return;
                 if (state.input === '') { setFeedback('empty', '先输入答案再确认哦～', '*'); return; }
@@ -1441,7 +1421,7 @@
                     }
                     feedbackArea.className = 'feedback-area wrong shake-wrong';
                     fbSymbol.textContent = '✗';
-                    feedbackText.textContent = '答案是 ' + q.answer + '，再想想！';
+                    feedbackText.textContent = '再想想！';
                     setTimeout(() => feedbackArea.classList.remove('shake-wrong'), 500);
                 }
                 updateInfoBar();
@@ -1449,7 +1429,19 @@
                 setControlsEnabled(false);
                 submitBtn.disabled = true;
 
+                // 增加一轮尝试计数
+                state.correctionAttemptedCount++;
+
+                // 判断本轮是否结束：如果尝试次数 >= 本轮总题数，则结束本轮
+                if (state.correctionAttemptedCount >= state.correctionTotalAttempts) {
+                    // 本轮结束，无论是否全部正确
+                    setTimeout(() => { finishCorrection(); }, 600);
+                    return;
+                }
+
+                // 否则，继续下一题
                 if (state.correctionQuestions.length === 0) {
+                    // 如果列表已经为空（全部正确），则直接结束
                     setTimeout(() => { finishCorrection(); }, 600);
                 } else {
                     setTimeout(() => {
@@ -1462,43 +1454,243 @@
                 }
             }
 
+            // ===== 完成改错（一轮结束或全部正确） =====
             function finishCorrection() {
                 if (state.correctionFinished) return;
                 state.correctionFinished = true;
                 state.isRunning = false;
+                state.isPaused = false;
+                state.correctionPaused = false;
                 state.currentQuestion = null;
                 renderQuestion();
                 disableAllControls();
                 setSettingsEnabled(true);
                 updateInfoBar();
-                showCorrectionResult();
+
+                // 检查是否还有错题
+                const remain = state.correctionQuestions.length;
+                if (remain > 0) {
+                    // 有错题，显示改错按钮和重新开始
+                    showButtons('finished'); // 会显示改错按钮
+                    setFeedback('empty', '本轮结束，还有 ' + remain + ' 道错题，继续改正或重新开始', '*');
+                    // 更新错题提示
+                    wrongHint.classList.remove('hidden');
+                    wrongHintCount.textContent = remain;
+                } else {
+                    // 全部改正
+                    showButtons('finished');
+                    setFeedback('correct', '太棒了！所有错题都改正了！', '*');
+                    correctionResultExtra.style.display = 'block';
+                    correctionResultExtra.innerHTML = '<span class="correction-label">改错完成！</span> 全部错题已改正！';
+                    resultPanel.classList.add('show');
+                    // 更新统计显示
+                    const total = state.correctionCorrectCount + state.correctionWrongCount;
+                    const correct = state.correctionCorrectCount;
+                    const wrong = state.correctionWrongCount;
+                    const rate = total > 0 ? Math.round((correct / total) * 100) : 100;
+                    resTotal.textContent = total;
+                    resCorrect.textContent = correct;
+                    resWrong.textContent = wrong;
+                    resRate.textContent = rate + '%';
+                }
                 saveState();
+            }
+
+            // ===== 开始改错（从练习结束触发） =====
+            function startCorrectionFromPractice() {
+                if (state.correctionMode) return;
+                const wrongs = state.records.filter(r => !r.correct);
+                if (wrongs.length === 0) {
+                    setFeedback('correct', '没有错题，太棒了！', '*');
+                    return;
+                }
+                // 准备错题列表
+                const questionList = wrongs.map(r => ({
+                    num1: r.num1,
+                    num2: r.num2,
+                    operator: r.operator,
+                    answer: r.answer
+                }));
+                // 打乱
+                for (let i = questionList.length - 1; i > 0; i--) {
+                    const j = getRandomInt(0, i);
+                    [questionList[i], questionList[j]] = [questionList[j], questionList[i]];
+                }
+
+                // 进入改错
+                state.correctionMode = true;
+                state.correctionQuestions = questionList;
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                state.correctionPaused = false;
+                state.isRunning = true;
+                state.isFinished = false;
+                state.isPaused = false;
+                state.isAnswered = false;
+                state.input = '';
+                state.currentQuestion = null;
+
+                // 设置本轮参数
+                state.correctionTotalAttempts = questionList.length;
+                state.correctionAttemptedCount = 0;
+
+                resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
+                setSettingsEnabled(false);
+                disableAllControls();
+
+                showButtons('running');
+                resetCorrectionQuestion();
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
+                updateInfoBar();
+                setFeedback('empty', '改错模式：共 ' + questionList.length + ' 道错题，加油！', '#');
+                saveState();
+                syncSettingsUI();
+            }
+
+            // ===== 开始下一轮改错（从改错完成后的改错按钮触发） =====
+            function startNextCorrectionRound() {
+                if (!state.correctionMode || !state.correctionFinished) return;
+                const remain = state.correctionQuestions.length;
+                if (remain === 0) {
+                    setFeedback('correct', '没有错题了', '*');
+                    return;
+                }
+                // 重新打乱剩余错题
+                for (let i = remain - 1; i > 0; i--) {
+                    const j = getRandomInt(0, i);
+                    [state.correctionQuestions[i], state.correctionQuestions[j]] = [state.correctionQuestions[j], state
+                        .correctionQuestions[i]
+                    ];
+                }
+                // 重置本轮计数
+                state.correctionTotalAttempts = remain;
+                state.correctionAttemptedCount = 0;
+                state.correctionFinished = false;
+                state.isRunning = true;
+                state.isPaused = false;
+                state.correctionPaused = false;
+                state.isAnswered = false;
+                state.input = '';
+                state.currentQuestion = null;
+
+                resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
+                setSettingsEnabled(false);
+                disableAllControls();
+
+                showButtons('running');
+                resetCorrectionQuestion();
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
+                updateInfoBar();
+                setFeedback('empty', '新的一轮改错，共 ' + remain + ' 道错题，加油！', '#');
+                saveState();
+            }
+
+            // ===== 暂停改错 =====
+            function pauseCorrection() {
+                if (!state.isRunning || state.correctionFinished) return;
+                state.isRunning = false;
+                state.isPaused = true;
+                state.correctionPaused = true;
+                disableAllControls();
+                setSettingsEnabled(true);
                 showButtons('idle');
-                setFeedback('correct', '太棒了！所有错题都改正了！', '*');
+                setFeedback('empty', '改错已暂停，点击"继续改错"恢复', '||');
+                updateInfoBar();
+                saveState();
             }
 
-            function showCorrectionResult() {
-                const total = state.correctionCorrectCount + state.correctionWrongCount;
-                const correct = state.correctionCorrectCount;
-                const wrong = state.correctionWrongCount;
-                const rate = total > 0 ? Math.round((correct / total) * 100) : 100;
-                resTotal.textContent = total;
-                resCorrect.textContent = correct;
-                resWrong.textContent = wrong;
-                resRate.textContent = rate + '%';
-                resTimeWrapper.style.display = 'none';
-                correctionResultExtra.style.display = 'block';
-                correctionResultExtra.innerHTML =
-                    '<span class="correction-label">改错完成！</span> 共改正 ' + total + ' 题，正确 ' + correct + ' 题，错误 ' +
-                    wrong + ' 题，正确率 ' + rate + '%';
-                resultPanel.classList.add('show');
+            // ===== 继续改错 =====
+            function continueCorrection() {
+                if (state.correctionFinished) {
+                    // 如果改错完成但有错题，则开始下一轮
+                    const remain = state.correctionQuestions.length;
+                    if (remain > 0) {
+                        startNextCorrectionRound();
+                    } else {
+                        setFeedback('correct', '没有错题了', '*');
+                    }
+                    return;
+                }
+                if (state.correctionQuestions.length === 0) {
+                    finishCorrection();
+                    return;
+                }
+                state.isRunning = true;
+                state.isPaused = false;
+                state.correctionPaused = false;
+                setSettingsEnabled(false);
+                showButtons('running');
+                if (!state.currentQuestion) {
+                    resetCorrectionQuestion();
+                }
+                setControlsEnabled(true);
+                submitBtn.disabled = false;
+                updateInfoBar();
+                setFeedback('empty', '继续改错，加油！', '!');
+                saveState();
             }
 
+            // ===== 重置改错（回到主界面） =====
+            function resetCorrectionFull() {
+                state.correctionMode = false;
+                state.correctionQuestions = [];
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                state.correctionPaused = false;
+                state.isRunning = false;
+                state.isPaused = false;
+                state.isFinished = false;
+                state.isAnswered = false;
+                state.input = '';
+                state.currentQuestion = null;
+                state.records = [];
+                state.correctCount = 0;
+                state.wrongCount = 0;
+                state.totalCount = 0;
+                state.answeredQuestions = 0;
+                state.elapsedSeconds = 0;
+                state.startTimestamp = null;
+                state.totalQuestions = 10;
+                state.selectedQuantity = 10;
+                state.mode = null;
+                state.selectedTime = null;
+                state.selectedQuantity = null;
+                state.selectedOps = [];
+                state.selectedDiff = null;
+
+                resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
+                disableAllControls();
+                setSettingsEnabled(true);
+                syncSettingsUI();
+                const q = generateQuestion(['add'], 10);
+                if (q) state.currentQuestion = q;
+                renderQuestion();
+                renderInput();
+                timerDisplay.textContent = '00:00';
+                progressText.classList.add('hidden');
+                correctionProgressText.classList.add('hidden');
+                wrongHint.classList.add('hidden');
+                infoStatus.textContent = '待开始';
+                infoStatus.className = 'info-status';
+                setFeedback('empty', '请选择模式、运算、参数和难度后开始', '·');
+                showButtons('idle');
+                btnStart.disabled = !canStart();
+                saveState();
+            }
+
+            // ===== 开始练习（普通模式） =====
             function startPractice() {
                 if (state.isRunning) return;
-                if (state.correctionMode) {
-                    exitCorrectionMode();
-                }
+                if (state.correctionMode) return;
                 if (!canStart()) {
                     let msg = '请选择';
                     if (state.mode === null) msg += ' 模式';
@@ -1532,6 +1724,7 @@
                 state.correctionWrongCount = 0;
                 state.correctionAnsweredCount = 0;
                 state.correctionFinished = false;
+                state.correctionPaused = false;
                 correctionResultExtra.style.display = 'none';
                 resultPanel.classList.remove('show');
 
@@ -1568,8 +1761,13 @@
                 saveState();
             }
 
+            // ===== 暂停练习 =====
             function pausePractice() {
-                if (!state.isRunning || state.isFinished || state.correctionMode) return;
+                if (state.correctionMode) {
+                    pauseCorrection();
+                    return;
+                }
+                if (!state.isRunning || state.isFinished) return;
                 if (state.timerInterval) { clearInterval(state.timerInterval);
                     state.timerInterval = null; }
                 if (state.clockInterval) { clearInterval(state.clockInterval);
@@ -1584,6 +1782,7 @@
                 updateInfoBar();
             }
 
+            // ===== 完成练习 =====
             function finishPractice() {
                 if (state.isFinished) return;
                 state.isRunning = false;
@@ -1602,11 +1801,14 @@
                 updateInfoBar();
                 showResultPanel();
                 saveState();
-                showButtons('finished');
+                showButtons('finished'); // 根据错题显示改错按钮
                 if (state.mode === 'timed') setFeedback('empty', '时间到！查看下方统计', 'T');
                 else setFeedback('empty', '全部完成！查看下方统计', '*');
+                // 更新错题提示
+                updateInfoBar();
             }
 
+            // ===== 显示结果面板 =====
             function showResultPanel() {
                 const total = state.totalCount,
                     correct = state.correctCount,
@@ -1623,146 +1825,12 @@
                 resultPanel.classList.add('show');
             }
 
-            function exitCorrectionMode() {
-                state.correctionMode = false;
-                state.correctionQuestions = [];
-                state.correctionCorrectCount = 0;
-                state.correctionWrongCount = 0;
-                state.correctionAnsweredCount = 0;
-                state.correctionFinished = false;
-                state.isRunning = false;
-                state.isFinished = false;
-                state.isPaused = false;
-                state.isAnswered = false;
-                state.input = '';
-                state.currentQuestion = null;
-                correctionResultExtra.style.display = 'none';
-                resultPanel.classList.remove('show');
-                disableAllControls();
-                setSettingsEnabled(true);
-                const q = generateQuestion(['add'], 10);
-                if (q) state.currentQuestion = q;
-                renderQuestion();
-                renderInput();
-                updateInfoBar();
-                setFeedback('empty', '已退出改错模式', '·');
-                showButtons('idle');
-                btnStart.disabled = !canStart();
-                updateErrorCorrectBtn();
-                saveState();
-            }
-
-            function startCorrection() {
-                if (state.correctionMode) {
-                    exitCorrectionMode();
-                    return;
-                }
-                if (state.isRunning) {
-                    setFeedback('empty', '请先完成当前练习或暂停后再改错', '!');
-                    return;
-                }
-                const wrongs = state.records.filter(r => !r.correct);
-                if (wrongs.length === 0) {
-                    setFeedback('correct', '没有错题，继续加油！', '*');
-                    return;
-                }
-                const questionList = wrongs.map(r => ({
-                    num1: r.num1,
-                    num2: r.num2,
-                    operator: r.operator,
-                    answer: r.answer
-                }));
-                for (let i = questionList.length - 1; i > 0; i--) {
-                    const j = getRandomInt(0, i);
-                    [questionList[i], questionList[j]] = [questionList[j], questionList[i]];
-                }
-
-                state.correctionMode = true;
-                state.correctionQuestions = questionList;
-                state.correctionCorrectCount = 0;
-                state.correctionWrongCount = 0;
-                state.correctionAnsweredCount = 0;
-                state.correctionFinished = false;
-                state.isRunning = false;
-                state.isFinished = false;
-                state.isPaused = false;
-                state.isAnswered = false;
-                state.input = '';
-                state.currentQuestion = null;
-
-                resultPanel.classList.remove('show');
-                correctionResultExtra.style.display = 'none';
-                setSettingsEnabled(false);
-                disableAllControls();
-
-                showButtons('idle');
-                resetCorrectionQuestion();
-                setControlsEnabled(true);
-                submitBtn.disabled = false;
-                updateInfoBar();
-                setFeedback('empty', '改错模式：共 ' + questionList.length + ' 道错题，加油！', '#');
-                saveState();
-            }
-
-            function resetAll() {
-                if (state.timerInterval) clearInterval(state.timerInterval);
-                if (state.clockInterval) clearInterval(state.clockInterval);
-                try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-                try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
-
-                state.mode = null;
-                state.selectedTime = null;
-                state.selectedQuantity = null;
-                state.selectedOps = [];
-                state.selectedDiff = null;
-                state.totalSeconds = 5 * 60;
-                state.remainingSeconds = 5 * 60;
-                state.totalQuestions = 10;
-                state.answeredQuestions = 0;
-                state.elapsedSeconds = 0;
-                state.startTimestamp = null;
-                state.records = [];
-                state.correctCount = 0;
-                state.wrongCount = 0;
-                state.totalCount = 0;
-                state.input = '';
-                state.isAnswered = false;
-                state.currentQuestion = null;
-                state.isRunning = false;
-                state.isFinished = false;
-                state.isPaused = false;
-                state.hasCache = false;
-
-                state.correctionMode = false;
-                state.correctionQuestions = [];
-                state.correctionCorrectCount = 0;
-                state.correctionWrongCount = 0;
-                state.correctionAnsweredCount = 0;
-                state.correctionFinished = false;
-
-                resultPanel.classList.remove('show');
-                correctionResultExtra.style.display = 'none';
-                disableAllControls();
-                setSettingsEnabled(true);
-                syncSettingsUI();
-                const q = generateQuestion(['add'], 10);
-                if (q) state.currentQuestion = q;
-                renderQuestion();
-                renderInput();
-                timerDisplay.textContent = '00:00';
-                progressText.classList.add('hidden');
-                correctionProgressText.classList.add('hidden');
-                infoStatus.textContent = '待开始';
-                infoStatus.className = 'info-status';
-                setFeedback('empty', '请选择模式、运算、参数和难度后开始', '·');
-                showButtons('idle');
-                btnStart.disabled = !canStart();
-                updateErrorCorrectBtn();
-                saveState();
-            }
-
+            // ===== 继续练习 =====
             function continuePractice() {
-                if (state.correctionMode) return;
+                if (state.correctionMode) {
+                    continueCorrection();
+                    return;
+                }
                 const loaded = loadState();
                 if (!loaded) {
                     setFeedback('empty', '没有可继续的练习', '·');
@@ -1819,6 +1887,7 @@
                 saveState();
             }
 
+            // ===== 清空输入 =====
             function clearInput() {
                 if (state.isAnswered) return;
                 if (state.correctionMode && state.correctionFinished) return;
@@ -1840,19 +1909,29 @@
                 if (!feedbackArea.classList.contains('empty')) setFeedback('empty', '输入答案后点击确认', '·');
             }
 
+            // ===== 模式选择 =====
             function selectMode(mode) {
-                if (state.isRunning || state.correctionMode) return;
+                if (state.isRunning && !state.isPaused) {
+                    setFeedback('empty', '请先暂停或完成当前练习', '!');
+                    return;
+                }
+                if (state.correctionMode) {
+                    setFeedback('empty', '当前在改错模式，请先完成或重新开始', '!');
+                    return;
+                }
                 if (state.mode === mode) {
                     state.mode = null;
                 } else {
                     state.mode = mode;
                 }
+
                 modeGroup.querySelectorAll('.setting-btn').forEach(b => {
                     b.classList.remove('active-mode-timed', 'active-mode-quantity');
                     if (b.dataset.mode === state.mode) {
                         b.classList.add(state.mode === 'timed' ? 'active-mode-timed' : 'active-mode-quantity');
                     }
                 });
+
                 const isTimed = (state.mode === 'timed');
                 paramLabel.textContent = isTimed ? '时长' : '题数';
                 paramGroup.querySelectorAll('.setting-btn').forEach(b => {
@@ -1873,6 +1952,7 @@
                 updateInfoBar();
             }
 
+            // ===== 保存/加载设置 =====
             function saveSettings() {
                 try {
                     const data = {
@@ -1935,9 +2015,9 @@
                     if (parseInt(b.dataset.diff, 10) === state.selectedDiff) b.classList.add('active-diff');
                 });
                 if (btnStart) btnStart.disabled = !canStart();
-                updateErrorCorrectBtn();
             }
 
+            // ===== 保存/加载状态 =====
             function saveState() {
                 try {
                     const data = {
@@ -1966,6 +2046,9 @@
                         correctionWrongCount: state.correctionWrongCount,
                         correctionAnsweredCount: state.correctionAnsweredCount,
                         correctionFinished: state.correctionFinished,
+                        correctionPaused: state.correctionPaused,
+                        correctionTotalAttempts: state.correctionTotalAttempts,
+                        correctionAttemptedCount: state.correctionAttemptedCount,
                     };
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                     state.hasCache = true;
@@ -2004,6 +2087,11 @@
                     if (data.correctionAnsweredCount !== undefined) state.correctionAnsweredCount = data
                         .correctionAnsweredCount;
                     if (data.correctionFinished !== undefined) state.correctionFinished = data.correctionFinished;
+                    if (data.correctionPaused !== undefined) state.correctionPaused = data.correctionPaused;
+                    if (data.correctionTotalAttempts !== undefined) state.correctionTotalAttempts = data
+                        .correctionTotalAttempts;
+                    if (data.correctionAttemptedCount !== undefined) state.correctionAttemptedCount = data
+                        .correctionAttemptedCount;
 
                     if (data.timestamp && state.mode === 'timed' && !state.isFinished && state.isRunning) {
                         const elapsed = Math.floor((Date.now() - data.timestamp) / 1000);
@@ -2029,12 +2117,21 @@
                         if (state.correctionFinished) {
                             disableAllControls();
                             setSettingsEnabled(true);
-                            showCorrectionResult();
-                            showButtons('idle');
-                            setFeedback('correct', '改错已完成！', '*');
-                        } else {
+                            const remain = state.correctionQuestions.length;
+                            if (remain > 0) {
+                                showButtons('finished');
+                                setFeedback('empty', '本轮结束，还有 ' + remain + ' 道错题，继续改正或重新开始', '*');
+                            } else {
+                                showButtons('finished');
+                                setFeedback('correct', '改错已完成！', '*');
+                                correctionResultExtra.style.display = 'block';
+                                correctionResultExtra.innerHTML = '<span class="correction-label">改错完成！</span> 全部错题已改正！';
+                                resultPanel.classList.add('show');
+                            }
+                            updateInfoBar();
+                        } else if (state.isRunning && !state.correctionPaused) {
                             setSettingsEnabled(false);
-                            showButtons('idle');
+                            showButtons('running');
                             if (state.correctionQuestions.length > 0) {
                                 resetCorrectionQuestion();
                                 setControlsEnabled(true);
@@ -2044,6 +2141,22 @@
                             }
                             updateInfoBar();
                             setFeedback('empty', '改错模式进行中...', '#');
+                        } else {
+                            setSettingsEnabled(false);
+                            showButtons('idle');
+                            if (state.correctionQuestions.length > 0) {
+                                if (!state.currentQuestion) {
+                                    const idx = getRandomInt(0, state.correctionQuestions.length - 1);
+                                    state.currentQuestion = state.correctionQuestions[idx];
+                                }
+                                renderQuestion();
+                                renderInput();
+                                disableAllControls();
+                            } else {
+                                finishCorrection();
+                            }
+                            updateInfoBar();
+                            setFeedback('empty', '改错模式已就绪', '#');
                         }
                         return true;
                     }
@@ -2073,6 +2186,67 @@
                     }
                     return true;
                 } catch (e) { return false; }
+            }
+
+            // ===== 重置全部（主界面重新开始） =====
+            function resetAll() {
+                if (state.timerInterval) clearInterval(state.timerInterval);
+                if (state.clockInterval) clearInterval(state.clockInterval);
+                try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+                try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
+
+                state.mode = null;
+                state.selectedTime = null;
+                state.selectedQuantity = null;
+                state.selectedOps = [];
+                state.selectedDiff = null;
+                state.totalSeconds = 5 * 60;
+                state.remainingSeconds = 5 * 60;
+                state.totalQuestions = 10;
+                state.answeredQuestions = 0;
+                state.elapsedSeconds = 0;
+                state.startTimestamp = null;
+                state.records = [];
+                state.correctCount = 0;
+                state.wrongCount = 0;
+                state.totalCount = 0;
+                state.input = '';
+                state.isAnswered = false;
+                state.currentQuestion = null;
+                state.isRunning = false;
+                state.isFinished = false;
+                state.isPaused = false;
+                state.hasCache = false;
+
+                state.correctionMode = false;
+                state.correctionQuestions = [];
+                state.correctionCorrectCount = 0;
+                state.correctionWrongCount = 0;
+                state.correctionAnsweredCount = 0;
+                state.correctionFinished = false;
+                state.correctionPaused = false;
+                state.correctionTotalAttempts = 0;
+                state.correctionAttemptedCount = 0;
+
+                resultPanel.classList.remove('show');
+                correctionResultExtra.style.display = 'none';
+                disableAllControls();
+                setSettingsEnabled(true);
+                syncSettingsUI();
+                const q = generateQuestion(['add'], 10);
+                if (q) state.currentQuestion = q;
+                renderQuestion();
+                renderInput();
+                timerDisplay.textContent = '00:00';
+                progressText.classList.add('hidden');
+                correctionProgressText.classList.add('hidden');
+                wrongHint.classList.add('hidden');
+                infoStatus.textContent = '待开始';
+                infoStatus.className = 'info-status';
+                setFeedback('empty', '请选择模式、运算、参数和难度后开始', '·');
+                showButtons('idle');
+                btnStart.disabled = !canStart();
+                saveState();
             }
 
             // ===== 事件绑定 =====
@@ -2142,6 +2316,30 @@
 
             btnStart.addEventListener('click', function() {
                 if (state.isRunning) return;
+                if (state.correctionMode) {
+                    if (state.correctionFinished) {
+                        // 如果改错完成且有错题，则开始下一轮
+                        const remain = state.correctionQuestions.length;
+                        if (remain > 0) {
+                            startNextCorrectionRound();
+                        } else {
+                            setFeedback('empty', '没有错题需要改正', '!');
+                        }
+                        return;
+                    }
+                    if (state.correctionQuestions.length === 0) {
+                        setFeedback('empty', '没有错题需要改正', '!');
+                        return;
+                    }
+                    if (state.isPaused || state.correctionPaused) {
+                        continueCorrection();
+                    } else {
+                        // 首次开始改错（从主界面进入改错，但改错模式只能由练习结束触发）
+                        // 这里不会发生，但保留
+                        startCorrectionFromPractice();
+                    }
+                    return;
+                }
                 if (state.hasCache) {
                     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
                     state.hasCache = false;
@@ -2154,20 +2352,42 @@
             });
 
             btnReset.addEventListener('click', function() {
+                if (state.correctionMode) {
+                    resetCorrectionFull();
+                    return;
+                }
                 resetAll();
                 showButtons('idle');
                 btnStart.disabled = !canStart();
-                setFeedback('empty', '已清除所有数据，请重新设置', '·');
+                setFeedback('empty', '已回到主界面，请重新设置', '·');
             });
 
             btnPause.addEventListener('click', function() {
-                if (state.isRunning && !state.isFinished && !state.correctionMode) {
+                if (state.isRunning && !state.isFinished) {
                     pausePractice();
                 }
             });
 
             btnErrorCorrect.addEventListener('click', function() {
-                startCorrection();
+                if (state.correctionMode) {
+                    // 如果改错完成且有错题，点击改错按钮开始下一轮
+                    if (state.correctionFinished && state.correctionQuestions.length > 0) {
+                        startNextCorrectionRound();
+                        return;
+                    }
+                    return;
+                }
+                // 从练习结束进入改错
+                if (!state.isFinished) {
+                    setFeedback('empty', '请先完成练习', '!');
+                    return;
+                }
+                const wrongs = getWrongCount();
+                if (wrongs === 0) {
+                    setFeedback('correct', '没有错题，太棒了！', '*');
+                    return;
+                }
+                startCorrectionFromPractice();
             });
 
             numberBtns.forEach(btn => {
@@ -2189,6 +2409,7 @@
                     clearInput(); }
             });
 
+            // ===== 星星背景 =====
             function initStars() {
                 const container = document.getElementById('starsBg');
                 const chars = ['*', '·', '✧', '✦', '•'];
@@ -2204,6 +2425,7 @@
             }
             initStars();
 
+            // ===== 初始化 =====
             function init() {
                 loadSettings();
                 if (!localStorage.getItem(SETTINGS_KEY)) {
@@ -2226,12 +2448,12 @@
                     disableAllControls();
                     progressText.classList.add('hidden');
                     correctionProgressText.classList.add('hidden');
+                    wrongHint.classList.add('hidden');
                     timerDisplay.textContent = '00:00';
                     progressTotal.textContent = state.totalQuestions;
                     resultPanel.classList.remove('show');
                     showButtons('idle');
                     btnStart.disabled = !canStart();
-                    updateErrorCorrectBtn();
                 }
             }
             init();
