@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>全屏圆形卫星图</title>
+
+    <!-- ========== 网址图标 Favicon（仅 FY 字母，无背景） ========== -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='68' font-family='system-ui, -apple-system, sans-serif' font-size='54' font-weight='800' fill='%2364b5f6' text-anchor='middle'%3EFY%3C/text%3E%3C/svg%3E" />
+    <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='68' font-family='system-ui, -apple-system, sans-serif' font-size='54' font-weight='800' fill='%2364b5f6' text-anchor='middle'%3EFY%3C/text%3E%3C/svg%3E" />
+
+    <title>FY4B 卫星云图</title>
+
     <style>
         /* =======================================================
             可自定义参数（修改下方变量即可）
@@ -47,7 +53,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* 防止滚动条 */
+            overflow: hidden;
+            /* 防止滚动条 */;
         }
 
         .circle {
