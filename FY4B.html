@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>全屏圆形卫星图</title>
+    <style>
+        /* =======================================================
+            可自定义参数（修改下方变量即可）
+           ======================================================= */
+        :root {
+            /* ----- 背景颜色 ----- */
+            --bg-color: #000000;
+
+            /* ----- 图片地址（支持本地或网络） ----- */
+            --image-url: url('https://img.nsmc.org.cn/CLOUDIMAGE/FY4B/AGRI/THUMBNAIL/FY4B_AGRI_DISK_GCLR.jpg');
+
+            /* ----- 缩放（100% 显示完整图像，增大可裁掉四角图案） ----- */
+            --scale: 100%;
+
+            /* ----- 水平偏移（50% 居中，小于50%左移，大于50%右移） ----- */
+            --pos-x: 50%;
+
+            /* ----- 垂直偏移（0% 顶部对齐，50%居中，100%底部对齐） ----- */
+            --pos-y: 0%;
+
+            /* ----- 圆形尺寸（自适应：取屏幕宽高较小值，始终填满屏幕） ----- */
+            /* 如需固定尺寸，可改为例如 500px */
+            --circle-size: min(100vw, 100vh);
+
+            /* ----- 外发光（可去掉或改为 none） ----- */
+            --shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        /* =======================================================
+            页面样式（一般无需修改）
+           ======================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 防止滚动条 */
+        }
+
+        .circle {
+            width: var(--circle-size);
+            height: var(--circle-size);
+            border-radius: 50%;
+            overflow: hidden;
+            background-image: var(--image-url);
+            background-size: var(--scale);
+            background-position: var(--pos-x) var(--pos-y);
+            background-repeat: no-repeat;
+            box-shadow: var(--shadow);
+        }
+    </style>
+</head>
+<body>
+    <div class="circle"></div>
+</body>
+</html>
