@@ -77,10 +77,10 @@
         }
 
         /* ============================================================
-           棋盘区域 — 占上方 2/3（减小了1/3）
+           棋盘区域 — 占上方 2/3
            ============================================================ */
         .board-wrapper {
-            flex: 2 1 0%; /* 原来为 3，现改为 2，高度减小 */
+            flex: 2 1 0%;
             min-height: 0;
             position: relative;
             background: #1a1a1a;
@@ -241,18 +241,17 @@
         }
 
         /* ============================================================
-           底部区域 — 占下方 1/3（因为游戏区域减小，底部变大）
-           内容靠上对齐，使按钮上移
+           底部区域 — 占下方 1/3，内容靠上，左右划分
            ============================================================ */
         .bottom-section {
-            flex: 1 1 0%; /* 占 1 份，相对游戏区域 2 份，即 1/3 */
+            flex: 1 1 0%;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* 改为靠上对齐 */
+            justify-content: flex-start;
             align-items: center;
             min-height: 0;
-            padding: 4px 0 2px 0; /* 顶部留一点空间 */
-            gap: 4px; /* 行间距紧凑 */
+            padding: 2px 0 2px 0;
+            gap: 4px;
         }
 
         /* Select / Start 行 */
@@ -298,18 +297,29 @@
             box-shadow: 0 0px 0 #1a2a1a, 0 4px 16px rgba(0, 0, 0, 0.4);
         }
 
-        /* 控制区域（方向键 + 旋转按钮） */
+        /* ----- 控制区域：左右划分，各自居中 ----- */
         .control-area {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: stretch;
+            width: 100%;
+            flex: 1 1 0%;
+            min-height: 0;
+            gap: 8px;
+            padding: 0 6px;
+        }
+
+        .control-left,
+        .control-right {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 80px;
-            touch-action: none;
-            padding: 0 0 0 0;
-            flex-shrink: 0;
-            width: 100%;
+            min-height: 0;
         }
 
+        /* 方向键 D-pad — 放大 */
         .dpad-wrapper {
             flex: 0 0 auto;
             touch-action: none;
@@ -317,8 +327,8 @@
 
         .dpad {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 170px;   /* 原来150，放大 */
+            height: 170px;  /* 原来150，放大 */
             flex-shrink: 0;
             touch-action: none;
             border-radius: 50%;
@@ -349,8 +359,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
+            width: 22px;    /* 略微放大中心点 */
+            height: 22px;
             border-radius: 50%;
             background: radial-gradient(circle at 40% 35%, #444, #1a1a1a);
             box-shadow:
@@ -365,12 +375,12 @@
             position: absolute;
             background: linear-gradient(145deg, #3e3e3e, #222);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;  /* 圆角略增 */
             box-shadow:
                 0 5px 0 #101010,
                 0 6px 18px rgba(0, 0, 0, 0.6);
             color: #c0c0c0;
-            font-size: 24px;
+            font-size: 28px;      /* 字体放大 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -384,8 +394,8 @@
             outline: none;
             border: 1px solid rgba(255, 255, 255, 0.03);
             z-index: 2;
-            width: 48px;
-            height: 48px;
+            width: 56px;    /* 原来48，放大 */
+            height: 56px;   /* 原来48，放大 */
         }
 
         .dpad-btn.touch-active {
@@ -398,7 +408,7 @@
             top: -6px;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 12px 12px 8px 8px;
+            border-radius: 14px 14px 10px 10px;
         }
         .dpad-up.touch-active {
             transform: translateX(-50%) translateY(5px) scale(0.94);
@@ -408,7 +418,7 @@
             bottom: -6px;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 8px 8px 12px 12px;
+            border-radius: 10px 10px 14px 14px;
         }
         .dpad-down.touch-active {
             transform: translateX(-50%) translateY(5px) scale(0.94);
@@ -418,7 +428,7 @@
             left: -6px;
             top: 50%;
             transform: translateY(-50%);
-            border-radius: 12px 8px 8px 12px;
+            border-radius: 14px 10px 10px 14px;
         }
         .dpad-left.touch-active {
             transform: translateY(-50%) translateY(5px) scale(0.94);
@@ -428,15 +438,16 @@
             right: -6px;
             top: 50%;
             transform: translateY(-50%);
-            border-radius: 8px 12px 12px 8px;
+            border-radius: 10px 14px 14px 10px;
         }
         .dpad-right.touch-active {
             transform: translateY(-50%) translateY(5px) scale(0.94);
         }
 
+        /* 旋转按钮 — 放大 */
         .rotate-btn {
-            width: 96px;
-            height: 96px;
+            width: 110px;   /* 原来96，放大 */
+            height: 110px;  /* 原来96，放大 */
             border-radius: 50%;
             border: none;
             background: radial-gradient(circle at 40% 35%, #444, #1e1e1e);
@@ -467,7 +478,7 @@
         }
 
         /* ============================================================
-           响应式适配 — 保持比例
+           响应式适配 — 手机尺寸
            ============================================================ */
 
         @media (max-width: 420px) {
@@ -501,14 +512,14 @@
             }
 
             .dpad {
-                width: 120px;
-                height: 120px;
+                width: 140px;
+                height: 140px;
             }
             .dpad-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
-                border-radius: 10px;
+                width: 46px;
+                height: 46px;
+                font-size: 22px;
+                border-radius: 12px;
                 box-shadow: 0 4px 0 #101010, 0 4px 14px rgba(0, 0, 0, 0.5);
             }
             .dpad-up {
@@ -524,17 +535,18 @@
                 right: -5px;
             }
             .dpad::after {
-                width: 16px;
-                height: 16px;
+                width: 18px;
+                height: 18px;
             }
 
             .rotate-btn {
-                width: 76px;
-                height: 76px;
+                width: 90px;
+                height: 90px;
             }
 
             .control-area {
-                gap: 50px;
+                gap: 4px;
+                padding: 0 4px;
             }
 
             .ss-row {
@@ -549,7 +561,7 @@
                 font-size: 20px;
             }
             .bottom-section {
-                padding: 2px 0 2px 0;
+                padding: 1px 0 1px 0;
                 gap: 2px;
             }
         }
@@ -585,14 +597,14 @@
             }
 
             .dpad {
-                width: 100px;
-                height: 100px;
+                width: 115px;
+                height: 115px;
             }
             .dpad-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-                border-radius: 8px;
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+                border-radius: 10px;
                 box-shadow: 0 3px 0 #101010, 0 3px 10px rgba(0, 0, 0, 0.4);
             }
             .dpad-up {
@@ -608,17 +620,20 @@
                 right: -4px;
             }
             .dpad::after {
-                width: 12px;
-                height: 12px;
+                width: 14px;
+                height: 14px;
             }
 
             .rotate-btn {
-                width: 62px;
-                height: 62px;
+                width: 74px;
+                height: 74px;
             }
+
             .control-area {
-                gap: 32px;
+                gap: 4px;
+                padding: 0 3px;
             }
+
             .ss-row {
                 gap: 12px;
                 padding: 0 4px 0 4px;
@@ -636,7 +651,7 @@
                 font-size: 16px;
             }
             .bottom-section {
-                padding: 1px 0 1px 0;
+                padding: 0px 0 0px 0;
                 gap: 1px;
             }
         }
@@ -672,14 +687,14 @@
             }
 
             .dpad {
-                width: 100px;
-                height: 100px;
+                width: 130px;
+                height: 130px;
             }
             .dpad-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-                border-radius: 8px;
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+                border-radius: 12px;
                 box-shadow: 0 3px 0 #101010, 0 3px 10px rgba(0, 0, 0, 0.4);
             }
             .dpad-up {
@@ -695,15 +710,16 @@
                 right: -4px;
             }
             .dpad::after {
-                width: 12px;
-                height: 12px;
+                width: 16px;
+                height: 16px;
             }
             .rotate-btn {
-                width: 62px;
-                height: 62px;
+                width: 82px;
+                height: 82px;
             }
             .control-area {
-                gap: 32px;
+                gap: 4px;
+                padding: 0 4px;
             }
             .ss-row {
                 padding: 0 6px 0 6px;
@@ -713,7 +729,7 @@
                 padding: 4px 12px;
             }
             .bottom-section {
-                padding: 2px 0 2px 0;
+                padding: 1px 0 1px 0;
                 gap: 2px;
             }
         }
@@ -748,14 +764,14 @@
             }
 
             .dpad {
-                width: 80px;
-                height: 80px;
+                width: 100px;
+                height: 100px;
             }
             .dpad-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 11px;
-                border-radius: 6px;
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+                border-radius: 8px;
                 box-shadow: 0 2px 0 #101010, 0 2px 8px rgba(0, 0, 0, 0.4);
             }
             .dpad-up {
@@ -771,15 +787,16 @@
                 right: -3px;
             }
             .dpad::after {
-                width: 10px;
-                height: 10px;
+                width: 12px;
+                height: 12px;
             }
             .rotate-btn {
-                width: 50px;
-                height: 50px;
+                width: 60px;
+                height: 60px;
             }
             .control-area {
-                gap: 20px;
+                gap: 4px;
+                padding: 0 2px;
             }
             .ss-row .ss-btn {
                 font-size: 6px;
@@ -792,7 +809,7 @@
                 font-size: 14px;
             }
             .bottom-section {
-                padding: 1px 0 1px 0;
+                padding: 0px 0 0px 0;
                 gap: 1px;
             }
         }
@@ -833,7 +850,7 @@
             </div>
         </div>
 
-        <!-- ===== 底部区域（下方 1/3），内容靠上 ===== -->
+        <!-- ===== 底部区域 ===== -->
         <div class="bottom-section">
             <!-- Select / Start -->
             <div class="ss-row">
@@ -841,17 +858,23 @@
                 <button class="ss-btn start-btn" id="startBtn">START</button>
             </div>
 
-            <!-- 方向键 + 旋转 -->
+            <!-- 左右控制区 -->
             <div class="control-area">
-                <div class="dpad-wrapper">
-                    <div class="dpad">
-                        <button class="dpad-btn dpad-up"    id="moveUpBtn"    aria-label="上 (旋转)">▲</button>
-                        <button class="dpad-btn dpad-down"  id="moveDownBtn"  aria-label="下 (硬降)">▼</button>
-                        <button class="dpad-btn dpad-left"  id="moveLeftBtn"  aria-label="左">◀</button>
-                        <button class="dpad-btn dpad-right" id="moveRightBtn" aria-label="右">▶</button>
+                <!-- 左：方向键 -->
+                <div class="control-left">
+                    <div class="dpad-wrapper">
+                        <div class="dpad">
+                            <button class="dpad-btn dpad-up"    id="moveUpBtn"    aria-label="上 (旋转)">▲</button>
+                            <button class="dpad-btn dpad-down"  id="moveDownBtn"  aria-label="下 (硬降)">▼</button>
+                            <button class="dpad-btn dpad-left"  id="moveLeftBtn"  aria-label="左">◀</button>
+                            <button class="dpad-btn dpad-right" id="moveRightBtn" aria-label="右">▶</button>
+                        </div>
                     </div>
                 </div>
-                <button class="rotate-btn" id="rotateBtn" aria-label="旋转"></button>
+                <!-- 右：旋转按钮 -->
+                <div class="control-right">
+                    <button class="rotate-btn" id="rotateBtn" aria-label="旋转"></button>
+                </div>
             </div>
         </div>
 
@@ -859,7 +882,7 @@
 
     <script>
         // ================================================================
-        //  黑白俄罗斯方块 — 经典7种方块 + 精确四分之一布局
+        //  游戏逻辑 — 完全不变
         // ================================================================
 
         (function() {
@@ -1292,7 +1315,7 @@
             }
 
             // ================================================================
-            //  核心渲染 — 黑灰色调 + 黑色网格线
+            //  核心渲染 — 黑灰色调 + 黑色网格线（不变）
             // ================================================================
 
             function computeCanvasSize() {
@@ -1479,7 +1502,7 @@
             }
 
             // ================================================================
-            //  触摸控制
+            //  触摸控制（不变）
             // ================================================================
 
             function setupTouchButton(buttonId, action, repeatable = false, repeatInterval = 130, repeatDelay = 180) {
