@@ -964,9 +964,8 @@
                 correctionAnsweredCount: 0,
                 correctionFinished: false,
                 correctionPaused: false,
-                // 新增：一轮改错的跟踪
-                correctionTotalAttempts: 0,   // 本轮需要尝试的总题数（初始列表长度）
-                correctionAttemptedCount: 0,  // 本轮已尝试的题数
+                correctionTotalAttempts: 0,
+                correctionAttemptedCount: 0,
             };
 
             const STORAGE_KEY = 'mathPracticeState';
@@ -1045,7 +1044,6 @@
                 miniWrong.textContent = state.wrongCount;
                 miniTotal.textContent = state.totalCount;
 
-                // 错题提示（非按钮）
                 const wrongCount = getWrongCount();
                 if (wrongCount > 0 && !state.correctionMode && state.isFinished) {
                     wrongHint.classList.remove('hidden');
@@ -1054,7 +1052,6 @@
                     wrongHint.classList.add('hidden');
                 }
 
-                // 改错模式信息
                 if (state.correctionMode) {
                     timerDisplay.textContent = '改错';
                     timerDisplay.classList.remove('warning', 'danger');
@@ -1163,10 +1160,8 @@
                 btnPause.classList.add('hidden');
                 btnErrorCorrect.classList.add('hidden');
 
-                // 改错模式特殊处理
                 if (state.correctionMode) {
                     if (state.correctionFinished) {
-                        // 改错完成（一轮结束或全部正确）
                         const remain = state.correctionQuestions.length;
                         if (remain > 0) {
                             btnErrorCorrect.classList.remove('hidden');
@@ -1183,9 +1178,7 @@
                         btnReset.disabled = false;
                         btnReset.className = 'btn-reset danger';
                         btnReset.textContent = '重新开始';
-                        // 没有暂停
                     } else if (state.isRunning) {
-                        // 改错进行中
                         btnStart.classList.remove('hidden');
                         btnStart.disabled = true;
                         btnStart.textContent = '改错中...';
@@ -1198,7 +1191,6 @@
                         btnReset.className = 'btn-reset';
                         btnReset.textContent = '重新开始';
                     } else if (state.isPaused || state.correctionPaused) {
-                        // 改错暂停
                         btnStart.classList.remove('hidden');
                         btnStart.disabled = false;
                         btnStart.textContent = '继续改错';
@@ -1211,7 +1203,6 @@
                         btnReset.className = 'btn-reset';
                         btnReset.textContent = '重新开始';
                     } else {
-                        // 改错待开始（初始化时）
                         btnStart.classList.remove('hidden');
                         btnStart.disabled = (state.correctionQuestions.length === 0);
                         btnStart.textContent = '开始改错';
@@ -1224,7 +1215,6 @@
                     return;
                 }
 
-                // 普通模式
                 if (stateType === 'idle') {
                     btnStart.classList.remove('hidden');
                     btnStart.disabled = !canStart();
@@ -1254,7 +1244,6 @@
                     btnReset.className = 'btn-reset';
                     btnReset.textContent = '重新开始';
                 } else if (stateType === 'finished') {
-                    // 练习结束，判断是否有错题
                     const wrong = getWrongCount();
                     if (wrong > 0) {
                         btnErrorCorrect.classList.remove('hidden');
@@ -1429,19 +1418,14 @@
                 setControlsEnabled(false);
                 submitBtn.disabled = true;
 
-                // 增加一轮尝试计数
                 state.correctionAttemptedCount++;
 
-                // 判断本轮是否结束：如果尝试次数 >= 本轮总题数，则结束本轮
                 if (state.correctionAttemptedCount >= state.correctionTotalAttempts) {
-                    // 本轮结束，无论是否全部正确
                     setTimeout(() => { finishCorrection(); }, 600);
                     return;
                 }
 
-                // 否则，继续下一题
                 if (state.correctionQuestions.length === 0) {
-                    // 如果列表已经为空（全部正确），则直接结束
                     setTimeout(() => { finishCorrection(); }, 600);
                 } else {
                     setTimeout(() => {
@@ -1467,23 +1451,18 @@
                 setSettingsEnabled(true);
                 updateInfoBar();
 
-                // 检查是否还有错题
                 const remain = state.correctionQuestions.length;
                 if (remain > 0) {
-                    // 有错题，显示改错按钮和重新开始
-                    showButtons('finished'); // 会显示改错按钮
+                    showButtons('finished');
                     setFeedback('empty', '本轮结束，还有 ' + remain + ' 道错题，继续改正或重新开始', '*');
-                    // 更新错题提示
                     wrongHint.classList.remove('hidden');
                     wrongHintCount.textContent = remain;
                 } else {
-                    // 全部改正
                     showButtons('finished');
                     setFeedback('correct', '太棒了！所有错题都改正了！', '*');
                     correctionResultExtra.style.display = 'block';
                     correctionResultExtra.innerHTML = '<span class="correction-label">改错完成！</span> 全部错题已改正！';
                     resultPanel.classList.add('show');
-                    // 更新统计显示
                     const total = state.correctionCorrectCount + state.correctionWrongCount;
                     const correct = state.correctionCorrectCount;
                     const wrong = state.correctionWrongCount;
@@ -1504,20 +1483,17 @@
                     setFeedback('correct', '没有错题，太棒了！', '*');
                     return;
                 }
-                // 准备错题列表
                 const questionList = wrongs.map(r => ({
                     num1: r.num1,
                     num2: r.num2,
                     operator: r.operator,
                     answer: r.answer
                 }));
-                // 打乱
                 for (let i = questionList.length - 1; i > 0; i--) {
                     const j = getRandomInt(0, i);
                     [questionList[i], questionList[j]] = [questionList[j], questionList[i]];
                 }
 
-                // 进入改错
                 state.correctionMode = true;
                 state.correctionQuestions = questionList;
                 state.correctionCorrectCount = 0;
@@ -1532,7 +1508,6 @@
                 state.input = '';
                 state.currentQuestion = null;
 
-                // 设置本轮参数
                 state.correctionTotalAttempts = questionList.length;
                 state.correctionAttemptedCount = 0;
 
@@ -1559,14 +1534,12 @@
                     setFeedback('correct', '没有错题了', '*');
                     return;
                 }
-                // 重新打乱剩余错题
                 for (let i = remain - 1; i > 0; i--) {
                     const j = getRandomInt(0, i);
                     [state.correctionQuestions[i], state.correctionQuestions[j]] = [state.correctionQuestions[j], state
                         .correctionQuestions[i]
                     ];
                 }
-                // 重置本轮计数
                 state.correctionTotalAttempts = remain;
                 state.correctionAttemptedCount = 0;
                 state.correctionFinished = false;
@@ -1608,7 +1581,6 @@
             // ===== 继续改错 =====
             function continueCorrection() {
                 if (state.correctionFinished) {
-                    // 如果改错完成但有错题，则开始下一轮
                     const remain = state.correctionQuestions.length;
                     if (remain > 0) {
                         startNextCorrectionRound();
@@ -1801,10 +1773,9 @@
                 updateInfoBar();
                 showResultPanel();
                 saveState();
-                showButtons('finished'); // 根据错题显示改错按钮
+                showButtons('finished');
                 if (state.mode === 'timed') setFeedback('empty', '时间到！查看下方统计', 'T');
                 else setFeedback('empty', '全部完成！查看下方统计', '*');
-                // 更新错题提示
                 updateInfoBar();
             }
 
@@ -2100,7 +2071,8 @@
                             state.isRunning = false; }
                     }
 
-                    state.hasCache = (state.totalCount > 0 || state.records.length > 0 || state.currentQuestion !== null ||
+                    // ★ 修复：只有真正有答题记录、练习状态或改错状态时，才视为有效缓存
+                    state.hasCache = (state.totalCount > 0 || state.records.length > 0 ||
                         state.isPaused || state.isRunning || state.correctionMode);
 
                     if (!state.hasCache) {
@@ -2169,19 +2141,21 @@
                         if (state.mode === 'timed') setFeedback('empty', '已结束，查看下方统计', 'T');
                         else setFeedback('empty', '已完成，查看下方统计', '*');
                     } else if (state.isRunning) {
+                        // 练习正在运行中，但页面刷新后我们将其转为暂停状态，让用户点击继续
                         state.isRunning = false;
                         state.isPaused = true;
                         disableAllControls();
                         setSettingsEnabled(true);
                         showButtons('idle_with_cache');
                         setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', 'S');
-                    } else if (state.totalCount > 0 || state.currentQuestion !== null) {
+                    } else if (state.totalCount > 0 || state.records.length > 0 || state.isPaused) {
+                        // ★ 有答题记录或处于暂停状态，显示“继续答题”
                         showButtons('idle_with_cache');
                         setFeedback('empty', '上次练习已保存，点击"继续答题"恢复', 'S');
                         disableAllControls();
                         setSettingsEnabled(true);
                     } else {
-                        state.hasCache = false;
+                        // 没有有效数据，返回 false
                         return false;
                     }
                     return true;
@@ -2318,7 +2292,6 @@
                 if (state.isRunning) return;
                 if (state.correctionMode) {
                     if (state.correctionFinished) {
-                        // 如果改错完成且有错题，则开始下一轮
                         const remain = state.correctionQuestions.length;
                         if (remain > 0) {
                             startNextCorrectionRound();
@@ -2334,8 +2307,6 @@
                     if (state.isPaused || state.correctionPaused) {
                         continueCorrection();
                     } else {
-                        // 首次开始改错（从主界面进入改错，但改错模式只能由练习结束触发）
-                        // 这里不会发生，但保留
                         startCorrectionFromPractice();
                     }
                     return;
@@ -2370,14 +2341,12 @@
 
             btnErrorCorrect.addEventListener('click', function() {
                 if (state.correctionMode) {
-                    // 如果改错完成且有错题，点击改错按钮开始下一轮
                     if (state.correctionFinished && state.correctionQuestions.length > 0) {
                         startNextCorrectionRound();
                         return;
                     }
                     return;
                 }
-                // 从练习结束进入改错
                 if (!state.isFinished) {
                     setFeedback('empty', '请先完成练习', '!');
                     return;
