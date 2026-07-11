@@ -1,7 +1,4 @@
-// utils/words.js
-module.exports = {
-  // 直接粘贴 englishwords.json 的内容（这里省略，实际需复制）
-      "小学": {
+    "小学": {
       "三年级": {
         "上册": {
           "一单元": [
@@ -3165,8 +3162,6 @@ module.exports = {
             { "word": "separate", "phonetic": "/ˈsep.ər.ət/", "meaning": "分开" },
             { "word": "wing", "phonetic": "/wɪŋ/", "meaning": "翅膀" }
           ]
+          }
         }
-      }
-    }
-  }
   
